@@ -64,10 +64,22 @@ endif
 # make is dumb
 close_parenthesis := )
 
-# Optimisation trick to avoid uncompressing each tarball three times
 ifneq (, $(DEB_TARBALL))
 $(warning Parsing $(DEB_TARBALL)...)
-config_all_tar		:= $(shell for i in $(DEB_TARBALL) ; do case $$i in *.tar$(close_parenthesis) tar -tf $$i ;; *.tgz|*.tar.gz$(close_parenthesis) tar -tzf $$i ;; *.tar.bz|*.tar.bz2$(close_parenthesis) tar -tjf $$i ;; *.zip$(close_parenthesis) unzip -l $$i ;; esac ; done | grep "/config\.")
+config_all_tar		:= $(shell \
+for i in $(DEB_TARBALL) ; do \
+	if ! test -e $$i.cdbs-config_list ; then \
+		echo Parsing $$i... >&2 ; \
+		case $$i in \
+			*.tar$(close_parenthesis) tar -tf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
+			*.tgz|*.tar.gz$(close_parenthesis) tar -tzf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
+			*.tar.bz|*.tar.bz2$(close_parenthesis) tar -tjf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
+			*.zip$(close_parenthesis) unzip -l $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
+			*$(close_parenthesis) echo Warning: tarball $$i with unknown format >&2 ;; \
+		esac ; \
+	fi ; \
+	cat $$i.cdbs-config_list ; \
+done)
 endif
 
 # Avoid recursive braindamage if we're building autotools-dev
@@ -191,10 +203,14 @@ ifneq (, $(shell egrep "\[(system|cpu): .*\]" debian/control.in))
 $(error Inconsistency in control.in.  [(system|cpu): ] tags were used but Cpu:|System: wasn't)
 endif
 else
+# Prevent recursive braindamage when building cdbs with itself.
 ifeq ($(_cdbs_bootstrap), )
 CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.26-2)
 endif
+# and type-handling with cdbs.
+ifeq (, $(shell grep -x 'Package: type-handling' debian/control))
 CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), type-handling (>= 0.2.5)
+endif
 control_system		:= $(shell grep "^System:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 control_arch		:= $(shell type-handling $(control_cpu) $(control_system))
 endif

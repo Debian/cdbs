@@ -1,3 +1,13 @@
+cdbs (0.4.27-4) unstable; urgency=low
+
+  * 1/rules/buildcore.mk.in
+    - Avoid recursive brainfuck with type-handling.  This actualy fixes
+      #297269, but we leave it for t-h to close.
+    - Don't parse tarballs a gazillon of times to find config.{guess,sub,rpath}
+      One shall be enough!
+
+ -- Robert Millan <rmh@debian.org>  Thu, 14 Apr 2005 18:36:04 +0200
+
 cdbs (0.4.27-3) unstable; urgency=low
 
   * When updating config.* files, pass --remove-destination to cp.  Thanks Christian Aichinger.  (Closes: #297855)
