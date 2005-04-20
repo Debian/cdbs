@@ -1,0 +1,75 @@
+#!/bin/sh -e
+# create or edit a cdbs simple-patchsys.mk patch
+#
+# (C) 2005 Martin Pitt <mpitt@debian.org>
+# This file is distributed as public domain.
+
+dh_testdir
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <patch name>"
+    exit 0
+fi
+
+SRCDIR=$(pwd)
+PATCHNAME=${1%.patch}.patch
+TMP=$(mktemp -t -d cdbs-new-patch.XXXXXX)
+trap "rm -rf $TMP" 0 1 2 3 9 11 13 15
+
+ORIGDIR=$(basename $(pwd))
+NEWDIR=$ORIGDIR.new
+
+# create clean source package in temporary dir
+cp -a . $TMP/$ORIGDIR
+cd $TMP/$ORIGDIR
+debclean
+
+# create an empty patch if necessary so that the following loop stops at the
+# lexicographic patch position
+[ -e "debian/patches/$PATCHNAME" ] || touch "debian/patches/$PATCHNAME" 
+
+# remove all patches later than the one to edit
+for p in $(find debian/patches -type f -name "*.patch" | LC_COLLATE=C sort -r); do
+    rm -f "$p"
+    pname=$(basename "$p")
+    [ "$pname" != "$PATCHNAME" ] || break
+done
+
+debian/rules apply-patches
+
+# create new source dir
+cp -a . $TMP/$NEWDIR
+cd $TMP/$NEWDIR
+
+# if we edit a patch, apply the already existing one to the new directory
+if [ -e "$SRCDIR/debian/patches/$PATCHNAME" ]; then
+    echo -n "Applying already existing patch to edit directory at level"
+    for level in 0 1 2; do
+        echo -n " $level"
+        if patch --dry-run -E -p$level < "$SRCDIR/debian/patches/$PATCHNAME" > /dev/null 2>&1; then
+            if patch --no-backup-if-mismatch -V never -p$level < "$SRCDIR/debian/patches/$PATCHNAME" > /dev/null 2>&1; then
+                echo " success"
+                success=1
+                break;
+            fi
+        fi
+    done
+    [ "$success" ] || {
+        echo " failure"
+        exit 1
+    }
+fi
+
+echo "
+You are now in a subshell in a cleaned copy of your source package.
+Please make the changes necessary for the patch $PATCHNAME
+in this directory and exit with status 0 to create/update the patch. Exiting
+with a non-zero value will cancel the patch modification."
+
+SH=$(getent passwd $USER | cut -f 7 -d:)
+[ "$SH" ] || SH=/bin/sh
+
+if $SH; then
+    cd $TMP
+    diff -Nur $ORIGDIR $NEWDIR > $SRCDIR/debian/patches/$PATCHNAME
+fi

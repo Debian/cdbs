@@ -83,6 +83,8 @@ classdir = $(pkgdatadir)/1/class
 rules_DATA = $(wildcard 1/rules/*.mk)
 rulesdir = $(pkgdatadir)/1/rules
 
+bin_SCRIPTS = scripts/cdbs-edit-patch
+
 all_scripts_in_files := $(wildcard scripts/*.in)
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)

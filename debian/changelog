@@ -1,3 +1,15 @@
+cdbs (0.4.28-1) unstable; urgency=low
+
+  * Merge changes from Ubuntu (0.4.26-1ubuntu1):
+
+  Add cdbs-edit-patch script; similar to dpatch-edit-patch to edit an
+  existing patch or create a new one. Does not yet work with tarball.mk,
+  use dbs-edit-patch in this case for now.
+
+  Thanks to Martin Pitt for the script!
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Wed, 20 Apr 2005 07:59:51 -0400
+
 cdbs (0.4.27-4) unstable; urgency=low
 
   * 1/rules/buildcore.mk.in
