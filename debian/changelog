@@ -1,3 +1,9 @@
+cdbs (0.4.40) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 12 May 2006 16:40:20 +0200
+
 cdbs (0.4.39-0.1) unstable; urgency=low
 
   * Non-maintainer upload.
