@@ -180,6 +180,12 @@ $(patsubst %,binary-strip/%,$(DEB_INDEP_PACKAGES)) :: binary-strip/%: common-bin
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%: 
 	$(if $(is_debug_package),,dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_STRIP_EXCLUDE)) $(DEB_DH_STRIP_ARGS))
 
+# This rule is called right before generating debs {post,pre}{inst,rm} and controls, deps, are calculated
+# for each package, but after the binary-fixup hooks have been run.
+# (necessary for dh_shlibdeps to work on our own dh_makeshlibs'ed libs)
+common-binary-fixup-arch:: $(patsubst %,binary-fixup/%,$(DEB_ARCH_PACKAGES))
+common-binary-fixup-indep:: $(patsubst %,binary-fixup/%,$(DEB_INDEP_PACKAGES))
+
 # This rule is called after stripping; it compresses, fixes permissions,
 # and sets up shared library information.
 $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) :: binary-fixup/%: binary-strip/%
@@ -194,7 +200,9 @@ common-binary-predeb-indep:: $(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES))
 
 # This rule is called right before a packages' .deb file is made.
 # It is a good place to make programs setuid, change the scripts in DEBIAN/, etc. 
-$(patsubst %,binary-predeb/%,$(DEB_ALL_PACKAGES)) :: binary-predeb/%: binary-fixup/%
+$(patsubst %,binary-predeb/%,$(DEB_ARCH_PACKAGES)) :: binary-predeb/%: common-binary-fixup-arch binary-predeb-IMPL/%
+$(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES)) :: binary-predeb/%: common-binary-fixup-indep binary-predeb-IMPL/%
+$(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-predeb-IMPL/%:
 	dh_installdeb -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEB_ARGS)
 	dh_perl -p$(cdbs_curpkg) $(DEB_DH_PERL_ARGS)
 	dh_shlibdeps -p$(cdbs_curpkg) $(DEB_DH_SHLIBDEPS_ARGS)

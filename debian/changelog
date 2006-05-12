@@ -1,3 +1,11 @@
+cdbs (0.4.39-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add a sequencing point to ensure all dh_makeshlibs are run before any
+    dh_shlibdeps is (closes: #365085).
+
+ -- Pierre Habouzit <madcoder@debian.org>  Fri,  5 May 2006 21:16:19 +0200
+
 cdbs (0.4.39) unstable; urgency=low
 
   * Added definitions of DEB_HOST_ARCH_CPU and DEB_HOST_ARCH_OS
