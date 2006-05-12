@@ -1,0 +1,52 @@
+* Handle packages which compile themselves several times with
+  different compiler flags.
+
+* Handle packages which build multiple versions with different ./configure
+  flags.
+
+* Come up with a good way to selectively override rules or even portions
+  of rules.
+
+* Convert README into real Docbook documentation.
+
+* Have a simple way to put docs like changelogs and such in one package,
+  and symlink them from other packages.
+
+* New regression tests for:
+  - bzip2 tarball builds
+  - disabling make check
+  - gnome
+  - kde
+  - perl
+
+* Fix current test suite so that install rules are tested.
+
+* Support spaces in filenames (hard).
+
+* Take over Debian archive:
+20030512 -   0,   0
+20030519 -   0,   0
+20030526 -  19,   7
+20030602 -  31,  13
+20030609 -  42,  17
+20030616 -  52,  22
+20030623 -  54,  22
+20030630 -  64,  24
+20030707 -  71,  25
+20030714 -  84,  30
+20030721 -  94,  31
+20030728 - 111,  35
+20030804 - 126,  36
+20030811 - 139,  42
+20030818 - 154,  46
+20030825 - 162,  48
+20030901 - 178,  51
+20030908 - 183,  52
+20030915 - 190,  54
+
+* Stuff for v2:
+  - Enable 'make test' by default
+
+Local Variables:
+mode: outline
+End:

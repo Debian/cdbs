@@ -1,0 +1,16 @@
+Source: hdparm
+Section: admin
+Priority: optional
+Maintainer: Christopher L Cheney <ccheney@debian.org>
+Build-Depends: debhelper (>> 4.0.18)
+# It actually build-depends on cdbs (>> 0.4.5) also but not in this test suite.
+Standards-Version: 3.6.0
+
+Package: hdparm
+Architecture: any
+Depends: ${shlibs:Depends}
+Suggests: apmd
+Replaces: apmd (<= 3.0.2-1.15)
+Description: Tune hard disk parameters for high performance
+ get/set hard disk parameters for Linux IDE drives.
+ Primary use is for enabling irq-unmasking and IDE multiplemode.

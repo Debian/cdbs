@@ -1,0 +1,38 @@
+.TH CDBS-EDIT-PATCH 1 "5 Feb 2006" Debian "CDBS Documentation"
+.SH NAME
+cdbs\-edit\-patch \- create or edit a CDBS simple-patchsys.mk patch
+
+.SH SYNOPSIS
+.B cdbs\-edit\-patch \fIpatchname\fP
+
+.SH DESCRIPTION
+\fBcdbs\-edit\-patch\fP creates or edits patches for use by the CDBS
+simple-patchsys.mk patch system.  For more information about CDBS
+please see the documentation under \fI/usr/share/doc/cdbs/\fP.
+
+When \fIpatchname\fP exists, \fBcdbs\-edit\-patch\fP will set up a
+temporary working source tree, apply all patches up to and including
+\fIpatchname\fP in lexicographic order, and spawn an interactive shell
+for the developer.  The developer can then edit files in this working
+tree.  When the developer is done and exits the shell,
+\fBcdbs\-edit\-patch\fP updates \fIpatchname\fP to reflect the changes
+made.  To abort the process from the interactive shell, exit with a
+nonzero exit value.
+
+When \fIpatchname\fP does not exist, \fBcdbs\-edit\-patch\fP will
+assume that a new patch should be created.  As with the above
+scenario, \fBcdbs\-edit\-patch\fP will first create a temporary
+working source tree and apply all patches up to the new patch in
+lexicographic order.  When the shell is quit, \fBcdbs\-edit\-patch\fP
+will create \fIpatchname\fP.
+
+.SH AUTHOR
+CDBS was written by Colin Walters and others.  \fBcdbs\-edit\-patch\fP
+was written by Martin Pitt.  This manual page was written by Peter
+Eisentraut based on the \fBdpatch\-edit\-patch\fP(1) manual page.
+
+.SH "SEE ALSO"
+CDBS documentation in \fI/usr/share/doc/cdbs/\fP,
+\fI/usr/share/cdbs/1/rules/simple-patchsys.mk\fP,
+.BR dpatch\-edit\-patch (1),
+.BR quilt (1)

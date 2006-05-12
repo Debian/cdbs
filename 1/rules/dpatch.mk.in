@@ -1,0 +1,97 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2002,2003 Colin Walters <walters@debian.org>
+#              2004 David B Harris <dbharris@eelf.ddts.net
+#
+# Description: A CDBS frontend to the dpatch patch system
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
+
+####
+# If you use autotools.mk, or any other rule/class which uses it, include
+# this file (dpatch.mk) *after* those.
+####
+
+ifndef _cdbs_bootstrap
+@PATH_RULES@
+endif
+
+ifndef _cdbs_rules_dpatch
+_cdbs_rules_dpatch := 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+
+ifeq ($(_cdbs_included_dpatch),)
+_cdbs_included_dpatch := 1
+
+CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), dpatch
+
+_cdbs_dpatch_apply_rule := apply-dpatches
+_cdbs_dpatch_unapply_rule := deapply-dpatches
+
+DEB_PATCH_SUFFIX ?= .diff .diff.gz .diff.bz2 .patch .patch.gz .patch.bz2 
+DEB_PATCHDIRS ?= debian/patches
+close_parenthesis ?= )
+DEB_PATCHES := $(shell\
+for dir in $(DEB_PATCHDIRS) ; do \
+	for file in $$dir/* ; do \
+		for suffix in $(DEB_PATCH_SUFFIX) ; do \
+			case $$file in *$$suffix$(close_parenthesis) echo $$file ;; esac ; \
+		done ; \
+	done ; \
+done)
+
+# if we have any patches, check if some are patching config.{guess,sub,rpath}
+# and print a warning
+ifneq (, $(DEB_PATCHES))
+CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), patchutils (>= 0.2.25)
+evil_patches_that_do_nasty_things := $(shell\
+if lsdiff=`which lsdiff` ; then \
+  $$lsdiff -H $(DEB_PATCHES) \
+  | egrep "/config\.(guess|sub|rpath)$$" | tr "\n" " " ; \
+fi)
+ifneq (, $(evil_patches_that_do_nasty_things))
+$(warning ** WARNING **:  The following patches are modifiing auto-updated files.   Please exclude the following files from your patch:  $(evil_patches_that_do_nasty_things))
+endif
+endif
+
+post-patches:: apply-dpatches
+
+clean:: deapply-dpatches
+
+deapply-dpatches:
+	$(MAKE) -f debian/rules reverse-config
+	dpatch deapply-all
+	rm -rf debian/patched
+	rm -f debian/stamp-patched
+# after reverting patches, we don't need update-config because:
+#  - the tree is already in a consistent state.
+#  - the initialisation of this routine is already in charge of making
+#    the tree not only consistent, but also prepared to accept patching.
+
+# for the benefit of dpatch-edit-patch
+unpatch: deapply-dpatches
+
+# The patch subsystem 
+apply-dpatches: pre-build debian/stamp-patched
+debian/stamp-patched:
+	$(MAKE) -f debian/rules reverse-config
+	dpatch apply-all
+	$(MAKE) -f debian/rules update-config
+	touch $@
+
+endif
+
+endif

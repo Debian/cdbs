@@ -1,0 +1,941 @@
+cdbs (0.4.39) unstable; urgency=low
+
+  * Added definitions of DEB_HOST_ARCH_CPU and DEB_HOST_ARCH_OS
+    (buildvars.mk)
+  * Added definition of DEB_UPSTREAM_VERSION (buildvars.mk)
+  * Remove *.pyc on clean (python-distutils.mk) (closes: #252134)
+  * Remove *.omf.out from help directory (gnome.mk) (closes: #292374)
+  * Moved dh_shlibdeps call to binary-predeb (debhelper.mk)
+    (closes: #326926)
+  * Rewrote various shell conditionals as make conditionals
+    (closes: #222376)
+  * Added 2.5 as possible Python version
+  * Remove Python build directories for every used Python version
+    separately (closes: #300149); enhanced test case distutils-3.sh to
+    check this
+  * Deal with rules files that set DH_COMPAT (closes: #362831)
+  * Removed DEB_AUTO_CLEANUP_RCS feature; no one was using that correctly
+    (tarball.mk)
+  * Don't clean config.cache, config.log, config.status; the upstream
+    package should do that (autotools.mk, autotools-files.mk)
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 21 Apr 2006 15:06:39 +0200
+
+cdbs (0.4.38) unstable; urgency=low
+
+  * Added support for uuencoded patches (patch by Christopher Martin)
+    (simple-patchsys.mk) (closes: #305857); test case in patchsys-1.sh
+  * Enabled use of $(cdbs_python_ver) in all package-specific targets
+    (patch by Tommi Virtanen) (python-distutils.mk) (closes: #295906);
+    test case in distutils-3.sh
+  * cdbs-edit-patch: Preserve comment in patch (closes: #332501)
+  * Added .NOTPARALLEL target in buildcore.mk to allow parallel make to
+    work (see comment there) (closes: #240981)
+  * Added call to dh_installudev if available (debhelper.mk)
+  * Clean target now reverses patches if some failed to apply
+    (simple-patchsys.mk) (closes: #263168)
+  * Added dpatch stamp file so dpatch apply-all is called only once per
+    build (dpatch.mk) (closes: #318295)
+  * Arranged dh_installinit call so that DEB_UPDATE_RCD_PARAMS is always
+    quoted (debhelper.mk) (closes: #242831)
+  * Run checks under build (not binary) target (ant.mk, makefile.mk);
+    adjusted comments accordingly (buildcore.mk) (closes: #244692)
+  * Enhanced debug package support, with support for multiple debug
+    packages (debhelper.mk)
+  * Merged changes from KDE team (kde.mk):
+    - Support for tarball builds
+    - Directories more flexible
+    - Corrected and improved handling of debug and final options
+    - More files excluded from compression
+    - dh_makeshlibs does not use -V by default anymore
+    - Support for building apidox
+  * Fixed certain cases of Python distutils plus tarball installing in
+    wrong directory (python-distutils.mk) (closes: #281055); test case
+    in distutils-4.sh
+
+ -- Peter Eisentraut <petere@debian.org>  Thu,  6 Apr 2006 22:10:35 +0200
+
+cdbs (0.4.37) unstable; urgency=low
+
+  * Merged all existing documentation, readmes, and examples into one
+    coherent document
+  * Dropped more-or-less redundant text and PostScript formatted
+    documentation
+  * Rewrote gen-dotty in Perl; ocaml dependency is gone
+  * Process depgraph.dot using graphviz instead of springgraph for better
+    looks and speed
+  * Removed autogen.sh; it was nonfunctional (use autoreconf instead)
+  * Document that rules that add commands should come after including
+    CDBS makefiles (closes: #273835)
+  * Added buildcore.mk dependency to hbuild.mk and python-distutils.mk
+  * Use debhelper level 5 by default (debhelper.mk) (closes: #353820);
+    test cases in debhelper-{4,5}.sh
+  * Generate properly versioned build dependency on debhelper depending
+    on level used (debhelper.mk) (closes: #345615)
+  * Automatically add --dbg-package to dh_strip if one debug package is
+    defined and debhelper level 5 is used (buildvars.mk, debhelper.mk)
+    (closes: #228044); test case in debhelper-2.sh
+  * Added call to dh_installcatalogs (debhelper.mk)
+  * Call make as $(MAKE) (autotools.mk, makefile-vars.mk,
+    perlmodule-vars.mk)
+  * Added + to rules calling $(MAKE) indirectly, for correct interaction
+    with parallel make (makefile.mk)
+  * Automatically use --disable-dependency-tracking (autotools-vars.mk)
+    (closes: #337487)
+  * Added DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg) (debhelper.mk)
+    (closes: #262757)
+  * Don't use auto-update debian/control feature (closes: #339720)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat, 25 Mar 2006 00:27:15 +0100
+
+cdbs (0.4.36) unstable; urgency=low
+
+  * Conditionalized targets using make conditionals rather than shell
+    tests (ant.mk, makefile.mk); fixes various quoting problems and is
+    more elegant (closes: #262861, #285583, #320097)
+  * Propagate CPPFLAGS to make (makefile-vars.mk)
+  * Added ant test case, entails new build dependencies ant, kaffe
+  * Check for java executable when checking the JAVA_HOME_DIRS (ant-vars.mk)
+    (closes: #239123)
+  * Added ant-launcher.jar to DEB_CLASSPATH (ant-vars.mk)
+    (closes: #239128, #341275)
+  * Set ANT_HOME to /usr/share/ant by default (ant-vars.mk)
+    (closes: #212196)
+  * Removed build dependency on ocaml-native-compilers; ocaml is enough
+    (closes: #355504)
+
+ -- Peter Eisentraut <petere@debian.org>  Mon,  6 Mar 2006 20:55:02 +0100
+
+cdbs (0.4.35) unstable; urgency=low
+
+  * Fixed build dependencies in hdparm test case (closes: #354361)
+  * Removed special handling of udebs; use debhelper's built-in support
+    now (debhelper.mk) (closes: #248654, #340299, #340866)
+  * Raised implicit debhelper dependency to 4.2.0 for udeb support
+    (debhelper.mk)
+  * Don't conditionalize dh_installlogcheck anymore as it's included in
+    debhelper 4.2.0 (debhelper.mk)
+  * Added call to dh_installmime (debhelper.mk) (closes: #260173)
+  * Removed erroneous references to nonexistent variable DEB_ANT_TEST_TARGET
+    (closes: #307813)
+  * Added support for dh_clean excludes with DEB_CLEAN_EXCLUDES
+    (debhelper.mk) (closes: #314341)
+  * Added debhelper test case for DEB_*_EXCLUDES functionality
+  * Don't play unnecessary tricks with build-essential in the automatic
+    dependencies (buildcore.mk, buildvars.mk) (closes: #316034)
+
+ -- Peter Eisentraut <petere@debian.org>  Tue, 28 Feb 2006 12:17:35 +0100
+
+cdbs (0.4.34) unstable; urgency=low
+
+  * Removed old FSF address from copyright file
+  * Removed spurious leftover confstatMD3O4Y directory
+  * Only print "deprecated" warning if variable is actually changed from
+    default (closes: #256079)
+  * Corrected DEB_COMPRESS_EXCLUDE, DEB_FIXPERMS_EXCLUDE documentation
+    (debhelper.mk) (closes: #260531)
+  * Cosmetic change to make emacs font-lock happier (buildcore.mk)
+    (closes: #317870)
+  * Corrected typo in guide (closes: #348536)
+  * Use elinks to build better-looking plain-text documentation
+    (closes: #330707)
+  * Properly (un)indented makefile comments so they don't appear in the
+    output (closes: #311464)
+  * Removed useless old changelogs
+  * Renamed documentation files from .xhtml to .html
+  * Integrated guide build better with Automake
+  * Eliminated installation of .dbk files
+  * Added man page for cdbs-edit-patch and accept --help (closes: #312736)
+  * Added Suggests of devscripts (better fix for #327151)
+  * Fixed testsuite so that it actually fails if there is an error
+  * Added a python-* package to testsuite so the distutils tests actually
+    do something; fixed Makefile.am so that they have a chance of being
+    called
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 17 Feb 2006 19:19:02 +0100
+
+cdbs (0.4.33) unstable; urgency=low
+
+  * Added myself to uploaders
+  * Allow specifying a makefile (makefile-vars.mk) (closes: #282959)
+  * Skip cleaning if DEB_MAKE_CLEAN_TARGET is unset (makefile.mk)
+    (closes: #338625)
+  * Add unpatch target for dpatch-edit-patch (dpatch.mk) (closes: #284231)
+  * Remove debian/patched/ on clean (dpatch.mk) (closes: #285244)
+  * Remove leading comma in Build-Depends line (buildcore.mk)
+    (closes: #294537)
+  * Propagate CPPFLAGS (autotools-vars.mk) (closes: #301667)
+  * Recognize "changelog" as upstream changelog name (debhelper.mk)
+    (closes: #311517)
+  * cdbs-edit-patch: Use debian/rules clean instead of debclean
+    (closes: #327151)
+  * cdbs-edit-patch: Create debian/patches directory (closes: #344383)
+  * Fix typo in documentation (closes: #260408)
+  * Add missing parentheses in python-distutils.mk (closes: #281053)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat,  4 Feb 2006 00:07:53 +0100
+
+cdbs (0.4.32) unstable; urgency=high
+
+  * Forgot some build-deps (/me need some more sleep) (Closes: #317640).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sun, 10 Jul 2005 17:41:45 +0200
+
+cdbs (0.4.31) unstable; urgency=low
+
+  * Added CDBS guide from DuckCorp.
+  * Register guide into doc-base, and suggest it.
+  * Added myself to Uploaders as i am officially in charge of
+    documentation.
+  * Updated 'debian/copyright'.
+  * Increased Standards-Version (no changes needed).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Tue,  5 Jul 2005 21:49:38 +0200
+
+cdbs (0.4.30) unstable; urgency=low
+
+  * This time do it right.  (Closes: #301692)
+    - 1/class/autotools-vars.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Mon, 23 May 2005 20:40:03 +0200
+
+cdbs (0.4.29) unstable; urgency=low
+
+  * The "back from vac" release.
+
+  * Add DEB_PATCHES initialisation.  (Closes: #295250, #296763, #300465)
+    - 1/rules/dpatch.mk.in
+  * Don't call update-config after reverting patches.  (Closes: #299010)
+    - 1/rules/simple-patchsys.mk.in
+    - 1/rules/dpatch.mk.in
+  * Make sure CDBS_BUILD_DEPENDS is _always_ initialised.  (Closes: #308664)
+    - 1/rules/buildvars.mk.in: Initialise it with "build-essential".
+    - 1/rules/buildcore.mk.in: Strip "build-essential" which isn't needed.
+  * Fix minor syntax error in CDBS_BUILD_DEPENDS construction.
+    - 1/class/autotools-vars.mk.in
+  * Turn patchutils weak dependency into versioned (>= 0.2.25).
+    (Closes: #308983)
+    - 1/rules/simple-patchsys.mk.in
+    - 1/rules/dpatch.mk.in
+  * Fix for parsing of double quotes in control file generation.  This is
+    related to #301607.  Thanks Jonas Smedegaard.
+    - 1/rules/buildcore.mk.in
+  * Clean *.log files from each dir listed in $(DEB_PATCHDIRS).  Thanks
+    Adeodato Simo.  (Closes: #296984)
+    - 1/rules/simple-patchsys.mk.in
+  * Add perl-modules support to CDBS_BUILD_DEPENDS.  (Closes: #305488)
+    - 1/class/perlmodule.mk.in
+  * Add $(DEB_PYTHON_COMPILE_VERSION) to python command.  Thanks Bastian
+    Kleineidam.  (Closes: #307342)
+    - 1/class/python-distutils.mk.in
+  * Fix typo in automake weak dependencies.  (Closes: #301692)
+    - 1/class/autotools-vars.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Wed, 18 May 2005 12:52:21 +0200
+
+cdbs (0.4.28-1) unstable; urgency=low
+
+  * Merge changes from Ubuntu (0.4.26-1ubuntu1):
+
+  Add cdbs-edit-patch script; similar to dpatch-edit-patch to edit an
+  existing patch or create a new one. Does not yet work with tarball.mk,
+  use dbs-edit-patch in this case for now.
+
+  Thanks to Martin Pitt for the script!
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Wed, 20 Apr 2005 07:59:51 -0400
+
+cdbs (0.4.27-4) unstable; urgency=low
+
+  * 1/rules/buildcore.mk.in
+    - Avoid recursive brainfuck with type-handling.  This actualy fixes
+      #297269, but we leave it for t-h to close.
+    - Don't parse tarballs a gazillon of times to find config.{guess,sub,rpath}
+      One shall be enough!
+
+ -- Robert Millan <rmh@debian.org>  Thu, 14 Apr 2005 18:36:04 +0200
+
+cdbs (0.4.27-3) unstable; urgency=low
+
+  * When updating config.* files, pass --remove-destination to cp.  Thanks Christian Aichinger.  (Closes: #297855)
+    - 1/rules/buildcore.mk.in
+    - 1/rules/tarball.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Thu, 10 Mar 2005 13:29:28 +0100
+
+cdbs (0.4.27-2) unstable; urgency=low
+
+  * Don't fail when dpkg-checkbuilddeps check fails.  (Closes: #295884)
+    - 1/rules/buildcore.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Mon, 21 Feb 2005 15:14:42 +0100
+
+cdbs (0.4.27-1) unstable; urgency=low
+
+  * Patch from Loïc Minier to cope with simple-patchsys being included
+    despite no patches existing.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Thu, 17 Feb 2005 09:27:17 -0500
+
+cdbs (0.4.26-4) unstable; urgency=low
+
+  * Fix a nasty conflict between cdbs updating config.* files and patches
+    attempting to modify them on their own.
+
+    WARNING:  Other patch systems based on cdbs are susceptible to this
+    problem and might need similar modifications to the ones done to
+    simple-patchsys.mk.
+
+    In buildcore.mk:
+      - Move config.* updates to a separate update-config target.
+      - Add reverse-config target that reverts update-config using *.cdbs-orig
+      backups.
+      - Make sure both update-config and reverse-config always keep a copy of
+      the old file, and that such "old" file is in sync with the patch system.
+      IOW, the "old" file can either be patched or unpatched and the patch
+      system is responsible for tracking its state (just like for other files).
+      - Add config.rpath to backup recovery routine.
+
+    In simple-patchsys.mk:
+      - Always invoke reverse-config before anything else, and update-config
+        after appliing/reverting patches.
+      - Add weak dependency on patchutils and use lsdiff to issue a big
+        warning if a patch is updating config.* files.
+      - Handle debian/stamp-patched properly so that both apply-patches and
+        reverse-patches targets are idempotent.
+
+    In dpatch.mk:
+      - Always invoke reverse-config before anything else, and update-config
+        after appliing/reverting patches.
+      - Add weak dependency on patchutils and use lsdiff to issue a big
+        warning if a patch is updating config.* files.
+      - Assuming that dpatch itself is in charge of idempotency in the
+        apply/reverse targets.
+      - [OT]: add weak dependency on dpatch.
+
+ -- Robert Millan <rmh@debian.org>  Tue,  8 Feb 2005 17:11:42 +0100
+
+cdbs (0.4.26-3) unstable; urgency=low
+
+  * Fix broken parsing of config.* filenames in $(config_all_tar).
+  * Add sanity check to prevent bogus use of cpu/system variables.
+
+ -- Robert Millan <rmh@debian.org>  Mon,  7 Feb 2005 17:18:41 +0100
+
+cdbs (0.4.26-2) unstable; urgency=low
+
+  * Add myself to Uploaders.
+  * Conditionalise use of --with-alsa in arts.rules example (only used on
+    linux-gnu).  (Closes: #293483)
+  * Support embedding of shell commands in control.in.  (Closes: #276599)
+  * For Cpu/System detection, also understand [cpu: foo] and [system: bar].
+
+ -- Robert Millan <rmh@debian.org>  Sat,  5 Feb 2005 05:21:05 +0100
+
+cdbs (0.4.26-1.3) unstable; urgency=low
+
+  * NMU.
+  * Optimise config.* auto-updating feature when working with tarballs.  In
+    the previous upload, each tarball was uncompressed three times!
+    - 1/rules/buildcore.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Fri,  4 Feb 2005 18:40:31 +0100
+
+cdbs (0.4.26-1.2) unstable; urgency=low
+
+  * NMU.
+  * Improvements for updating config.* files. (Closes: #290940)
+    - 1/class/autotools-files.mk.in
+    - 1/rules/buildcore.mk.in
+    - 1/rules/tarball.mk.in
+  * Support for Cpu/System fields in control.in. (Closes: #293197)
+    - debian/control.in
+    - 1/rules/buildcore.mk.in
+  * Handle (uncompressed) *.tar files. (Closes: #284101)
+    - 1/rules/tarball.mk.in
+  * Check for compressed debian/patches/* implicitly. (Closes: #249931)
+    - 1/rules/simple-patchsys.mk.in
+  * Track autothings in Build-Depends when generating debian/control.
+    (Closes: #277672)
+    - 1/class/autotools-vars.mk.in
+    - 1/class/gnome.mk.in
+    - control.in
+
+ -- Robert Millan <rmh@debian.org>  Thu,  3 Feb 2005 10:05:18 +0100
+
+cdbs (0.4.26-1.1) unstable; urgency=low
+
+  * NMU (with Jeff's permission).
+  * Add optional DEB_AUTO_CLEANUP_RCS feature to tarball.mk.in
+    (Closes: #280365).
+
+ -- Robert Millan <rmh@debian.org>  Mon, 17 Jan 2005 17:50:52 +0100
+
+cdbs (0.4.26-1) unstable; urgency=low
+
+  * Add support for Python 2.4.  Thanks to doko for the reminder.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Mon, 20 Dec 2004 00:07:32 -0500
+
+cdbs (0.4.25-1) unstable; urgency=low
+
+  * Only run dh_desktop and dh_gconf if they're there.  For gnome
+    packages that are transitioning slowly.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Wed, 20 Oct 2004 10:34:51 -0400
+
+cdbs (0.4.24-1) unstable; urgency=low
+
+  This is the "Make MIME not suck for GNOME" release.
+
+  * Call dh_desktop from gnome.mk.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Wed, 13 Oct 2004 12:58:02 -0400
+
+cdbs (0.4.23-1.1) unstable; urgency=low
+
+  * NMU (on Jeff's request).
+  * Set 0.4.23-1.1 as the minimal version that provides the DEB_AUTO_UPDATE\
+    _DEBIAN_CONTROL feature introduced in 0.4.23-1.  (this prevents packages
+    that use this feature from migrating to testing before cdbs itself)
+
+ -- Robert Millan <rmh@debian.org>  Tue,  5 Oct 2004 01:30:47 +0200
+
+cdbs (0.4.23-1) unstable; urgency=low
+
+  * Thanks to Robert Millan for the NMU's!
+    Acknowledging: (Closes: #235961, #268483, #265562, #266982, #267254)
+
+  * Apply Robert's patch to generate config's from config.in.
+    (Closes: #272758).  Further tweaked to honour debian/control as a 
+    target, and to make sure that cdbs doesn't depend on cdbs.
+
+  * Use this new feature in CDBS.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Fri, 24 Sep 2004 13:34:28 -0400
+
+cdbs (0.4.22-1.4) unstable; urgency=low
+
+  * NMU.
+  * Replace config.{guess,sub} with real files instead of symlinks.
+    (Closes: #268483)
+
+ -- Robert Millan <rmh@debian.org>  Sun,  5 Sep 2004 19:53:00 +0200
+
+cdbs (0.4.22-1.3) unstable; urgency=low
+
+  * The "Let's try to do it right this time" NMU.
+  * Some packages define DEB_AUTO_UPDATE_* variables _after_ including cdbs
+    makefiles.  See bug #262295 (last message) for an example.  This is a Bad
+    Thing and breaks the compatibility blurb for DEB_AUTO_UPDATE_AUTOMAKE.
+    I'm adding Yet Another One compatibility blurb in the actual target.
+
+ -- Robert Millan <rmh@debian.org>  Fri, 27 Aug 2004 13:47:01 +0200
+
+cdbs (0.4.22-1.2) unstable; urgency=low
+
+  * NMU again to correct error introduced in -1.1.  Oops!
+  * Always invoke aclocal with _ACLOCAL suffix, not _AUTOMAKE suffix.
+
+ -- Robert Millan <rmh@debian.org>  Fri, 27 Aug 2004 03:22:22 +0200
+
+cdbs (0.4.22-1.1) unstable; urgency=low
+
+  * NMU (with Jeff's permission).
+  * Multiple fixes/improvements to DEB_AUTO_UPDATE_* interface.
+    (Closes: #265562)
+    - Recognise _ACLOCAL, and deprecate _AUTOMAKE for aclocal updates.
+    - Be smarter when looking for autoconf 2.50 or 2.13 command.
+    - Recognise _AUTOHEADER.
+    - Move "_LIBTOOL = post" case to autotools.mk, where it belongs.
+    - Improve config.{guess,sub} replacement code to crawl into the source
+      directory replacing every instance.  In addition, use symlinks instead
+      of copying, which is faster.
+  * Add warnings when DEB_AUTO_UPDATE_* variables are used unconsistently.
+    These should become errors after the release. (Closes: #267254)
+  * Fix DEB_AUTO_UPDATE_ACLOCAL (formerly &_AUTOMAKE) invocation of m4.
+    Thanks Andreas Rottmann.  (Closes: #235961)
+  * Implement DEB_VERBOSE_ALL option.  (Closes: #266982)
+
+ -- Robert Millan <rmh@debian.org>  Fri, 27 Aug 2004 02:34:00 +0200
+
+cdbs (0.4.22-1) unstable; urgency=low
+
+  This is the "What?  You want a those bugs FIXED?" release.
+
+  * Jeff Bailey <jbailey@raspberryginger.com>
+
+    - Acknowledge NMU (Closes: #241504), Thanks Brian!
+
+    - Only call dh_link the second time.  (Closes: #224123)
+    - Make sure the source package is free of cruft. (Closes: #234100)
+    - Call dh_gconf with the right args. (Closes: #234398)
+    - Don't know why the docs went away, but they're back.
+      (Closes: #2359971)
+    - Support DEB_DH_LINK_$(cdbs_curpkg).  (Closes: #242088)
+
+    - Documentation patches, by Michael Wiedmann <mw@miwie.in-berlin.de>
+      Thanks!  (Closes: #243356)
+
+    - Work around packages that don't provide trailing /'s where they
+      ought to.  Patch by Martin Quinson <Martin.Quinson@tuxfamily.org>
+      Thanks!  (Closes: #254125)
+
+    - Fix build env so that make clean and make all aren't overridden,
+      just chained to.  (Use -local, not -am).
+
+    - Update my email address.
+
+ -- Jeff Bailey <jbailey@raspberryginger.com>  Fri,  6 Aug 2004 21:48:10 -0400
+
+cdbs (0.4.21-0.1) unstable; urgency=low
+
+  * Non-maintainer upload
+  * Ran 'autoreconf -f -i' to fix the build system so that dpatch.mk is
+    actually included in the package (Closes: #241504)
+
+ -- Brian Nelson <pyro@debian.org>  Tue, 27 Apr 2004 16:12:15 -0700
+
+cdbs (0.4.21) unstable; urgency=low
+
+  * David B Harris <david@eelf.ddts.net>:
+    - Add wrapper for dpatch patch system, "dpatch.mk". Must be included after
+      "autotools.mk" if the latter is used. Please see dpatch documentation
+      for more information, as this wrapper just calls dpatch(1) to do all the
+      heavy lifting.
+
+ -- Colin Walters <walters@debian.org>  Mon, 23 Feb 2004 03:22:31 +0000
+
+cdbs (0.4.20) unstable; urgency=low
+
+  * Andres Salomon <dilinger@voxel.net>:
+    - New variable DEB_NOEPOCH_VERSION.
+    - Use it in debhelper.mk to avoid putting epoch in udeb versions
+      (Closes: #232809)
+
+ -- Colin Walters <walters@debian.org>  Sun, 15 Feb 2004 06:16:06 +0000
+
+cdbs (0.4.19) unstable; urgency=low
+
+  * Colin Walters <walters@verbum.org>:
+    - Make docbookxml.mk a noop now that catalogs work in sid.
+
+ -- Colin Walters <walters@debian.org>  Wed, 11 Feb 2004 12:59:20 -0500
+	
+cdbs (0.4.18) unstable; urgency=low
+
+  * Andres Salomon <dilinger@voxel.net>:
+    - New variable DEB_DH_ALWAYS_EXCLUDE.
+    - Don't generate maintainer scripts for udebs (Closes: #216148)
+
+ -- Colin Walters <walters@debian.org>  Tue, 20 Jan 2004 13:51:20 -0500
+	
+cdbs (0.4.17) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Add quotes around other DEB_PATCHDIRS_READONLY reference (#227936)
+    - Add dh_gconf call to debhelper.mk. 
+    - Allow setting DEB_UDEB_PACKAGES before including any rules.
+
+ -- Colin Walters <walters@debian.org>  Tue, 20 Jan 2004 13:51:20 -0500
+
+cdbs (0.4.16) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Move dh_shlibdeps back into binary-makedeb, so that it happens after
+      all packages are installed (Closes: #225441)
+
+ -- Colin Walters <walters@debian.org>  Tue, 13 Jan 2004 17:26:22 +0000
+
+cdbs (0.4.15) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Don't lose if DEB_PATCHDIRS_READONLY isn't defined (Closes: #225872)
+    - Apply patch from Robert Millan to add some variables like
+      DEB_HOST_GNU_TYPE to buildvars.mk.in (Closes: #218862)
+    - Apply patch from Robert Millan to add variables for automatically
+      rerunning the autotools: DEB_AUTO_UPDATE_LIBTOOL, DEB_AUTO_UPDATE_AUTOMAKE,
+      and DEB_AUTO_UPDATE_AUTOCONF.  Beware that these do not have corresponding
+      reverse actions in the clean rule.  If you want to avoid your diff being
+      bloated, you'll have to use a separate build dir.  (Closes: #217131).
+
+ -- Colin Walters <walters@debian.org>  Wed,  7 Jan 2004 19:18:10 +0000
+
+cdbs (0.4.14) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Apply patch from Nathaniel W. Turner to fix kde.mk's use of
+      DEB_BUILDDIR (Closes: #206941).
+    - Apply patch from Guillem Jover to make DPATCHLEVEL in
+      simple-patchsys.mk actually work (Closes: #220562).
+    - Apply patch from Robert Millan to simple-patchsys.mk (Closes: #219132)
+      - add DEB_PATCH_SUFFIX variable, to override patch suffix (.patch, .gz, etc)
+      - permit overriding DEB_PATCHDIRS variable
+      - support for compressed patches (detects .gz|.bz2 and issues proper command)
+      - add DEB_PATCHDIRS_READONLY variable. when set to "yes", it will avoid
+        writing log files in the patch directory.
+    - Actually set CDBS_VERSION (Closes: #223707)
+    - Move dh_installdeb, dh_perl, and dh_shlibdeps into the binary-predeb:: hook.
+      This way one can hook stuff after the various postinsts and stuff have been
+      created in DEBIAN/.  (Closes: #215066).
+
+ -- walters <walters@debian.org>  Mon, 15 Dec 2003 04:50:25 +0000
+
+cdbs (0.4.13) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Build-Depend on docbook-xsl (Closes: #215055).
+    - Add configure-time checks for docbook bits and don't build
+      the docs if they're not available.
+    - Sync up with debhelper's architecture regexp (Closes: #215961)
+
+ -- Colin Walters <walters@debian.org>  Wed, 15 Oct 2003 23:17:01 -0400
+
+cdbs (0.4.12) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Fix is_debug_package logic (Closes: #214327, #214316)
+
+ -- Colin Walters <walters@debian.org>  Mon,  6 Oct 2003 08:48:58 -0400
+
+cdbs (0.4.11) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Don't run dh_makeshlibs and dh_strip for packages ending in -dbg.
+    - Don't run dh_installlogcheck if it's not available (Closes: #214271).
+    - Add note about debhelper versioning in main docs.
+
+ -- Colin Walters <walters@debian.org>  Sun,  5 Oct 2003 20:47:57 -0400
+
+cdbs (0.4.10) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Add DocBook-ized documentation from debacle <debacle@knorke.in-berlin.de>.
+    - Use = instead of := to set DEB_MAKE_INVOKE in autotools.mk; this
+      solves a problem with DEB_MAKE_ENVVARS not being used (Closes: #214268).
+
+ -- Colin Walters <walters@debian.org>  Thu,  2 Oct 2003 09:46:11 -0400
+
+cdbs (0.4.9) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Don't pass CFLAGS and CXXFLAGS on the make commandline if we've
+      already passed them to ./configure.
+    - scripts/list-packages: Only build against architectures matching
+      the requested arch exactly.
+  * Jeff Bailey <jbailey@debian.org>:
+    - make python-distutils honour $(DEB_INSTALL_PYTHON_ALL) and
+    $(DEB_INSTALL_PYTHON_$(cdbs_curpkg)).
+
+ -- Colin Walters <walters@debian.org>  Mon, 15 Sep 2003 20:11:06 -0400
+
+cdbs (0.4.8) unstable; urgency=low
+
+  * Stefan Gybas <sgybas@debian.org>:
+    - Fixed ignored DEB_ANT_PROPERTYFILE in the Ant class
+    - Renamed ANT_OPTS to ANT_ARGS to match Ant's wrapper script and
+      documentation
+    - Added an example for the Ant class and improved its documentation
+
+ -- Stefan Gybas <sgybas@debian.org>  Wed, 10 Sep 2003 13:21:26 +0200
+  
+cdbs (0.4.7) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Remove Conflicts: autoconf2.13.  Users of autotools.mk should
+      just be aware of the issue.
+
+ -- Colin Walters <walters@debian.org>  Tue,  9 Sep 2003 13:47:20 -0400
+
+cdbs (0.4.6) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - More documentation for tarball.mk (Closes: #206941)
+    - New variable DEB_UPDATE_RCD_PARAMS_package (Closes: #206955)
+    - Add DEB_PYTHON_COMPILE_VERSION to python-distutils.mk
+      (Closes: #204843)
+    - Call dh_installlogcheck by default (Closes: #202091)
+  * Joerg Wendland <joergland@debian.org>
+    - Call dh_installlogrotate by default (Closes: #207625)
+
+ -- Colin Walters <walters@debian.org>  Sun, 31 Aug 2003 00:48:56 -0400
+
+cdbs (0.4.5.5) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - simple-patchsys.mk: Use DEB_SRCDIR instead of DEB_BUILDDIR
+      for applying patches.
+    - buildcore.mk: Don't run common-blah rules at entrypoints
+      like binary-arch and binary-indep.  They can actually
+      have side effects, which isn't what we want if the
+      package really doesn't have any indep or arch packages
+      (Closes: #207981).
+
+ -- Colin Walters <walters@debian.org>  Sun, 31 Aug 2003 00:41:27 -0400
+
+cdbs (0.4.5.4) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - test/udeb1.sh: New udeb test.
+    - New variables DEB_ARCH_REGULAR_PACKAGES and DEB_INDEP_REGULAR_PACKAGES.
+    - Fix udeb creation rules.
+  * Jonas Smedegaard <dr@jones.dk>
+    - Fix DEB_MAKEMAKER_PACKAGE resolving for Perl modules. This closes:
+      bug#5361 thanks to Dagfinn Ilmari Mannsaker <ilmari@ilmari.org>
+      (although intended behaviour was fixed instead of using his proposed
+      patch).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 24 Aug 2003 14:47:38 +0200
+  
+cdbs (0.4.5.3) unstable; urgency=low
+
+  * Jeff Bailey <jbailey@nisa.net>:
+    - Make debhelper.mk.in defaults respect $(DEB_SRCDIR) for looking for
+      AUTHORS, README, ChangeLog, and other such files.
+    - debhelper.mk now installs THANKS if found.
+  * Stefan Gybas <sgybas@debian.org>:
+    - Added Ant class for Java packages (Closes: #206408)
+    - Fixed prerequisites of common-install-arch and common-install-indep in
+      buildcore.mk
+  * Colin Walters <walters@debian.org>:
+    - Add Stefan Gybas to AUTHORS.
+
+ -- Jeff Bailey <jbailey@nisa.net>  Tue, 19 Aug 2003 01:03:46 -0400
+
+cdbs (0.4.5.2) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Have binary-arch and binary-indep depend on common-binary-arch
+      and common-binary-indep, not just common-binary (Closes: #203985).
+    - Use a stamp file for building in makefile.mk (Closes: #203271).
+
+ -- Colin Walters <walters@debian.org>  Sun, 10 Aug 2003 18:45:33 -0400
+
+cdbs (0.4.5.1) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Fix silly error in gnome.mk (Closes: #203974).
+
+ -- Colin Walters <walters@debian.org>  Sun,  3 Aug 2003 11:49:11 -0400
+
+cdbs (0.4.5) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Just run /usr/bin/python if this doesn't appear to be a
+      multi-Python-version package (Closes: #199229).
+    - Implement deprecated variables.
+    - Start on multi-build stuff.
+    - Don't define DEB_MAKE_CHECK_TARGET by default
+      (Closes: #203704, #203703, #203610).
+    - Quote id -u output (Closes: #203391).
+    - Pass variables like CC and CFLAGS to configure (Closes: #202387).
+  * Jonas Smedegaard <dr@jones.dk>:
+    - Build-conflict with autoconf older than 2.54 (test 2 and 5 fails
+      if autoconf installed but too old).
+    - Only provide --host to configure if different from --build, as
+      recommended by autotools-dev README.Debian.
+    - Conflict with autoconf2.13 for now (it needs different workarounds
+      and I don't know of a safe way to distinguish between them).
+    - Install Perl modules into first package by default (instead of tmp
+      when there's more than one package).
+    - Tweak buildcore.mk and makefile.mk to allow patching makefile and
+      do reverse-patching after other clean rules.
+
+ -- Colin Walters <walters@debian.org>  Fri,  1 Aug 2003 15:59:41 -0400
+
+cdbs (0.4.4) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Major refactoring to buildcore.mk and debhelper.mk to fully support
+      an arch/indep split.  Now there are -arch and -indep variants of
+      most rules, such as common-build.  Please use those
+      (or the package-specific rule) if at all possible.  The other variants
+      are deprecated.  If you do the same thing for both -arch and -indep
+      builds, please see how e.g. autotools.mk implements this.
+    - All variables are now set using = or := instead of ?=.  The latter
+      encouraged people to set variables before including the makefiles,
+      which is wrong.  In almost all cases, you should be setting the
+      variables *after* including the makefiles.
+    - debhelper.mk now calls dh_installemacsen (Closes: #197935).
+    - debhelper.mk now has many more variables of the form DEB_DH_*_ARGS.
+    - gnome.mk now calls dh_scrollkeeper if debhelper is used.
+    - Split out vars from makefile.mk into makefile-vars.mk.
+  * Jeff Bailey <jbailey@debian.org>
+    - Various bug fixes
+  * Jonas Smedegaard <dr@jones.dk>
+    - Update perlmodule.mk to be in sync with makefile.mk.
+    - python-distutils.mk now also handles simpler non-versioned python
+      packages.
+    - Various small tweaks to perlmodule.mk and python-distutils.mk.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 24 Jun 2003 16:54:55 +0200
+  
+cdbs (0.4.3.1) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Revert previous changes to the 'build' target; build now is again
+      hardcoded to just depend on build-arch and build-indep.  This is
+      in line with policy, §7.6.
+    - Detect python in configure.ac.
+    - Add Build-Depends on python-dev (Closes: #197436).
+    - Change Maintainer: to <build-common-hackers@lists.alioth.debian.org>.
+    - Use $(DEB_DESTDIR) to reference config.status in autotools.mk
+      (Closes: #197477).
+
+ -- Colin Walters <walters@debian.org>  Sun, 15 Jun 2003 13:42:55 -0400
+
+cdbs (0.4.3) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Make 'build' target by default depend on nothing.
+      Add DEB_BUILD_TARGET_DEPENDS variable.
+    - Remove obsolete test:: target.
+    - Add new common-post-build:: target.  This is used by
+      makefile.mk to run checks, using the
+      DEB_MAKE_CHECK_TARGET variable.   By default this is
+      unset; however, autotools.mk sets it to 'check'.  This
+      means check is run by default for autotools.mk using
+      packages.  To avoid running the checks, set
+      DEB_BUILD_OPTIONS=nocheck.
+  * Jeff Bailey <jbailey@debian.org>:
+    - Various bug fixes and testsuite tweaks.
+    - tarball builds now support bzip, bzip2, and zip
+    - Can now override which tarballs are unpacked by setting
+      DEB_TARBALL
+
+ -- Jeff Bailey <jbailey@debian.org>  Thu, 12 Jun 2003 15:29:31 -0400
+
+cdbs (0.4.2) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - debhelper.mk now includes a number of common-binary- rules,
+      which is handy for hooking on generic stuff not necessarily
+      specific to a package.  It now also includes some more
+      documentation for the rules.
+    - docbookxml.mk now does its changes in pre-build so it's
+      actually useful.  Sigh.
+    - debhelper.mk now uses test -s to see if documentation files
+      have nonzero size before including them (Closes: #197008).
+    - examples/python-logging.rules is now actually included.
+
+ -- Colin Walters <walters@debian.org>  Sat,  7 Jun 2003 17:22:34 -0400
+
+cdbs (0.4.0.1) unstable; urgency=low
+
+  The "Jordi Mallach is watching me" release.
+
+  * Jeff Bailey <jbailey@debian.org>:
+    - Add copyright heads to my files.
+    - Added regression test suite.  Not called by default.
+    - tarball.mk officially here now.  It appears to work.
+  * Colin Walters <walters@debian.org>:
+    - Add copyright headers to most files.
+    - Remove direct dependency by autotools.mk on autotools-vars.mk;
+      this makes the depgraph look nicer and it doesn't hurt anything.
+    - python-distutils.mk actually works now.
+    - New: examples/python-logging.rules.
+    - Minor cleanups to examples/libgd-graph-perl.rules.
+    - Fix --update-rcd-params parameter passed to dh_installinit
+      (Closes: #196500).
+
+ -- Colin Walters <walters@debian.org>  Sat,  7 Jun 2003 13:52:44 -0400
+
+cdbs (0.4.0) unstable; urgency=low
+
+  * Colin Walters <walters@debian.org>:
+    - Package is now Debian-native.
+    - A dependency graph is now included.
+    - langcore.mk now correctly includes buildcore.mk.
+    - docbookxml.mk now really fixes Docbook files (Closes: #196215)
+    - gnome.mk includes docbookxml.mk after autotools.mk, to ensure
+      the docbook fixes run after build.
+    - simple-patchsys.mk now removes empty files using patch's -E option.
+    - debhelper.mk implements DEB_UPDATE_RCD_PARAMS (Closes: #196385)
+  * Jeff Bailey <jbailey@debian.org>
+    - Support has been added for builddir != srcdir builds.  To use this
+      define DEB_BUILDDIR and (optionally) DEB_SRCDIR (Closes: #194539).
+
+ -- Colin Walters <walters@debian.org>  Thu,  5 Jun 2003 14:02:24 -0400
+
+cdbs (0.2.12-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Sun,  1 Jun 2003 13:38:59 -0400
+
+cdbs (0.2.11-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Colin Walters <walters@debian.org>  Thu, 29 May 2003 15:33:32 -0400
+
+cdbs (0.2.10-1) unstable; urgency=low
+
+  * New upstream release.
+    - Correctly sets default value of DEB_AC_AUX_DIR to $(CURDIR)
+      instead of $(pwd).  (Closes: #195188).
+  * debian/control:
+    - Bump Build-Depends on debhelper to 4.1.0.
+
+ -- Colin Walters <walters@debian.org>  Thu, 29 May 2003 03:01:24 -0400
+
+cdbs (0.2.9-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/rules:
+    - Minor cleanups.
+
+ -- Colin Walters <walters@debian.org>  Wed, 28 May 2003 21:57:53 -0400
+
+cdbs (0.2.8-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Mon, 26 May 2003 16:17:48 -0400
+
+cdbs (0.2.7-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Mon, 26 May 2003 02:41:14 -0400
+
+cdbs (0.2.6-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Sun, 25 May 2003 14:15:09 -0400
+
+cdbs (0.2.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Sun, 25 May 2003 04:25:45 -0400
+
+cdbs (0.2.4-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Sat, 24 May 2003 02:56:40 -0400
+
+cdbs (0.2.3-1) unstable; urgency=low
+
+  * The "Department Of Homeland Security Deputizes Real Mean Dog" release.
+  * New upstream release.
+    - Uses = instead of == in tests (Closes: #194046).
+  * debian/control:
+    - Bump Standards-Version to 3.5.10, no changes required.
+
+ -- Colin Walters <walters@debian.org>  Tue, 20 May 2003 13:37:59 -0400
+
+cdbs (0.2.2-1) unstable; urgency=low
+
+  * The "Take This Job And Love It" release.
+  * New upstream release.
+
+ -- Colin Walters <walters@debian.org>  Tue, 20 May 2003 04:19:00 -0400
+
+cdbs (0.2.1-1) unstable; urgency=low
+
+  * Initial version (Closes: #188049).
+
+ -- Colin Walters <walters@debian.org>  Mon, 12 May 2003 17:23:20 -0400

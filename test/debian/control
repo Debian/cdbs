@@ -1,0 +1,11 @@
+Source: cdbs-testsuite
+Section: devel
+Priority: optional
+Maintainer: Jeff Bailey <jbailey@debian.org>
+Standards-Version: 3.5.10
+
+Package: cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've 
+ managed to install this, something has gone horribly wrong.
