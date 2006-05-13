@@ -66,6 +66,10 @@ clean:: reverse-patches
 	    rm -f $$dir/*.log ; \
 	done
 
+# It's best to try the patch levels in this weird order, to avoid
+# problems with patches that only create new files (see bug #365524).
+cdbs_simple_patchsys_levels = 1 0 2
+
 # The patch subsystem 
 apply-patches: pre-build debian/stamp-patched
 debian/stamp-patched: $(DEB_PATCHES)
@@ -95,7 +99,7 @@ debian/stamp-patched reverse-patches:
 	  success=""; \
 	  if [ -z "$$level" ]; then \
 	    echo -n "Trying "; if test -n "$$reverse"; then echo -n "reversed "; fi; echo -n "patch $$patch at level "; \
-	    for level in 0 1 2; do \
+	    for level in $(cdbs_simple_patchsys_levels); do \
 	      if test -z "$$success"; then \
 	        echo -n "$$level..."; \
 		if [ "$(DEB_PATCHDIRS_READONLY)" = "yes" ] ; then \
