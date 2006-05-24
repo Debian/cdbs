@@ -1,7 +1,7 @@
 Document: cdbs
 Title: CDBS Documentation
 Author: Marc Dequènes (Duck) <Duck@DuckCorp.org>
-Abstract: Documentation for the CDBS build system
+Abstract: Documentation for the Common Debian Build System
 Section: Apps/Tools
 
 Format: HTML
@@ -10,9 +10,3 @@ Files: /usr/share/doc/cdbs/*.html
 
 Format: PDF
 Files: /usr/share/doc/cdbs/cdbs-doc.pdf.gz
-
-Format: PostScript
-Files: /usr/share/doc/cdbs/cdbs-doc.ps.gz
-
-Format: text
-Files: /usr/share/doc/cdbs/cdbs-doc.txt.gz

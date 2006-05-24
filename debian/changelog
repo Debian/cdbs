@@ -6,8 +6,14 @@ cdbs (0.4.40) UNRELEASED; urgency=low
   * cdbs-edit-patch: Avoid error message when creating new patch
   * Try patches at level 1 first, to avoid problems with patches that only
     create new files (simple-patchsys.mk) (closes: #365524)
+  * Unset DEB_DBG_PACKAGE_ALL if some DEB_DBG_PACKAGE_pkg is set by user
+    (debhelper.mk); test case in debhelper-6.sh
+  * Set DEB_DBG_PACKAGE_pkg automatically if corresponding pkg exists
+    (debhelper.mk) (closes: #365122); test case in debhelper-7.sh
+  * Resurrected old documentation changelog
+  * Fixed doc-base entries
 
- -- Peter Eisentraut <petere@debian.org>  Sun, 14 May 2006 00:39:00 +0200
+ -- Peter Eisentraut <petere@debian.org>  Wed, 24 May 2006 23:53:15 +0200
 
 cdbs (0.4.39-0.1) unstable; urgency=low
 
@@ -137,9 +143,9 @@ cdbs (0.4.35) unstable; urgency=low
   * Added call to dh_installmime (debhelper.mk) (closes: #260173)
   * Removed erroneous references to nonexistent variable DEB_ANT_TEST_TARGET
     (closes: #307813)
-  * Added support for dh_clean excludes with DEB_CLEAN_EXCLUDES
+  * Added support for dh_clean excludes with DEB_CLEAN_EXCLUDE
     (debhelper.mk) (closes: #314341)
-  * Added debhelper test case for DEB_*_EXCLUDES functionality
+  * Added debhelper test case for DEB_*_EXCLUDE functionality
   * Don't play unnecessary tricks with build-essential in the automatic
     dependencies (buildcore.mk, buildvars.mk) (closes: #316034)
 

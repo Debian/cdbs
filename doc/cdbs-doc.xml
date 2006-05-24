@@ -793,10 +793,20 @@ DEB_DBG_PACKAGE_foo-bin = foo-bin-dbg
 </programlisting>
         </para>
 
-        <para>If exactly one debug package is defined but you do not
-        want to put all debug symbols into it, unset the variable
-        <varname>DEB_DBG_PACKAGE_ALL</varname> and optionally assign
-        the debug packages individually as shown above.</para>
+        <para>If exactly one debug package is defined, setting any
+        variable
+        <varname>DEB_DBG_PACKAGE_<replaceable>package</replaceable></varname>
+        disables the behavior of putting all debug symbols in that
+        package.</para>
+
+        <para>If there is more than one debug package defined and each
+        debug package is named <literal>foo-dbg</literal> such that
+        there is a package called <literal>foo</literal>, then the
+        assignments <literal>DEB_DBG_PACKAGE_foo = foo-dbg</literal>
+        are done automatically.  Again, this only happens if all debug
+        packages can be assigned this way.  Of course, all these
+        assignments can be overridden if you find that this behavior
+        doesn't quite work for you.</para>
       </sect2>
     </sect1>
   </chapter>
@@ -2181,6 +2191,28 @@ clean::
 
   <colophon>
     <title>Thanks</title>
+
+    <para>This document was originally written by Marc Dequènes and
+    Arnaud Patard with the following revision history:
+
+    <revhistory>
+        <revision>
+          <revnumber>0.1.0</revnumber>
+          <date>2005-04-03</date>
+          <revremark>First Public Release (for CDBS V0.4.27-3)</revremark>
+        </revision>
+        <revision>
+          <revnumber>0.1.1</revnumber>
+          <date>2005-06-07</date>
+          <revremark>Updated for CDBS V0.4.30 (perl class build dependency management, cdbs-edit-patch script)</revremark>
+        </revision>
+        <revision>
+          <revnumber>0.1.2</revnumber>
+          <date>2005-07-05</date>
+          <revremark>Added DEB_CONFIGURE_SCRIPT_ENV usage warning, fixed typo.</revremark>
+        </revision>
+      </revhistory>
+    </para>
 
     <para>Thanks to Jeff Bailey for his patience and for replying to
     so many questions.</para>
