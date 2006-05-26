@@ -313,6 +313,13 @@ include /usr/share/cdbs/1/class/autotools.mk
         <filename>/usr/share/cdbs/1</filename>.</para>
       </note>
 
+      <warning>
+        <para>CDBS does not work if the name of the current directory
+        contains spaces or some other special characters such as
+        quotation marks.  This situation is very hard to handle in
+        <command>make</command>, so it is best to stick to
+        <quote>sane</quote> directory names.</para>
+      </warning>
     </sect1>
 
     <sect1>

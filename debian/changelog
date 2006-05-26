@@ -12,8 +12,11 @@ cdbs (0.4.40) UNRELEASED; urgency=low
     (debhelper.mk) (closes: #365122); test case in debhelper-7.sh
   * Resurrected old documentation changelog
   * Fixed doc-base entries
+  * Documented that directories with special characters are not supported
+    (closes: #306941)
+  * Corrected some typos in documentation (closes: #365457)
 
- -- Peter Eisentraut <petere@debian.org>  Wed, 24 May 2006 23:53:15 +0200
+ -- Peter Eisentraut <petere@debian.org>  Thu, 25 May 2006 23:55:57 +0200
 
 cdbs (0.4.39-0.1) unstable; urgency=low
 
