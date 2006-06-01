@@ -24,9 +24,7 @@
 # this file (dpatch.mk) *after* those.
 ####
 
-ifndef _cdbs_bootstrap
-@PATH_RULES@
-endif
+#PATH_RULES#
 
 ifndef _cdbs_rules_dpatch
 _cdbs_rules_dpatch := 1

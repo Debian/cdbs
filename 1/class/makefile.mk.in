@@ -17,10 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-
-ifndef _cdbs_bootstrap
-@PATH_RULES@
-endif
+#PATH_RULES#
 
 ifndef _cdbs_class_makefile
 _cdbs_class_makefile := 1

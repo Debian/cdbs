@@ -19,5 +19,4 @@ _cdbs_package_root_dir := $(CURDIR)/../../..
 _cdbs_scripts_path := $(_cdbs_package_root_dir)/scripts
 _cdbs_rules_path := $(_cdbs_package_root_dir)/1/rules
 _cdbs_class_path := $(_cdbs_package_root_dir)/1/class
-_cdbs_bootstrap := yes
 _cdbs_makefile_suffix := .in

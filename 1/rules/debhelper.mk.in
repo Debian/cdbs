@@ -70,9 +70,7 @@
 #   Completely override argument passing to dh_perl.
 ####
 
-ifndef _cdbs_bootstrap
-@PATH_RULES@
-endif
+#PATH_RULES#
 
 ifndef _cdbs_rules_debhelper
 _cdbs_rules_debhelper := 1

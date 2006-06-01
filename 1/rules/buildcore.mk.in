@@ -17,9 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-ifndef _cdbs_bootstrap
-@PATH_RULES@
-endif
+#PATH_RULES#
 
 ifndef _cdbs_rules_buildcore
 _cdbs_rules_buildcore := 1
@@ -204,11 +202,7 @@ ifneq (, $(shell egrep "\[(system|cpu): .*\]" debian/control.in))
 $(error Inconsistency in control.in.  [(system|cpu): ] tags were used but Cpu:|System: was not)
 endif
 else
-# Prevent recursive braindamage when building cdbs with itself.
-ifeq ($(_cdbs_bootstrap), )
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.26-2)
-endif
-# and type-handling with cdbs.
+# Prevent recursive braindamage when building type-handling with cdbs.
 ifeq (, $(shell grep -x 'Package: type-handling' debian/control))
 CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), type-handling (>= 0.2.5)
 endif
