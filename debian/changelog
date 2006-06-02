@@ -1,8 +1,9 @@
 cdbs (0.4.41) UNRELEASED; urgency=low
 
   * Removed _cdbs_bootstrap variable
+  * Propagate LDFLAGS (autotools-vars.mk, makefile-vars.mk)
 
- -- Peter Eisentraut <petere@debian.org>  Fri,  2 Jun 2006 00:15:12 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sat,  3 Jun 2006 00:21:20 +0200
 
 cdbs (0.4.40) unstable; urgency=low
 
