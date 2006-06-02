@@ -1,0 +1,42 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Description: A class to build qmake packages
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
+
+#PATH_RULES#
+
+ifndef _cdbs_class_qmake
+_cdbs_class_qmake := 1
+
+include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
+
+DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) make -C $(DEB_BUILDDIR)
+
+DEB_MAKE_INSTALL_TARGET = install INSTALL_ROOT=$(DEB_DESTDIR)
+DEB_MAKE_CLEAN_TARGET = distclean
+
+QMAKE = qmake
+
+common-configure-arch common-configure-indep:: common-configure-impl
+common-configure-impl:: $(DEB_BUILDDIR)/Makefile
+$(DEB_BUILDDIR)/Makefile:
+	cd $(DEB_BUILDDIR) && $(QMAKE) $(DEB_QMAKE_ARGS) 'QMAKE_CFLAGS_RELEASE = $(CPPFLAGS) $(CFLAGS)' 'QMAKE_CXXFLAGS_RELEASE = $(CPPFLAGS) $(CXXFLAGS)'
+
+clean::
+	rm -f $(DEB_BUILDDIR)/Makefile $(DEB_BUILDDIR)/.qmake.internal.cache
+
+endif

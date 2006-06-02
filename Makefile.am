@@ -53,6 +53,7 @@ all_mk_files := 1/rules/buildvars.mk		\
 		1/class/perlmodule-vars.mk	\
 		1/class/perlmodule.mk		\
 		1/class/python-distutils.mk	\
+		1/class/qmake.mk		\
 		1/class/hbuild.mk
 
 %.png: %.dot

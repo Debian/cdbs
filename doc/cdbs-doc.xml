@@ -1379,6 +1379,39 @@ include /usr/share/cdbs/1/class/kde.mk
     </sect1>
 
     <sect1>
+      <title>The Qmake Class</title>
+
+      <para>Qmake is a build tool for software written for the Qt
+      toolkit library.  To use the Qmake class, add this include to
+      your <filename>debian/rules</filename>:
+
+<programlisting>
+include /usr/share/cdbs/1/class/qmake.mk
+</programlisting> 
+
+      The class takes care of the call to <command>qmake</command> and
+      the subsequent calls to <command>make</command>, with all the
+      necessary options to honor <varname>DEB_BUILD_OPTIONS</varname>,
+      for example.  To that end, the Qmake class builds upon the
+      makefile class.</para>
+
+      <para>The Qmake class will call <literal>make install</literal>,
+      but many Qmake projects are not set up to have a functioning
+      install target, in which case the installation of the package
+      components has to be handled manually.</para>
+
+      <para><varname>DEB_BUILD_OPTIONS</varname> is checked for the
+      following options:
+      <variablelist>
+        <varlistentry>
+          <term><literal>noopt</literal></term>
+          <listitem><para>use <option>-O0</option> instead of <option>-O2</option></para></listitem>
+        </varlistentry>
+      </variablelist>
+      </para>
+    </sect1>
+
+    <sect1>
       <title>The Ant Class</title>
 
       <para>Ant is a build tool for software written in the Java
