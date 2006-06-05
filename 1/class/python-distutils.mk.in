@@ -69,8 +69,11 @@ $(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
 # This class can optionally utilize debhelper's "dh_python" command.  Just
 # be sure you include debhelper.mk before including this file.
 ifdef _cdbs_rules_debhelper
+
+DEB_DH_PYTHON_ARGS = $(addprefix -V ,$(DEB_PYTHON_COMPILE_VERSION)) $(DEB_DH_PYTHON_ARGS_ALL) $(DEB_DH_PYTHON_ARGS_$(cdbs_curpkg))
+
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
-	dh_python -p$(cdbs_curpkg)
+	dh_python -p$(cdbs_curpkg) $(DEB_DH_PYTHON_ARGS)
 endif
 
 

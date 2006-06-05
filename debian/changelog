@@ -3,8 +3,10 @@ cdbs (0.4.41) UNRELEASED; urgency=low
   * Removed _cdbs_bootstrap variable
   * Propagate LDFLAGS (autotools-vars.mk, makefile-vars.mk)
   * Added qmake class (closes: #360589)
+  * Honor DEB_PYTHON_COMPILE_VERSION when calling dh_python
+    (python-distutils.mk) (closes: #369335)
 
- -- Peter Eisentraut <petere@debian.org>  Sat,  3 Jun 2006 00:59:45 +0200
+ -- Peter Eisentraut <petere@debian.org>  Mon,  5 Jun 2006 22:44:27 +0200
 
 cdbs (0.4.40) unstable; urgency=low
 
