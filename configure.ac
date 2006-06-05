@@ -34,27 +34,12 @@ AC_PATH_PROG(PERL, [perl])
 if test "x$PERL" == "x"; then
   AC_MSG_ERROR([you must have Perl 5 installed])
 fi
-AC_SUBST(PERL)
 
 AC_PATH_PROG(PYTHON, [python])
 if test "x$PYTHON" == "x"; then
   AC_PATH_PROG(PYTHON, [python2.2])
 fi
-AC_SUBST(PYTHON)
 AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
-
-AC_PATH_PROG(XSLTPROC, [xsltproc])
-AC_SUBST(XSLTPROC)
-if test x"$XSLTPROC" != x; then
-  AC_MSG_CHECKING([for docbook onechunk.xsl stylesheet])
-  if test -f /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl; then
-    stylesheet=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl
-    AC_MSG_RESULT([yes])
-  else
-    AC_MSG_RESULT([no])
-  fi  
-fi
-AM_CONDITIONAL(HAVE_DOCBOOK, test x"$XSLTPROC" != x && test x"$stylesheet" != x)
 
 AC_CONFIG_FILES([Makefile scripts/list-packages test/Makefile])
 
