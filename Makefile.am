@@ -31,8 +31,7 @@ edit = $(PERL) -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_
 	$(edit) <$(srcdir)/$< >$@.tmp
 	mv $@.tmp $@
 
-all_mk_in_files := $(wildcard 1/class/*.mk.in 1/rules/*.mk.in)
-all_mk_files := 1/rules/buildvars.mk		\
+all_mk_files =	1/rules/buildvars.mk		\
 		1/rules/buildcore.mk		\
 		1/rules/debhelper.mk		\
 		1/rules/simple-patchsys.mk	\
@@ -78,7 +77,6 @@ rulesdir = $(pkgdatadir)/1/rules
 bin_SCRIPTS = scripts/cdbs-edit-patch
 dist_man_MANS = scripts/cdbs-edit-patch.1
 
-all_scripts_in_files := $(wildcard scripts/*.in)
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)
 

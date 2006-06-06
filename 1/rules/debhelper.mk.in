@@ -73,7 +73,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_rules_debhelper
-_cdbs_rules_debhelper := 1
+_cdbs_rules_debhelper = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
@@ -83,9 +83,9 @@ DH_COMPAT = 5
 endif
 
 ifeq ($(DH_COMPAT),4)
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
 else
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), debhelper (>= 5)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5)
 endif
 
 ifeq ($(DEB_VERBOSE_ALL), yes)

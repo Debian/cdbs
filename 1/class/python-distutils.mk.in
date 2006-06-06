@@ -24,7 +24,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_class_python_distutils
-_cdbs_class_python_distutils := 1
+_cdbs_class_python_distutils = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
@@ -39,10 +39,10 @@ DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 
 # make: *** No rule to make target `voodoo'.  Stop.
-DEB_PYTHON_REAL_LIB_PACKAGES := $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
+DEB_PYTHON_REAL_LIB_PACKAGES = $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
 # If no versioned python library packages found, grab all simpler ones
 ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
-DEB_PYTHON_SIMPLE_PACKAGES := $(strip $(filter python-%,$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
+DEB_PYTHON_SIMPLE_PACKAGES = $(strip $(filter python-%,$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
 endif
 
 cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst python%,%,$(cdbs_curpkg))))

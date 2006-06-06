@@ -20,7 +20,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_class_ant_vars
-_cdbs_class_ant_vars := 1
+_cdbs_class_ant_vars = 1
 
 # Ant home directory.  Doesn't need to be changed except when using
 # nonstandard Ant installations.
@@ -41,7 +41,7 @@ JAVACMD   = $(JAVA_HOME)/bin/java
 # files will silently be ignored. tools.jar is automatically added to the
 # end of the class path if it exists in the JDK's lib directory.
 # You can override the complete class path using DEB_CLASSPATH.
-DEB_JARS_BASE := /usr/share/java
+DEB_JARS_BASE = /usr/share/java
 DEB_CLASSPATH = $(ANT_HOME)/lib/ant.jar:$(ANT_HOME)/lib/ant-launcher.jar:$(shell for jar in $(DEB_JARS); do \
 		if [ -f "$$jar" ]; then echo -n "$${jar}:"; fi; \
 		if [ -f "$$jar".jar ]; then echo -n "$${jar}.jar:"; fi; \

@@ -5,8 +5,10 @@ cdbs (0.4.41) UNRELEASED; urgency=low
   * Added qmake class (closes: #360589)
   * Honor DEB_PYTHON_COMPILE_VERSION when calling dh_python
     (python-distutils.mk) (closes: #369335)
+  * Replaced most uses of := by = in makefiles.  This generally gives
+    more reasonable behavior.
 
- -- Peter Eisentraut <petere@debian.org>  Mon,  5 Jun 2006 22:44:27 +0200
+ -- Peter Eisentraut <petere@debian.org>  Tue,  6 Jun 2006 21:30:39 +0200
 
 cdbs (0.4.40) unstable; urgency=low
 

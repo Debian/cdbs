@@ -21,7 +21,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_class_perlmodule_vars
-_cdbs_class_perlmodule_vars := 1
+_cdbs_class_perlmodule_vars = 1
 
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 

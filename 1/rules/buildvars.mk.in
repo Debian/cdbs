@@ -20,9 +20,9 @@
 #PATH_RULES#
 
 ifndef _cdbs_rules_buildvars
-_cdbs_rules_buildvars := 1
+_cdbs_rules_buildvars = 1
 
-CDBS_VERSION := @PACKAGE_VERSION@
+CDBS_VERSION = @PACKAGE_VERSION@
 
 # Common useful variables
 DEB_SOURCE_PACKAGE := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))
@@ -48,8 +48,8 @@ endif
 #DEB_INDEP_UDEB_PACKAGES = $(filter %-udeb, $(DEB_INDEP_PACKAGES))
 # A handy list of every package, udeb or not
 DEB_ALL_PACKAGES = $(DEB_PACKAGES) $(DEB_UDEB_PACKAGES)
-DEB_INDEP_REGULAR_PACKAGES := $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_INDEP_PACKAGES))
-DEB_ARCH_REGULAR_PACKAGES := $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_ARCH_PACKAGES))
+DEB_INDEP_REGULAR_PACKAGES = $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_INDEP_PACKAGES))
+DEB_ARCH_REGULAR_PACKAGES = $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_ARCH_PACKAGES))
 
 DEB_DBG_PACKAGES = $(filter %-dbg, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
 
@@ -79,6 +79,6 @@ else
 	DEB_DESTDIR = $(CURDIR)/debian/tmp/
 endif
 
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.23-1.1)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.23-1.1)
 
 endif

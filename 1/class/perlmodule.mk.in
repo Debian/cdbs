@@ -21,7 +21,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_class_perlmodule
-_cdbs_class_perlmodule := 1
+_cdbs_class_perlmodule = 1
 
 # Make sure that CDBS_BUILD_DEPENDS is initialised
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)

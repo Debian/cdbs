@@ -691,9 +691,9 @@ include /usr/share/cdbs/1/rules/debhelper.mk
         <para>
           To specify a tight dependency on a package containing shared libraries:
 <programlisting>
-DEB_DH_MAKESHLIBS_ARGS_libfoo := -V"libfoo (>= 0.1.2-3)"
-DEB_SHLIBDEPS_LIBRARY_arkrpg := libfoo
-DEB_SHLIBDEPS_INCLUDE_arkrpg := debian/libfoo/usr/lib/
+DEB_DH_MAKESHLIBS_ARGS_libfoo = -V"libfoo (>= 0.1.2-3)"
+DEB_SHLIBDEPS_LIBRARY_arkrpg = libfoo
+DEB_SHLIBDEPS_INCLUDE_arkrpg = debian/libfoo/usr/lib/
 </programlisting>
         </para>
 
@@ -701,7 +701,7 @@ DEB_SHLIBDEPS_INCLUDE_arkrpg := debian/libfoo/usr/lib/
           To install a changelog file with an uncommon name like
           <filename>ProjectChanges.txt.gz</filename>:
 <programlisting>
-DEB_INSTALL_CHANGELOGS_ALL := ProjectChanges.txt
+DEB_INSTALL_CHANGELOGS_ALL = ProjectChanges.txt
 </programlisting>
           (CDBS automatically recognizes a fair number of possible
           changelog names, but not that one.)
@@ -711,7 +711,7 @@ DEB_INSTALL_CHANGELOGS_ALL := ProjectChanges.txt
           To avoid compressing files with a <filename>.py</filename>
           extension:
 <programlisting>
-DEB_COMPRESS_EXCLUDE := .py
+DEB_COMPRESS_EXCLUDE = .py
 </programlisting>
         </para>
 
@@ -720,13 +720,13 @@ DEB_COMPRESS_EXCLUDE := .py
           <command>dh_perl</command> call is always performed.):
 <programlisting>
 # Add a space-separated list of paths to search for perl modules
-DEB_PERL_INCLUDE := /usr/lib/perl-z
+DEB_PERL_INCLUDE = /usr/lib/perl-z
 
 # Like the above, but for the 'libperl-stuff' package
-DEB_PERL_INCLUDE_libperl-stuff := /usr/lib/perl-plop
+DEB_PERL_INCLUDE_libperl-stuff = /usr/lib/perl-plop
 
 # Overrides options passed to dh_perl
-DEB_DH_PERL_ARGS := -d
+DEB_DH_PERL_ARGS = -d
 </programlisting>
         </para>
       </sect2>
@@ -896,14 +896,14 @@ include /usr/share/cdbs/1/class/makefile.mk
       Now, it remains to tell CDBS the name of our four makefile
       rules.  For the previous examples it gives:
 <programlisting>
-DEB_MAKE_CLEAN_TARGET   := clean
-DEB_MAKE_BUILD_TARGET   := all
-DEB_MAKE_INSTALL_TARGET := install DESTDIR=$(CURDIR)/debian/tmp/
+DEB_MAKE_CLEAN_TARGET   = clean
+DEB_MAKE_BUILD_TARGET   = all
+DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(CURDIR)/debian/tmp/
 # no check for this software
-DEB_MAKE_CHECK_TARGET   :=
+DEB_MAKE_CHECK_TARGET   =
 
 # example when changing environment variables is necessary
-DEB_MAKE_ENVVARS        := CFLAGS="-pwet"
+DEB_MAKE_ENVVARS        = CFLAGS="-pwet"
 </programlisting>
       </para>
 
@@ -943,7 +943,7 @@ DEB_MAKE_ENVVARS        := CFLAGS="-pwet"
         too difficult, however, you may do this:
 
 <programlisting>
-DEB_MAKE_INVOKE := $(DEB_MAKE_ENVVARS) make -C $(DEB_BUILDDIR)
+DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) make -C $(DEB_BUILDDIR)
 </programlisting>
 
         That will avoid passing <varname>CFLAGS</varname>.  But note
@@ -1009,14 +1009,14 @@ include /usr/share/cdbs/1/class/autotools.mk
       variables that you can override for that purpose, like this:
 
 <programlisting>
-DEB_CONFIGURE_EXTRA_FLAGS := --enable-ipv6 --with-foo
+DEB_CONFIGURE_EXTRA_FLAGS = --enable-ipv6 --with-foo
 </programlisting>
       </para>
 
       <para>If the build system uses non-standard configure options
       you can override the CDBS default behavior:
 <programlisting>
-COMMON_CONFIGURE_FLAGS := --program-dir=/usr
+COMMON_CONFIGURE_FLAGS = --program-dir=/usr
 </programlisting>
       Note that <varname>DEB_CONFIGURE_EXTRA_FLAGS</varname> will
       still be appended.</para>
@@ -1030,7 +1030,7 @@ DEB_CONFIGURE_SCRIPT_ENV += LDFLAGS=" -Wl,-z,defs -Wl,-O1"
 
       <tip>
         <para>Prefer the use of <literal>+=</literal> over
-        <literal>:=</literal> lest you override other environment
+        <literal>=</literal> lest you override other environment
         variables like <varname>CC</varname> or <varname>CXX</varname>
         defined in the CDBS default.
         </para>
@@ -1076,18 +1076,18 @@ DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
       <para>The following make parameters can also be overridden :
 <programlisting>
 # these are the defaults CDBS provides
-DEB_MAKE_INSTALL_TARGET := install DESTDIR=$(DEB_DESTDIR)
-DEB_MAKE_CLEAN_TARGET := distclean
-DEB_MAKE_CHECK_TARGET :=
+DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
+DEB_MAKE_CLEAN_TARGET = distclean
+DEB_MAKE_CHECK_TARGET =
 
 # example to work around dirty makefile
-DEB_MAKE_INSTALL_TARGET := install prefix=$(CURDIR)/debian/tmp/usr
+DEB_MAKE_INSTALL_TARGET = install prefix=$(CURDIR)/debian/tmp/usr
 
 # example with unexistant install rule for make
-DEB_MAKE_INSTALL_TARGET :=
+DEB_MAKE_INSTALL_TARGET =
 
 # example to activate check rule
-DEB_MAKE_CHECK_TARGET := check
+DEB_MAKE_CHECK_TARGET = check
 </programlisting>
       </para>
 
@@ -1130,13 +1130,13 @@ include /usr/share/cdbs/1/class/perlmodule.mk
       <para>You can customize build options like this:
 <programlisting>
 # change MakeMaker defaults (hardly ever useful)
-DEB_MAKE_BUILD_TARGET := build-all
-DEB_MAKE_CLEAN_TARGET := realclean
-DEB_MAKE_CHECK_TARGET :=
-DEB_MAKE_INSTALL_TARGET := install PREFIX=debian/stuff
+DEB_MAKE_BUILD_TARGET = build-all
+DEB_MAKE_CLEAN_TARGET = realclean
+DEB_MAKE_CHECK_TARGET =
+DEB_MAKE_INSTALL_TARGET = install PREFIX=debian/stuff
 
 # add custom MakeMaker options
-DEB_MAKEMAKER_USER_FLAGS := --with-foo
+DEB_MAKEMAKER_USER_FLAGS = --with-foo
 </programlisting>
       </para>
 
@@ -1194,10 +1194,10 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 <programlisting>
 # force using a specific Python version for build
 # (should not be necessary)
-DEB_PYTHON_COMPILE_VERSION := 2.3
+DEB_PYTHON_COMPILE_VERSION = 2.3
 
 # change the python build script name (default is 'setup.py')
-DEB_PYTHON_SETUP_CMD := install.py
+DEB_PYTHON_SETUP_CMD = install.py
 
 # clean options for the python build script
 DEB_PYTHON_CLEAN_ARGS = -all
@@ -1211,7 +1211,7 @@ DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile --optimize --force
 
 # specific additional install options for binary package 'foo'
 # ('--root' option is always set)
-DEB_PYTHON_INSTALL_ARGS_foo := --root=debian/foo-install-dir/
+DEB_PYTHON_INSTALL_ARGS_foo = --root=debian/foo-install-dir/
 </programlisting>
       </para>
 
@@ -1304,7 +1304,7 @@ include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
           work-arround (until it is solved in a proper way):
 <programlisting>
 # deactivate 'debian/control' file management
-#DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+#DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
 
 # ...
 # includes and other stuff
@@ -1450,7 +1450,7 @@ JAVA_HOME = /usr/lib/jvm/java-gcj
       following example:
 
 <programlisting>
-DEB_JARS := xerces /usr/lib/java-bonus/ldap-connector.jar
+DEB_JARS = xerces /usr/lib/java-bonus/ldap-connector.jar
 </programlisting>
 
       The <filename>.jar</filename> extension may be omitted.  The
@@ -1464,7 +1464,7 @@ DEB_JARS := xerces /usr/lib/java-bonus/ldap-connector.jar
       <para>To use a specific Java compiler, override the variable
       <varname>DEB_ANT_COMPILER</varname>, for example
 <programlisting>
-DEB_ANT_COMPILER := jikes
+DEB_ANT_COMPILER = jikes
 </programlisting>
       </para>
 
@@ -1473,7 +1473,7 @@ DEB_ANT_COMPILER := jikes
       where Ant would find it by default, you can point CDBS to the
       right place like this:
 <programlisting>
-DEB_ANT_BUILDFILE := build/build.xml
+DEB_ANT_BUILDFILE = build/build.xml
 </programlisting>
       </para>
 
@@ -1588,8 +1588,8 @@ include /usr/share/cdbs/1/class/hbuild.mk
       <para>You can customize the directories where patches are
       searched and the suffix like this:
 <programlisting>
-DEB_PATCHDIRS := debian/mypatches
-DEB_PATCH_SUFFIX := .plop
+DEB_PATCHDIRS = debian/mypatches
+DEB_PATCH_SUFFIX = .plop
 </programlisting>
       The defaults are: <filename>.diff</filename>,
       <filename>.diff.gz</filename>, <filename>.diff.bz2</filename>,
@@ -1678,7 +1678,7 @@ DEB_PATCH_SUFFIX := .plop
       <filename>debian/rules</filename>, and specify the name of the
       top directory of the extracted tarball:
 <programlisting>
-DEB_TAR_SRCDIR := foosoft
+DEB_TAR_SRCDIR = foosoft
 
 include /usr/share/cdbs/1/rules/tarball.mk
 </programlisting>
@@ -1692,7 +1692,7 @@ include /usr/share/cdbs/1/rules/tarball.mk
       <filename>.zip</filename>.  The tarball location is autodetected
       if it is in the top source directory, or can be specified:
 <programlisting>
-DEB_TARBALL := $(CURDIR)/tarballdir/mygnustuff_beta-1.2.3.tar.gz
+DEB_TARBALL = $(CURDIR)/tarballdir/mygnustuff_beta-1.2.3.tar.gz
 </programlisting>
       </para>
 
@@ -1792,7 +1792,7 @@ Build-Depends: @cdbs@, procps [system: linux], plop [cpu: s390]
           <filename>debian/rules</filename>, before
           <emphasis>any</emphasis> include:
 <programlisting>
-DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
 </programlisting>
           </para>
         </step>
@@ -2142,7 +2142,7 @@ Section: libs
 Priority: optional
 Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
 Uploaders: Peter Eisentraut <petere@debian.org>
-Build-Depends-Indep: cdbs (>= 0.4.5.3), debhelper (>= 4.1.0), kaffe, jikes, ant, junit
+Build-Depends-Indep: cdbs (>= 0.4.36), debhelper (>= 5), kaffe, jikes, ant, junit
 Standards-Version: 3.6.2
 
 Package: libjline-java
@@ -2195,7 +2195,7 @@ DEB_INSTALL_EXAMPLES_libjline-java-doc = release/jline-demo.jar
 
 install/libjline-java:: DEB_FINALDIR=$(CURDIR)/debian/libjline-java
 install/libjline-java::
-	install -m 644 -D release/jline.jar $(DEB_FINALDIR)/usr/share/java/jline-$(PACKAGE_VERSION).jar
+	install -m 644 -D release/jline-0_9_5.jar $(DEB_FINALDIR)/usr/share/java/jline-$(PACKAGE_VERSION).jar
 	dh_link /usr/share/java/jline-$(PACKAGE_VERSION).jar /usr/share/java/jline.jar
 
 

@@ -20,7 +20,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_rules_buildcore
-_cdbs_rules_buildcore := 1
+_cdbs_rules_buildcore = 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
@@ -53,14 +53,14 @@ $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% :
 DEB_TARBALL ?= $(wildcard *.tar *.tgz *.tar.gz *.tar.bz *.tar.bz2 *.zip)
 
 ifneq (, $(findstring .bz2, $(DEB_TARBALL)))
-CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), bzip2
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), bzip2
 endif
 ifneq (, $(findstring .zip, $(DEB_TARBALL)))
-CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), unzip
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), unzip
 endif
 
 # make is dumb
-close_parenthesis := )
+close_parenthesis = )
 
 ifneq (, $(DEB_TARBALL))
 $(warning Parsing $(DEB_TARBALL)...)
@@ -98,10 +98,10 @@ endif
 endif
 
 ifneq (, $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar))
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), autotools-dev
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autotools-dev
 endif
 ifneq (, $(config_rpath)$(config_rpath_tar))
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), gnulib (>= 0.0.20041014-2)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), gnulib (>= 0.0.20041014-2)
 endif
 
 # This target is called before almost anything else happens.  It's a good place
@@ -161,7 +161,7 @@ $(patsubst %,configure/%,$(DEB_INDEP_PACKAGES)) :: configure/% : common-configur
 # information, see Policy §5.2, Policy §7.6, and Debian Bug #178809.
 # For now, you may override the dependencies by setting the variable
 # DEB_BUILD_DEPENDENCIES, below.  This is not recommended.
-DEB_BUILD_DEPENDENCIES := build-arch build-indep
+DEB_BUILD_DEPENDENCIES = build-arch build-indep
 build: $(DEB_BUILD_DEPENDENCIES)
 
 # This target should take care of actually compiling the package from source.
@@ -204,7 +204,7 @@ endif
 else
 # Prevent recursive braindamage when building type-handling with cdbs.
 ifeq (, $(shell grep -x 'Package: type-handling' debian/control))
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), type-handling (>= 0.2.5)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), type-handling (>= 0.2.5)
 endif
 control_system		:= $(shell grep "^System:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 control_arch		:= $(shell type-handling $(control_cpu) $(control_system))

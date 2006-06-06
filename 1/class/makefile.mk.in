@@ -20,7 +20,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_class_makefile
-_cdbs_class_makefile := 1
+_cdbs_class_makefile = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)

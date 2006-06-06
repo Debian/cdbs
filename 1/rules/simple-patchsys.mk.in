@@ -21,15 +21,15 @@
 #PATH_RULES#
 
 ifndef _cdbs_rules_patchsys
-_cdbs_rules_patchsys := 1
+_cdbs_rules_patchsys = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
 ifeq ($(_cdbs_included_patchsys),)
-_cdbs_included_patchsys := 1
+_cdbs_included_patchsys = 1
 
-_cdbs_patch_system_apply_rule := apply-patches
-_cdbs_patch_system_unapply_rule := reverse-patches
+_cdbs_patch_system_apply_rule = apply-patches
+_cdbs_patch_system_unapply_rule = reverse-patches
 
 DEB_PATCH_SUFFIX ?= .diff .diff.gz .diff.bz2 .diff.uu .patch .patch.gz .patch.bz2 .patch.uu
 DEB_PATCHDIRS ?= debian/patches
@@ -46,7 +46,7 @@ done)
 # if we have any patches, check if some are patching config.{guess,sub,rpath}
 # and print a warning
 ifneq (, $(DEB_PATCHES))
-CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), patchutils (>= 0.2.25)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), patchutils (>= 0.2.25)
 evil_patches_that_do_nasty_things := $(shell\
 if lsdiff=`which lsdiff` ; then \
   $$lsdiff -H $(DEB_PATCHES) \

@@ -23,7 +23,7 @@
 #PATH_RULES#
 
 ifndef _cdbs_rules_tarball
-_cdbs_rules_tarball := 1
+_cdbs_rules_tarball = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
@@ -34,7 +34,7 @@ ifeq ($(DEB_TAR_SRCDIR),)
 $(error You must specify DEB_TAR_SRCDIR)
 endif
 
-_cdbs_tarball_dir := build-tree
+_cdbs_tarball_dir = build-tree
 
 DEB_SRCDIR = $(_cdbs_tarball_dir)/$(DEB_TAR_SRCDIR)
 DEB_BUILDDIR ?= $(DEB_SRCDIR)
