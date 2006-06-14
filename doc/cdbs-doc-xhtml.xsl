@@ -9,5 +9,6 @@
 <xsl:variable name="use.extentions">1</xsl:variable>
 <xsl:variable name="tablecolumns.extension">0</xsl:variable>
 <xsl:variable name="html.stylesheet">cdbs-doc.css</xsl:variable>
+<xsl:param name="graphic.default.extension">png</xsl:param>
 
 </xsl:stylesheet>

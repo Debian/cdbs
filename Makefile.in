@@ -67,7 +67,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = scripts/list-packages
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" \
 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" \
-	"$(DESTDIR)$(regulardocsdir)" "$(DESTDIR)$(rulesdir)"
+	"$(DESTDIR)$(rulesdir)"
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 scriptsSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS) $(scripts_SCRIPTS)
@@ -88,9 +88,8 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 classDATA_INSTALL = $(INSTALL_DATA)
-regulardocsDATA_INSTALL = $(INSTALL_DATA)
 rulesDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(class_DATA) $(regulardocs_DATA) $(rules_DATA)
+DATA = $(class_DATA) $(rules_DATA)
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
@@ -138,7 +137,7 @@ bindir = @bindir@
 build_alias = @build_alias@
 datadir = @datadir@
 datarootdir = @datarootdir@
-docdir = $(prefix)/share/doc/$(PACKAGE)
+docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 host_alias = @host_alias@
@@ -162,7 +161,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
-SUBDIRS = doc test
+SUBDIRS = . doc test
 BUILT_SOURCES = 
 edit = $(PERL) -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
 all_mk_files = 1/rules/buildvars.mk		\
@@ -198,8 +197,6 @@ bin_SCRIPTS = scripts/cdbs-edit-patch
 dist_man_MANS = scripts/cdbs-edit-patch.1
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)
-regulardocs_DATA = doc/depgraph.png
-regulardocsdir = $(docdir)
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -339,23 +336,6 @@ uninstall-classDATA:
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(classdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(classdir)/$$f"; \
-	done
-install-regulardocsDATA: $(regulardocs_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(regulardocsdir)" || $(mkdir_p) "$(DESTDIR)$(regulardocsdir)"
-	@list='$(regulardocs_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(regulardocsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(regulardocsdir)/$$f'"; \
-	  $(regulardocsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(regulardocsdir)/$$f"; \
-	done
-
-uninstall-regulardocsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(regulardocs_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(regulardocsdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(regulardocsdir)/$$f"; \
 	done
 install-rulesDATA: $(rules_DATA)
 	@$(NORMAL_INSTALL)
@@ -512,7 +492,7 @@ check: $(BUILT_SOURCES)
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" "$(DESTDIR)$(regulardocsdir)" "$(DESTDIR)$(rulesdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" "$(DESTDIR)$(rulesdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -544,7 +524,7 @@ maintainer-clean-generic:
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-recursive
 
-clean-am: clean-generic clean-local mostlyclean-am
+clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -561,8 +541,8 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-classDATA install-man install-regulardocsDATA \
-	install-rulesDATA install-scriptsSCRIPTS
+install-data-am: install-classDATA install-man install-rulesDATA \
+	install-scriptsSCRIPTS
 
 install-exec-am: install-binSCRIPTS
 
@@ -591,30 +571,28 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-binSCRIPTS uninstall-classDATA \
-	uninstall-info-am uninstall-man uninstall-regulardocsDATA \
-	uninstall-rulesDATA uninstall-scriptsSCRIPTS
+	uninstall-info-am uninstall-man uninstall-rulesDATA \
+	uninstall-scriptsSCRIPTS
 
 uninstall-info: uninstall-info-recursive
 
 uninstall-man: uninstall-man1
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am all-local \
-	am--refresh check check-am clean clean-generic clean-local \
-	clean-recursive ctags ctags-recursive distclean \
-	distclean-generic distclean-recursive distclean-tags dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binSCRIPTS install-classDATA install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-man1 \
-	install-regulardocsDATA install-rulesDATA \
-	install-scriptsSCRIPTS install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive \
-	mostlyclean mostlyclean-generic mostlyclean-recursive pdf \
-	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
-	uninstall-binSCRIPTS uninstall-classDATA uninstall-info-am \
-	uninstall-man uninstall-man1 uninstall-regulardocsDATA \
-	uninstall-rulesDATA uninstall-scriptsSCRIPTS
+	am--refresh check check-am clean clean-generic clean-recursive \
+	ctags ctags-recursive distclean distclean-generic \
+	distclean-recursive distclean-tags dvi dvi-am html html-am \
+	info info-am install install-am install-binSCRIPTS \
+	install-classDATA install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am install-man \
+	install-man1 install-rulesDATA install-scriptsSCRIPTS \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-generic \
+	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-binSCRIPTS \
+	uninstall-classDATA uninstall-info-am uninstall-man \
+	uninstall-man1 uninstall-rulesDATA uninstall-scriptsSCRIPTS
 
 
 %.mk: %.mk.in
@@ -622,16 +600,7 @@ uninstall-man: uninstall-man1
 	$(edit) <$(srcdir)/$< >$@.tmp
 	mv $@.tmp $@
 
-%.png: %.dot
-	dot -Tpng -o $@ $^
-
-doc/depgraph.dot: doc/gen-dotty.pl $(all_mk_files)
-	$(PERL) $^ >$@
-
-all-local: $(all_mk_files) $(scripts_SCRIPTS) doc/depgraph.png
-
-clean-local: 
-	rm -f doc/depgraph.png doc/depgraph.dot
+all-local: $(all_mk_files) $(scripts_SCRIPTS)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -553,6 +553,28 @@ common-configure::
       which is sure to fail.  It would be nice to be able to partially
       override rule fragments, but that is a tricky problem.</para>
 
+      <para><xref linkend="fig:buildcore"/> gives an overview of the
+      targets provided by <filename>buildcore.mk</filename> where you
+      can hook in custom rules.  The bold ellipses are the targets
+      required by the Debian policy.  For illustration, the
+      diamond-shaped nodes show how a typical autotools-using build
+      process would be hooked into these rules.  These are not
+      actually provided by <filename>buildcore.mk</filename> of
+      course.</para>
+
+      <figure id="fig:buildcore">
+        <title>Buildcore targets</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="buildcore"/>
+          </imageobject>
+          <textobject>
+            <phrase>Rules graph</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+
       <para>Rules that add commands should normally be written
       <emphasis>after</emphasis> including any CDBS rule fragments,
       unless you know exactly what you're doing.  The reason for this
@@ -848,8 +870,22 @@ DEB_DBG_PACKAGE_foo-bin = foo-bin-dbg
     class inherits the makefile class because much of the build
     process is the same between them, only the configuration stage is
     different.  The effect is that all the variables provided by the
-    inherited class are available in the inheriting class as
-    well.</para>
+    inherited class are available in the inheriting class as well.
+    <xref linkend="fig:depgraph"/> shows the relationship between the
+    classes and other rule sets provided by CDBS.</para>
+
+    <figure id="fig:depgraph">
+      <title>Dependencies between the CDBS class and rule files</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="depgraph"/>
+        </imageobject>
+        <textobject>
+          <phrase>Dependency graph</phrase>
+        </textobject>
+      </mediaobject>
+    </figure>
 
     <para>The rest of this chapter explains all the classes supported
     by CDBS.</para>

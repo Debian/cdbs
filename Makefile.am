@@ -18,11 +18,9 @@
 
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
 
-SUBDIRS = doc test
+SUBDIRS = . doc test
 
 BUILT_SOURCES =
-
-docdir = $(prefix)/share/doc/$(PACKAGE)
 
 edit = $(PERL) -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
 
@@ -55,16 +53,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/qmake.mk		\
 		1/class/hbuild.mk
 
-%.png: %.dot
-	dot -Tpng -o $@ $^
-
-doc/depgraph.dot: doc/gen-dotty.pl $(all_mk_files)
-	$(PERL) $^ >$@
-
-all-local: $(all_mk_files) $(scripts_SCRIPTS) doc/depgraph.png
-
-clean-local: 
-	rm -f doc/depgraph.png doc/depgraph.dot
+all-local: $(all_mk_files) $(scripts_SCRIPTS)
 
 CLEANFILES = $(all_mk_files)
 
@@ -79,6 +68,3 @@ dist_man_MANS = scripts/cdbs-edit-patch.1
 
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)
-
-regulardocs_DATA = doc/depgraph.png
-regulardocsdir = $(docdir)

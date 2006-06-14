@@ -7,8 +7,10 @@ cdbs (0.4.41) UNRELEASED; urgency=low
     (python-distutils.mk) (closes: #369335)
   * Replaced most uses of := by = in makefiles.  This generally gives
     more reasonable behavior.
+  * Added buildcore picture, and integrated it and depgraph into the
+    documentation
 
- -- Peter Eisentraut <petere@debian.org>  Tue,  6 Jun 2006 21:30:39 +0200
+ -- Peter Eisentraut <petere@debian.org>  Wed, 14 Jun 2006 18:01:47 +0200
 
 cdbs (0.4.40) unstable; urgency=low
 

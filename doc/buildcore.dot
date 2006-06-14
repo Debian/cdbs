@@ -1,0 +1,80 @@
+digraph deps {
+"build" [style=bold];
+"build-arch" [style=bold];
+"build-indep" [style=bold];
+"binary" [style=bold];
+"binary-arch" [style=bold];
+"binary-indep" [style=bold];
+"clean" [style=bold];
+
+"build" -> "build-arch";
+"build" -> "build-indep";
+"common-configure-arch" -> "post-patches";
+"common-configure-indep" -> "post-patches";
+
+"binary" -> "binary-arch";
+"binary" -> "binary-indep";
+
+subgraph cluster_arch {
+	label = "arch";
+
+	subgraph cluster_build_arch {
+		"build-arch" -> "build/pkgarch";
+		"build/pkgarch" -> "common-build-arch";
+		"build/pkgarch" -> "configure/pkgarch";
+		"common-build-arch" -> "configure/pkgarch";
+		"configure/pkgarch" -> "common-configure-arch";
+	}
+
+	subgraph cluster_binary_arch {
+		"binary-arch" -> "binary/pkgarch";
+		"binary/pkgarch" -> "common-binary-arch";
+		"binary/pkgarch" -> "install/pkgarch";
+		"common-binary-arch" -> "install/pkgarch";
+		"install-arch" -> "install/pkgarch";
+		"install/pkgarch" -> "common-install-arch";
+		"install/pkgarch" -> "build/pkgarch";
+	}
+}
+
+subgraph cluster_indep {
+	label = "indep";
+
+	subgraph cluster_build_indep {
+		"build-indep" -> "build/pkgindep";
+		"build/pkgindep" -> "common-build-indep";
+		"build/pkgindep" -> "configure/pkgindep";
+		"common-build-indep" -> "configure/pkgindep";
+		"configure/pkgindep" -> "common-configure-indep";
+	}
+
+	subgraph cluster_binary_indep {
+		"binary-indep" -> "binary/pkgindep";
+		"binary/pkgindep" -> "common-binary-indep";
+		"binary/pkgindep" -> "install/pkgindep";
+		"common-binary-indep" -> "install/pkgindep";
+		"install-indep" -> "install/pkgindep";
+		"install/pkgindep" -> "common-install-indep";
+		"install/pkgindep" -> "build/pkgindep";
+	}
+}
+
+"clean";
+
+"configure" [shape=Mdiamond];
+"make" [shape=Mdiamond];
+"make check" [shape=Mdiamond];
+"make install" [shape=Mdiamond];
+"make distclean" [shape=Mdiamond];
+
+"common-configure-arch" -> "configure";
+"common-configure-indep" -> "configure";
+"common-build-arch" -> "make";
+"common-build-indep" -> "make";
+"common-build-arch" -> "make check";
+"common-build-indep" -> "make check";
+"make check" -> "make";
+"common-install-arch" -> "make install";
+"common-install-indep" -> "make install";
+"clean" -> "make distclean";
+}
