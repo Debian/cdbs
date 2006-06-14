@@ -1,4 +1,4 @@
-cdbs (0.4.41) UNRELEASED; urgency=low
+cdbs (0.4.41) unstable; urgency=low
 
   * Removed _cdbs_bootstrap variable
   * Propagate LDFLAGS (autotools-vars.mk, makefile-vars.mk)
@@ -9,8 +9,10 @@ cdbs (0.4.41) UNRELEASED; urgency=low
     more reasonable behavior.
   * Added buildcore picture, and integrated it and depgraph into the
     documentation
+  * Support for new Python policy (provided by Marc Dequènes)
+    (python-distutils.mk) (closes: #373628)
 
- -- Peter Eisentraut <petere@debian.org>  Wed, 14 Jun 2006 18:01:47 +0200
+ -- Peter Eisentraut <petere@debian.org>  Wed, 14 Jun 2006 19:30:43 +0200
 
 cdbs (0.4.40) unstable; urgency=low
 

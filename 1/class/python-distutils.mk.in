@@ -1,10 +1,13 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2003 Colin Walters <walters@debian.org>
-# Description: configure, compile, binary, and clean Python libraries and programs
-#  This class works for Python packages which use the Python
-#  "distutils".  Note that optionally it can also use the
-#  dh_python program which does some nice stuff.  See
-#  the manual page for that program for more information.
+# Copyright © 2006 Marc Dequènes (Duck) <Duck@DuckCorp.org>
+#
+# Description: manage Python public modules build
+#   This class is designed to work with Python packages using the
+#   'distutils' build system and comply to the new policy established
+#   during summer 2006.  Use of the debhelper class to make use of the
+#   new dh_python is strongly advised.  (This is still left as optional
+#   in line with CDBS' flexible behavior.)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -18,8 +21,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02111-1307 USA.
+#
+
+# This class provides rules for old and new Python policy.  Leaving
+# DEB_PYTHON_SYSTEM unset selects the old behavior.  The pysupport and
+# pycentral methods are available to comply with new policy.  Don't forget
+# to update your 'debian/control'.  (Build-Depends are correctly generated
+# if you are using the auto control generation feature.)
+
+# Once all old-style packages are removed before etch, some of the old
+# can be refactored or removed.
+
 
 #PATH_RULES#
 
@@ -29,14 +43,49 @@ _cdbs_class_python_distutils = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
+
+# check python system
+ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
+cdbs_python_support_path = usr/share/python-support/$(DEB_PYTHON_MODULE_PACKAGE)
+else
+ifneq (pycentral, $(DEB_PYTHON_SYSTEM))
+ifneq (, $(DEB_PYTHON_SYSTEM))
+$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral))
+else
+ifeq (yes, $(shell grep -q "^XS-Python-Version:" debian/control && echo yes))
+$(error Your package uses the new Python policy; you must set DEB_PYTHON_SUPPORT to "pycentral" or "pysupport".)
+endif
+endif # unknown method
+endif # not pycentral
+endif # pysupport
+
+
+ifndef DEB_PYTHON_SYSTEM
 DEB_PYTHON_COMPILE_VERSION = 
-
 DEB_PYTHON_VERSIONS = 2.1 2.2 2.3 2.4 2.5
+else
+# default package is the first one declared in 'debian/control'
+# (override if necessary)
+DEB_PYTHON_MODULE_PACKAGE = $(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
+DEB_PYTHON_PRIVATE_MODULES_DIRS =
+endif
 
+# common variables
 DEB_PYTHON_SETUP_CMD = setup.py
 DEB_PYTHON_CLEAN_ARGS = -a
 DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
+
+
+ifndef DEB_PYTHON_SYSTEM
+########################### old policy method ###########################
+
+$(warning ########################################################)
+$(warning Your package does not conform to the new Python policy.)
+$(warning Please consider updating.  Here is some documentation:)
+$(warning   http://wiki.debian.org/DebianPython/NewPolicy)
+$(warning   http://wiki.debian.org/DebianPythonFAQ)
+$(warning ########################################################)
 
 # make: *** No rule to make target `voodoo'.  Stop.
 DEB_PYTHON_REAL_LIB_PACKAGES = $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
@@ -88,6 +137,106 @@ clean:: $(patsubst %,python-cleanbuilddir/%,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 $(patsubst %,python-cleanbuilddir/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: python-cleanbuilddir/% : 
 	-python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 endif
+
+else
+########################## new policy methods ###########################
+
+# Calculate cdbs_python_build_versions
+cdbs_python_module_arch = $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
+ifeq (all, $(cdbs_python_module_arch))
+cdbs_python_current_version := $(strip $(patsubst python%, %, $(shell pyversions -d)))
+cdbs_python_build_versions := $(cdbs_python_current_version)
+else
+cdbs_python_build_versions := $(strip $(patsubst python%, %, $(shell pyversions -r debian/control | grep -E "^python[0-9.]+( python[0-9.]+)*$$")))
+endif
+
+ifeq (, $(cdbs_python_build_versions))
+$(error invalid setting for XS-Python-Version)
+endif
+
+
+# Declare Build-Deps for packages using this file
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1), cdbs (>= 0.4.43)
+ifeq (all, $(cdbs_python_module_arch))
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-7)
+else
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev (>= 2.3.5-7)
+endif
+ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-support (>= 0.2.3)
+else
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.4.10)
+endif
+
+
+# build stage
+common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
+python-build-stamp-%:
+ifeq (all, $(cdbs_python_module_arch))
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+else
+	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+endif # archall detection
+	touch $@
+
+
+# Select install procedure depending on choosen method (python-support or python-central)
+ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
+ifeq (all, $(cdbs_python_module_arch))
+common-install-arch common-install-indep:: python-install-py
+else
+common-install-arch common-install-indep:: $(addprefix python-install-so-, $(cdbs_python_build_versions)) python-install-py
+python-install-so-%:
+	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+	find $(DEB_DESTDIR)/usr/lib/python$* -type f -a ! -name "*.so" -exec rm {} \;
+	find $(DEB_DESTDIR)/usr/lib/python$* -depth -type d -a -empty -exec rmdir {} \;
+endif # archall detection
+python-install-py:
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS) --install-lib $(cdbs_python_support_path)
+	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -type f -a -name "*.so" -exec rm {} \;
+	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -depth -type d -a -empty -exec rmdir {} \;
+else
+ifeq (all, $(cdbs_python_module_arch))
+common-install-arch common-install-indep:: python-install-py
+python-install-py:
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+else
+common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
+python-install-%:
+	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+endif # archall detection
+endif # install selection
+
+
+# This class can optionally use debhelper's commands.  Just
+# be sure you include debhelper.mk before including this file.
+ifdef _cdbs_rules_debhelper
+binary-install/$(DEB_PYTHON_MODULE_PACKAGE) :: binary-install/%:
+ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
+	dh_pysupport -p$(DEB_PYTHON_MODULE_PACKAGE) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
+else
+	dh_pycentral -p$(DEB_PYTHON_MODULE_PACKAGE)
+endif
+	dh_python -p$(DEB_PYTHON_MODULE_PACKAGE) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
+endif
+
+
+# clean stage
+clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
+python-clean-%:
+ifeq (all, $(cdbs_python_module_arch))
+	-cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+else
+	-cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+endif # archall detection
+
+clean::
+	rm -f python-build-stamp-*
+
+endif
+
+
+########################## all policy methods ###########################
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
 # pass here.
