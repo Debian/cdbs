@@ -53,7 +53,7 @@ ifneq (, $(DEB_PYTHON_SYSTEM))
 $(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral))
 else
 ifeq (yes, $(shell grep -q "^XS-Python-Version:" debian/control && echo yes))
-$(error Your package uses the new Python policy; you must set DEB_PYTHON_SUPPORT to "pycentral" or "pysupport".)
+$(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pycentral" or "pysupport".)
 endif
 endif # unknown method
 endif # not pycentral
@@ -156,7 +156,7 @@ endif
 
 
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1), cdbs (>= 0.4.43)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1), cdbs (>= 0.4.41)
 ifeq (all, $(cdbs_python_module_arch))
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-7)
 else
@@ -187,23 +187,23 @@ common-install-arch common-install-indep:: python-install-py
 else
 common-install-arch common-install-indep:: $(addprefix python-install-so-, $(cdbs_python_build_versions)) python-install-py
 python-install-so-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 	find $(DEB_DESTDIR)/usr/lib/python$* -type f -a ! -name "*.so" -exec rm {} \;
 	find $(DEB_DESTDIR)/usr/lib/python$* -depth -type d -a -empty -exec rmdir {} \;
 endif # archall detection
 python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS) --install-lib $(cdbs_python_support_path)
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) --install-lib $(cdbs_python_support_path)
 	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -type f -a -name "*.so" -exec rm {} \;
 	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -depth -type d -a -empty -exec rmdir {} \;
 else
 ifeq (all, $(cdbs_python_module_arch))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 else
 common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
 python-install-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS)
+	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 endif # archall detection
 endif # install selection
 

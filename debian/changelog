@@ -1,3 +1,14 @@
+cdbs (0.4.42) unstable; urgency=low
+
+  * Corrected misspelled DEB_PYTHON_INSTALL_ARGS(_ALL)
+    (python-distutils.mk) (closes: #373678)
+  * Corrected automatic cdbs dependency version (python-distutils.mk)
+    (closes: #373653, #373997)
+  * Corrected error message (python-distutils.mk)
+    (closes: #373653, #373873)
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 16 Jun 2006 20:00:03 +0200
+
 cdbs (0.4.41) unstable; urgency=low
 
   * Removed _cdbs_bootstrap variable
