@@ -33,20 +33,17 @@ testdir: debian/control
 testroot:
 	test "`id -u`" = 0
 
-$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% : 
-	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
-
+$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: DEB_BUILDDIR := $(if $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR))
 makebuilddir:: $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES))
+makebuilddir $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) ::
 	mkdir -p "$(DEB_BUILDDIR)"
 
 cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
+$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: DEB_BUILDDIR := $(if $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR))
 cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES))
+cleanbuilddir $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) ::
 	-$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,rmdir $(DEB_BUILDDIR))
-
-$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% : 
-	-$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),$(if $(call cdbs_streq,$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_SRCDIR)),,rmdir "$(DEB_BUILDDIR_$(cdbs_curpkg))"))
-
 
 # This variable is used by tarball.mk, but we want it here in order to check
 # tarball contents before unpacking.  tarball.mk imports this file anyway.
@@ -278,7 +275,7 @@ common-install-prehook:: common-install-prehook-arch common-install-prehook-inde
 common-install:: common-install-arch common-install-indep
 common-binary:: common-binary-arch common-binary-indep
 
-.PHONY: pre-build apply-patches post-patches common-configure-arch common-configure-indep $(patsubst %,configure/%,$(DEB_ALL_PACKAGES)) build common-build-arch common-build-indep $(patsubst %,build/%,$(DEB_ALL_PACKAGES)) build-arch build-indep clean common-install-arch common-install-indep install-arch install-indep $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) common-binary-arch common-binary-indep $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) binary-indep binary-arch binary $(DEB_PHONY_RULES)
+.PHONY: pre-build apply-patches post-patches common-configure-arch common-configure-indep $(patsubst %,configure/%,$(DEB_ALL_PACKAGES)) build common-build-arch common-build-indep $(patsubst %,build/%,$(DEB_ALL_PACKAGES)) build-arch build-indep clean common-install-arch common-install-indep install-arch install-indep $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) common-binary-arch common-binary-indep $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) binary-indep binary-arch binary $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) $(DEB_PHONY_RULES)
 
 # Parallel execution of the cdbs makefile fragments will fail, but
 # this way you can call dpkg-buildpackage with MAKEFLAGS=-j in the
