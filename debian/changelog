@@ -4,8 +4,11 @@ cdbs (0.4.43) unstable; urgency=low
     contains cdbs-autoupdate. This allows globally enabling the feature
     (eg. on compiler farms), and still obey Debian Policy by default.
   * Add buildinfo rule. Closes: bug#202873.
+  * Resolve per-package DEB_BUILDDIR before running {make,clean}builddir
+    targets in buildcore rule, making it possible to programmatically
+    change DEB_BUILDDIR.
 
- -- Jonas Smedegaard <dr@jones.dk>  Sat, 17 Jun 2006 23:45:24 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Jun 2006 00:33:16 +0200
 
 cdbs (0.4.42) unstable; urgency=low
 
