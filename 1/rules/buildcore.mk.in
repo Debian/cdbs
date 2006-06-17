@@ -195,6 +195,10 @@ ifneq (::, $(config_guess):$(config_sub):$(config_rpath))
 	done
 endif
 
+ifneq (,$(findstring cdbs-autoupdate,$(DEB_BUILD_OPTIONS)))
+DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
+endif
+
 ifneq (, $(DEB_AUTO_UPDATE_DEBIAN_CONTROL))
 control_cpu		:= $(shell grep "^Cpu:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 ifeq (, $(control_cpu))
