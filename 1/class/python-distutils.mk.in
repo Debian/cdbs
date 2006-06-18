@@ -98,7 +98,7 @@ cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst python%,%,$(cdbs_curpk
 
 common-build-arch common-build-indep:: common-build-impl
 common-build-impl::
-	cd $(DEB_SRCDIR) && python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && /usr/bin/python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 
 
 # See if this package doesn't appear to need to be compiled by multiple
@@ -113,7 +113,7 @@ $(patsubst %,install/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: install/% :
 endif
 
 $(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
+	cd $(DEB_SRCDIR) && /usr/bin/python $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 
 # This class can optionally utilize debhelper's "dh_python" command.  Just
 # be sure you include debhelper.mk before including this file.
@@ -130,12 +130,12 @@ endif
 # exist.
 ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 clean::
-	-python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-/usr/bin/python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 else
 clean:: $(patsubst %,python-cleanbuilddir/%,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 
 $(patsubst %,python-cleanbuilddir/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: python-cleanbuilddir/% : 
-	-python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-/usr/bin/python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 endif
 
 else
@@ -173,9 +173,9 @@ endif
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
 python-build-stamp-%:
 ifeq (all, $(cdbs_python_module_arch))
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && /usr/bin/python $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 else
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && /usr/bin/python$* $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 endif # archall detection
 	touch $@
 
@@ -187,23 +187,23 @@ common-install-arch common-install-indep:: python-install-py
 else
 common-install-arch common-install-indep:: $(addprefix python-install-so-, $(cdbs_python_build_versions)) python-install-py
 python-install-so-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && /usr/bin/python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 	find $(DEB_DESTDIR)/usr/lib/python$* -type f -a ! -name "*.so" -exec rm {} \;
 	find $(DEB_DESTDIR)/usr/lib/python$* -depth -type d -a -empty -exec rmdir {} \;
 endif # archall detection
 python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) --install-lib $(cdbs_python_support_path)
+	cd $(DEB_SRCDIR) && /usr/bin/python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) --install-lib $(cdbs_python_support_path)
 	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -type f -a -name "*.so" -exec rm {} \;
 	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -depth -type d -a -empty -exec rmdir {} \;
 else
 ifeq (all, $(cdbs_python_module_arch))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && /usr/bin/python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 else
 common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
 python-install-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && /usr/bin/python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 endif # archall detection
 endif # install selection
 
@@ -225,9 +225,9 @@ endif
 clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
 python-clean-%:
 ifeq (all, $(cdbs_python_module_arch))
-	-cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && /usr/bin/python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 else
-	-cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && /usr/bin/python$* $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 endif # archall detection
 
 clean::
