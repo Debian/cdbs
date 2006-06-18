@@ -10,8 +10,11 @@ cdbs (0.4.43) unstable; urgency=low
   * Honour per-package DEB_BUILDDIR in makefile class.
   * Use full path to python interpreter in python-distutils class
     (Python Policy section 1.3.2).
+  * Add CDBS_BUILD_DEPENDS to old policy method in python-distutils
+    class, and in new policy methods avoid dependency on debhelper
+    unless actually used.
 
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Jun 2006 01:57:11 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Jun 2006 02:34:00 +0200
 
 cdbs (0.4.42) unstable; urgency=low
 

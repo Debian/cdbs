@@ -87,11 +87,19 @@ $(warning   http://wiki.debian.org/DebianPython/NewPolicy)
 $(warning   http://wiki.debian.org/DebianPythonFAQ)
 $(warning ########################################################)
 
+DEB_PYTHON_DEFAULT_VERSION := $(shell /usr/bin/python -V 2>&1 | sed 's/^[^0-9]*\([0-9]\+.[0-9]\+\)[^0-9].*/\1/')
+DEB_PYTHON_NEXT_VERSION := $(shell expr '$(DEB_PYTHON_DEFAULT_VERSION)' : '[^0-9]*\([0-9]\+\).').$(shell expr '(' '$(DEB_PYTHON_DEFAULT_VERSION)' : '[^0-9]*[0-9]\+.\([0-9]\+\)' ')' + 1)
+
 # make: *** No rule to make target `voodoo'.  Stop.
 DEB_PYTHON_REAL_LIB_PACKAGES = $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
 # If no versioned python library packages found, grab all simpler ones
 ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 DEB_PYTHON_SIMPLE_PACKAGES = $(strip $(filter python-%,$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= $(DEB_PYTHON_DEFAULT_VERSION)), python-dev (<< $(DEB_PYTHON_NEXT_VERSION))
+else
+DEB_PYTHON_REAL_VERSIONS := $(filter-out -%,$(subst -, -,$(patsubst python%,%,$(DEB_PYTHON_REAL_LIB_PACKAGES))))
+comma := ,
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(patsubst %,python%-dev$(comma),$(DEB_PYTHON_REAL_VERSIONS)) python
 endif
 
 cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst python%,%,$(cdbs_curpkg))))
@@ -118,6 +126,13 @@ $(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
 # This class can optionally utilize debhelper's "dh_python" command.  Just
 # be sure you include debhelper.mk before including this file.
 ifdef _cdbs_rules_debhelper
+ifneq (,$(strip $(filter 2.4,$(DEB_PYTHON_REAL_VERSIONS))))
+# Python 2.4 support
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.28)
+else
+# Python 2.3 support
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.1.60)
+endif
 
 DEB_DH_PYTHON_ARGS = $(addprefix -V ,$(DEB_PYTHON_COMPILE_VERSION)) $(DEB_DH_PYTHON_ARGS_ALL) $(DEB_DH_PYTHON_ARGS_$(cdbs_curpkg))
 
@@ -156,7 +171,10 @@ endif
 
 
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1), cdbs (>= 0.4.41)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.41)
+ifdef _cdbs_rules_debhelper
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1)
+endif
 ifeq (all, $(cdbs_python_module_arch))
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-7)
 else
