@@ -1,25 +1,3 @@
-cdbs (0.4.43) unstable; urgency=low
-
-  * Enable DEB_AUTO_UPDATE_DEBIAN_CONTROL when DEB_BUILD_OPTIONS
-    contains cdbs-autoupdate. This allows globally enabling the feature
-    (eg. on compiler farms), and still obey Debian Policy by default.
-  * Add buildinfo rule. Closes: bug#202873.
-  * Resolve per-package DEB_BUILDDIR before running {make,clean}builddir
-    targets in buildcore rule, making it possible to programmatically
-    change DEB_BUILDDIR.
-  * Honour per-package DEB_BUILDDIR in makefile class.
-  * Cleanup of python-distutils class:
-    + Use full path to python interpreter (Python Policy section 1.3.2).
-    + Add CDBS_BUILD_DEPENDS to old policy method.
-    + Fix CDBS_BUILD_DEPENDS in new policy methods to only depend on
-      debhelper when actually used.
-    + Fix DEB_PYTHON_SIMPLE_PACKAGES sometimes installed twice (and only
-      one of them honouring DEB_PYTHON_COMPILE_VERSION).
-    + Unify install path for old policy method.
-    + Quote install path.
-
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Jun 2006 03:16:29 +0200
-
 cdbs (0.4.42) unstable; urgency=low
 
   * Corrected misspelled DEB_PYTHON_INSTALL_ARGS(_ALL)
