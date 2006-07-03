@@ -1,3 +1,17 @@
+cdbs (0.4.43) unstable; urgency=low
+
+  * Python class update (Closes: #374809):
+    + support latest pysupport features (mainly .so support).
+    + use pyversions improvements to simplify the code.
+    + added a check against 'debian/pycompat'.
+    + tigthten build-dependencies to make use of new features.
+    + $(cdbs_python_current_version) is always set
+      (Closes: #374012).
+    + honnour minor supported version (thanks to Piotr Ozarowski for the
+      original patch) (Closes: #373997).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sat, 24 Jun 2006 11:44:28 +0200
+
 cdbs (0.4.42) unstable; urgency=low
 
   * Corrected misspelled DEB_PYTHON_INSTALL_ARGS(_ALL)

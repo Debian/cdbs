@@ -45,18 +45,37 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 
 # check python system
+cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
+cdbs_selected_pycompat := $(shell if [[ -e debian/pycompat ]]; then cat debian/pycompat; fi)
+cdbs_pycompat = $(cdbs_selected_pycompat)
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-cdbs_python_support_path = usr/share/python-support/$(DEB_PYTHON_MODULE_PACKAGE)
+  cdbs_python_support_path = usr/share/python-support/$(DEB_PYTHON_MODULE_PACKAGE)
+  ifeq (, $(cdbs_selected_pycompat))
+    cdbs_pycompat = 2
+  endif # use pycompat
+  # warning pysupport compatibility mode
+  ifneq (, $(cdbs_use_xs_field))
+    $(warning Use of XS-Python-Version and XB-Python-Version fields in 'debian/control' is deprecated with pysupport method, use 'debian/pyversions' if you need to specify specific versions)
+  endif # use XS field (compat)
 else
-ifneq (pycentral, $(DEB_PYTHON_SYSTEM))
-ifneq (, $(DEB_PYTHON_SYSTEM))
-$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral))
-else
-ifeq (yes, $(shell grep -q "^XS-Python-Version:" debian/control && echo yes))
-$(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pycentral" or "pysupport".)
-endif
-endif # unknown method
-endif # not pycentral
+  ifeq (pycentral, $(DEB_PYTHON_SYSTEM))
+    ifeq (, $(cdbs_selected_pycompat))
+      cdbs_pycompat = 2
+    endif # use pycompat
+  else
+    ifneq (, $(DEB_PYTHON_SYSTEM))
+      $(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral))
+    else
+      ifneq (, $(cdbs_use_xs_field))
+        $(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pysupport" or "pycentral".)
+      endif
+      ifneq (, $(cdbs_selected_pycompat))
+        ifeq (yes, $(shell expr $(cdbs_selected_pycompat) \> 1 >/dev/null && echo yes))
+          $(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pysupport" or "pycentral".)
+        endif
+      endif # use pycompat
+    endif # unknown method
+  endif # pycentral
 endif # pysupport
 
 
@@ -142,30 +161,45 @@ else
 ########################## new policy methods ###########################
 
 # Calculate cdbs_python_build_versions
-cdbs_python_module_arch = $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
+cdbs_python_module_arch := $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
+cdbs_python_current_version := $(shell pyversions -vd)
 ifeq (all, $(cdbs_python_module_arch))
-cdbs_python_current_version := $(strip $(patsubst python%, %, $(shell pyversions -d)))
-cdbs_python_build_versions := $(cdbs_python_current_version)
+  # check if current is in build versions
+  ifneq ($(cdbs_python_current_version), $(filter $(cdbs_python_current_version), $(shell pyversions -vr)))
+    cdbs_python_compile_version := $(firstword $(strip $(sort $(shell pyversions -vr))))
+    cdbs_python_build_versions := $(cdbs_python_compile_version)
+  else
+    cdbs_python_build_versions := $(cdbs_python_current_version)
+  endif
 else
-cdbs_python_build_versions := $(strip $(patsubst python%, %, $(shell pyversions -r debian/control | grep -E "^python[0-9.]+( python[0-9.]+)*$$")))
-endif
+cdbs_python_build_versions := $(shell pyversions -vr)
+endif # archall
 
+# check if build is possible
 ifeq (, $(cdbs_python_build_versions))
+ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
+$(error invalid setting in 'debian/pyversions')
+else
 $(error invalid setting for XS-Python-Version)
-endif
+endif # system selected
+endif # build versions empty
 
 
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.1), cdbs (>= 0.4.41)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.2), cdbs (>= 0.4.43)
 ifeq (all, $(cdbs_python_module_arch))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-7)
+  ifneq (, $(cdbs_python_compile_version))
+    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python${cdbs_python_compile_version}-dev, python (>= 2.3.5-11)
+  else
+    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-11)
+  endif
 else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev (>= 2.3.5-7)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev (>= 2.3.5-11)
 endif
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-support (>= 0.2.3)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-support (>= 0.3.2)
 else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.4.10)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.5.0)
 endif
 
 
@@ -173,39 +207,23 @@ endif
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
 python-build-stamp-%:
 ifeq (all, $(cdbs_python_module_arch))
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 else
 	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 endif # archall detection
 	touch $@
 
 
-# Select install procedure depending on choosen method (python-support or python-central)
-ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-ifeq (all, $(cdbs_python_module_arch))
-common-install-arch common-install-indep:: python-install-py
-else
-common-install-arch common-install-indep:: $(addprefix python-install-so-, $(cdbs_python_build_versions)) python-install-py
-python-install-so-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
-	find $(DEB_DESTDIR)/usr/lib/python$* -type f -a ! -name "*.so" -exec rm {} \;
-	find $(DEB_DESTDIR)/usr/lib/python$* -depth -type d -a -empty -exec rmdir {} \;
-endif # archall detection
-python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) --install-lib $(cdbs_python_support_path)
-	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -type f -a -name "*.so" -exec rm {} \;
-	find $(DEB_DESTDIR)/$(cdbs_python_support_path) -depth -type d -a -empty -exec rmdir {} \;
-else
+# install stage
 ifeq (all, $(cdbs_python_module_arch))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 else
 common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
 python-install-%:
 	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 endif # archall detection
-endif # install selection
 
 
 # This class can optionally use debhelper's commands.  Just
@@ -225,12 +243,15 @@ endif
 clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
 python-clean-%:
 ifeq (all, $(cdbs_python_module_arch))
-	-cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 else
 	-cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 endif # archall detection
 
 clean::
+ifeq (, $(cdbs_selected_pycompat))
+	echo "$(cdbs_pycompat)" >debian/pycompat
+endif # use pycompat
 	rm -f python-build-stamp-*
 
 endif
