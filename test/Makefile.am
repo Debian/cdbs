@@ -36,7 +36,6 @@ TESTS = autotools-1.sh \
 	debhelper-5.sh \
 	debhelper-6.sh \
 	debhelper-7.sh \
-	ant-1.sh \
 	patchsys-1.sh
 
 if HAVE_PYTHON

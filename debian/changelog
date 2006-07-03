@@ -1,8 +1,11 @@
-cdbs (0.4.44) UNRELEASED; urgency=low
+cdbs (0.4.44) unstable; urgency=medium
 
   * Shortened uploaders list
+  * Added gs-common build dependency (closes: #375464)
+  * Disabled ant-1 test while kaffe is broken (see #376336)
+  * Removed weird garbage file left in last upload
 
- -- Peter Eisentraut <petere@debian.org>  Mon,  3 Jul 2006 14:57:02 +0200
+ -- Peter Eisentraut <petere@debian.org>  Mon,  3 Jul 2006 17:46:43 +0200
 
 cdbs (0.4.43) unstable; urgency=low
 
