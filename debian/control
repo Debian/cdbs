@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Build-Depends-Indep: debhelper (>= 5), graphviz, realpath, fakeroot, python-dev, python2.3, python2.4, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, db2latex-xsl, tetex-extra, ant, kaffe, sharutils
-Uploaders: Colin Walters <walters@debian.org>, Jeff Bailey <jbailey@raspberryginger.com>, Jonas Smedegaard <dr@jones.dk>, Chris Cheney <ccheney@debian.org>, Stefan Gybas <sgybas@debian.org>, Robert Millan <rmh@debian.org>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
+Uploaders: Jeff Bailey <jbailey@raspberryginger.com>, Jonas Smedegaard <dr@jones.dk>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
 Standards-Version: 3.7.2
 
 Package: cdbs
