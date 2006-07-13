@@ -34,7 +34,7 @@ QMAKE = qmake
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(DEB_BUILDDIR)/Makefile
 $(DEB_BUILDDIR)/Makefile:
-	cd $(DEB_BUILDDIR) && $(QMAKE) $(DEB_QMAKE_ARGS) 'QMAKE_CFLAGS_RELEASE = $(CPPFLAGS) $(CFLAGS)' 'QMAKE_CXXFLAGS_RELEASE = $(CPPFLAGS) $(CXXFLAGS)'
+	cd $(DEB_BUILDDIR) && $(QMAKE) $(DEB_QMAKE_ARGS) 'QMAKE_CC = $(CC)' 'QMAKE_CXX = $(CXX)' 'QMAKE_CFLAGS_RELEASE = $(CPPFLAGS) $(CFLAGS)' 'QMAKE_CXXFLAGS_RELEASE = $(CPPFLAGS) $(CXXFLAGS)'
 
 clean::
 	rm -f $(DEB_BUILDDIR)/Makefile $(DEB_BUILDDIR)/.qmake.internal.cache
