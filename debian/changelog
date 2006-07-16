@@ -1,8 +1,11 @@
 cdbs (0.4.45) UNRELEASED; urgency=low
 
   * Added support for user-defined CC and CXX in qmake class
+  * Fixed diff call yielding false positives in list-missing rule
+    (utils.mk) (closes: #378013); test case in list-missing-1.sh
+  * Fixed bashisms in utils.mk
 
- -- Peter Eisentraut <petere@debian.org>  Thu, 13 Jul 2006 17:28:39 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sun, 16 Jul 2006 19:02:37 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 

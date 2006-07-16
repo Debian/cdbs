@@ -119,7 +119,8 @@ EXTRA_DIST = testsuite_functions
 TESTS = autotools-1.sh autotools-2.sh autotools-3.sh autotools-4.sh \
 	autotools-5.sh recursive.sh udeb-1.sh hdparm.sh debhelper-1.sh \
 	debhelper-2.sh debhelper-3.sh debhelper-4.sh debhelper-5.sh \
-	debhelper-6.sh debhelper-7.sh patchsys-1.sh $(am__append_1)
+	debhelper-6.sh debhelper-7.sh patchsys-1.sh list-missing-1.sh \
+	$(am__append_1)
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz
 

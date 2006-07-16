@@ -36,7 +36,8 @@ TESTS = autotools-1.sh \
 	debhelper-5.sh \
 	debhelper-6.sh \
 	debhelper-7.sh \
-	patchsys-1.sh
+	patchsys-1.sh \
+	list-missing-1.sh
 
 if HAVE_PYTHON
 TESTS += distutils-1.sh distutils-2.sh distutils-3.sh distutils-4.sh
