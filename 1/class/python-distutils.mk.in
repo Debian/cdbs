@@ -46,7 +46,7 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
-cdbs_selected_pycompat := $(shell if [[ -e debian/pycompat ]]; then cat debian/pycompat; fi)
+cdbs_selected_pycompat := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
 cdbs_pycompat = $(cdbs_selected_pycompat)
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
   cdbs_python_support_path = usr/share/python-support/$(DEB_PYTHON_MODULE_PACKAGE)

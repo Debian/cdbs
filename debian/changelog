@@ -4,8 +4,9 @@ cdbs (0.4.45) UNRELEASED; urgency=low
   * Fixed diff call yielding false positives in list-missing rule
     (utils.mk) (closes: #378013); test case in list-missing-1.sh
   * Fixed bashisms in utils.mk
+  * Fixed bashism in python-distutils.mk
 
- -- Peter Eisentraut <petere@debian.org>  Sun, 16 Jul 2006 19:02:37 +0200
+ -- Peter Eisentraut <petere@debian.org>  Fri, 21 Jul 2006 10:33:43 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 
