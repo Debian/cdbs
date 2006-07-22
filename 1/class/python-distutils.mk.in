@@ -229,13 +229,16 @@ endif # archall detection
 # This class can optionally use debhelper's commands.  Just
 # be sure you include debhelper.mk before including this file.
 ifdef _cdbs_rules_debhelper
-binary-install/$(DEB_PYTHON_MODULE_PACKAGE) :: binary-install/%:
+
+DEB_DH_PYTHON_ARGS = $(DEB_DH_PYTHON_ARGS_ALL) $(DEB_DH_PYTHON_ARGS_$(cdbs_curpkg)) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
+
+$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-	dh_pysupport -p$(DEB_PYTHON_MODULE_PACKAGE) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
+	dh_pysupport -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
 else
-	dh_pycentral -p$(DEB_PYTHON_MODULE_PACKAGE)
+	dh_pycentral -p$(cdbs_curpkg)
 endif
-	dh_python -p$(DEB_PYTHON_MODULE_PACKAGE) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
+	dh_python -p$(cdbs_curpkg) $(DEB_DH_PYTHON_ARGS)
 endif
 
 

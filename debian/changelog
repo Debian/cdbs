@@ -5,8 +5,10 @@ cdbs (0.4.45) UNRELEASED; urgency=low
     (utils.mk) (closes: #378013); test case in list-missing-1.sh
   * Fixed bashisms in utils.mk
   * Fixed bashism in python-distutils.mk
+  * Call dh_py* for all packages in new Python policy section
+    (python-distutils.mk) (closes: #377965)
 
- -- Peter Eisentraut <petere@debian.org>  Fri, 21 Jul 2006 10:33:43 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sat, 22 Jul 2006 15:09:05 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 
