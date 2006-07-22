@@ -189,7 +189,7 @@ endif # build versions empty
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.2), cdbs (>= 0.4.43)
 ifeq (all, $(cdbs_python_module_arch))
   ifneq (, $(cdbs_python_compile_version))
-    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python${cdbs_python_compile_version}-dev, python (>= 2.3.5-11)
+    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python$(cdbs_python_compile_version)-dev, python (>= 2.3.5-11)
   else
     CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-11)
   endif
