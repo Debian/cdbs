@@ -7,8 +7,10 @@ cdbs (0.4.45) UNRELEASED; urgency=low
   * Fixed bashism in python-distutils.mk
   * Call dh_py* for all packages in new Python policy section
     (python-distutils.mk) (closes: #377965)
+  * Make use of per-patch stamp files and don't ignore failed patch
+    reversals (simple-patchsys.mk) (closes: #372682)
 
- -- Peter Eisentraut <petere@debian.org>  Sat, 22 Jul 2006 15:09:05 +0200
+ -- Peter Eisentraut <petere@debian.org>  Mon, 24 Jul 2006 22:45:11 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 

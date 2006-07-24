@@ -53,7 +53,7 @@ if lsdiff=`which lsdiff` ; then \
   | egrep "/config\.(guess|sub|rpath)$$" | tr "\n" " " ; \
 fi)
 ifneq (, $(evil_patches_that_do_nasty_things))
-$(warning ** WARNING **:  The following patches are modifiing auto-updated files.   Please exclude the following files from your patch:  $(evil_patches_that_do_nasty_things))
+$(warning ** WARNING **:  The following patches are modifiing auto-updated files.  Please exclude the following files from your patch:  $(evil_patches_that_do_nasty_things))
 endif
 endif
 
@@ -68,83 +68,86 @@ clean:: reverse-patches
 # problems with patches that only create new files (see bug #365524).
 cdbs_simple_patchsys_levels = 1 0 2
 
+cdbs_update_stamp = if [ "$@" = "debian/stamp-patched" ]; then touch $(1); elif [ "$@" = "reverse-patches" ]; then rm -f $(1); fi
+
 # The patch subsystem 
 apply-patches: pre-build debian/stamp-patched
 debian/stamp-patched: $(DEB_PATCHES)
 debian/stamp-patched reverse-patches:
 	$(MAKE) -f debian/rules reverse-config
+
+	if [ "$@" = "reverse-patches" ]; then rm -f debian/stamp-patched; fi
+
 	@echo "patches: $(DEB_PATCHES)"
 	@set -e ; reverse=""; patches="$(DEB_PATCHES)"; \
+	if [ "$@" = "reverse-patches" ]; then \
+	  reverse="-R";	\
+	  for patch in $$patches; do reversepatches="$$patch $$reversepatches"; done; \
+	  patches="$$reversepatches"; \
+	fi; \
+	for patch in $$patches; do \
 	  if [ "$@" = "reverse-patches" ]; then \
-	    if [ ! -e debian/stamp-patched ]; then \
-	      echo "Not reversing not applied patches."; \
-	      exit 0; \
+	    if [ ! -e debian/stamp-patch-$$(basename $$patch) ]; then \
+	      echo "Patch $$patch is not applied."; continue; \
 	    fi; \
-	    reverse="-R"; \
-	    for patch in $$patches; do reversepatches="$$patch $$reversepatches"; done; \
-	    patches="$$reversepatches"; \
+	  else \
+	    if [ -e debian/stamp-patch-$$(basename $$patch) ]; then \
+	      echo "Patch $$patch is already applied."; continue; \
+	    fi; \
 	  fi; \
-	  for patch in $$patches; do \
-          case $$patch in \
-            *.gz) cat=zcat ;; \
-            *.bz2) cat=bzcat ;; \
-            *.uu) cat="uudecode -o -" ;; \
-            *) cat=cat ;; \
-          esac; \
+	  case $$patch in \
+	    *.gz) cat=zcat ;; \
+	    *.bz2) cat=bzcat ;; \
+	    *.uu) cat="uudecode -o -" ;; \
+	    *) cat=cat ;; \
+	  esac; \
 	  level=$$(head $$patch | egrep '^#DPATCHLEVEL=' | cut -f 2 -d '='); \
 	  reverse=""; \
 	  if [ "$@" = "reverse-patches" ]; then reverse="-R"; fi; \
 	  success=""; \
 	  if [ -z "$$level" ]; then \
-	    echo -n "Trying "; if test -n "$$reverse"; then echo -n "reversed "; fi; echo -n "patch $$patch at level "; \
+	    echo -n "Trying "; if test -n "$$reverse"; then echo -n "reverse "; fi; echo -n "patch $$patch at level "; \
 	    for level in $(cdbs_simple_patchsys_levels); do \
 	      if test -z "$$success"; then \
-	        echo -n "$$level..."; \
-		if [ "$(DEB_PATCHDIRS_READONLY)" = "yes" ] ; then \
-		  logfile="/dev/null" ; \
-		else \
-		  logfile="$$patch.level-$$level.log" ; \
-		fi ; \
+	        echo -n "$$level ... "; \
+	        if [ "$(DEB_PATCHDIRS_READONLY)" = "yes" ] ; then \
+	          logfile="/dev/null" ; \
+	        else \
+	          logfile="$$patch.level-$$level.log" ; \
+	        fi ; \
 	        if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --dry-run -p$$level 1>$$logfile 2>&1; then \
 	          if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --no-backup-if-mismatch -V never -p$$level 1>$$logfile 2>&1; then \
 	            success=yes; \
-	            touch debian/stamp-patch-$$(basename $$patch); \
+	            $(call cdbs_update_stamp,debian/stamp-patch-$$(basename $$patch)); \
 	            echo "success."; \
-                  fi; \
+	          fi; \
 	        fi; \
 	      fi; \
-            done; \
+	    done; \
 	    if test -z "$$success"; then \
-	      if test -z "$$reverse"; then \
-	        echo "failure."; \
-	        touch debian/stamp-patched; \
-	        exit 1; \
-	       else \
-	         echo "failure (ignored)."; \
-               fi \
+	      echo "failure."; \
+	      exit 1; \
 	    fi; \
 	  else \
-	    echo -n "Trying patch $$patch at level $$level..."; \
-	        echo -n "$$level..."; \
+	    echo -n "Trying patch $$patch at level $$level ... "; \
+	    echo -n "$$level ... "; \
 	    if [ "$(DEB_PATCHDIRS_READONLY)" = "yes" ] ; then \
 	      logfile="/dev/null" ; \
 	    else \
 	      logfile="$$patch.log" ; \
 	    fi ; \
 	    if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --no-backup-if-mismatch -V never -p$$level 1>$$logfile 2>&1; then \
-              touch debian/stamp-patch-$$(basename $$patch); \
+	      $(call cdbs_update_stamp,debian/stamp-patch-$$(basename $$patch)); \
 	      echo "success."; \
 	    else \
 	      echo "failure:"; \
 	      cat $$logfile; \
-	      touch debian/stamp-patched; \
-	      if test -z "$$reverse"; then exit 1; fi; \
-            fi; \
+	      exit 1; \
+	    fi; \
 	  fi; \
 	done
-	if [ "$@" = "debian/stamp-patched" ] ; then touch debian/stamp-patched ; \
-	elif [ "$@" = "reverse-patches" ] ; then rm -f debian/stamp-patch* ; \
-	fi
+
+	if [ "$@" != "reverse-patches" ]; then touch debian/stamp-patched; fi
 
 # after reverting patches, we don't need update-config because:
 #  - the tree is already in a consistent state.
