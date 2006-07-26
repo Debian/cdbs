@@ -33,7 +33,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-@HAVE_PYTHON_TRUE@am__append_1 = distutils-1.sh distutils-2.sh distutils-3.sh distutils-4.sh
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -56,8 +55,6 @@ DEFS = @DEFS@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
-HAVE_PYTHON_FALSE = @HAVE_PYTHON_FALSE@
-HAVE_PYTHON_TRUE = @HAVE_PYTHON_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -76,8 +73,6 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PERL = @PERL@
-PYTHON = @PYTHON@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -116,11 +111,28 @@ target_alias = @target_alias@
 # Run these tests silently so we can see what fails
 TESTS_ENVIRONMENT = TESTS_SILENT=true
 EXTRA_DIST = testsuite_functions
-TESTS = autotools-1.sh autotools-2.sh autotools-3.sh autotools-4.sh \
-	autotools-5.sh recursive.sh udeb-1.sh hdparm.sh debhelper-1.sh \
-	debhelper-2.sh debhelper-3.sh debhelper-4.sh debhelper-5.sh \
-	debhelper-6.sh debhelper-7.sh patchsys-1.sh list-missing-1.sh \
-	$(am__append_1)
+TESTS = autotools-1.sh \
+	autotools-2.sh \
+	autotools-3.sh \
+	autotools-4.sh \
+	autotools-5.sh \
+	recursive.sh \
+	udeb-1.sh \
+	hdparm.sh \
+	debhelper-1.sh \
+	debhelper-2.sh \
+	debhelper-3.sh \
+	debhelper-4.sh \
+	debhelper-5.sh \
+	debhelper-6.sh \
+	debhelper-7.sh \
+	patchsys-1.sh \
+	list-missing-1.sh \
+	distutils-1.sh \
+	distutils-2.sh \
+	distutils-3.sh \
+	distutils-4.sh
+
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz
 

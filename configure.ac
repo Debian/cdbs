@@ -17,33 +17,9 @@ dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 dnl 02111-1307 USA.
 
-AC_INIT(cdbs, 0.4.7)
+AC_INIT(cdbs, something)
 AC_CONFIG_SRCDIR(1/rules/buildcore.mk.in)
 AM_INIT_AUTOMAKE
-
-AC_MSG_CHECKING([whether 'make' is GNU Make])
-if ! make --version 2>&1 | grep -q "GNU Make"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_ERROR([you must use GNU Make])
-fi
-AC_MSG_RESULT([yes])
-
 AM_MAINTAINER_MODE
-
-AC_PATH_PROG(PERL, [perl])
-if test "x$PERL" == "x"; then
-  AC_MSG_ERROR([you must have Perl 5 installed])
-fi
-
-AC_PATH_PROG(PYTHON, [python])
-if test "x$PYTHON" == "x"; then
-  AC_PATH_PROG(PYTHON, [python2.2])
-fi
-AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
-
-AC_CONFIG_FILES([Makefile scripts/list-packages test/Makefile])
-
-AC_CONFIG_COMMANDS([list-packages],
-                   [chmod +x scripts/list-packages])
-
+AC_CONFIG_FILES([Makefile test/Makefile])
 AC_OUTPUT
