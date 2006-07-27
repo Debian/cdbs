@@ -11,8 +11,10 @@ cdbs (0.4.45) UNRELEASED; urgency=low
     reversals (simple-patchsys.mk) (closes: #372682)
   * Removed some redundant autotools use, since we know our target platform
     pretty well
+  * Updated debian/copyright, removed redundant AUTHORS file
+  * Updated TODO
 
- -- Peter Eisentraut <petere@debian.org>  Wed, 26 Jul 2006 13:50:42 +0200
+ -- Peter Eisentraut <petere@debian.org>  Thu, 27 Jul 2006 11:18:39 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 
