@@ -1,4 +1,4 @@
-cdbs (0.4.45) UNRELEASED; urgency=low
+cdbs (0.4.45) unstable; urgency=medium
 
   * Added support for user-defined CC and CXX in qmake class
   * Fixed diff call yielding false positives in list-missing rule
@@ -14,7 +14,7 @@ cdbs (0.4.45) UNRELEASED; urgency=low
   * Updated debian/copyright, removed redundant AUTHORS file
   * Updated TODO
 
- -- Peter Eisentraut <petere@debian.org>  Thu, 27 Jul 2006 11:18:39 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sat, 29 Jul 2006 17:18:57 +0200
 
 cdbs (0.4.44) unstable; urgency=medium
 
