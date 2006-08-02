@@ -70,6 +70,8 @@ cdbs_simple_patchsys_levels = 1 0 2
 
 cdbs_update_stamp = if [ "$@" = "debian/stamp-patched" ]; then touch $(1); elif [ "$@" = "reverse-patches" ]; then rm -f $(1); fi
 
+cdbs_patch_stamp_file = debian/stamp-patch-$$(echo $$patch | tr '/' '=')
+
 # The patch subsystem 
 apply-patches: pre-build debian/stamp-patched
 debian/stamp-patched: $(DEB_PATCHES)
@@ -87,11 +89,11 @@ debian/stamp-patched reverse-patches:
 	fi; \
 	for patch in $$patches; do \
 	  if [ "$@" = "reverse-patches" ]; then \
-	    if [ ! -e debian/stamp-patch-$$(basename $$patch) ]; then \
+	    if [ ! -e $(cdbs_patch_stamp_file) ]; then \
 	      echo "Patch $$patch is not applied."; continue; \
 	    fi; \
 	  else \
-	    if [ -e debian/stamp-patch-$$(basename $$patch) ]; then \
+	    if [ -e $(cdbs_patch_stamp_file) ]; then \
 	      echo "Patch $$patch is already applied."; continue; \
 	    fi; \
 	  fi; \
@@ -118,7 +120,7 @@ debian/stamp-patched reverse-patches:
 	        if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --dry-run -p$$level 1>$$logfile 2>&1; then \
 	          if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --no-backup-if-mismatch -V never -p$$level 1>$$logfile 2>&1; then \
 	            success=yes; \
-	            $(call cdbs_update_stamp,debian/stamp-patch-$$(basename $$patch)); \
+	            $(call cdbs_update_stamp,$(cdbs_patch_stamp_file)); \
 	            echo "success."; \
 	          fi; \
 	        fi; \
@@ -137,7 +139,7 @@ debian/stamp-patched reverse-patches:
 	      logfile="$$patch.log" ; \
 	    fi ; \
 	    if $$cat $$patch | patch -d $(DEB_SRCDIR) $$reverse -E --no-backup-if-mismatch -V never -p$$level 1>$$logfile 2>&1; then \
-	      $(call cdbs_update_stamp,debian/stamp-patch-$$(basename $$patch)); \
+	      $(call cdbs_update_stamp,$(cdbs_patch_stamp_file)); \
 	      echo "success."; \
 	    else \
 	      echo "failure:"; \

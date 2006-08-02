@@ -1,3 +1,10 @@
+cdbs (0.4.46) UNRELEASED; urgency=low
+
+  * Changed patch stamp file naming scheme to handle equally named patches
+    in different directories (simple-patchsys.mk) (closes: #380499)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat, 29 Jul 2006 18:24:28 +0200
+
 cdbs (0.4.45) unstable; urgency=medium
 
   * Added support for user-defined CC and CXX in qmake class
