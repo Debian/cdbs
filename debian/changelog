@@ -1,3 +1,9 @@
+cdbs (0.4.47) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Peter Eisentraut <petere@debian.org>  Thu,  3 Aug 2006 23:47:46 +0200
+
 cdbs (0.4.46) unstable; urgency=high
 
   * Changed patch stamp file naming scheme to handle equally named patches
