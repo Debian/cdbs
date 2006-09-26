@@ -22,12 +22,12 @@ patch_header()
         '
 }
 
-dh_testdir
-
 if [ -z "$1" ] || [ "$1" = "--help" ]; then
     echo "Usage: $0 <patch name>"
     exit 0
 fi
+
+dh_testdir
 
 SRCDIR=$(pwd)
 PATCHNAME=${1%.patch}.patch

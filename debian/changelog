@@ -1,8 +1,11 @@
 cdbs (0.4.47) UNRELEASED; urgency=medium
 
-  * Reverse patches before cleaning build directory (closes: #387103)
+  * Reverse patches before cleaning build directory (simple-patchsys.mk)
+    (closes: #387103)
+  * cdbs-edit-patch: Test directory after checking for help message
+    (closes: #389503)
 
- -- Peter Eisentraut <petere@debian.org>  Tue, 26 Sep 2006 22:07:10 +0200
+ -- Peter Eisentraut <petere@debian.org>  Tue, 26 Sep 2006 22:14:42 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
