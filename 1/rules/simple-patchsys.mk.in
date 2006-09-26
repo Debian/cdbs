@@ -59,7 +59,7 @@ endif
 
 post-patches:: apply-patches
 
-clean:: reverse-patches
+cleanbuilddir:: reverse-patches
 	for dir in $(DEB_PATCHDIRS) ; do \
 	    rm -f $$dir/*.log ; \
 	done

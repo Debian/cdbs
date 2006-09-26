@@ -1,8 +1,8 @@
-cdbs (0.4.47) UNRELEASED; urgency=low
+cdbs (0.4.47) UNRELEASED; urgency=medium
 
-  * NOT RELEASED YET
+  * Reverse patches before cleaning build directory (closes: #387103)
 
- -- Peter Eisentraut <petere@debian.org>  Thu,  3 Aug 2006 23:47:46 +0200
+ -- Peter Eisentraut <petere@debian.org>  Tue, 26 Sep 2006 22:07:10 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
