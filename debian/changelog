@@ -2,9 +2,10 @@ cdbs (0.4.47) UNRELEASED; urgency=medium
 
   * Reverse patches before cleaning build directory (simple-patchsys.mk)
     (closes: #387103)
-  * cdbs-edit-patch: Test directory after checking for help message
-    (closes: #389503)
-  * cdbs-edit-patch: Support patches ending in .diff (closes: #389508)
+  * cdbs-edit-patch:
+    - Test directory after checking for help message (closes: #389503)
+    - Support patches ending in .diff (closes: #389508)
+    - Ensure exit status 0 in case of success (closes: #389929)
 
  -- Peter Eisentraut <petere@debian.org>  Thu, 28 Sep 2006 09:29:04 +0200
 

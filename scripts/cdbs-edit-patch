@@ -102,3 +102,5 @@ if $SH; then
     cd $TMP
     diff -Nur $ORIGDIR $NEWDIR >> $SRCDIR/debian/patches/$PATCHNAME
 fi
+
+exit 0
