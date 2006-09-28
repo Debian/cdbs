@@ -30,10 +30,14 @@ fi
 dh_testdir
 
 SRCDIR=$(pwd)
-PATCHNAME=${1%.patch}.patch
 TMP=$(mktemp -t -d cdbs-new-patch.XXXXXX)
 TMP2=$(mktemp -t cdbs-old-patch-header.XXXXXX)
 trap "rm -rf $TMP $TMP2" 0 1 2 3 9 11 13 15
+
+case $1 in
+    *.diff|*.patch) PATCHNAME=$1;;
+    *)              PATCHNAME=$1.patch;;
+esac
 
 ORIGDIR=$(basename $(pwd))
 NEWDIR=$ORIGDIR.new
@@ -50,7 +54,7 @@ debclean
 [ -e "debian/patches/$PATCHNAME" ] || touch "debian/patches/$PATCHNAME" 
 
 # remove all patches later than the one to edit
-for p in $(find debian/patches -type f -name "*.patch" | LC_COLLATE=C sort -r); do
+for p in $(find debian/patches -type f \( -name "*.diff" -o -name "*.patch" \) | LC_COLLATE=C sort -r); do
     rm -f "$p"
     pname=$(basename "$p")
     [ "$pname" != "$PATCHNAME" ] || break

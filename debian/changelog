@@ -4,8 +4,9 @@ cdbs (0.4.47) UNRELEASED; urgency=medium
     (closes: #387103)
   * cdbs-edit-patch: Test directory after checking for help message
     (closes: #389503)
+  * cdbs-edit-patch: Support patches ending in .diff (closes: #389508)
 
- -- Peter Eisentraut <petere@debian.org>  Tue, 26 Sep 2006 22:14:42 +0200
+ -- Peter Eisentraut <petere@debian.org>  Thu, 28 Sep 2006 09:29:04 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
