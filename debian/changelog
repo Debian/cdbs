@@ -6,8 +6,9 @@ cdbs (0.4.47) UNRELEASED; urgency=medium
     - Test directory after checking for help message (closes: #389503)
     - Support patches ending in .diff (closes: #389508)
     - Ensure exit status 0 in case of success (closes: #389929)
+  * Added XS-X-Vcs-Svn field
 
- -- Peter Eisentraut <petere@debian.org>  Thu, 28 Sep 2006 09:29:04 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sat, 30 Sep 2006 00:53:42 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
