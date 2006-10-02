@@ -158,7 +158,6 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_installinfo -p$(cdbs_curpkg) $(DEB_INSTALL_INFO_$(cdbs_curpkg)) 
 	dh_installmenu -p$(cdbs_curpkg) $(DEB_DH_INSTALL_MENU_ARGS)
 	dh_installcron -p$(cdbs_curpkg) $(DEB_DH_INSTALL_CRON_ARGS)
-	dh_installinit -p$(cdbs_curpkg) $(if $(DEB_UPDATE_RCD_PARAMS),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS))",$(if $(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)))")) $(DEB_DH_INSTALLINIT_ARGS) 
 	dh_installdebconf -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEBCONF_ARGS)
 	dh_installemacsen -p$(cdbs_curpkg) $(if $(DEB_EMACS_PRIORITY),--priority=$(DEB_EMACS_PRIORITY)) $(if $(DEB_EMACS_FLAVOR),--flavor=$(DEB_EMACS_FLAVOR)) $(DEB_DH_INSTALLEMACSEN_ARGS)
 	dh_installcatalogs -p$(cdbs_curpkg) $(DEB_DH_INSTALLCATALOGS_ARGS)
@@ -199,6 +198,7 @@ $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) :: binary-fixup/%: binary-strip
 	dh_compress -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_COMPRESS_EXCLUDE)) $(DEB_DH_COMPRESS_ARGS)
 	dh_fixperms -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_FIXPERMS_EXCLUDE)) $(DEB_DH_FIXPERMS_ARGS)
 	$(if $(is_debug_package),,dh_makeshlibs -p$(cdbs_curpkg) $(DEB_DH_MAKESHLIBS_ARGS))
+	dh_installinit -p$(cdbs_curpkg) $(if $(DEB_UPDATE_RCD_PARAMS),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS))",$(if $(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)))")) $(DEB_DH_INSTALLINIT_ARGS)
 
 # This rule is called right before building the binary .deb packages
 # for each package, but after the binary-predeb hooks have been run.
