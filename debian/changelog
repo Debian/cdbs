@@ -7,10 +7,8 @@ cdbs (0.4.47) UNRELEASED; urgency=medium
     - Support patches ending in .diff (closes: #389508)
     - Ensure exit status 0 in case of success (closes: #389929)
   * Added XS-X-Vcs-Svn field
-  * Move dh_installinit to binary-fixup to make sure its postinst fragment
-    is the last (debhelper.mk) (closes: #386970)
 
- -- Peter Eisentraut <petere@debian.org>  Sat, 30 Sep 2006 01:28:10 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sat, 30 Sep 2006 00:53:42 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
