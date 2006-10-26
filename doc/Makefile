@@ -3,35 +3,20 @@ all: html pdf
 graphics = buildcore depgraph
 
 xmllint-stamp-%: %.xml
-	xmllint --xinclude --postvalid --noblanks --noout $<
+	xmllint --nonet --xinclude --postvalid --noblanks --noout $<
 	touch $@
 
 html: cdbs-doc.html
 %.html: %.xml xmllint-stamp-% cdbs-doc-xhtml.xsl $(graphics:%=%.png)
-	xsltproc --xinclude -o $@ cdbs-doc-xhtml.xsl $<
-
-%.tex-pdf: %.xml xmllint-stamp-% cdbs-doc-latex.xsl
-	xsltproc --xinclude --stringparam graphic.default.extension pdf -o $@ cdbs-doc-latex.xsl $<
-
-%.tex-ps: %.xml xmllint-stamp-% cdbs-doc-latex.xsl
-	xsltproc --xinclude --stringparam graphic.default.extension eps -o $@ cdbs-doc-latex.xsl $<
-
-dvi: cdbs-doc.dvi
-%.dvi: %.tex-ps $(graphics:%=%.eps)
-# 3 passes to avoid undefined references
-	latex $<
-	mkindex $<
-	latex $<
-	latex $<
+	xsltproc --nonet --xinclude -o $@ cdbs-doc-xhtml.xsl $<
 
 pdf: cdbs-doc.pdf
-%.pdf: %.tex-pdf $(graphics:%=%.pdf)
-	pdflatex $<
-	pdflatex $<
+%.pdf: %.xml xmllint-stamp-% $(graphics:%=%.pdf)
+	dblatex -b pdftex -T db2latex $<
 
 ps: cdbs-doc.ps
-%.ps: %.dvi
-	dvips $<
+%.ps: %.xml xmllint-stamp-% $(graphics:%=%.eps)
+	dblatex -T db2latex -t ps -f eps $<
 
 txt: cdbs-doc.txt
 %.txt: %.html

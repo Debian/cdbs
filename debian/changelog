@@ -1,3 +1,10 @@
+cdbs (0.4.47) unstable; urgency=low
+
+  * Replaced db2latex-xsl by dblatex for documentation build (patch by
+    Frank Küster) (closes: #393665)
+
+ -- Peter Eisentraut <petere@debian.org>  Thu, 26 Oct 2006 12:21:40 +0200
+
 cdbs (0.4.46) unstable; urgency=high
 
   * Changed patch stamp file naming scheme to handle equally named patches

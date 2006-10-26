@@ -2303,7 +2303,7 @@ clean::
     xsltproc (from <ulink
     url="http://xmlsoft.org/XSLT/">libxslt</ulink>), using the <ulink
     url="http://nwalsh.com/">N. Walsh</ulink> and <ulink
-    url="http://db2latex.sourceforge.net/">DB2LaTeX</ulink> XLST
+    url="http://dblatex.sourceforge.net/">dblatex</ulink> XLST
     stylesheets, and converted with <ulink
     url="http://www.latex-project.org/">LaTeX</ulink> tools (latex,
     mkindex, pdflatex &amp; dvips) / <ulink
