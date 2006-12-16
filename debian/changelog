@@ -1,3 +1,10 @@
+cdbs (0.4.48) unstable; urgency=medium
+
+  * Reverse patches before cleaning build directory (simple-patchsys.mk)
+    (closes: #387103)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat, 16 Dec 2006 17:08:29 +0100
+
 cdbs (0.4.47) unstable; urgency=low
 
   * Replaced db2latex-xsl by dblatex for documentation build (patch by
