@@ -19,9 +19,9 @@ chmod +x $WORKDIR/debian/rules
 
 cat >>$WORKDIR/debian/control <<EOF
 
-Package: python2.3-cdbs-testsuite
+Package: python2.5-cdbs-testsuite
 Architecture: any
-Description: common build system test suite (Python 2.3)
+Description: common build system test suite (Python 2.5)
  This package is part of the testsuite for the CDBS build system.  If you've
  managed to install this, something has gone horribly wrong.
 
@@ -38,7 +38,7 @@ touch $WORKDIR/foo.c
 
 build_package
 
-dpkg -c $WORKDIR/../python2.3-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.3/site-packages/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python2.5-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
 dpkg -c $WORKDIR/../python2.4-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
 
 clean_package

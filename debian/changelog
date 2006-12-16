@@ -2,8 +2,10 @@ cdbs (0.4.48) unstable; urgency=medium
 
   * Reverse patches before cleaning build directory (simple-patchsys.mk)
     (closes: #387103)
+  * Drop build dependency on python2.3; use python2.5 in the testsuite
+    instead (closes: #403358)
 
- -- Peter Eisentraut <petere@debian.org>  Sat, 16 Dec 2006 17:08:29 +0100
+ -- Peter Eisentraut <petere@debian.org>  Sat, 16 Dec 2006 17:47:12 +0100
 
 cdbs (0.4.47) unstable; urgency=low
 
