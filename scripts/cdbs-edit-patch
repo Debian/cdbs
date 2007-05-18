@@ -69,7 +69,7 @@ cd $TMP/$NEWDIR
 # if we edit a patch, apply the already existing one to the new directory
 if [ -e "$SRCDIR/debian/patches/$PATCHNAME" ]; then
     echo -n "Applying already existing patch to edit directory at level"
-    for level in 0 1 2; do
+    for level in 1 0 2; do
         echo -n " $level"
         if patch --dry-run -E -p$level < "$SRCDIR/debian/patches/$PATCHNAME" > /dev/null 2>&1; then
             if patch --no-backup-if-mismatch -V never -p$level < "$SRCDIR/debian/patches/$PATCHNAME" > /dev/null 2>&1; then

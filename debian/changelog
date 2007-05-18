@@ -4,6 +4,8 @@ cdbs (0.4.49) UNRELEASED; urgency=low
     - Test directory after checking for help message (closes: #389503)
     - Support patches ending in .diff (closes: #389508)
     - Ensure exit status 0 in case of success (closes: #389929)
+    - Apply patches in an order consistent with simple-patchsys.mk
+      (closes: #395180)
   * Added XS-Vcs- fields
   * Added build dependency on texlive-extra-utils to pull in epstopdf
     (closes: #420329)
