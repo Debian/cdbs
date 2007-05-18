@@ -5,8 +5,10 @@ cdbs (0.4.49) UNRELEASED; urgency=low
     - Support patches ending in .diff (closes: #389508)
     - Ensure exit status 0 in case of success (closes: #389929)
   * Added XS-Vcs- fields
+  * Added build dependency on texlive-extra-utils to pull in epstopdf
+    (closes: #420329)
 
- -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 20:35:58 +0200
+ -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 21:03:45 +0200
 
 cdbs (0.4.48) unstable; urgency=medium
 
