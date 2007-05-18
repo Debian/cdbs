@@ -1,14 +1,28 @@
-cdbs (0.4.47) UNRELEASED; urgency=medium
+cdbs (0.4.49) UNRELEASED; urgency=low
 
-  * Reverse patches before cleaning build directory (simple-patchsys.mk)
-    (closes: #387103)
   * cdbs-edit-patch:
     - Test directory after checking for help message (closes: #389503)
     - Support patches ending in .diff (closes: #389508)
     - Ensure exit status 0 in case of success (closes: #389929)
-  * Added XS-X-Vcs-Svn field
+  * Added XS-Vcs- fields
 
- -- Peter Eisentraut <petere@debian.org>  Sat, 30 Sep 2006 00:53:42 +0200
+ -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 20:35:58 +0200
+
+cdbs (0.4.48) unstable; urgency=medium
+
+  * Reverse patches before cleaning build directory (simple-patchsys.mk)
+    (closes: #387103)
+  * Drop build dependency on python2.3; use python2.5 in the testsuite
+    instead (closes: #403358)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat, 16 Dec 2006 18:25:48 +0100
+
+cdbs (0.4.47) unstable; urgency=low
+
+  * Replaced db2latex-xsl by dblatex for documentation build (patch by
+    Frank Küster) (closes: #393665)
+
+ -- Peter Eisentraut <petere@debian.org>  Thu, 26 Oct 2006 12:21:40 +0200
 
 cdbs (0.4.46) unstable; urgency=high
 
