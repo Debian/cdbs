@@ -10,6 +10,8 @@ cdbs (0.4.49) UNRELEASED; urgency=low
   * Added build dependency on texlive-extra-utils to pull in epstopdf
     (closes: #420329)
   * Fixed typos (hbuild.mk) (closes: #419322)
+  * Corrected documentation about how to override configure flags
+    (closes: #420198)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 21:03:45 +0200
 

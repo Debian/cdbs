@@ -1052,7 +1052,7 @@ DEB_CONFIGURE_EXTRA_FLAGS = --enable-ipv6 --with-foo
       <para>If the build system uses non-standard configure options
       you can override the CDBS default behavior:
 <programlisting>
-COMMON_CONFIGURE_FLAGS = --program-dir=/usr
+DEB_CONFIGURE_NORMAL_ARGS = --program-dir=/usr
 </programlisting>
       Note that <varname>DEB_CONFIGURE_EXTRA_FLAGS</varname> will
       still be appended.</para>
