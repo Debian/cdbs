@@ -12,6 +12,7 @@ cdbs (0.4.49) UNRELEASED; urgency=low
   * Fixed typos (hbuild.mk) (closes: #419322)
   * Corrected documentation about how to override configure flags
     (closes: #420198)
+  * Shortened uploaders list
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 21:03:45 +0200
 
