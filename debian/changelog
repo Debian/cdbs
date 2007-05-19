@@ -6,6 +6,11 @@ cdbs (0.4.49) UNRELEASED; urgency=low
     - Ensure exit status 0 in case of success (closes: #389929)
     - Apply patches in an order consistent with simple-patchsys.mk
       (closes: #395180)
+    [from Martin Pitt:] (closes: #381120)
+    - Now works for packages using tarball.mk (closes: #399308)
+    - Can edit patches that produce rejections
+    - Strips off "debian/patches/" from patch name argument to comfortably
+      work with command line completion
   * Added XS-Vcs- fields
   * Added build dependency on texlive-extra-utils to pull in epstopdf
     (closes: #420329)

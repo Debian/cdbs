@@ -38,6 +38,7 @@ case $1 in
     *.diff|*.patch) PATCHNAME=$1;;
     *)              PATCHNAME=$1.patch;;
 esac
+PATCHNAME=${PATCHNAME#debian/patches/}
 
 ORIGDIR=$(basename $(pwd))
 NEWDIR=$ORIGDIR.new
@@ -53,7 +54,7 @@ debclean
 # lexicographic patch position
 [ -e "debian/patches/$PATCHNAME" ] || touch "debian/patches/$PATCHNAME" 
 
-# remove all patches later than the one to edit
+# remove all patches later than or equal to the one to edit
 for p in $(find debian/patches -type f \( -name "*.diff" -o -name "*.patch" \) | LC_COLLATE=C sort -r); do
     rm -f "$p"
     pname=$(basename "$p")
@@ -62,9 +63,14 @@ done
 
 debian/rules apply-patches
 
+deb_tar_srcdir=$(sed -nr 's/^[[:space:]]*DEB_TAR_SRCDIR[[:space:]]*:?=[[:space:]]*//p' debian/rules)
+if [ -n "$deb_tar_srcdir" ]; then
+	deb_srcdir=build-tree/$deb_tar_srcdir
+fi
+
 # create new source dir
 cp -a . $TMP/$NEWDIR
-cd $TMP/$NEWDIR
+cd $TMP/$NEWDIR/$deb_srcdir
 
 # if we edit a patch, apply the already existing one to the new directory
 if [ -e "$SRCDIR/debian/patches/$PATCHNAME" ]; then
@@ -81,7 +87,10 @@ if [ -e "$SRCDIR/debian/patches/$PATCHNAME" ]; then
     done
     [ "$success" ] || {
         echo " failure"
-        exit 1
+        echo
+        echo "Forcefully applying patch at level 1.  You have to fix the"
+        echo "rejections manually."
+        patch -p1 < "$SRCDIR/debian/patches/$PATCHNAME" || [ $? -eq 1 ]
     }
 fi
 
@@ -100,7 +109,10 @@ if $SH; then
         cat $TMP2 > $SRCDIR/debian/patches/$PATCHNAME
     fi
     cd $TMP
-    diff -Nur $ORIGDIR $NEWDIR >> $SRCDIR/debian/patches/$PATCHNAME
-fi
+    diff -Nur $ORIGDIR/$deb_srcdir $NEWDIR/$deb_srcdir >> $SRCDIR/debian/patches/$PATCHNAME || [ $? -eq 1 ]
 
-exit 0
+    # adjust paths in patches with build tree
+    if [ -n "$deb_srcdir" ]; then
+	sed -i "s_^\(---\|+++\) [^/]*/build-tree/_\1 _" $SRCDIR/debian/patches/$PATCHNAME
+    fi
+fi
