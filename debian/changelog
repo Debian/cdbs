@@ -18,6 +18,8 @@ cdbs (0.4.49) UNRELEASED; urgency=low
   * Corrected documentation about how to override configure flags
     (closes: #420198)
   * Shortened uploaders list
+  * Do not unapply patches when building from a tarball (tarball.mk)
+    (closes: #424080)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 21:03:45 +0200
 

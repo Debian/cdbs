@@ -99,5 +99,6 @@ cleanbuilddir::
 	rm -rf $(_cdbs_tarball_dir)
 # Ignore errors from this.  These stamps may not exist yet.
 	-rm $(_cdbs_tarball_stamps)
+	-rm debian/stamp-patch-* 2>/dev/null
 
 endif
