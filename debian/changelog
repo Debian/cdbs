@@ -1,4 +1,4 @@
-cdbs (0.4.49) UNRELEASED; urgency=low
+cdbs (0.4.49) unstable; urgency=low
 
   * cdbs-edit-patch:
     - Test directory after checking for help message (closes: #389503)
@@ -20,11 +20,11 @@ cdbs (0.4.49) UNRELEASED; urgency=low
   * Shortened uploaders list
   * Do not unapply patches when building from a tarball (tarball.mk)
     (closes: #424080)
-  * Normalize spelling of makefile errors and warnings (autotools-files.mk,
+  * Normalized spelling of makefile errors and warnings (autotools-files.mk,
     buildcore.mk, dpatch.mk, perlmodule.mk, python-distutils.mk,
     simple-patchsys.mk, tarball.mk)
 
- -- Peter Eisentraut <petere@debian.org>  Fri, 18 May 2007 21:03:45 +0200
+ -- Peter Eisentraut <petere@debian.org>  Sun, 20 May 2007 18:01:14 +0200
 
 cdbs (0.4.48) unstable; urgency=medium
 
