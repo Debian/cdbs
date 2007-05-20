@@ -38,7 +38,7 @@ include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 DEB_MAKEMAKER_PACKAGE ?= tmp
 
 ifneq ($(DEB_BUILDDIR),$(DEB_SRCDIR))
-$(error DEB_BUILDDIR and DEB_SRCDIR must be the same for Perl builds.)
+$(error DEB_BUILDDIR and DEB_SRCDIR must be the same for Perl builds)
 endif
 
 common-configure-arch common-configure-indep:: Makefile

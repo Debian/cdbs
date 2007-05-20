@@ -63,7 +63,7 @@ endif
 close_parenthesis = )
 
 ifneq (, $(DEB_TARBALL))
-$(warning Parsing $(DEB_TARBALL)...)
+$(warning parsing $(DEB_TARBALL) ...)
 config_all_tar		:= $(shell \
 for i in $(DEB_TARBALL) ; do \
 	if ! test -e $$i.cdbs-config_list ; then \
@@ -109,7 +109,7 @@ endif
 # the future it will be a good place to generate debian/control, but right
 # now we don't support that very well.
 pre-build:: testdir makebuilddir
-	$(foreach x,$(_cdbs_deprecated_vars),$(if $(shell test "$($x)" != "$(_cdbs_deprecated_$(x)_default)" && echo W),$(warning "$x is a deprecated variable")))
+	$(foreach x,$(_cdbs_deprecated_vars),$(if $(shell test "$($x)" != "$(_cdbs_deprecated_$(x)_default)" && echo W),$(warning WARNING:  $x is a deprecated variable)))
 
 # This target is called after patches are applied.  Used by the patch system.
 post-patches:: pre-build apply-patches update-config
@@ -199,7 +199,7 @@ ifneq (, $(DEB_AUTO_UPDATE_DEBIAN_CONTROL))
 control_cpu		:= $(shell grep "^Cpu:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 ifeq (, $(control_cpu))
 ifneq (, $(shell egrep "\[(system|cpu): .*\]" debian/control.in))
-$(error Inconsistency in control.in.  [(system|cpu): ] tags were used but Cpu:|System: was not)
+$(error inconsistency in control.in: [(system|cpu): ] tags were used but Cpu:|System: was not)
 endif
 else
 # Prevent recursive braindamage when building type-handling with cdbs.

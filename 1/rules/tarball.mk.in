@@ -31,7 +31,7 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 # to unpack.
 
 ifeq ($(DEB_TAR_SRCDIR),)
-$(error You must specify DEB_TAR_SRCDIR)
+$(error DEB_TAR_SRCDIR must be specified)
 endif
 
 _cdbs_tarball_dir = build-tree

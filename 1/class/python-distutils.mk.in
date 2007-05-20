@@ -55,7 +55,7 @@ ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
   endif # use pycompat
   # warning pysupport compatibility mode
   ifneq (, $(cdbs_use_xs_field))
-    $(warning Use of XS-Python-Version and XB-Python-Version fields in 'debian/control' is deprecated with pysupport method, use 'debian/pyversions' if you need to specify specific versions)
+    $(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)
   endif # use XS field (compat)
 else
   ifeq (pycentral, $(DEB_PYTHON_SYSTEM))
@@ -67,11 +67,11 @@ else
       $(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral))
     else
       ifneq (, $(cdbs_use_xs_field))
-        $(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pysupport" or "pycentral".)
+        $(error package uses the new Python policy; DEB_PYTHON_SYSTEM must be set to "pysupport" or "pycentral")
       endif
       ifneq (, $(cdbs_selected_pycompat))
         ifeq (yes, $(shell expr $(cdbs_selected_pycompat) \> 1 >/dev/null && echo yes))
-          $(error Your package uses the new Python policy; you must set DEB_PYTHON_SYSTEM to "pysupport" or "pycentral".)
+          $(error package uses the new Python policy; DEB_PYTHON_SYSTEM must be set to "pysupport" or "pycentral")
         endif
       endif # use pycompat
     endif # unknown method
@@ -178,7 +178,7 @@ endif # archall
 # check if build is possible
 ifeq (, $(cdbs_python_build_versions))
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-$(error invalid setting in 'debian/pyversions')
+$(error invalid setting in debian/pyversions)
 else
 $(error invalid setting for XS-Python-Version)
 endif # system selected

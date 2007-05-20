@@ -61,7 +61,7 @@ if lsdiff=`which lsdiff` ; then \
   | egrep "/config\.(guess|sub|rpath)$$" | tr "\n" " " ; \
 fi)
 ifneq (, $(evil_patches_that_do_nasty_things))
-$(warning ** WARNING **:  The following patches are modifiing auto-updated files.   Please exclude the following files from your patch:  $(evil_patches_that_do_nasty_things))
+$(warning WARNING:  The following patches are modifying auto-updated files.  Please exclude the following files from your patch:  $(evil_patches_that_do_nasty_things))
 endif
 endif
 
