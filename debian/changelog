@@ -1,6 +1,6 @@
 cdbs (0.4.50) UNRELEASED; urgency=low
 
-  * Made qmake class observe nostrip option (qmake.mk) (closes: #437272)
+  * Made qmake class observe nostrip option (qmake.mk) (closes: #438417)
   * Call make as $(MAKE) (qmake.mk)
   * Added cmake class (original patch by Fathi Boudra) (closes: #377524)
 
