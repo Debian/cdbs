@@ -31,7 +31,11 @@ testdir: debian/control
 	test -x debian/rules
 
 testroot:
+ifdef _cdbs_rules_debhelper
+	dh_testroot
+else
 	test "`id -u`" = 0
+endif
 
 $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% : 
 	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
