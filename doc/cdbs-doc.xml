@@ -346,9 +346,6 @@ DEB_SRCDIR = $(CURDIR)/src
 
 # in which directory to build
 DEB_BUILDDIR = $(DEB_SRCDIR)/build
-
-# in which directory to install the sofware
-DEB_DESTDIR = $(CURDIR)/plop/
 </programlisting>
       Remember that you can get the package directory using the
       <varname>CURDIR</varname> variable.</para>
@@ -425,6 +422,24 @@ DEB_DESTDIR = $(CURDIR)/plop/
           <varlistentry>
             <term><varname>DEB_HOST_ARCH_OS</varname></term>
             <listitem><para>the operating system part of the Debian architecture (e.g., <literal>linux</literal>)</para></listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><varname>DEB_DESTDIR</varname></term>
+            <listitem><para>The directory in which to install the
+            package.  This is automatically set to
+            <filename>$(CURDIR)/debian/<replaceable>packagename</replaceable></filename>
+            if there is one package and
+            <filename>$(CURDIR)/debian/tmp</filename> if there are
+            multiple packages.  In the latter case you would usually
+            use <filename>.install</filename> files to install the
+            package files into the final directories.  In some
+            exceptional cases, you may need to set
+            <varname>DEB_DESTDIR</varname> yourself.  One case is when
+            some packages are only built on some architectures, which
+            could make CDBS set the variable inconsistently across
+            architectures, which in turn would create problems with
+            the <filename>.install</filename> files.</para></listitem>
           </varlistentry>
         </variablelist>
       </para>
