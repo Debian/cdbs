@@ -41,6 +41,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/autotools-vars.mk	\
 		1/class/autotools-files.mk	\
 		1/class/autotools.mk		\
+		1/class/cmake.mk		\
 		1/class/docbookxml.mk		\
 		1/class/gnome.mk		\
 		1/class/kde.mk			\
