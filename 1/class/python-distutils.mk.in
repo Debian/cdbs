@@ -125,10 +125,10 @@ common-build-impl::
 ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	cd $(DEB_SRCDIR) && /usr/bin/python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
+	cd $(DEB_SRCDIR) && python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 else
 $(patsubst %,install/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: install/% :
-	cd $(DEB_SRCDIR) && /usr/bin/python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
+	cd $(DEB_SRCDIR) && python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 endif
 
 $(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
@@ -203,13 +203,16 @@ CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.5.0)
 endif
 
 
+cdbs_python_current_binary := $(shell pyversions -d)
+cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
+
 # build stage
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
 python-build-stamp-%:
 ifeq (all, $(cdbs_python_module_arch))
-	cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 else
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 endif # archall detection
 	touch $@
 
@@ -218,11 +221,11 @@ endif # archall detection
 ifeq (all, $(cdbs_python_module_arch))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
-	cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 else
 common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
 python-install-%:
-	cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 endif # archall detection
 
 
@@ -246,9 +249,9 @@ endif
 clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
 python-clean-%:
 ifeq (all, $(cdbs_python_module_arch))
-	-cd $(DEB_SRCDIR) && python$(cdbs_python_compile_version) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 else
-	-cd $(DEB_SRCDIR) && python$* $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 endif # archall detection
 
 clean::
