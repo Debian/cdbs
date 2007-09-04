@@ -1116,9 +1116,19 @@ DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
       the following variables:
 
       <itemizedlist>
-        <listitem><para><varname>DEB_AUTO_UPDATE_AUTOCONF</varname></para></listitem>
-        <listitem><para><varname>DEB_AUTO_UPDATE_AUTOMAKE</varname></para></listitem>
-        <listitem><para><varname>DEB_AUTO_UPDATE_LIBTOOL</varname></para></listitem>
+        <listitem><para><varname>DEB_AUTO_UPDATE_AUTOCONF</varname> to
+        the version of Autoconf to use; e.g.,
+        <literal>2.61</literal></para></listitem>
+
+        <listitem><para><varname>DEB_AUTO_UPDATE_AUTOMAKE</varname> to
+        the version of Automake to use; e.g.,
+        <literal>1.10</literal></para></listitem>
+
+        <listitem><para><varname>DEB_AUTO_UPDATE_LIBTOOL</varname> to
+        <literal>pre</literal> to run <command>libtoolize</command>
+        before the build, or to <literal>post</literal> to copy the
+        system-supplied <command>libtool</command> program into the
+        build tree after the configure run</para></listitem>
       </itemizedlist>
 
       (Corresponding build dependencies will automatically be
