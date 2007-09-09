@@ -11,7 +11,8 @@ XS-Vcs-Svn: svn://svn.debian.org/build-common/
 Package: cdbs
 Architecture: all
 Conflicts: build-common
-Recommends: autotools-dev, debhelper (>= 4.2.0)
+Depends: debhelper (>= 5.0.30)
+Recommends: autotools-dev
 Suggests: devscripts, doc-base
 Description: common build system for Debian packages
  This package contains the Common Debian Build System, an abstract

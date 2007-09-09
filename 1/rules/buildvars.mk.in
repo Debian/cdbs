@@ -33,8 +33,16 @@ DEB_ISNATIVE := $(shell dpkg-parsechangelog | egrep '^Version:' | perl -ne 'prin
 
 # Split into arch/indep packages
 ifneq ($(DEB_INDEP_PACKAGES),cdbs)
+ifdef _cdbs_rules_debhelper
+# This odd piece of coding is necessary to hide the warning message
+# "I have no package to build" while preserving genuine error messages.
+# This was in fact an error before debhelper 5.0.30.
+DEB_INDEP_PACKAGES := $(strip $(shell dh_listpackages -i 2>/dev/null || dh_listpackages -i))
+DEB_ARCH_PACKAGES := $(filter-out $(DEB_INDEP_PACKAGES),$(strip $(shell dh_listpackages -s 2>/dev/null || dh_listpackages -s)))
+else
 DEB_INDEP_PACKAGES := $(strip $(shell $(_cdbs_scripts_path)/list-packages indep))
 DEB_ARCH_PACKAGES := $(filter-out $(DEB_INDEP_PACKAGES),$(strip $(shell $(_cdbs_scripts_path)/list-packages same)))
+endif
 endif
 # Split into normal and udeb packages
 ifeq ($(DEB_UDEB_PACKAGES),)
