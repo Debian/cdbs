@@ -31,7 +31,9 @@ list-missing:
 	  (cd debian/tmp && find . -type f -o -type l | grep -v '/DEBIAN/' | sort) > debian/cdbs-install-list; \
 	  (for package in $(DEB_ALL_PACKAGES); do \
 	     (cd debian/$$package && find . -type f -o -type l); \
-	   done) | sort -u > debian/cdbs-package-list; \
+	   done; \
+	   test -e debian/not-installed && grep -v '^#' debian/not-installed; \
+	   ) | sort -u > debian/cdbs-package-list; \
 	  diff -u debian/cdbs-install-list debian/cdbs-package-list | sed '1,2d' | egrep '^-' || true; \
 	else \
 	  echo "All files were installed into debian/$(DEB_SOURCE_PACKAGE)."; \
