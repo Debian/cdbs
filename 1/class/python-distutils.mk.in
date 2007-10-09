@@ -99,12 +99,12 @@ DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 ifndef DEB_PYTHON_SYSTEM
 ########################### old policy method ###########################
 
-$(warning ########################################################)
+$(warning =======================================================)
 $(warning Your package does not conform to the new Python policy.)
 $(warning Please consider updating.  Here is some documentation:)
 $(warning   http://wiki.debian.org/DebianPython/NewPolicy)
 $(warning   http://wiki.debian.org/DebianPythonFAQ)
-$(warning ########################################################)
+$(warning =======================================================)
 
 # make: *** No rule to make target `voodoo'.  Stop.
 DEB_PYTHON_REAL_LIB_PACKAGES = $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(filter-out $(DEB_PYTHON_PACKAGES_EXCLUDE),$(DEB_ALL_PACKAGES))))
