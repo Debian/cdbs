@@ -1468,6 +1468,11 @@ include /usr/share/cdbs/1/class/qmake.mk
           <term><literal>noopt</literal></term>
           <listitem><para>use <option>-O0</option> instead of <option>-O2</option></para></listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term><literal>nostrip</literal></term>
+          <listitem><para>pass the <literal>nostrip</literal> option to <command>qmake</command> though the <varname>CONFIG</varname> variable</para></listitem>
+        </varlistentry>
       </variablelist>
       </para>
     </sect1>
@@ -1610,6 +1615,11 @@ DEB_ANT_CLEAN_TARGET = super-clean
       <para><varname>DEB_BUILD_OPTIONS</varname> is checked for the
       following options:
       <variablelist>
+        <varlistentry>
+          <term><literal>nocheck</literal></term>
+          <listitem><para>skip the check target</para></listitem>
+        </varlistentry>
+
         <varlistentry>
           <term><literal>noopt</literal></term>
           <listitem><para>set Ant option <literal>compile.optimize</literal> to false</para></listitem>
