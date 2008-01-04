@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 # -*- mode: sh; coding: utf-8 -*-
 # Recursively build CDBS and sanity check the resulting package.
 # Copyright © 2003 Colin Walters <walters@debian.org>

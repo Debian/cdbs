@@ -1,3 +1,10 @@
+cdbs (0.4.51) UNRELEASED; urgency=low
+
+  * Changed test/recursive.sh to use bash, like all other tests, since it
+    doesn't work with dash (closes: #459052)
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 04 Jan 2008 14:20:20 +0100
+
 cdbs (0.4.50) unstable; urgency=low
 
   * Made qmake class observe nostrip option (qmake.mk) (closes: #438417)
