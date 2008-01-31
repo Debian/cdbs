@@ -84,8 +84,12 @@ endif
 
 ifeq ($(DH_COMPAT),4)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
-else
+endif
+ifeq ($(DH_COMPAT),5)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5)
+endif
+ifeq ($(DH_COMPAT),6)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.44)
 endif
 
 ifeq ($(DEB_VERBOSE_ALL), yes)
@@ -120,7 +124,7 @@ $(foreach x,$(DEB_DBG_PACKAGES),$(eval $(call cdbs_deb_dbg_package_assign,$(valu
 endif
 endif
 cdbs_dbg_package = $(if $(DEB_DBG_PACKAGE_$(cdbs_curpkg)),$(DEB_DBG_PACKAGE_$(cdbs_curpkg)),$(DEB_DBG_PACKAGE_ALL))
-cdbs_dbg_package_option = $(if $(cdbs_dbg_package),$(shell if [ "$(DH_COMPAT)" -eq 5 ]; then echo "--dbg-package=$(strip $(cdbs_dbg_package))"; fi))
+cdbs_dbg_package_option = $(if $(cdbs_dbg_package),$(shell if [ "$(DH_COMPAT)" -ge 5 ]; then echo "--dbg-package=$(strip $(cdbs_dbg_package))"; fi))
 DEB_DH_STRIP_ARGS = $(cdbs_dbg_package_option)
 endif
 

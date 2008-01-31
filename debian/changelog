@@ -5,6 +5,7 @@ cdbs (0.4.51) UNRELEASED; urgency=low
   * Changed CMAKE_C_COMPILER to CMAKE_C_COMPILER:FILEPATH and
     CMAKE_CXX_COMPILER to CMAKE_CXX_COMPILER:FILEPATH (cmake.mk)
     (closes: #450901)
+  * Added initial support for debhelper level 6 (closes: #462130)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 04 Jan 2008 14:20:20 +0100
 
