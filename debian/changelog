@@ -1,6 +1,6 @@
 cdbs (0.4.52) UNRELEASED; urgency=low
 
-  * Bump python-central build-dependency to >= 0.6 in python-distutils.
+  * Bump python-central build-dependency to >= 0.6 in python-distutils class.
 
  -- Jonas Smedegaard <dr@jones.dk>  Wed, 12 Mar 2008 13:28:25 +0100
 
