@@ -79,7 +79,9 @@ deapply-dpatches:
 #  - the initialisation of this routine is already in charge of making
 #    the tree not only consistent, but also prepared to accept patching.
 
-# for the benefit of dpatch-edit-patch
+# standard targets, also for the benefit of dpatch-edit-patch
+.PHONY: patch unpatch
+patch: apply-dpatches
 unpatch: deapply-dpatches
 
 # The patch subsystem 

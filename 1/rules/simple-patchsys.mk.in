@@ -158,6 +158,12 @@ debian/stamp-patched reverse-patches:
 	if [ "$@" != "reverse-patches" ] ; then \
 		$(MAKE) -f debian/rules update-config ; \
 	fi
+
+# standard targets
+.PHONY: patch unpatch
+patch: apply-patches
+unpatch: reverse-patches
+
 endif
 
 endif

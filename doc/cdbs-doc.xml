@@ -1777,6 +1777,29 @@ DEB_PATCH_SUFFIX = .plop
     </sect1>
 
     <sect1>
+      <title>Standard Patch System Targets</title>
+
+      <para>The most popular patch systems in Debian, the CDBS Simple
+      Patch System, DPatch, and Quilt, support the following uniform
+      make targets that you can use directly to apply and unapply the
+      patches.  This could be useful during package development.  Of
+      course, the patches are automatically applied or unapplied as
+      necessary when a full package build is performed.</para>
+
+      <variablelist>
+	<varlistentry>
+	  <term><literal>patch</literal></term>
+	  <listitem><para>to apply the patches</para></listitem>
+	</varlistentry>
+
+	<varlistentry>
+	  <term><literal>unpatch</literal></term>
+	  <listitem><para>to unapply the patches</para></listitem>
+	</varlistentry>
+      </variablelist>
+    </sect1>
+
+    <sect1>
       <title>Tarball-Inside-a-Tarball Build System</title>
 
       <para>Some Debian packagers may be familiar with DBS, where you
