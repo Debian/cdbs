@@ -109,7 +109,7 @@ if $SH; then
         cat $TMP2 > $SRCDIR/debian/patches/$PATCHNAME
     fi
     cd $TMP
-    diff -Nur $ORIGDIR/$deb_srcdir $NEWDIR/$deb_srcdir >> $SRCDIR/debian/patches/$PATCHNAME || [ $? -eq 1 ]
+    diff -Nur -x '*.orig' -x '*~' $ORIGDIR/$deb_srcdir $NEWDIR/$deb_srcdir >> $SRCDIR/debian/patches/$PATCHNAME || [ $? -eq 1 ]
 
     # adjust paths in patches with build tree
     if [ -n "$deb_srcdir" ]; then

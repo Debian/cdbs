@@ -14,6 +14,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   * Added variables DEB_DH_GENCONTROL_ARGS_{ALL,<package>} (debhelper.mk)
     (closes: #457046)
   * Changed control fields XS-Vcs-* to Vcs-*
+  * cdbs-edit-patch: ignore *.orig and *~ (closes: #449469)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
