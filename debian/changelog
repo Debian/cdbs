@@ -8,6 +8,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
     (patch by Dmitry E. Oboukhov) (tarball.mk) (closes: #456290)
   * Fixed/updated doc-base section
   * Added DEB_AUTOMAKE_ARGS variable (autotools-files.mk) (closes: #439747)
+  * Added dh_icons call to GNOME class (gnome.mk) (closes: #432851)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 

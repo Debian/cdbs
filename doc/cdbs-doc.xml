@@ -1303,6 +1303,7 @@ DEB_PYTHON_PACKAGES_EXCLUDE = python-mylib-doc
       <itemizedlist>
         <listitem><para>dh_desktop</para></listitem>
         <listitem><para>dh_gconf</para></listitem>
+        <listitem><para>dh_icons</para></listitem>
         <listitem><para>dh_scrollkeeper</para></listitem>
       </itemizedlist>
 
