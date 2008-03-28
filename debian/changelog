@@ -6,6 +6,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   [ Peter Eisentraut ]
   * Clean up debian/patched when using tarball.mk, to clean up after dpatch.mk
     (patch by Dmitry E. Oboukhov) (tarball.mk) (closes: #456290)
+  * Fixed/updated doc-base section
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
