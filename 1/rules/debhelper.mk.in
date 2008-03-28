@@ -54,6 +54,12 @@
 ####
 # Special variables used by this rule file:
 #
+# DEB_DH_GENCONTROL_ARGS_ALL
+#   Arguments passed directly to dh_gencontrol, for all packages
+# DEB_DH_GENCONTROL_ARGS_<package>
+#   Arguments passed directly to dh_gencontrol, for a particular package <package>
+# DEB_DH_GENCONTROL_ARGS
+#   Completely override argument passing to dh_gencontrol.
 # DEB_DH_MAKESHLIBS_ARGS_ALL
 #   Arguments passed directly to dh_makeshlibs, for all packages
 # DEB_DH_MAKESHLIBS_ARGS_<package>
@@ -106,6 +112,7 @@ cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 cdbs_strip_quotes = $(subst ',,$(subst ",,$(1)))
 # hello emacs '
 
+DEB_DH_GENCONTROL_ARGS = $(DEB_DH_GENCONTROL_ARGS_ALL) $(DEB_DH_GENCONTROL_ARGS_$(cdbs_curpkg))
 DEB_DH_MAKESHLIBS_ARGS = $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
 DEB_DH_SHLIBDEPS_ARGS = $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
 

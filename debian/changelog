@@ -11,6 +11,8 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   * Added dh_icons call to GNOME class (gnome.mk) (closes: #432851)
   * Added standard patch system targets "patch" and "unpatch"
     (dpatch.mk, simple-patchsys.mk) (closes: #466259)
+  * Added variables DEB_DH_GENCONTROL_ARGS_{ALL,<package>} (debhelper.mk)
+    (closes: #457046)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
