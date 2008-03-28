@@ -1122,7 +1122,10 @@ DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
 
         <listitem><para><varname>DEB_AUTO_UPDATE_AUTOMAKE</varname> to
         the version of Automake to use; e.g.,
-        <literal>1.10</literal></para></listitem>
+        <literal>1.10</literal>.  To pass extra arguments
+        to <command>automake</command>, such
+        as <literal>--add-missing --copy</literal>, put them into the
+        variable <varname>DEB_AUTOMAKE_ARGS</varname>.</para></listitem>
 
         <listitem><para><varname>DEB_AUTO_UPDATE_LIBTOOL</varname> to
         <literal>pre</literal> to run <command>libtoolize</command>

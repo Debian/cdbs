@@ -50,7 +50,7 @@ debian/stamp-autotools-files:
 	$(if $(DEB_AUTO_UPDATE_ACLOCAL),if [ -d $(DEB_SRCDIR)/m4 ]; then m4="-I m4"; fi; if [ -e $(DEB_SRCDIR)/aclocal.m4 ]; then cd $(DEB_SRCDIR) && aclocal-$(DEB_AUTO_UPDATE_ACLOCAL) $$m4; fi,$(if $(DEB_AUTO_UPDATE_AUTOMAKE), if [ -d $(DEB_SRCDIR)/m4 ]; then m4="-I m4"; fi; if [ -e $(DEB_SRCDIR)/aclocal.m4 ]; then cd $(DEB_SRCDIR) && aclocal-$(DEB_AUTO_UPDATE_AUTOMAKE) $$m4; fi))
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which autoconf$(DEB_AUTO_UPDATE_AUTOCONF) || which autoconf`; fi)
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which autoheader$(DEB_AUTO_UPDATE_AUTOHEADER) || which autoheader` ; fi)
-	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),if [ -e $(DEB_SRCDIR)/Makefile.am ]; then cd $(DEB_SRCDIR) && automake-$(DEB_AUTO_UPDATE_AUTOMAKE) ; fi)
+	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),if [ -e $(DEB_SRCDIR)/Makefile.am ]; then cd $(DEB_SRCDIR) && automake-$(DEB_AUTO_UPDATE_AUTOMAKE) $(DEB_AUTOMAKE_ARGS) ; fi)
 	touch debian/stamp-autotools-files
 
 clean::

@@ -7,6 +7,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   * Clean up debian/patched when using tarball.mk, to clean up after dpatch.mk
     (patch by Dmitry E. Oboukhov) (tarball.mk) (closes: #456290)
   * Fixed/updated doc-base section
+  * Added DEB_AUTOMAKE_ARGS variable (autotools-files.mk) (closes: #439747)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
