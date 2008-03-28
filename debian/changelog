@@ -1,8 +1,13 @@
 cdbs (0.4.52) UNRELEASED; urgency=low
 
+  [ Jonas Smedegaard ]
   * Bump python-central build-dependency to >= 0.6 in python-distutils class.
 
- -- Jonas Smedegaard <dr@jones.dk>  Wed, 12 Mar 2008 13:28:25 +0100
+  [ Peter Eisentraut ]
+  * Clean up debian/patched when using tarball.mk, to clean up after dpatch.mk
+    (patch by Dmitry E. Oboukhov) (tarball.mk) (closes: #456290)
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
 cdbs (0.4.51) unstable; urgency=low
 
