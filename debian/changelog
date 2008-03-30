@@ -15,6 +15,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
     (closes: #457046)
   * Changed control fields XS-Vcs-* to Vcs-*
   * cdbs-edit-patch: ignore *.orig and *~ (closes: #449469)
+  * Added call to dh_lintian if available (debhelper.mk) (closes: #467570)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 

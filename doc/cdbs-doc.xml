@@ -692,6 +692,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
           <listitem><para>dh_installpam</para></listitem>
           <listitem><para>dh_installudev</para></listitem>
           <listitem><para>dh_link</para></listitem>
+          <listitem><para>dh_lintian</para></listitem>
           <listitem><para>dh_makeshlibs</para></listitem>
           <listitem><para>dh_md5sums</para></listitem>
           <listitem><para>dh_perl</para></listitem>

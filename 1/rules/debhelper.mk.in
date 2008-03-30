@@ -179,6 +179,7 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_installmime -p$(cdbs_curpkg) $(DEB_DH_INSTALLMIME_ARGS)
 	dh_installchangelogs -p$(cdbs_curpkg) $(DEB_DH_INSTALLCHANGELOGS_ARGS) $(DEB_INSTALL_CHANGELOGS_ALL) $(DEB_INSTALL_CHANGELOGS_$(cdbs_curpkg))
 	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(DEB_DH_INSTALLUDEV_ARGS))
+	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(DEB_DH_LINTIAN_ARGS))
 	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(DEB_DH_INSTALL_ARGS)
 	dh_link -p$(cdbs_curpkg) $(DEB_DH_LINK_ARGS) $(DEB_DH_LINK_$(cdbs_curpkg))
 
