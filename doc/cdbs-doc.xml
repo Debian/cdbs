@@ -322,7 +322,7 @@ include /usr/share/cdbs/1/class/autotools.mk
       </warning>
     </sect1>
 
-    <sect1>
+    <sect1 id="basic-settings">
       <title>Basic Settings and Available Variables</title>
 
       <para>Every CDBS-using <filename>debian/rules</filename> should
@@ -852,6 +852,29 @@ DEB_DBG_PACKAGE_foo-bin = foo-bin-dbg
         packages can be assigned this way.  Of course, all these
         assignments can be overridden if you find that this behavior
         doesn't quite work for you.</para>
+
+	<note>
+	  <para>If a source package builds a single binary package,
+	  and then a debug package is added, this changes the
+	  automatic assignment of <varname>DEB_DESTDIR</varname>
+	  to <literal>$(CURDIR)/debian/tmp</literal>, as described in
+	  <xref linkend="basic-settings"/>, which will likely invalid
+	  the installation rules and leave you with a nearly-empty
+	  package.  To work around this behavior,
+	  set <varname>DEB_DESTDIR</varname> manually
+	  in <filename>debian/rules</filename> as
+<programlisting>
+DEB_DESTDIR = $(CURDIR)/debian/<replaceable>packagename</replaceable>
+</programlisting>
+          Alternatively, write
+          a <filename><replaceable>packagename</replaceable>.install</filename>
+          file listing
+<programlisting>
+debian/tmp/*
+</programlisting>
+          or whatever subset you need.
+	  </para>
+	</note>
       </sect2>
     </sect1>
   </chapter>
