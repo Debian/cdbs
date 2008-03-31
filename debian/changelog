@@ -20,6 +20,8 @@ cdbs (0.4.52) UNRELEASED; urgency=low
     (closes: #380614)
   * Run dh_installmime after dh_install (debhelper.mk) (closes: #443825)
   * Corrected incorrect example about binary/foo targets (closes: #448507)
+  * Fixed tarball stamp file name generation so it works with tarballs in
+    subdirectories (tarball.mk) (closes: #434774)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 

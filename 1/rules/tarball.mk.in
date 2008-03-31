@@ -46,7 +46,7 @@ DEB_BUILDDIR ?= $(DEB_SRCDIR)
 # based on the stamp name.  Also, tar-gzip archives can be either
 # .tar.gz or .tgz.  tar-bzip archives can be either tar.bz or tar.bz2
 
-_cdbs_tarball_stamps = $(addprefix debian/stamp-,$(DEB_TARBALL))
+_cdbs_tarball_stamps = $(addprefix debian/stamp-,$(notdir $(DEB_TARBALL)))
 _cdbs_tarball_stamp_base = $(basename $(_cdbs_tarball_stamps))
 
 ifeq ($(DEB_VERBOSE_ALL),yes)
@@ -79,20 +79,22 @@ ifneq (, $(config_rpath_tar))
 	fi
 endif
 
+_cdbs_stampname_to_tarname = $(filter $(patsubst stamp-%,%,$(notdir $(1))) %/$(patsubst stamp-%,%,$(notdir $(1))),$(DEB_TARBALL))
+
 $(addsuffix .tar,$(_cdbs_tarball_stamp_base)):
-	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -xf $(patsubst stamp-%,%,$(notdir $@))
+	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -x -f $(call _cdbs_stampname_to_tarname,$@)
 	touch $@
 
 $(addsuffix .gz,$(_cdbs_tarball_stamp_base)) $(addsuffix .tgz,$(_cdbs_tarball_stamp_base)):
-	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -xzf $(patsubst stamp-%,%,$(notdir $@))
+	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -x -z -f $(call _cdbs_stampname_to_tarname,$@)
 	touch $@
 
 $(addsuffix .bz,$(_cdbs_tarball_stamp_base)) $(addsuffix .bz2,$(_cdbs_tarball_stamp_base)):
-	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -xjf $(patsubst stamp-%,%,$(notdir $@))
+	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -x -j -f $(call _cdbs_stampname_to_tarname,$@)
 	touch $@
 
 $(addsuffix .zip,$(_cdbs_tarball_stamp_base)):
-	unzip $(patsubst stamp-%,%,$(notdir $@)) -d $(_cdbs_tarball_dir)
+	unzip $(call _cdbs_stampname_to_tarname,$@) -d $(_cdbs_tarball_dir)
 	touch $@
 
 cleanbuilddir::
