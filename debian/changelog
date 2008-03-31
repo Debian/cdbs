@@ -18,6 +18,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   * Added call to dh_lintian if available (debhelper.mk) (closes: #467570)
   * Documented a particular issue with debug packages affecting DEB_DESTDIR
     (closes: #380614)
+  * Run dh_installmime after dh_install (debhelper.mk) (closes: #443825)
 
  -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
 
