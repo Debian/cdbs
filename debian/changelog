@@ -1,4 +1,4 @@
-cdbs (0.4.52) UNRELEASED; urgency=low
+cdbs (0.4.52) unstable; urgency=low
 
   [ Jonas Smedegaard ]
   * Bump python-central build-dependency to >= 0.6 in python-distutils class.
@@ -23,7 +23,7 @@ cdbs (0.4.52) UNRELEASED; urgency=low
   * Fixed tarball stamp file name generation so it works with tarballs in
     subdirectories (tarball.mk) (closes: #434774)
 
- -- Peter Eisentraut <petere@debian.org>  Fri, 28 Mar 2008 14:53:30 +0100
+ -- Peter Eisentraut <petere@debian.org>  Tue, 01 Apr 2008 11:45:35 +0200
 
 cdbs (0.4.51) unstable; urgency=low
 
