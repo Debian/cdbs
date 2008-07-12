@@ -1208,10 +1208,6 @@ DEB_MAKE_CHECK_TARGET = check
 include /usr/share/cdbs/1/class/perlmodule.mk
 </programlisting>
 
-      Optionally, this class can take care of using
-      <command>dh_perl</command>, if the CDBS debhelper rules are
-      included before the Perl class.</para>
-
       <para>The installation directory defaults to
       <filename><replaceable>first_pkg</replaceable>/usr</filename>
       where <replaceable>first_pkg</replaceable> is the first package
