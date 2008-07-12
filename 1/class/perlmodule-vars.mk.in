@@ -30,11 +30,7 @@ DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) -C $(DEB_BUILDDIR) OPTIMIZE="$(CFL
 
 # Install into first listed package by default.
 # Unset for standard debhelper rules (use debian/tmp if multiple packages).
-ifdef _cdbs_rules_debhelper
-DEB_MAKEMAKER_PACKAGE := $(firstword $(shell dh_listpackages))
-else
-DEB_MAKEMAKER_PACKAGE := $(firstword $(shell $(_cdbs_scripts_path)/list-packages))
-endif
+DEB_MAKEMAKER_PACKAGE = $(firstword $(if $(_cdbs_rules_debhelper),$(shell dh_listpackages),$(shell $(_cdbs_scripts_path)/list-packages)))
 
 DEB_MAKEMAKER_INVOKE = /usr/bin/perl Makefile.PL INSTALLDIRS=vendor
 

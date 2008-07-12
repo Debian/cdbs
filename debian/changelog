@@ -3,6 +3,8 @@ cdbs (0.4.53) UNRELEASED; urgency=low
   * Relax python-central build-dependency to >= 0.5.6 in python-distutils
     class (instruction in python policy is only really needed for
     transition of python-central itself, which has now completed).
+  * Adjust perlmodule.mk to not rely on specific inclusion order of cdbs
+    files.  Closes: bug#489430, thanks to Martin Koeppe.
 
  -- Jonas Smedegaard <dr@jones.dk>  Thu, 17 Apr 2008 21:14:56 +0200
 
