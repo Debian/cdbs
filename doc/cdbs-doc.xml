@@ -860,7 +860,7 @@ DEB_DBG_PACKAGE_foo-bin = foo-bin-dbg
 	  and then a debug package is added, this changes the
 	  automatic assignment of <varname>DEB_DESTDIR</varname>
 	  to <literal>$(CURDIR)/debian/tmp</literal>, as described in
-	  <xref linkend="basic-settings"/>, which will likely invalid
+	  <xref linkend="basic-settings"/>, which will likely invalidate
 	  the installation rules and leave you with a nearly-empty
 	  package.  To work around this behavior,
 	  set <varname>DEB_DESTDIR</varname> manually
