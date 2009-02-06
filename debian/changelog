@@ -12,6 +12,8 @@ cdbs (0.4.53) UNRELEASED; urgency=low
   [ Peter Eisentraut ]
   * Added CHANGELOG to list of detected changelog file names (debhelper.mk) 
     (closes: #508141)
+  * Documented variables DEB_AUTO_UPDATE_AUTOHEADER, DEB_AUTO_UPDATE_ACLOCAL
+    (patch by Rafael Laboissiere) (closes: #505883)
 
  -- Jonas Smedegaard <dr@jones.dk>  Thu, 17 Apr 2008 21:14:56 +0200
 

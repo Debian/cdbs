@@ -1146,12 +1146,25 @@ DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
         the version of Autoconf to use; e.g.,
         <literal>2.61</literal></para></listitem>
 
+        <listitem><para><varname>DEB_AUTO_UPDATE_AUTOHEADER</varname> to
+        the version of <command>autoheader</command> to use; e.g.,
+        <literal>2.61</literal></para></listitem>
+
         <listitem><para><varname>DEB_AUTO_UPDATE_AUTOMAKE</varname> to
         the version of Automake to use; e.g.,
         <literal>1.10</literal>.  To pass extra arguments
         to <command>automake</command>, such
         as <literal>--add-missing --copy</literal>, put them into the
         variable <varname>DEB_AUTOMAKE_ARGS</varname>.</para></listitem>
+
+        <listitem><para><varname>DEB_AUTO_UPDATE_ACLOCAL</varname> to
+        the version of <command>aclocal</command> to use; e.g.,
+        <literal>1.10</literal>.  In the current version of CDBS,
+        <varname>DEB_AUTO_UPDATE_AUTOMAKE</varname> implies
+        <varname>DEB_AUTO_UPDATE_ACLOCAL</varname>.  This behavior will
+        eventually be discontinued; so if you meant <filename>aclocal.m4</filename> to be
+        regenerated, please use <varname>DEB_AUTO_UPDATE_ACLOCAL</varname>.
+        </para></listitem>
 
         <listitem><para><varname>DEB_AUTO_UPDATE_LIBTOOL</varname> to
         <literal>pre</literal> to run <command>libtoolize</command>
