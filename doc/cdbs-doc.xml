@@ -1207,6 +1207,7 @@ DEB_MAKE_CHECK_TARGET = check
 <programlisting>
 include /usr/share/cdbs/1/class/perlmodule.mk
 </programlisting>
+      </para>
 
       <para>The installation directory defaults to
       <filename><replaceable>first_pkg</replaceable>/usr</filename>
