@@ -8,6 +8,12 @@ cdbs (0.4.53) UNRELEASED; urgency=low
     files.  Closes: bug#489430, thanks to Martin Koeppe.
   * Drop bogus phrase about ordered relation between debhelper.mk and
     perl.mk in documentation.
+  * Run dh_pycentral/dh_pysupport before dh_installinit.  Closes:
+    bug#494288, thanks to Guido Günther.
+  * Add support for debhelper level 7 (debhelper.mk):
+    - Add new option DEB_DH_PREP. At levels <= 7 "dh_clean -k" is used
+      by default, at newer levels "dh_prep" is used
+    - Support level 7 in CDBS_BUILD_DEPENDS
 
   [ Peter Eisentraut ]
   * Added CHANGELOG to list of detected changelog file names (debhelper.mk) 

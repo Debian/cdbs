@@ -54,6 +54,8 @@
 ####
 # Special variables used by this rule file:
 #
+# DEB_DH_PREP
+#   Command used to perform cleanups in preparation for building a binary package
 # DEB_DH_GENCONTROL_ARGS_ALL
 #   Arguments passed directly to dh_gencontrol, for all packages
 # DEB_DH_GENCONTROL_ARGS_<package>
@@ -97,12 +99,17 @@ endif
 ifeq ($(DH_COMPAT),6)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.44)
 endif
+ifeq ($(DH_COMPAT),7)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 7.0.1)
+endif
 
 ifeq ($(DEB_VERBOSE_ALL), yes)
 DH_VERBOSE = 1
 endif
 
 is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
+
+DEB_DH_PREP = $(shell if [ "$(DH_COMPAT)" -gt 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
 
 DEB_INSTALL_DIRS_ALL =
 DEB_INSTALL_CHANGELOGS_ALL = $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
@@ -145,7 +152,7 @@ clean::
 
 common-install-prehook-arch common-install-prehook-indep:: common-install-prehook-impl
 common-install-prehook-impl::
-	dh_clean -k $(call cdbs_add_dashx,$(DEB_CLEAN_EXCLUDE))
+	$(DEB_DH_PREP) $(call cdbs_add_dashx,$(DEB_CLEAN_EXCLUDE))
 	dh_installdirs -A $(DEB_INSTALL_DIRS_ALL)
 
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:

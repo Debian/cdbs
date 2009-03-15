@@ -698,6 +698,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
           <listitem><para>dh_makeshlibs</para></listitem>
           <listitem><para>dh_md5sums</para></listitem>
           <listitem><para>dh_perl</para></listitem>
+          <listitem><para>dh_prep</para></listitem>
           <listitem><para>dh_shlibdeps</para></listitem>
           <listitem><para>dh_strip</para></listitem>
         </itemizedlist>
