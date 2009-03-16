@@ -91,7 +91,10 @@ endif # build versions empty
 
 
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.2), cdbs (>= 0.4.43)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.43)
+ifdef _cdbs_rules_debhelper
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5.0.37.2)
+endif
 ifeq (all, $(cdbs_python_module_arch))
   ifneq (, $(cdbs_python_compile_version))
     CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python$(cdbs_python_compile_version)-dev, python (>= 2.3.5-11)
@@ -134,9 +137,8 @@ python-install-%:
 endif # archall detection
 
 
-# This class can optionally use debhelper's commands.  Just
-# be sure you include debhelper.mk before including this file.
-ifdef _cdbs_rules_debhelper
+# This class can optionally use debhelper's commands.
+# (if unused, below build targets should simply be ignored)
 
 DEB_DH_PYTHON_ARGS = $(DEB_DH_PYTHON_ARGS_ALL) $(DEB_DH_PYTHON_ARGS_$(cdbs_curpkg)) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
 
@@ -148,7 +150,6 @@ else
 	dh_pycentral -p$(cdbs_curpkg)
 endif
 	dh_python -p$(cdbs_curpkg) $(DEB_DH_PYTHON_ARGS)
-endif
 
 
 # clean stage

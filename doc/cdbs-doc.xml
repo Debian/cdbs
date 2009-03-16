@@ -1270,8 +1270,10 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 </programlisting>
 
       Optionally, this class can take care of using
-      <command>dh_python</command>, if the CDBS debhelper rules are
-      included before the Python class.</para>
+      <command>dh_python</command>.
+
+      If DEB_AUTO_UPDATE_DEBIAN_CONTROL is used, the CDBS debhelper
+      rules needs to be included before the Python class.</para>
 
       <para>Most Python packages are architecture-independent and then
       don't need to be built for multiple Python versions; your

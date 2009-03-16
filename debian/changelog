@@ -19,6 +19,9 @@ cdbs (0.4.53) UNRELEASED; urgency=low
     - Strip no longer supported options DEB_PYTHON_COMPILE_VERSION and
       DEB_PYTHON_PACKAGES_EXCLUDE from documentation
     - Add NEWS entry about the change
+  * Make python-distutils.mk only depend on debhelper when actually
+    used, and only require special inclusion order when
+    DEB_AUTO_UPDATE_DEBIAN_CONTROL is used.
 
   [ Peter Eisentraut ]
   * Added CHANGELOG to list of detected changelog file names (debhelper.mk) 
