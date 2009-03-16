@@ -1293,10 +1293,6 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 
       <para>You can customize build options like this:
 <programlisting>
-# force using a specific Python version for build
-# (should not be necessary)
-DEB_PYTHON_COMPILE_VERSION = 2.3
-
 # change the python build script name (default is 'setup.py')
 DEB_PYTHON_SETUP_CMD = install.py
 
@@ -1313,16 +1309,6 @@ DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile --optimize --force
 # specific additional install options for binary package 'foo'
 # ('--root' option is always set)
 DEB_PYTHON_INSTALL_ARGS_foo = --root=debian/foo-install-dir/
-</programlisting>
-      </para>
-
-      <para>Occassionally, you might have a package called
-      <literal>python-something</literal> that you don't want handled
-      by this class, for example a <literal>-doc</literal> package.
-      You can list these packages in the variable
-      <varname>DEB_PYTHON_PACKAGES_EXCLUDE</varname>.  For example:
-<programlisting>
-DEB_PYTHON_PACKAGES_EXCLUDE = python-mylib-doc
 </programlisting>
       </para>
     </sect1>
