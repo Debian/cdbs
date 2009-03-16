@@ -22,6 +22,13 @@ cdbs (0.4.53) UNRELEASED; urgency=low
   * Make python-distutils.mk only depend on debhelper when actually
     used, and only require special inclusion order when
     DEB_AUTO_UPDATE_DEBIAN_CONTROL is used.
+  * Drop use of dh_python from python-distutils.mk:
+    - Drop actual dh_python invocation
+    - Tighten build-dependencies on python-support and python-central to
+      versions adopteing the functionality of dh_python, and drop
+      tightened build-dependency on debhelper.
+    - Adjust documentation
+    - Add NEWS entry about the change
 
   [ Peter Eisentraut ]
   * Added CHANGELOG to list of detected changelog file names (debhelper.mk) 

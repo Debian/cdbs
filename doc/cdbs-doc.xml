@@ -172,8 +172,8 @@
       <command>dh_foo</command> program (for example, some of
       <filename>autotools.mk</filename>).  Likewise, some
       <command>dh_foo</command> programs would probably do better as
-      CDBS makefile fragments (<command>dh_python</command> comes to
-      mind).</para>
+      CDBS makefile fragments (<command>dh_pysupport</command> and
+      <command>dh_pycentral</command> comes to mind).</para>
 
       <para>But CDBS' makefile fragment orientation allows it to do
       things that Debhelper can't, or can't easily do.  For example,
@@ -1270,10 +1270,8 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 </programlisting>
 
       Optionally, this class can take care of using
-      <command>dh_python</command>.
-
-      If DEB_AUTO_UPDATE_DEBIAN_CONTROL is used, the CDBS debhelper
-      rules needs to be included before the Python class.</para>
+      <command>dh_pycentral</command> or <command>dh_pycentral</command>
+      as needed, if the CDBS debhelper rules are also included.
 
       <para>Most Python packages are architecture-independent and then
       don't need to be built for multiple Python versions; your
