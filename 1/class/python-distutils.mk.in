@@ -170,7 +170,7 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-modu
 	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
-	-for buildver in $(cdbs_python_curpkg_build_versions); do \
+	-for buildver in $(cdbs_python_build_versions); do \
 		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS); \
 	done
 
