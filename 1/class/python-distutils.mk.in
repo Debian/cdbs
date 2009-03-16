@@ -30,8 +30,8 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 
 # default package is the first one declared in 'debian/control'
-# (override if necessary)
-DEB_PYTHON_MODULE_PACKAGE = $(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
+# NB! override needs to be done _before_ including this file!
+#DEB_PYTHON_MODULE_PACKAGE =
 DEB_PYTHON_PRIVATE_MODULES_DIRS =
 
 # common variables
@@ -43,15 +43,15 @@ DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 #DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
 
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
-cdbs_python_arch_packages = $(filter $(DEB_PYTHON_MODULE_PACKAGE), $(DEB_ARCH_PACKAGES))
-cdbs_python_indep_packages = $(filter $(DEB_PYTHON_MODULE_PACKAGE), $(DEB_INDEP_PACKAGES))
+cdbs_python_packages = $(or $(DEB_PYTHON_MODULE_PACKAGE),$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
+cdbs_python_arch_packages = $(filter $(cdbs_python_packages), $(DEB_ARCH_PACKAGES))
+cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
 
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_selected_pycompat := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
 cdbs_pycompat = $(cdbs_selected_pycompat)
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-  cdbs_python_support_path = usr/share/python-support/$(DEB_PYTHON_MODULE_PACKAGE)
   ifeq (, $(cdbs_selected_pycompat))
     cdbs_pycompat = 2
   endif # use pycompat
