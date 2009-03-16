@@ -14,12 +14,10 @@ cdbs (0.4.53) UNRELEASED; urgency=low
     - Add new option DEB_DH_PREP. At levels <= 7 "dh_clean -k" is used
       by default, at newer levels "dh_prep" is used
     - Support level 7 in CDBS_BUILD_DEPENDS
-  * Drop support for Python policy v1 from python-distutils.mk:
+  * Drop support for Python policy v1 from python-distutils.mk.
     - Drop code handling python policy v1
     - Strip no longer supported options DEB_PYTHON_COMPILE_VERSION and
       DEB_PYTHON_PACKAGES_EXCLUDE from documentation
-    - Add new option DEB_PYTHON_DESTDIR to ease transition from v1
-      always installing directly into each package
     - Add NEWS entry about the change
   * Make python-distutils.mk only depend on debhelper when actually
     used, and only require special inclusion order when
