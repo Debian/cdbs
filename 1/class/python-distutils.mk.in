@@ -40,6 +40,7 @@ DEB_PYTHON_CLEAN_ARGS = -a
 DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 
+cdbs_python_arch_packages = $(filter $(DEB_PYTHON_MODULE_PACKAGE), $(DEB_ARCH_PACKAGES))
 
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
@@ -66,9 +67,8 @@ endif # pysupport
 
 
 # Calculate cdbs_python_build_versions
-cdbs_python_module_arch := $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
 cdbs_python_current_version := $(shell pyversions -vd)
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_pkg_check)$(cdbs_python_arch_packages))
   # check if current is in build versions
   ifneq ($(cdbs_python_current_version), $(filter $(cdbs_python_current_version), $(shell pyversions -vr)))
     cdbs_python_compile_version := $(firstword $(strip $(sort $(shell pyversions -vr))))
@@ -92,7 +92,7 @@ endif # build versions empty
 
 # Declare Build-Deps for packages using this file
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.43)
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_arch_packages))
   ifneq (, $(cdbs_python_compile_version))
     CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python$(cdbs_python_compile_version)-dev, python (>= 2.3.5-11)
   else
@@ -114,7 +114,7 @@ cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),
 # build stage
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
 python-build-stamp-%:
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_arch_packages))
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 else
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
@@ -123,7 +123,7 @@ endif # archall detection
 
 
 # install stage
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_arch_packages))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
@@ -151,7 +151,7 @@ endif
 # clean stage
 clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
 python-clean-%:
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_arch_packages))
 	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 else
 	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
