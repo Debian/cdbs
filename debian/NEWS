@@ -4,5 +4,10 @@ cdbs (0.4.53) UNRELEASED; urgency=low
   DEB_PYTHON_SYSTEM must now always be set to either of the two
   competing implementations of Python policy v2, pysupport or pycentral.
 
+  To install multiple binaries directly into their package subdir like
+  the older routines did, add the following:
+
+    DEB_PYTHON_DESTDIR = $(CURDIR)/debian/$(cdbs_curpkg)
+
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 16 Mar 2009 12:37:41 +0100
