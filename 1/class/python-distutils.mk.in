@@ -41,6 +41,7 @@ DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 
 cdbs_python_arch_packages = $(filter $(DEB_PYTHON_MODULE_PACKAGE), $(DEB_ARCH_PACKAGES))
+cdbs_python_indep_packages = $(filter $(DEB_PYTHON_MODULE_PACKAGE), $(DEB_INDEP_PACKAGES))
 
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
@@ -111,27 +112,38 @@ endif
 cdbs_python_current_binary := $(shell pyversions -d)
 cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
 
+pre-build::
+	mkdir -p python-module-stamp
+
 # build stage
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
-python-build-stamp-%:
-ifeq (,$(cdbs_python_arch_packages))
+
+$(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : python-module-stamp/%
+
+$(patsubst %,python-module-stamp/%,$(cdbs_python_indep_packages)) :: python-module-stamp/%:
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
-else
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
-endif # archall detection
+	touch $@
+
+$(patsubst %,python-module-stamp/%,$(cdbs_python_arch_packages)) :: python-module-stamp/%:
+	for buildver in $(cdbs_python_build_versions); do \
+		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS); \
+	done
 	touch $@
 
 
 # install stage
-ifeq (,$(cdbs_python_arch_packages))
-common-install-arch common-install-indep:: python-install-py
-python-install-py:
+$(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
-else
-common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
-python-install-%:
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
-endif # archall detection
+
+$(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
+	for buildver in $(cdbs_python_build_versions); do \
+		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL); \
+	done
+
+# Deprecated targets.  You should use above targets instead.
+$(addprefix python-build-stamp-, $(cdbs_python_build_versions)):
+python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
+
 
 
 # This class can optionally use debhelper's commands.
@@ -149,23 +161,30 @@ endif
 
 
 # clean stage
-clean:: $(addprefix python-clean-, $(cdbs_python_build_versions))
-python-clean-%:
-ifeq (,$(cdbs_python_arch_packages))
+clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
+
+$(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
 	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
-else
-	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
-endif # archall detection
+
+$(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
+	-for buildver in $(cdbs_python_curpkg_build_versions); do \
+		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS); \
+	done
+
+# Deprecated targets.  You should use above targets instead.
+$(addprefix python-clean-, $(cdbs_python_build_versions)):
 
 clean::
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
-	rm -f python-build-stamp-*
+	rm -rf python-build-stamp
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
 # pass here.
 clean::
 	find . -name '*.pyc' -exec rm '{}' ';'
 
+.PHONY: $(patsubst %,python-module-stamp/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
+.PHONY: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 endif
