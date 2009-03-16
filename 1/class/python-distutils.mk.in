@@ -67,6 +67,7 @@ endif # pysupport
 
 # Calculate cdbs_python_build_versions
 cdbs_python_module_arch := $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
+cdbs_python_current_version := $(shell pyversions -vd)
 ifeq (all, $(cdbs_python_module_arch))
   # check if current is in build versions
   ifneq ($(cdbs_python_current_version), $(filter $(cdbs_python_current_version), $(shell pyversions -vr)))
