@@ -1,8 +1,24 @@
 #!/bin/bash
 # -*- mode: sh; coding: utf-8 -*-
 # Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
 
-# Test distutils arch package + multiple python versions + tarball
+# Test distutils arch package + extra package + tarball w/ pycentral
 
 . testsuite_functions
 
@@ -12,24 +28,21 @@ setup_workdir
 cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
 DEB_TAR_SRCDIR=distutils-test-0.1
+DEB_PYTHON_SYSTEM = pycentral
+DEB_PYTHON_MODULE_PACKAGE = python-cdbs-testsuite
 include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
 include \$(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
+DEB_PYTHON_DESTDIR = \$(CURDIR)/debian/\$(cdbs_curpkg)
 EOF
 chmod +x $WORKDIR/debian/rules
 
 cat >>$WORKDIR/debian/control <<EOF
 
-Package: python2.5-cdbs-testsuite
+Package: python-cdbs-testsuite
 Architecture: any
-Description: common build system test suite (Python 2.5)
- This package is part of the testsuite for the CDBS build system.  If you've
- managed to install this, something has gone horribly wrong.
-
-Package: python2.4-cdbs-testsuite
-Architecture: any
-Description: common build system test suite (Python 2.4)
+Description: common build system test suite
  This package is part of the testsuite for the CDBS build system.  If you've
  managed to install this, something has gone horribly wrong.
 EOF
@@ -40,8 +53,8 @@ cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
 
 build_package
 
-dpkg -c $WORKDIR/../python2.5-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
-dpkg -c $WORKDIR/../python2.4-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
 
 clean_workdir
 return_pass

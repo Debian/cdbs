@@ -1,6 +1,7 @@
 #!/bin/bash
 # -*- mode: sh; coding: utf-8 -*-
 # Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+# Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -17,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-# Test distutils indep package
+# Test distutils indep package w/ pycentral
 
 . testsuite_functions
 
@@ -26,6 +27,7 @@ setup_workdir
 
 cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
+DEB_PYTHON_SYSTEM = pycentral
 include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
 include \$(_cdbs_package_root_dir)/1/class/python-distutils.mk.in

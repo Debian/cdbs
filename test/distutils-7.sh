@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-# Test distutils arch package + extra package w/ pycentral
+# Test distutils arch package + extra package w/ pysupport
 
 . testsuite_functions
 
@@ -27,7 +27,7 @@ setup_workdir
 
 cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
-DEB_PYTHON_SYSTEM = pycentral
+DEB_PYTHON_SYSTEM = pysupport
 DEB_PYTHON_MODULE_PACKAGE = python-cdbs-testsuite
 include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
@@ -51,8 +51,9 @@ touch $WORKDIR/foo.c
 
 build_package
 
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/share/python-support/python-cdbs-testsuite/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python-support/python-cdbs-testsuite/python2.4/foo.so || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python-support/python-cdbs-testsuite/python2.5/foo.so || return_fail
 
 clean_package
 test -d $WORKDIR/build && return_fail

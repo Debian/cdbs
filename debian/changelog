@@ -28,6 +28,9 @@ cdbs (0.4.53) UNRELEASED; urgency=low
       the required versions adopting the functionality of dh_python are
       provided since oldstable), and drop build-dependency on debhelper.
     - Adjust documentation
+  * Fix and extend distutils tests to use Python policy v2 against both
+    competing implementations.  Build-depend on python-central and
+    python-support.
 
   [ Peter Eisentraut ]
   * Added CHANGELOG to list of detected changelog file names (debhelper.mk) 

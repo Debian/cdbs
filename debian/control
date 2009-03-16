@@ -2,7 +2,7 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep: debhelper (>= 5), graphviz, realpath, fakeroot, python-dev, python2.4-dev, python2.5-dev, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, dblatex, ant, kaffe, sharutils, gs-common, texlive-extra-utils
+Build-Depends-Indep: debhelper (>= 5), graphviz, realpath, fakeroot, python-dev, python2.4-dev, python2.5-dev, python-central, python-support, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, dblatex, ant, kaffe, sharutils, gs-common, texlive-extra-utils
 Uploaders: Jonas Smedegaard <dr@jones.dk>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
 Standards-Version: 3.7.3
 Vcs-Browser: http://svn.debian.org/wsvn/build-common/

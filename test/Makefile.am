@@ -1,5 +1,6 @@
 ## -*- mode: makefile; coding: utf-8 -*-
 ## Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+## Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
@@ -41,7 +42,11 @@ TESTS = autotools-1.sh \
 	distutils-1.sh \
 	distutils-2.sh \
 	distutils-3.sh \
-	distutils-4.sh
+	distutils-4.sh \
+	distutils-5.sh \
+	distutils-6.sh \
+	distutils-7.sh \
+	distutils-8.sh
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz

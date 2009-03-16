@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- mode: sh; coding: utf-8 -*-
-# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
 # Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
 #
 # This program is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-# Test distutils arch package + extra package w/ pycentral
+# Test distutils indep package + tarball w/ pysupport
 
 . testsuite_functions
 
@@ -27,35 +27,28 @@ setup_workdir
 
 cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
-DEB_PYTHON_SYSTEM = pycentral
-DEB_PYTHON_MODULE_PACKAGE = python-cdbs-testsuite
+DEB_TAR_SRCDIR=distutils-test-0.1
+DEB_PYTHON_SYSTEM = pysupport
 include debian/testsuite.mk
+include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
 include \$(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
 DEB_PYTHON_DESTDIR = \$(CURDIR)/debian/\$(cdbs_curpkg)
 EOF
 chmod +x $WORKDIR/debian/rules
 
-cat >>$WORKDIR/debian/control <<EOF
+sed -i \
+	-e 's/Package: cdbs-testsuite/Package: python-cdbs-testsuite/' \
+	-e 's/Architecture: any/Architecture: all/' \
+	$WORKDIR/debian/control
 
-Package: python-cdbs-testsuite
-Architecture: any
-Description: common build system test suite
- This package is part of the testsuite for the CDBS build system.  If you've
- managed to install this, something has gone horribly wrong.
-EOF
-
-cp -R distutils/* $WORKDIR
-sed -i 's/^#EXT#/     /g' $WORKDIR/setup.py
-touch $WORKDIR/foo.c
+# Make sure tarball is in place for this test.
+test_tarballs
+cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
 
 build_package
 
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
-
-clean_package
-test -d $WORKDIR/build && return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_all.deb | grep -q /usr/share/python-support/python-cdbs-testsuite/testing/foo.py || return_fail
 
 clean_workdir
 return_pass
