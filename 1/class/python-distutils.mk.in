@@ -29,6 +29,18 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 
+# default package is the first one declared in 'debian/control'
+# (override if necessary)
+DEB_PYTHON_MODULE_PACKAGE = $(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
+DEB_PYTHON_PRIVATE_MODULES_DIRS =
+
+# common variables
+DEB_PYTHON_SETUP_CMD = setup.py
+DEB_PYTHON_CLEAN_ARGS = -a
+DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
+DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
+
+
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_selected_pycompat := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
@@ -53,22 +65,9 @@ else
 endif # pysupport
 
 
-# default package is the first one declared in 'debian/control'
-# (override if necessary)
-DEB_PYTHON_MODULE_PACKAGE = $(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
-DEB_PYTHON_PRIVATE_MODULES_DIRS =
-
-# common variables
-DEB_PYTHON_SETUP_CMD = setup.py
-DEB_PYTHON_CLEAN_ARGS = -a
-DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
-DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
-
-
 # Calculate cdbs_python_build_versions
-cdbs_python_module_arch := $(strip $(shell perl -e '$$/=""; $$_=(grep {/^Package: $(DEB_PYTHON_MODULE_PACKAGE)$$/m;} (<>))[0]; /^Architecture: (.*)$$/m && print $$1' debian/control))
 cdbs_python_current_version := $(shell pyversions -vd)
-ifeq (all, $(cdbs_python_module_arch))
+ifeq (,$(cdbs_python_pkg_check)$(DEB_PYTHON_ARCH_PACKAGES))
   # check if current is in build versions
   ifneq ($(cdbs_python_current_version), $(filter $(cdbs_python_current_version), $(shell pyversions -vr)))
     cdbs_python_compile_version := $(firstword $(strip $(sort $(shell pyversions -vr))))
