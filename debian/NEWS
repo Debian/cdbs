@@ -1,0 +1,8 @@
+cdbs (0.4.53) UNRELEASED; urgency=low
+
+  python-distutils.mk no longer supports Python policy v1.
+  DEB_PYTHON_SYSTEM must now always be set to either of the two
+  competing implementations of Python policy v2, pysupport or pycentral.
+
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 16 Mar 2009 12:37:41 +0100
