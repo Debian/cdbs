@@ -1271,7 +1271,7 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 
       Optionally, this class can take care of using
       <command>dh_pycentral</command> or <command>dh_pycentral</command>
-      as needed, if the CDBS debhelper rules are also included.
+      as needed, if the CDBS debhelper rules are also included.</para>
 
       <para>Most Python packages are architecture-independent and then
       don't need to be built for multiple Python versions; your
