@@ -1,4 +1,4 @@
-cdbs (0.4.53) unstable; urgency=low
+cdbs (0.4.53) UNRELEASED; urgency=low
 
   [ Jonas Smedegaard ]
   * Relax python-central build-dependency to >= 0.5.6 in python-distutils
