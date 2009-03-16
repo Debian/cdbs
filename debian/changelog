@@ -1,4 +1,4 @@
-cdbs (0.4.53) UNRELEASED; urgency=low
+cdbs (0.4.53) unstable; urgency=low
 
   [ Jonas Smedegaard ]
   * Relax python-central build-dependency to >= 0.5.6 in python-distutils
@@ -38,7 +38,7 @@ cdbs (0.4.53) UNRELEASED; urgency=low
   * Documented variables DEB_AUTO_UPDATE_AUTOHEADER, DEB_AUTO_UPDATE_ACLOCAL
     (patch by Rafael Laboissiere) (closes: #505883)
 
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 15 Mar 2009 18:24:28 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 17 Mar 2009 00:39:25 +0100
 
 cdbs (0.4.52) unstable; urgency=low
 

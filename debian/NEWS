@@ -1,4 +1,4 @@
-cdbs (0.4.53) UNRELEASED; urgency=low
+cdbs (0.4.53) unstable; urgency=low
 
   python-distutils.mk no longer supports Python policy v1.
   DEB_PYTHON_SYSTEM must now always be set to either of the two
