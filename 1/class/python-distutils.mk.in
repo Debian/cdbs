@@ -129,7 +129,7 @@ $(patsubst %,python-module-stamp/%,$(cdbs_python_indep_packages)) :: python-modu
 
 $(patsubst %,python-module-stamp/%,$(cdbs_python_arch_packages)) :: python-module-stamp/%:
 	for buildver in $(cdbs_python_build_versions); do \
-		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS); \
 	done
 	touch $@
 
@@ -140,7 +140,7 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	for buildver in $(cdbs_python_build_versions); do \
-		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) $(DEB_PYTHON_INSTALL_ARGS_ALL); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) $(DEB_PYTHON_INSTALL_ARGS_ALL); \
 	done
 
 # Deprecated targets.  You should use above targets instead.
@@ -171,7 +171,7 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-modu
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-for buildver in $(cdbs_python_build_versions); do \
-		cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS); \
 	done
 
 # Deprecated targets.  You should use above targets instead.
@@ -181,7 +181,7 @@ clean::
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
-	rm -rf python-build-stamp
+#	rm -rf python-build-stamp
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
 # pass here.
