@@ -63,6 +63,7 @@ DEB_PYTHON_SETUP_CMD = setup.py
 DEB_PYTHON_CLEAN_ARGS = -a
 DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
+DEB_PYTHON_DESTDIR ?= $(DEB_DESTDIR)
 
 
 # Calculate cdbs_python_build_versions
@@ -126,11 +127,11 @@ endif # archall detection
 ifeq (all, $(cdbs_python_module_arch))
 common-install-arch common-install-indep:: python-install-py
 python-install-py:
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_PYTHON_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 else
 common-install-arch common-install-indep:: $(addprefix python-install-, $(cdbs_python_build_versions))
 python-install-%:
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$*) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_PYTHON_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 endif # archall detection
 
 

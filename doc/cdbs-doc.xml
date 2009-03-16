@@ -1309,6 +1309,9 @@ DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile --optimize --force
 # specific additional install options for binary package 'foo'
 # ('--root' option is always set)
 DEB_PYTHON_INSTALL_ARGS_foo = --root=debian/foo-install-dir/
+
+# installation basedir
+DEB_PYTHON_DESTDIR = $(CURDIR)/debian/$(cdbs_curpkg)
 </programlisting>
       </para>
     </sect1>
