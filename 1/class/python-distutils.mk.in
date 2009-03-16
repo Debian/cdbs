@@ -99,12 +99,12 @@ ifeq (all, $(cdbs_python_module_arch))
     CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-11)
   endif
 else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev (>= 2.3.5-11)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev
 endif
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-support (>= 0.5.2)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-support
 else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.5.6)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central
 endif
 
 
