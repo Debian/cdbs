@@ -1,3 +1,11 @@
+cdbs (0.4.54) UNRELEASED; urgency=low
+
+  * Adjust buildcore.mk to not rely on specific inclusion order of
+    debhelper.mk.  Closes: bug#489430 (for real this time), thanks to
+    Martin Koeppe for insisting.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 17 Mar 2009 00:49:09 +0100
+
 cdbs (0.4.53) unstable; urgency=low
 
   [ Jonas Smedegaard ]
