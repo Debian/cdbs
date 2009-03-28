@@ -1,3 +1,14 @@
+cdbs (0.4.54) unstable; urgency=low
+
+  * The variable DEB_PYTHON_MODULE_PACKAGE used in python-distutils.mk
+    is now deprecated.  Use new variable DEB_PYTHON_MODULE_PACKAGES
+    instead.
+
+    As its name indicates, the new variable may support multiple Python
+    packages in the future.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 28 Mar 2009 10:41:05 +0100
+
 cdbs (0.4.53) unstable; urgency=low
 
   python-distutils.mk no longer supports Python policy v1.

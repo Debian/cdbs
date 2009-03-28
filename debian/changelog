@@ -1,10 +1,14 @@
-cdbs (0.4.54) UNRELEASED; urgency=low
+cdbs (0.4.54) unstable; urgency=low
 
   * Adjust buildcore.mk to not rely on specific inclusion order of
     debhelper.mk.  Closes: bug#489430 (for real this time), thanks to
     Martin Koeppe for insisting.
+  * Introduce new variable DEB_PYTHON_MODULE_PACKAGES, and properly
+    deprecate DEB_PYTHON_MODULE_PACKAGE (instead of just dropping it, as
+    was done in 0.4.53).  Add NEWS entry.  This closes: bug#521180,
+    thanks to Marc Dequènes.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 17 Mar 2009 00:49:09 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 28 Mar 2009 10:41:05 +0100
 
 cdbs (0.4.53) unstable; urgency=low
 
