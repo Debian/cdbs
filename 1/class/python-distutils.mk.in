@@ -48,6 +48,15 @@ cdbs_python_packages = $(or $(DEB_PYTHON_MODULE_PACKAGES),$(DEB_PYTHON_MODULE_PA
 cdbs_python_arch_packages = $(filter $(cdbs_python_packages), $(DEB_ARCH_PACKAGES))
 cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
 
+# DEB_PYTHON_MODULE_PACKAGE is deprecated.
+# use DEB_PYTHON_MODULE_PACKAGES instead (since CDBS 0.4.54)
+# (it was accidentally not redefinable in the past, so redefining ok here)
+DEB_PYTHON_MODULE_PACKAGE = $(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
+_cdbs_deprecated_vars += DEB_PYTHON_MODULE_PACKAGE
+_cdbs_deprecated_DEB_PYTHON_MODULE_PACKAGE_default := $(DEB_PYTHON_MODULE_PACKAGE)
+# warn about deprecation (even when used as-is: may be plural in future)
+DEB_PYTHON_MODULE_PACKAGE += $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprecated, please use DEB_PYTHON_MODULE_PACKAGES instead)
+
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_selected_pycompat := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
