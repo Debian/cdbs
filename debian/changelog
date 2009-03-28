@@ -7,6 +7,7 @@ cdbs (0.4.54) unstable; urgency=low
     deprecate DEB_PYTHON_MODULE_PACKAGE (instead of just dropping it, as
     was done in 0.4.53).  Add NEWS entry.  This closes: bug#521180,
     thanks to Marc Dequènes.
+  * Fix distutils tests to use new DEB_PYTHON_MODULE_PACKAGES.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sat, 28 Mar 2009 10:41:05 +0100
 

@@ -29,7 +29,7 @@ cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
 DEB_TAR_SRCDIR=distutils-test-0.1
 DEB_PYTHON_SYSTEM = pysupport
-DEB_PYTHON_MODULE_PACKAGE = python-cdbs-testsuite
+DEB_PYTHON_MODULE_PACKAGES = python-cdbs-testsuite
 include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
