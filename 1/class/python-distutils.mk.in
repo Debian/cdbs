@@ -187,7 +187,7 @@ clean::
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
-#	rm -rf python-build-stamp
+	rm -rf python-module-stamp
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
 # pass here.
