@@ -1,3 +1,10 @@
+cdbs (0.4.55) unstable; urgency=low
+
+  * Fix python-distutils.mk remove python-module-stamp dir in clean
+    target.  Closes: bug#521568, thanks to Tristan Seligmann.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 28 Mar 2009 21:10:01 +0100
+
 cdbs (0.4.54) unstable; urgency=low
 
   * Adjust buildcore.mk to not rely on specific inclusion order of
