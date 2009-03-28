@@ -73,7 +73,7 @@ endif # pysupport
 
 # Calculate cdbs_python_build_versions
 cdbs_python_current_version := $(shell pyversions -vd)
-ifeq (,$(cdbs_python_pkg_check)$(cdbs_python_arch_packages))
+ifeq (,$(cdbs_python_arch_packages))
   # check if current is in build versions
   ifneq ($(cdbs_python_current_version), $(filter $(cdbs_python_current_version), $(shell pyversions -vr)))
     cdbs_python_compile_version := $(firstword $(strip $(sort $(shell pyversions -vr))))
