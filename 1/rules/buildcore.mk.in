@@ -1,5 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2002,2003 Colin Walters <walters@debian.org>
+# Copyright © 2009 Jonas Smdegaard <dr@jones.dk>
 # Description: Defines the rule framework
 #
 # This program is free software; you can redistribute it and/or
