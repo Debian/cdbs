@@ -1,3 +1,10 @@
+cdbs (0.4.56) UNRELEASED; urgency=low
+
+  * Simplify logic in autotools, makefile and debhelper snippets:
+    $(if A,A,B) -> $(or A,B).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 31 Mar 2009 11:45:22 +0200
+
 cdbs (0.4.55) unstable; urgency=low
 
   * Fix python-distutils.mk remove python-module-stamp dir in clean
