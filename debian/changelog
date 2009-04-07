@@ -6,7 +6,7 @@ cdbs (0.4.56) UNRELEASED; urgency=low
     bug#522613, thanks to Adam D. Barratt and Russ Allbery.
   * Fix python-distutils.mk cleanup clashing with dh_clean (dh_clean
     chokes on dirnames containing trailing "-stamp"):
-    + Remove python-module-stamp dir before clean target
+    + Remove stampdir before clean target
     + Use dirname not ending in "-stamp" (and while at it, use dir below
       debian dir to avoid clashing with upstream files)
     Either of above fixes the issue, and closes: bug#521568, thanks to
