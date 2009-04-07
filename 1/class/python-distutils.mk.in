@@ -122,18 +122,18 @@ cdbs_python_current_binary := $(shell pyversions -d)
 cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
 
 pre-build::
-	mkdir -p python-module-stamp
+	mkdir -p debian/python-module-stampdir
 
 # build stage
 common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
 
-$(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : python-module-stamp/%
+$(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : debian/python-module-stampdir/%
 
-$(patsubst %,python-module-stamp/%,$(cdbs_python_indep_packages)) :: python-module-stamp/%:
+$(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 	touch $@
 
-$(patsubst %,python-module-stamp/%,$(cdbs_python_arch_packages)) :: python-module-stamp/%:
+$(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
 	for buildver in $(cdbs_python_build_versions); do \
 		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS); \
 	done
@@ -190,13 +190,13 @@ clean-python-distutils::
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
-	rm -rf python-module-stamp
+	rm -rf debian/python-module-stampdir
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
 # pass here.
 clean::
 	find . -name '*.pyc' -exec rm '{}' ';'
 
-.PHONY: $(patsubst %,python-module-stamp/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
+.PHONY: $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 .PHONY: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 endif
