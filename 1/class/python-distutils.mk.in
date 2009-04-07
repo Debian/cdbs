@@ -183,7 +183,10 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-modul
 # Deprecated targets.  You should use above targets instead.
 $(addprefix python-clean-, $(cdbs_python_build_versions)):
 
-clean::
+# cleanup stamp dir
+# (dh_clean choke on dirs named stamp, so need to happen before clean::)
+clean:: clean-python-distutils
+clean-python-distutils::
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat

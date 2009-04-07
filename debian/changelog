@@ -4,6 +4,9 @@ cdbs (0.4.56) UNRELEASED; urgency=low
     $(if A,A,B) -> $(or A,B).
   * Tighten debhelper.mk build-dependency hint for debhelper.  Closes:
     bug#522613, thanks to Adam D. Barratt and Russ Allbery.
+  * Fix python-distutils.mk remove python-module-stamp dir before clean
+    target (dh_clean chokes on dirs containing "stamp" cleaning in
+    parallel won't work).  Closes: bug#521568, thanks to Luca Falavigna.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 31 Mar 2009 11:45:22 +0200
 
