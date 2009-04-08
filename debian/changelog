@@ -1,4 +1,4 @@
-cdbs (0.4.56) UNRELEASED; urgency=low
+cdbs (0.4.56) unstable; urgency=low
 
   * Simplify logic in autotools, makefile and debhelper snippets:
     $(if A,A,B) -> $(or A,B).
@@ -20,7 +20,7 @@ cdbs (0.4.56) UNRELEASED; urgency=low
     + Refer to centrally stored GPL-2 (not version-less GPL)
     Thanks for lintian for hinting about some of the above.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 31 Mar 2009 11:45:22 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 08 Apr 2009 21:17:02 +0200
 
 cdbs (0.4.55) unstable; urgency=low
 
