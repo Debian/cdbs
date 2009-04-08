@@ -1,4 +1,4 @@
-cdbs (0.4.56) unstable; urgency=low
+cdbs (0.4.56) UNRELEASED; urgency=low
 
   * Simplify logic in autotools, makefile and debhelper snippets:
     $(if A,A,B) -> $(or A,B).
