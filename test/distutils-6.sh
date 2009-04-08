@@ -48,7 +48,7 @@ cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
 
 build_package
 
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_all.deb | grep -q /usr/share/python-support/python-cdbs-testsuite/testing/foo.py || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_all.deb | grep -q '/usr/share/py\(thon-support/python-cdbs-testsuite\|shared\)/testing/foo.py' || return_fail
 
 clean_workdir
 return_pass

@@ -51,9 +51,9 @@ touch $WORKDIR/foo.c
 
 build_package
 
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/share/python-support/python-cdbs-testsuite/testing/foo.py || return_fail
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python-support/python-cdbs-testsuite/python2.4/foo.so || return_fail
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python-support/python-cdbs-testsuite/python2.5/foo.so || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/share/py\(thon-support/python-cdbs-testsuite\|shared\)/testing/foo.py' || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/py\(thon-support/python-cdbs-testsuite\|shared\)/python2.4/foo.so' || return_fail
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/py\(thon-support/python-cdbs-testsuite\|shared\)/python2.5/foo.so' || return_fail
 
 clean_package
 test -d $WORKDIR/build && return_fail

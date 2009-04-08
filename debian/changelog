@@ -19,6 +19,8 @@ cdbs (0.4.56) UNRELEASED; urgency=low
       use different but still GPL2-compatible licenses)
     + Refer to centrally stored GPL-2 (not version-less GPL)
     Thanks for lintian for hinting about some of the above.
+  * Adapt testsuite to changed packaging format of python-support 0.90.0
+    and newer.
 
  -- Jonas Smedegaard <dr@jones.dk>  Wed, 08 Apr 2009 21:17:02 +0200
 
