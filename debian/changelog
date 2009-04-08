@@ -11,6 +11,8 @@ cdbs (0.4.56) UNRELEASED; urgency=low
       debian dir to avoid clashing with upstream files)
     Either of above fixes the issue, and closes: bug#521568, thanks to
     Luca Falavigna.
+  * Normalize headers to consistently use 1 line per copyright holder,
+    one desription and then 1 empty line.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 31 Mar 2009 11:45:22 +0200
 

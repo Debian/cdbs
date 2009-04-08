@@ -1,9 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
-#  # Copyright © 2003 Jeff Bailey <jbailey@debian.org>
-# Description: A class for Tarball-based packages;
-# facilitates unpacking into a directory and setting DEB_SRCDIR and
-# DEB_BUILDDIR appropriately.  Note that tarball.mk MUST come
-# *FIRST* in the list of included rules.
+# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+# Description: A class for Tarball-based packages
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,6 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
+
+####
+# facilitates unpacking into a directory and setting DEB_SRCDIR and
+# DEB_BUILDDIR appropriately.  Note that tarball.mk MUST come
+# *FIRST* in the list of included rules.
+####
 
 #PATH_RULES#
 
