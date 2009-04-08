@@ -13,6 +13,12 @@ cdbs (0.4.56) UNRELEASED; urgency=low
     Luca Falavigna.
   * Normalize headers to consistently use 1 line per copyright holder,
     one desription and then 1 empty line.
+  * Rewrite debian/copyright to follow recent draft of proposed format:
+    + Include all copyright holders (not only most project members)
+    + Include all licenses (one file is restricted to GPL v2, other ones
+      use different but still GPL2-compatible licenses)
+    + Refer to centrally stored GPL-2 (not version-less GPL)
+    Thanks for lintian for hinting about some of the above.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 31 Mar 2009 11:45:22 +0200
 
