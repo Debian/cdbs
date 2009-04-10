@@ -101,6 +101,7 @@ ifeq ($(DH_COMPAT),6)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 6)
 endif
 ifeq ($(DH_COMPAT),7)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.53)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 7.0.1)
 endif
 

@@ -1,3 +1,9 @@
+cdbs (0.4.57) UNRELEASED; urgency=low
+
+  * Have debhelper.mk build-depend on cdbs 0.4.53 or newer for DH v7.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Apr 2009 11:58:37 +0200
+
 cdbs (0.4.56) unstable; urgency=low
 
   * Simplify logic in autotools, makefile and debhelper snippets:
