@@ -99,13 +99,12 @@ endif # system selected
 endif # build versions empty
 
 
-# Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.43)
+# Dependencies according to Python policy, appendix A
 ifeq (,$(cdbs_python_arch_packages))
   ifneq (, $(cdbs_python_compile_version))
-    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python$(cdbs_python_compile_version)-dev, python (>= 2.3.5-11)
+    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python$(cdbs_python_compile_version)-dev, python (>= 2.3.5-7)
   else
-    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-11)
+    CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-dev (>= 2.3.5-7)
   endif
 else
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-all-dev

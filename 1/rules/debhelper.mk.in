@@ -92,10 +92,10 @@ DH_COMPAT = 5
 endif
 
 ifeq ($(DH_COMPAT),4)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
 endif
 ifeq ($(DH_COMPAT),5)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 5)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
 endif
 ifeq ($(DH_COMPAT),6)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 6)

@@ -1,6 +1,11 @@
 cdbs (0.4.57) UNRELEASED; urgency=low
 
   * Have debhelper.mk build-depend on cdbs 0.4.53 or newer for DH v7.
+  * Use unversioned build-dependencies when satisfied in oldstable
+    (codename "Etch"), except when required by policy (concretely this
+    means keep old versioned depenencies for Perl, relax them a bit for
+    Python, but drop them for old versions of debhelper, gnulib,
+    type-handling, cdbs and patchutils).
 
  -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Apr 2009 11:58:37 +0200
 

@@ -102,7 +102,7 @@ ifneq (, $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar))
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autotools-dev
 endif
 ifneq (, $(config_rpath)$(config_rpath_tar))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), gnulib (>= 0.0.20041014-2)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), gnulib
 endif
 
 # This target is called before almost anything else happens.  It's a good place
@@ -205,7 +205,7 @@ endif
 else
 # Prevent recursive braindamage when building type-handling with cdbs.
 ifeq (, $(shell grep -x 'Package: type-handling' debian/control))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), type-handling (>= 0.2.5)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), type-handling
 endif
 control_system		:= $(shell grep "^System:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 control_arch		:= $(shell type-handling $(control_cpu) $(control_system))

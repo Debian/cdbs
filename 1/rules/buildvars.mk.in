@@ -87,6 +87,6 @@ else
 	DEB_DESTDIR = $(CURDIR)/debian/tmp/
 endif
 
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.23-1.1)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs
 
 endif

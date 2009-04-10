@@ -23,7 +23,7 @@ ifndef _cdbs_class_gnome
 _cdbs_class_gnome = 1
 
 # for dh_desktop
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.21)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 ifndef _cdbs_rules_debhelper
