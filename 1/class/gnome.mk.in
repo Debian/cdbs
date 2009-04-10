@@ -22,15 +22,15 @@
 ifndef _cdbs_class_gnome
 _cdbs_class_gnome = 1
 
-# for dh_desktop
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
-
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 ifndef _cdbs_rules_debhelper
 include $(_cdbs_class_path)/docbookxml.mk$(_cdbs_makefile_suffix)
 endif
 
 DEB_MAKE_ENVVARS += GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+
+# for dh_desktop
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
 
 # Most GNOME upstreams don't bother to fix this.
 clean::
