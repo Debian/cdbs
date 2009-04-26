@@ -8,8 +8,9 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     type-handling, cdbs and patchutils).
   * Adjust gnome.mk to extend build-dependencies after including classes
     which initialize them.
+  * Use viewsvn (not vswn) in Vcs-Browser stanza in debian/control.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Apr 2009 11:58:37 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 26 Apr 2009 14:48:35 +0200
 
 cdbs (0.4.56) unstable; urgency=low
 
