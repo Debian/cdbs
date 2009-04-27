@@ -53,8 +53,11 @@ cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
 
 build_package
 
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.5/site-packages/testing/foo.py || return_fail
-dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb | grep -F -q /usr/lib/python2.4/site-packages/testing/foo.py || return_fail
+for v in `pyversions -vs`; do
+	dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb \
+		| grep -F -q /usr/lib/python$v/site-packages/testing/foo.py \
+		|| return_fail
+done
 
 clean_workdir
 return_pass
