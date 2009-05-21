@@ -31,7 +31,7 @@ DEB_MAKE_CLEAN_TARGET = distclean
 
 QMAKE = qmake
 
-ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+ifneq (,$(filter nostrip,$(DEB_BUILD_OPTIONS)))
 DEB_QMAKE_CONFIG_VAL = nostrip
 endif
 

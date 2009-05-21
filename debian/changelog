@@ -12,6 +12,8 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Build-depend on python-all-dev (not python2.4-dev or python2.5-dev),
     and generalize python-distutils tests to try all available versions
     of python.  Closes: bug#525855, thanks to Martin Pitt.
+  * Use $(filter ...) instead of $(findstring ...) to extract space-
+    separated options from DEB_BUILD_OPTIONS in debian/rules.
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 

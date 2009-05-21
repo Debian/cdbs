@@ -36,18 +36,18 @@ export kde_cgidir  = \$${libdir}/cgi-bin
 export kde_confdir = \$${sysconfdir}/kde3
 export kde_htmldir = \$${datadir}/doc/kde/HTML
 
-ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ifeq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
 	cdbs_kde_enable_final = $(if $(DEB_KDE_ENABLE_FINAL),--enable-final,)
 endif
 
-ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+ifneq (,$(filter nostrip,$(DEB_BUILD_OPTIONS)))
 	cdbs_kde_enable_final =
 	cdbs_kde_enable_debug = --enable-debug=yes
 else
 	cdbs_kde_enable_debug = --disable-debug
 endif
 
-ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
 	cdbs_kde_enable_debug = --enable-debug=full
 endif
 

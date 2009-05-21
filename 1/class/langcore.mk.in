@@ -24,7 +24,7 @@ _cdbs_class_langcore = 1
 
 CFLAGS += -g -Wall
 CXXFLAGS += -g -Wall
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
 	DEB_OPT_FLAG = -O0
 else
 	DEB_OPT_FLAG = -O2
