@@ -9,7 +9,7 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Adjust gnome.mk to extend build-dependencies after including classes
     which initialize them.
   * Append trunk in Vcs-* stanzas of debian/control, and use viewsvn
-    (not vswn) in Vcs-Browser stanza.
+    (not vswn) in Vcs-Browser stanza.  Closes: bug#531692.
   * Build-depend on python-all-dev (not python2.4-dev or python2.5-dev),
     and generalize python-distutils tests to try all available versions
     of python.  Closes: bug#525855, thanks to Martin Pitt.
