@@ -30,7 +30,7 @@ DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) -C $(DEB_BUILDDIR)
 
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(DEB_BUILDDIR)/config.status
-$(DEB_BUILDDIR)/config.status:
+$(DEB_BUILDDIR)/config.status: post-patches
 	chmod a+x $(DEB_CONFIGURE_SCRIPT)
 	$(DEB_CONFIGURE_INVOKE) $(cdbs_configure_flags) $(DEB_CONFIGURE_EXTRA_FLAGS) $(DEB_CONFIGURE_USER_FLAGS)
 	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),if [ -e $(DEB_BUILDDIR)/libtool ]; then cp -f /usr/bin/libtool $(DEB_BUILDDIR)/libtool; fi)
