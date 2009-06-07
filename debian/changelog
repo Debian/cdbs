@@ -17,6 +17,8 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     separated options from DEB_BUILD_OPTIONS in debian/rules.
   * Fix autotools.mk not completing all dependencies of post-patches
     before doing configure.
+  * Fix doc-base ection (Debian, not Programming). Closes: bug#532193,
+    thanks to Drew Parsons.
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 
