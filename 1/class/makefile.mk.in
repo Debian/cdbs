@@ -32,7 +32,7 @@ debian/stamp-makefile-build:
 	+$(DEB_MAKE_INVOKE) $(DEB_MAKE_BUILD_TARGET)
 	touch $@
 
-clean:: makefile-clean
+cleanbuilddir:: makefile-clean
 makefile-clean::
 	$(if $(DEB_MAKE_CLEAN_TARGET),+-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),@echo "DEB_MAKE_CLEAN_TARGET unset, not running clean")
 	rm -f debian/stamp-makefile-build
