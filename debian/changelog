@@ -19,6 +19,8 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     before doing configure.
   * Fix doc-base ection (Debian, not Programming). Closes: bug#532193,
     thanks to Drew Parsons.
+  * Fix testroot rule broken since 0.4.54. Closes: bug#532262, thanks to
+    Frédéric Brière.
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 
