@@ -28,7 +28,7 @@ include $(_cdbs_class_path)/ant-vars.mk$(_cdbs_makefile_suffix)
 DEB_PHONY_RULES += ant-sanity-check
 
 ant-sanity-check:
-	@if ! test -x "$(JAVACMD)"; then \
+	@if ! test -x "$(firstword $(JAVACMD))"; then \
 		echo "You must specify a valid JAVA_HOME or JAVACMD!"; \
 		exit 1; \
 	fi

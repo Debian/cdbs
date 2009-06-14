@@ -29,6 +29,9 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Document the class for KDE 4 provided by pkg-kde-tools, and document the
     KDE 3 class as obsolescent.  Move up the cmake section so the order makes
     sense again. (closes: #520383)
+  * Allow JAVACMD to include options (patch by Matthias Klose) (ant.mk) 
+    (closes: #520105)
+  * Reenabled the ant-1 test
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 

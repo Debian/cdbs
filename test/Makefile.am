@@ -46,7 +46,8 @@ TESTS = autotools-1.sh \
 	distutils-5.sh \
 	distutils-6.sh \
 	distutils-7.sh \
-	distutils-8.sh
+	distutils-8.sh \
+	ant-1.sh
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz
