@@ -96,6 +96,10 @@ $(addsuffix .bz,$(_cdbs_tarball_stamp_base)) $(addsuffix .bz2,$(_cdbs_tarball_st
 	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -x -j -f $(call _cdbs_stampname_to_tarname,$@)
 	touch $@
 
+$(addsuffix .lzma,$(_cdbs_tarball_stamp_base)):
+	tar -C $(_cdbs_tarball_dir) $(_cdbs_tar_verbose) -x --lzma -f $(call _cdbs_stampname_to_tarname,$@)
+	touch $@
+
 $(addsuffix .zip,$(_cdbs_tarball_stamp_base)):
 	unzip $(call _cdbs_stampname_to_tarname,$@) -d $(_cdbs_tarball_dir)
 	touch $@

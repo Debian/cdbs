@@ -27,6 +27,7 @@ TESTS = autotools-1.sh \
 	autotools-3.sh \
 	autotools-4.sh \
 	autotools-5.sh \
+	autotools-lzma.sh \
 	recursive.sh \
 	udeb-1.sh \
 	hdparm.sh \

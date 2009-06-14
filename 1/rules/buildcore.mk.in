@@ -51,7 +51,7 @@ $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% :
 
 # This variable is used by tarball.mk, but we want it here in order to check
 # tarball contents before unpacking.  tarball.mk imports this file anyway.
-DEB_TARBALL ?= $(wildcard *.tar *.tgz *.tar.gz *.tar.bz *.tar.bz2 *.zip)
+DEB_TARBALL ?= $(wildcard *.tar *.tgz *.tar.gz *.tar.bz *.tar.bz2 *.tar.lzma *.zip)
 
 ifneq (, $(findstring .bz2, $(DEB_TARBALL)))
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), bzip2
@@ -73,6 +73,7 @@ for i in $(DEB_TARBALL) ; do \
 			*.tar$(close_parenthesis) tar -tf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
 			*.tgz|*.tar.gz$(close_parenthesis) tar -tzf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
 			*.tar.bz|*.tar.bz2$(close_parenthesis) tar -tjf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
+			*.tar.lzma$(close_parenthesis) tar -t --lzma -f $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
 			*.zip$(close_parenthesis) unzip -l $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
 			*$(close_parenthesis) echo Warning: tarball $$i with unknown format >&2 ;; \
 		esac ; \

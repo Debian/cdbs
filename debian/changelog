@@ -32,6 +32,8 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Allow JAVACMD to include options (patch by Matthias Klose) (ant.mk) 
     (closes: #520105)
   * Reenabled the ant-1 test
+  * Added support for lzma-compressed tarballs (patch by Robert Millan) 
+    (buildcore.mk, tarball.mk) (closes: #529355); added test case
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 
