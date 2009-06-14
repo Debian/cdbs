@@ -1,5 +1,6 @@
 cdbs (0.4.57) UNRELEASED; urgency=low
 
+  [ Jonas Smedegaard ]
   * Have debhelper.mk build-depend on cdbs 0.4.53 or newer for DH v7.
   * Use unversioned build-dependencies when satisfied in oldstable
     (codename "Etch"), except when required by policy (concretely this
@@ -23,6 +24,11 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     Frédéric Brière.
   * Fix makefile.mk to cleanup before cleanbuilddir (not in parallel).
     Closes: bug#521711, thanks to Raúl Sánchez Siles.
+
+  [ Peter Eisentraut ]
+  * Document the class for KDE 4 provided by pkg-kde-tools, and document the
+    KDE 3 class as obsolescent.  Move up the cmake section so the order makes
+    sense again. (closes: #520383)
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
 

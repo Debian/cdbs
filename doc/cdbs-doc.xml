@@ -46,6 +46,8 @@
 
     <copyright>
       <year>2007</year>
+      <year>2008</year>
+      <year>2009</year>
       <holder>Peter Eisentraut</holder>
     </copyright>
 
@@ -1212,6 +1214,40 @@ DEB_MAKE_CHECK_TARGET = check
     </sect1>
 
     <sect1>
+      <title>The CMake Class</title>
+
+      <para>CMake is a cross-platform build tool.  On Unix-like systems
+      it typically generates makefiles, which are then run through make
+      normally.  To use the CMake class, add this include to
+      your <filename>debian/rules</filename>:
+
+<programlisting>
+include /usr/share/cdbs/1/class/cmake.mk
+</programlisting> 
+
+      The class takes care of the call to <command>cmake</command> and
+      the subsequent calls to <command>make</command>, with all the
+      necessary options to honor <varname>DEB_BUILD_OPTIONS</varname>,
+      for example.  To that end, the CMake class builds upon the
+      makefile class.</para>
+
+      <para>CMake is designed to always use separate source and build
+      directories.  Therefore, the CMake class by default builds the project
+      in a separate build directory named like <filename>obj-<replaceable>platform</replaceable></filename>
+      under the top-level source directory.</para>
+
+      <para><varname>DEB_BUILD_OPTIONS</varname> is checked for the
+      following options:
+      <variablelist>
+        <varlistentry>
+          <term><literal>noopt</literal></term>
+          <listitem><para>use <option>-O0</option> instead of <option>-O2</option></para></listitem>
+        </varlistentry>
+      </variablelist>
+      </para>
+    </sect1>
+
+    <sect1>
       <title>The Perl Class</title>
 
       <para>The Perl class can manage Perl module packages using
@@ -1410,13 +1446,47 @@ clean::
     <sect1>
       <title>The KDE Class</title>
 
-      <para>To use the KDE class, add this line to your
+      <para>The support for building KDE-related packages for KDE
+      version 4 and higher using CDBS is included in the
+      package <literal>pkg-kde-tools</literal>.  To use the KDE class,
+      add this line to your
       <filename>debian/rules</filename> file:
+<programlisting>
+include /usr/share/pkg-kde-tools/makefiles/1/cdbs/kde.mk
+</programlisting>
+      and add <literal>pkg-kde-tools</literal> to the build
+      dependencies.  The KDE class inherits the cmake class, so
+      everything that was said there also applies here.</para>
+
+      <para>The KDE class provides a plethora of options to
+      the <command>cmake</command> call that have been chosen so that
+      the resulting packages integrate properly with Debian.</para>
+
+      <para>The following files are excluded from compression:
+      <itemizedlist>
+        <listitem><para><filename>.dcl</filename></para></listitem>
+        <listitem><para><filename>.docbook</filename></para></listitem>
+        <listitem><para><filename>-license</filename></para></listitem>
+        <listitem><para><filename>.tag</filename></para></listitem>
+        <listitem><para><filename>.sty</filename></para></listitem>
+        <listitem><para><filename>.el</filename></para></listitem>
+      </itemizedlist>
+      </para>
+
+      <sect2>
+	<title>Obsolescent: KDE 3 Support</title>
+
+	<para>The class named <filename>kde.mk</filename> included in
+	CDBS is for building KDE-3-based packages.  It will eventually
+	be removed from CDBS.</para>
+
+	<para>To use it, add
+	this line to <filename>debian/rules</filename>:
 <programlisting>
 include /usr/share/cdbs/1/class/kde.mk
 </programlisting>
-      The KDE class inherits the autotools class, so everything that
-      was said there also applies here.</para>
+        This KDE 3 class inherits the autotools class, so everything
+        that was said there also applies here.</para>
 
       <para>CDBS automatically exports the following variables with the right values:
       <itemizedlist>
@@ -1431,14 +1501,6 @@ include /usr/share/cdbs/1/class/kde.mk
         <varname>DEB_AC_AUX_DIR</varname>, and
         <varname>DEB_CONFIGURE_INCLUDEDIR</varname> are set to KDE
         defaults.
-      </para>
-
-      <para>The following files are excluded from compression:
-      <itemizedlist>
-        <listitem><para><filename>.dcl</filename></para></listitem>
-        <listitem><para><filename>.docbook</filename></para></listitem>
-        <listitem><para><filename>-license</filename></para></listitem>
-      </itemizedlist>
       </para>
 
       <para>The class handles configure options specific to KDE (not
@@ -1464,6 +1526,7 @@ include /usr/share/cdbs/1/class/kde.mk
         </varlistentry>
       </variablelist>
       </para>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -1499,40 +1562,6 @@ include /usr/share/cdbs/1/class/qmake.mk
         <varlistentry>
           <term><literal>nostrip</literal></term>
           <listitem><para>pass the <literal>nostrip</literal> option to <command>qmake</command> though the <varname>CONFIG</varname> variable</para></listitem>
-        </varlistentry>
-      </variablelist>
-      </para>
-    </sect1>
-
-    <sect1>
-      <title>The CMake Class</title>
-
-      <para>CMake is a cross-platform build tool.  On Unix-like systems
-      it typically generates makefiles, which are then run through make
-      normally.  To use the CMake class, add this include to
-      your <filename>debian/rules</filename>:
-
-<programlisting>
-include /usr/share/cdbs/1/class/cmake.mk
-</programlisting> 
-
-      The class takes care of the call to <command>cmake</command> and
-      the subsequent calls to <command>make</command>, with all the
-      necessary options to honor <varname>DEB_BUILD_OPTIONS</varname>,
-      for example.  To that end, the CMake class builds upon the
-      makefile class.</para>
-
-      <para>CMake is designed to always use separate source and build
-      directories.  Therefore, the CMake class by default builds the project
-      in a separate build directory named like <filename>obj-<replaceable>platform</replaceable></filename>
-      under the top-level source directory.</para>
-
-      <para><varname>DEB_BUILD_OPTIONS</varname> is checked for the
-      following options:
-      <variablelist>
-        <varlistentry>
-          <term><literal>noopt</literal></term>
-          <listitem><para>use <option>-O0</option> instead of <option>-O2</option></para></listitem>
         </varlistentry>
       </variablelist>
       </para>
