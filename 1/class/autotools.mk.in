@@ -26,7 +26,7 @@ include $(_cdbs_class_path)/autotools-files.mk$(_cdbs_makefile_suffix)
 
 # Overriden from makefile-vars.mk.  We pass CFLAGS and friends to ./configure, so
 # no need to pass them to make.
-DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) -C $(DEB_BUILDDIR)
+DEB_MAKE_EXTRA_ARGS =
 
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(DEB_BUILDDIR)/config.status

@@ -34,7 +34,7 @@ endif
 
 # Overriden from makefile-vars.mk
 # We pass CFLAGS and friends to cmake, so no need to pass them to make
-DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) -C $(DEB_BUILDDIR)
+DEB_MAKE_EXTRA_ARGS =
 
 DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
 
