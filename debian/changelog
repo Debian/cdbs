@@ -1,4 +1,4 @@
-cdbs (0.4.57) UNRELEASED; urgency=low
+cdbs (0.4.57) unstable; urgency=low
 
   [ Jonas Smedegaard ]
   * Have debhelper.mk build-depend on cdbs 0.4.53 or newer for DH v7.
@@ -43,7 +43,7 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Added support for lzma-compressed tarballs (patch by Robert Millan) 
     (buildcore.mk, tarball.mk) (closes: #529355); added test case
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Apr 2009 17:56:24 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Jul 2009 11:00:48 +0200
 
 cdbs (0.4.56) unstable; urgency=low
 
