@@ -30,6 +30,8 @@ cdbs (0.4.57) UNRELEASED; urgency=low
   * Fix override autotools config.{guess,sub,rpath} also when symlinks.
     Closes: bug#536351.
   * Drop noop inclusion of docbookxml.mk in gnome.mk.
+  * Unconditionally add binary-install/* rules in gnome.mk (they are
+    silently ignored if debhelper.mk not included).
 
   [ Peter Eisentraut ]
   * Document the class for KDE 4 provided by pkg-kde-tools, and document the

@@ -36,12 +36,11 @@ clean::
 	  if test -d doc; then find doc -name '*.omf.out' -exec rm -f \{\} \; ; fi; \
 	  if test -d help; then find help -name '*.omf.out' -exec rm -f \{\} \; ; fi
 
-ifdef _cdbs_rules_debhelper
+# debhelper.mk targets, so silently ignored if debhelper.mk not included
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
 	dh_scrollkeeper -p$(cdbs_curpkg) $(DEB_DH_SCROLLKEEPER_ARGS)
 	$(if $(wildcard /usr/bin/dh_gconf),dh_gconf -p$(cdbs_curpkg) $(DEB_DH_GCONF_ARGS))
 	$(if $(wildcard /usr/bin/dh_desktop),dh_desktop -p$(cdbs_curpkg) $(DEB_DH_DESKTOP_ARGS))
 	$(if $(wildcard /usr/bin/dh_icons),dh_icons -p$(cdbs_curpkg) $(DEB_DH_ICONS_ARGS))
-endif
 
 endif
