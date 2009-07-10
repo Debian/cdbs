@@ -26,6 +26,9 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     Closes: bug#521711, thanks to Raúl Sánchez Siles.
   * Fix perlmodule-vars.mk to work with recent MakeMaker (set DESTDIR
     instead of PREFIX). Closes: bug#534895, thanks to Kevin Ryde.
+  * Fix override autotools config.{guess,sub,rpath} also when symlinks.
+    Closes: bug#536351.
+
   [ Peter Eisentraut ]
   * Document the class for KDE 4 provided by pkg-kde-tools, and document the
     KDE 3 class as obsolescent.  Move up the cmake section so the order makes

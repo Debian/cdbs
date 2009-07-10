@@ -84,8 +84,8 @@ endif
 
 # Avoid recursive braindamage if we're building autotools-dev
 ifeq (, $(shell grep -x 'Package: autotools-dev' debian/control))
-config_guess		:= $(shell find $(DEB_SRCDIR) -type f -name config.guess)
-config_sub		:= $(shell find $(DEB_SRCDIR) -type f -name config.sub)
+config_guess		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.guess)
+config_sub		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.sub)
 ifneq (, $(config_all_tar))
 config_guess_tar	:= $(filter %/config.guess, $(config_all_tar))
 config_sub_tar		:= $(filter %/config.sub, $(config_all_tar))
@@ -93,7 +93,7 @@ endif
 endif
 # Ditto for gnulib
 ifeq (, $(shell grep -x 'Package: gnulib' debian/control))
-config_rpath		:= $(shell find $(DEB_SRCDIR) -type f -name config.rpath)
+config_rpath		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.rpath)
 ifneq (, $(config_all_tar))
 config_rpath_tar	:= $(filter %/config.rpath, $(config_all_tar))
 endif
