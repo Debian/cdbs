@@ -2,11 +2,12 @@ cdbs (0.4.57) UNRELEASED; urgency=low
 
   [ Jonas Smedegaard ]
   * Have debhelper.mk build-depend on cdbs 0.4.53 or newer for DH v7.
-  * Use unversioned build-dependencies when satisfied in oldstable
-    (codename "Etch"), except when required by policy (concretely this
-    means keep old versioned depenencies for Perl, relax them a bit for
-    Python, but drop them for old versions of debhelper, gnulib,
-    type-handling, cdbs and patchutils).
+  * Relax build-dependencies (e.g. drop versioning when satisfied in
+    oldstable and not explicitly required by policy):
+    + keep old versioning for perl (required by policy)
+    + relax slightly versioning for python
+    + drop some old versionings for debhelper, gnulib, type-handling,
+      cdbs and patchutils
   * Adjust gnome.mk to extend build-dependencies after including classes
     which initialize them.
   * Append trunk in Vcs-* stanzas of debian/control, and use viewsvn
@@ -18,7 +19,7 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     separated options from DEB_BUILD_OPTIONS in debian/rules.
   * Fix autotools.mk not completing all dependencies of post-patches
     before doing configure.
-  * Fix doc-base ection (Debian, not Programming). Closes: bug#532193,
+  * Fix doc-base section (Debian, not Programming). Closes: bug#532193,
     thanks to Drew Parsons.
   * Fix testroot rule broken since 0.4.54. Closes: bug#532262, thanks to
     Frédéric Brière.
