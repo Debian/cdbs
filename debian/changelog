@@ -29,6 +29,7 @@ cdbs (0.4.57) UNRELEASED; urgency=low
     instead of PREFIX). Closes: bug#534895, thanks to Kevin Ryde.
   * Fix override autotools config.{guess,sub,rpath} also when symlinks.
     Closes: bug#536351.
+  * Drop noop inclusion of docbookxml.mk in gnome.mk.
 
   [ Peter Eisentraut ]
   * Document the class for KDE 4 provided by pkg-kde-tools, and document the

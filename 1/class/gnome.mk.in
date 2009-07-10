@@ -23,9 +23,6 @@ ifndef _cdbs_class_gnome
 _cdbs_class_gnome = 1
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
-ifndef _cdbs_rules_debhelper
-include $(_cdbs_class_path)/docbookxml.mk$(_cdbs_makefile_suffix)
-endif
 
 DEB_MAKE_ENVVARS += GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
