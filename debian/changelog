@@ -1,3 +1,13 @@
+cdbs (0.4.58) unstable; urgency=high
+
+  * Revert change in 0.4.57 ensuring post-patches finished before
+    configure in autotools.mk: Causes configure to be invoked again
+    after build.
+  * Set urgency=high as this cause FTBFS for packages not supporting
+    multiple configure runs (see bugs #537011, #536992, #536963).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 14 Jul 2009 20:31:47 +0200
+
 cdbs (0.4.57) unstable; urgency=low
 
   [ Jonas Smedegaard ]
