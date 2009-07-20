@@ -163,7 +163,7 @@ $(patsubst %,configure/%,$(DEB_INDEP_PACKAGES)) :: configure/% : common-configur
 # information, see Policy §5.2, Policy §7.6, and Debian Bug #178809.
 # For now, you may override the dependencies by setting the variable
 # DEB_BUILD_DEPENDENCIES, below.  This is not recommended.
-DEB_BUILD_DEPENDENCIES = build-arch build-indep
+DEB_BUILD_DEPENDENCIES ?= build-arch build-indep
 build: $(DEB_BUILD_DEPENDENCIES)
 
 # This target should take care of actually compiling the package from source.
