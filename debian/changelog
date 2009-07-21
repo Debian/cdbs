@@ -4,7 +4,7 @@ cdbs (0.4.59) unstable; urgency=low
     no respect prior override. Closes: bug#205395, thanks to Robert
     Jordens, and to Joachim Breitner for reviving.
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 20 Jul 2009 15:48:04 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 21 Jul 2009 18:49:44 +0200
 
 cdbs (0.4.58) unstable; urgency=high
 
