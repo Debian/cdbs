@@ -1,7 +1,7 @@
 cdbs (0.4.59) unstable; urgency=low
 
   * Defer setting DEB_BUILD_DEPENDENCIES in buildcore.mk (use ?= not =),
-    no respect prior override. Closes: bug#205395, thanks to Robert
+    to respect prior override. Closes: bug#205395, thanks to Robert
     Jordens, and to Joachim Breitner for reviving.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 21 Jul 2009 18:49:44 +0200
