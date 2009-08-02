@@ -1,3 +1,10 @@
+cdbs (0.4.60) unstable; urgency=low
+
+  * Relax perlmodule.mk build-dependency on perl to be unversioned
+    (following bug#525190 pending for debian-policy).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 02 Aug 2009 13:51:56 +0200
+
 cdbs (0.4.59) unstable; urgency=low
 
   * Defer setting DEB_BUILD_DEPENDENCIES in buildcore.mk (use ?= not =),

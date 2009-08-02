@@ -29,7 +29,7 @@ include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 # Dependency according to Perl policy 4.3
 # (contrary to common misunderstanding a tighter dependency on perl 5.8
 # was only temporarily needed when 5.8 was introduced into Debian sid.)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), perl (>= 5.6.0-16)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), perl
 
 include $(_cdbs_class_path)/perlmodule-vars.mk$(_cdbs_makefile_suffix)
 
