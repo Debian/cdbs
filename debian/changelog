@@ -1,7 +1,7 @@
 cdbs (0.4.60) unstable; urgency=low
 
-  * Relax perlmodule.mk build-dependency on perl to be unversioned
-    (following bug#525190 pending for debian-policy).
+  * Relax perlmodule.mk build-dependency on perl (drop versioning
+    unneeded since Debian Policy 3.8.3).
   * Rewrite autotools cross-compiling comment to clarify that cross-
     compiling requires autotools 2.52 or newer (not that we conflict
     with autotools2.13, which apparently changed in 0.4.22-1.1).
