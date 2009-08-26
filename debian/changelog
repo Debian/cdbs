@@ -8,6 +8,9 @@ cdbs (0.4.60) unstable; urgency=low
   * Fix include DEB_MAKEMAKER_USER_FLAGS in DEB_MAKEMAKER_INVOKE (not
     separately when invoked) to handle options that must be declared
     before arguments. Closes: bug#481893, thanks to Dmitry E. Oboukhov.
+  * Support parallel builds in makefile, automake, perlmodule, qmake and
+    cmake classes when DEB_BUILD_PARALLEL is non-empty. Closes:
+    bug#505328, thanks to Steve M. Robbins and Felipe Sateler.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sun, 02 Aug 2009 13:51:56 +0200
 

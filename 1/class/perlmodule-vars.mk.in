@@ -26,7 +26,7 @@ _cdbs_class_perlmodule_vars = 1
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
 # Override optimizations to follow Perl Policy 3.3
-DEB_MAKE_EXTRA_ARGS = OPTIMIZE="$(CFLAGS)"
+DEB_MAKE_EXTRA_ARGS = OPTIMIZE="$(CFLAGS)" $(DEB_MAKE_PARALLEL)
 
 # Install into first listed package by default.
 # Unset for standard debhelper rules (use debian/tmp if multiple packages).
