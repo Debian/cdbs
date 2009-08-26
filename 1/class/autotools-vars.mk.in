@@ -35,17 +35,13 @@ DEB_CONFIGURE_SCRIPT = $(CURDIR)/$(DEB_SRCDIR)/configure
 DEB_CONFIGURE_SCRIPT_ENV = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
 DEB_CONFIGURE_NORMAL_ARGS = --build=$(DEB_BUILD_GNU_TYPE) --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) --disable-maintainer-mode --disable-dependency-tracking
 
-# Provide --host only if different from --build, as recommended in
-# autotools-dev README.Debian: When provided (even if equal) autotools
-# 2.52+ switches to cross-compiling mode.
-
+# Provide --host only if different from --build, to support cross-
+# compiling with autotools 2.52+ without slowing down normal builds.
+# Cross-compiling with autotools 2.13 is unsupported, as it needs
+# other tweaks (more info at autotools-dev README.Debian)
 ifneq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
 DEB_CONFIGURE_NORMAL_ARGS += --host=$(DEB_HOST_GNU_TYPE)
 endif
-
-### TODO: Fix the above to also handle 2.13 which needs other tweaks
-### (read autotools-dev README.Debian!). For now we conflict with
-### autoconf2.13!
 
 # This magic is required because otherwise configure wants to analyse
 # $0 to see whether a VPATH build is needed.  This tells it with
