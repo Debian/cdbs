@@ -11,6 +11,9 @@ cdbs (0.4.60) unstable; urgency=low
   * Support parallel builds in makefile, automake, perlmodule, qmake and
     cmake classes when DEB_BUILD_PARALLEL is non-empty. Closes:
     bug#505328, thanks to Steve M. Robbins and Felipe Sateler.
+  * Simplify autotools-files.mk and make m4 dir configurable through
+    new variable DEB_ACLOCAL_ARGS. Fix copyright of that file. Closes:
+    bug#537497, thanks to Robert Millan.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sun, 02 Aug 2009 13:51:56 +0200
 

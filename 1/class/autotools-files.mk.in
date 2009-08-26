@@ -1,5 +1,5 @@
 # -*- mode: makefile; coding: utf-8 -*-
-# Copyright © 2002,2003 Colin Walters <walters@debian.org>
+# Copyright © 2005 Robert Millan
 # Description: A class to automatically update GNU autotools files
 #
 # This program is free software; you can redistribute it and/or
@@ -44,10 +44,14 @@ $(warning WARNING:  DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
 endif
 endif
 
+ifneq (, $(wildcard $(DEB_SRCDIR)/m4))
+DEB_ACLOCAL_ARGS ?= -I m4
+endif
+
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:
 	$(if $(filter pre,$(DEB_AUTO_UPDATE_LIBTOOL)),cd $(DEB_SRCDIR) && libtoolize -c -f)
-	$(if $(DEB_AUTO_UPDATE_ACLOCAL),if [ -d $(DEB_SRCDIR)/m4 ]; then m4="-I m4"; fi; if [ -e $(DEB_SRCDIR)/aclocal.m4 ]; then cd $(DEB_SRCDIR) && aclocal-$(DEB_AUTO_UPDATE_ACLOCAL) $$m4; fi,$(if $(DEB_AUTO_UPDATE_AUTOMAKE), if [ -d $(DEB_SRCDIR)/m4 ]; then m4="-I m4"; fi; if [ -e $(DEB_SRCDIR)/aclocal.m4 ]; then cd $(DEB_SRCDIR) && aclocal-$(DEB_AUTO_UPDATE_AUTOMAKE) $$m4; fi))
+	$(if $(DEB_AUTO_UPDATE_ACLOCAL),cd $(DEB_SRCDIR) && aclocal-$(DEB_AUTO_UPDATE_ACLOCAL) $(DEB_ACLOCAL_ARGS))
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which autoconf$(DEB_AUTO_UPDATE_AUTOCONF) || which autoconf`; fi)
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which autoheader$(DEB_AUTO_UPDATE_AUTOHEADER) || which autoheader` ; fi)
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),if [ -e $(DEB_SRCDIR)/Makefile.am ]; then cd $(DEB_SRCDIR) && automake-$(DEB_AUTO_UPDATE_AUTOMAKE) $(DEB_AUTOMAKE_ARGS) ; fi)
