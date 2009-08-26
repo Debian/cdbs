@@ -5,6 +5,9 @@ cdbs (0.4.60) unstable; urgency=low
   * Rewrite autotools cross-compiling comment to clarify that cross-
     compiling requires autotools 2.52 or newer (not that we conflict
     with autotools2.13, which apparently changed in 0.4.22-1.1).
+  * Fix include DEB_MAKEMAKER_USER_FLAGS in DEB_MAKEMAKER_INVOKE (not
+    separately when invoked) to handle options that must be declared
+    before arguments. Closes: bug#481893, thanks to Dmitry E. Oboukhov.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sun, 02 Aug 2009 13:51:56 +0200
 

@@ -32,7 +32,7 @@ DEB_MAKE_EXTRA_ARGS = OPTIMIZE="$(CFLAGS)"
 # Unset for standard debhelper rules (use debian/tmp if multiple packages).
 DEB_MAKEMAKER_PACKAGE = $(firstword $(if $(_cdbs_rules_debhelper),$(shell dh_listpackages),$(shell $(_cdbs_scripts_path)/list-packages)))
 
-DEB_MAKEMAKER_INVOKE = /usr/bin/perl Makefile.PL INSTALLDIRS=vendor
+DEB_MAKEMAKER_INVOKE = /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor
 
 # Set some MakeMaker defaults
 DEB_MAKE_BUILD_TARGET = all

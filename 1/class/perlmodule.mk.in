@@ -43,6 +43,6 @@ endif
 
 common-configure-arch common-configure-indep:: Makefile
 Makefile:
-	(cd $(DEB_BUILDDIR) && $(DEB_MAKEMAKER_INVOKE) $(DEB_MAKEMAKER_USER_FLAGS) )
+	(cd $(DEB_BUILDDIR) && $(DEB_MAKEMAKER_INVOKE) )
 
 endif
