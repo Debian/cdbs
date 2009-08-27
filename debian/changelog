@@ -1,3 +1,10 @@
+cdbs (0.4.61) unstable; urgency=low
+
+  * Brown paperbag release: Fix excess closing paranthesis in
+    autotools-files.mk. Closes: bug#543916, thanks to Zak B. Elep.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 27 Aug 2009 21:10:32 +0200
+
 cdbs (0.4.60) unstable; urgency=low
 
   * Relax perlmodule.mk build-dependency on perl (drop versioning

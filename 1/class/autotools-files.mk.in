@@ -44,7 +44,7 @@ $(warning WARNING:  DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
 endif
 endif
 
-DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4)),-I m4)
+DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),-I m4)
 
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:
