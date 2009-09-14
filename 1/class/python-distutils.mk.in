@@ -132,7 +132,7 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: d
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
-	for buildver in $(cdbs_python_build_versions); do \
+	set -e; for buildver in $(cdbs_python_build_versions); do \
 		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS); \
 	done
 	touch $@
@@ -143,7 +143,7 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) $(DEB_PYTHON_INSTALL_ARGS_ALL)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
-	for buildver in $(cdbs_python_build_versions); do \
+	set -e; for buildver in $(cdbs_python_build_versions); do \
 		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) $(DEB_PYTHON_INSTALL_ARGS_ALL); \
 	done
 
