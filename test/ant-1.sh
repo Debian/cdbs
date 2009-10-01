@@ -13,8 +13,8 @@ include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
 include \$(_cdbs_package_root_dir)/1/class/ant.mk.in
 
-DEB_CLASSPATH := /tmp/nothing.jar:\$(DEB_CLASSPATH)
-JAVA_HOME_DIRS = /var/tmp/ /usr/lib/kaffe/
+DEB_JARS := /tmp/nothing.jar
+JAVA_HOME := /usr/lib/jvm/default-java
 JAVACMD += -Dfoo=bar
 EOF
 chmod +x $WORKDIR/debian/rules

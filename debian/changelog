@@ -1,9 +1,17 @@
 cdbs (0.4.62) UNRELEASED; urgency=low
 
+  [ Jonas Smedegaard ]
   * Fix detect exit code in for loops in python-distutils.mk. Closes:
     bug#546589.
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 14 Sep 2009 14:25:26 +0200
+  [ Marc Dequènes (Duck) ]
+  * Applied patch from Barry deFreese <bdefreese@debian.org> and Torsten
+    Werner <twerner@debian.org> to migrate the Java class from kaffe
+    (which is being removed) to default-jdk (Build-Depends, Depends,
+    'test/ant-1.sh' test, and documentation were updated) (Closes:
+    #547391).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Thu, 01 Oct 2009 22:20:22 +0200
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 

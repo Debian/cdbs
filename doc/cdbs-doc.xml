@@ -1588,9 +1588,9 @@ include /usr/share/cdbs/1/class/ant.mk
       <varname>JAVA_HOME</varname>.  For Ant-using packages in the
       Debian main archive, you would typically use either
 <programlisting>
-JAVA_HOME = /usr/lib/kaffe
+JAVA_HOME = /usr/lib/jvm/default-java
 </programlisting>
-      which requires a build dependency on <literal>kaffe</literal>, or
+      which requires a build dependency on <literal>default-jdk</literal>, or
 <programlisting>
 JAVA_HOME = /usr/lib/jvm/java-gcj
 </programlisting>
@@ -2325,26 +2325,30 @@ Source: jline
 Section: libs
 Priority: optional
 Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
-Uploaders: Peter Eisentraut <petere@debian.org>
-Build-Depends-Indep: cdbs (>= 0.4.36), debhelper (>= 5), kaffe, jikes, ant, junit
-Standards-Version: 3.6.2
+Uploaders: Varun Hiremath <varun@debian.org>, Kumar Appaiah <akumar@ee.iitm.ac.in>,
+ Torsten Werner <twerner@debian.org>
+Build-Depends: cdbs, debhelper (>= 5), default-jdk, ant
+Build-Depends-Indep: maven-repo-helper, junit, openjdk-6-doc
+Standards-Version: 3.8.2
+Homepage: http://jline.sourceforge.net/
+Vcs-Svn: svn://svn.debian.org/svn/pkg-java/trunk/jline
+Vcs-Browser: http://svn.debian.org/wsvn/pkg-java/trunk/jline
 
 Package: libjline-java
 Section: libs
 Architecture: all
-Depends: kaffe | java2-runtime | java1-runtime
-Suggests: kaffe | java-virtual-machine, libjline-java-doc
+Depends: ${misc:Depends}, default-jre-headless | java2-runtime-headless | java1-runtime-headless
+Suggests: libjline-java-doc
 Description: Java library for handling console input
  JLine is a 100% pure Java library for reading and editing console input.
  It is similar in functionality to BSD editline and GNU readline.  People
  familiar with the readline/editline capabilities for modern shells will
  find most of the command editing features of JLine to be familiar.
- .
- Web site: http://jline.sourceforge.net/
 
 Package: libjline-java-doc
 Section: doc
 Architecture: all
+Depends: ${misc:Depends}, openjdk-6-doc | classpath-doc
 Suggests: libjline-java
 Description: documentation for JLine
  JLine is a 100% pure Java library for reading and editing console input.
@@ -2353,8 +2357,6 @@ Description: documentation for JLine
  find most of the command editing features of JLine to be familiar.
  .
  This package contains the documentation for JLine.
- .
- Web site: http://jline.sourceforge.net/
 ]]></programlisting>
       </para>
 
@@ -2362,32 +2364,33 @@ Description: documentation for JLine
 <programlisting><![CDATA[
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/class/ant.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/class/ant.mk
 
-PACKAGE_VERSION := $(shell dpkg-parsechangelog | sed -n 's/^Version: \(.*\)-[^-]*$$/\1/p')
+PACKAGE              := $(DEB_SOURCE_PACKAGE)
+VERSION              := $(DEB_UPSTREAM_VERSION)
+JAVA_HOME                    := /usr/lib/jvm/default-java
+DEB_JARS                     := junit
+DEB_ANT_BUILDFILE        := debian/build.xml
+DEB_ANT_BUILD_TARGET := jar javadoc
 
-JAVA_HOME = /usr/lib/kaffe
-DEB_JARS = junit
-DEB_ANT_BUILD_TARGET = jars
-DEB_ANT_COMPILER = jikes
+DEB_INSTALL_EXAMPLES_libjline-java-doc = jline-demo.jar
 
-DEB_INSTALL_DOCS_ALL =
-DEB_INSTALL_EXAMPLES_libjline-java-doc = release/jline-demo.jar
-
-
-install/libjline-java:: DEB_FINALDIR=$(CURDIR)/debian/libjline-java
-install/libjline-java::
-	install -m 644 -D release/jline-0_9_5.jar $(DEB_FINALDIR)/usr/share/java/jline-$(PACKAGE_VERSION).jar
-	dh_link /usr/share/java/jline-$(PACKAGE_VERSION).jar /usr/share/java/jline.jar
-
+binary-post-install/lib$(PACKAGE)-java::
+        mh_installpoms -plib$(PACKAGE)-java
+        mh_installjar -plib$(PACKAGE)-java -l debian/pom.xml jline.jar
 
 clean::
-	rm -rf build/ release/ reports/ tmp/
-	rm -f VERSION.txt]]></programlisting>
+        -rm -rf debian/tmp
+
+get-orig-source:
+        -uscan --upstream-version 0
+
+get-orig-pom:
+        wget -O debian/pom.xml http://repository.sonatype.org/service/local/repositories/central/content/jline/jline/$(VERSION)/jline-$(VERSION).pom]]>
+	</programlisting>
       </para>
-    </sect1>  
+    </sect1>
   </chapter>
 
   <chapter>
