@@ -13,6 +13,8 @@ cdbs (0.4.62) UNRELEASED; urgency=low
 
   [ Peter Eisentraut ]
   * Updated standards version
+  * Document more clearly that a build dependency on autotools-dev should be
+    added to get config.{guess,sub} updates reliably
 
  -- Peter Eisentraut <petere@debian.org>  Mon, 05 Oct 2009 22:35:03 +0300
 

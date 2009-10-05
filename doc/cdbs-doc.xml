@@ -1125,9 +1125,13 @@ DEB_CONFIGURE_SCRIPT_ENV += LDFLAGS=" -Wl,-z,defs -Wl,-O1"
       management is activated, <literal>autotools-dev</literal> and
       <literal>gnulib</literal>, respectively, will then be
       automatically added to the build dependencies (needed to obtain
-      updated versions of the files).  If the program does not use the
-      top source directory to store autoconf files, you can teach CDBS
-      where they are to be found:
+      updated versions of the files).  Otherwise, you should add these
+      packages, as appropriate, to the build dependencies yourself.
+      If you fail to do so, these updates will not execute unless the
+      required packages are already installed by coincidence.
+      (Lintian is likely to complain if you forget.)  If the program
+      does not use the top source directory to store autoconf files,
+      you can teach CDBS where they are to be found:
 <programlisting>
 DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
 </programlisting>
