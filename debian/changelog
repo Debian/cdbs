@@ -11,7 +11,10 @@ cdbs (0.4.62) UNRELEASED; urgency=low
     'test/ant-1.sh' test, and documentation were updated) (Closes:
     #547391).
 
- -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Thu, 01 Oct 2009 22:20:22 +0200
+  [ Peter Eisentraut ]
+  * Updated standards version
+
+ -- Peter Eisentraut <petere@debian.org>  Mon, 05 Oct 2009 22:35:03 +0300
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 
