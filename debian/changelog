@@ -10,13 +10,15 @@ cdbs (0.4.62) UNRELEASED; urgency=low
     (which is being removed) to default-jdk (Build-Depends, Depends,
     'test/ant-1.sh' test, and documentation were updated) (Closes:
     #547391).
+  * Cleaned up .egg-info directories sometimes left over by Python
+    distutils, as suggested by Evan Broder (Closes: #507966).
 
   [ Peter Eisentraut ]
   * Updated standards version
   * Document more clearly that a build dependency on autotools-dev should be
     added to get config.{guess,sub} updates reliably
 
- -- Peter Eisentraut <petere@debian.org>  Mon, 05 Oct 2009 22:35:03 +0300
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sat, 10 Oct 2009 20:53:27 +0200
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 
