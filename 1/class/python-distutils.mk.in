@@ -55,6 +55,7 @@ DEB_PYTHON_MODULE_PACKAGE = $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprec
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_selected_pycompat := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
+cdbs_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
 cdbs_pycompat = $(cdbs_selected_pycompat)
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
   ifeq (, $(cdbs_selected_pycompat))
@@ -187,7 +188,7 @@ $(addprefix python-clean-, $(cdbs_python_build_versions)):
 # (dh_clean choke on dirs named stamp, so need to happen before clean::)
 clean:: clean-python-distutils
 clean-python-distutils::
-ifeq (, $(cdbs_selected_pycompat))
+ifeq (, $(cdbs_selected_pycompat)$(cdbs_use_xs_field)$(cdbs_selected_pyversions))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
 	rm -rf debian/python-module-stampdir

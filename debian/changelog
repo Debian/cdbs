@@ -12,13 +12,16 @@ cdbs (0.4.62) UNRELEASED; urgency=low
     #547391).
   * Cleaned up .egg-info directories sometimes left over by Python
     distutils, as suggested by Evan Broder (Closes: #507966).
+  * Stopped creating 'debian/pycompat' in the Python class if either XS-
+    Python-Version or 'debian/pyversions' is set, as suggested by Loïc
+    Minier (Closes: #512300).
 
   [ Peter Eisentraut ]
   * Updated standards version
   * Document more clearly that a build dependency on autotools-dev should be
     added to get config.{guess,sub} updates reliably
 
- -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sat, 10 Oct 2009 20:53:27 +0200
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sat, 10 Oct 2009 22:19:41 +0200
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 
