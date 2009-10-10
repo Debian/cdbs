@@ -74,9 +74,9 @@ ifneq (, $(config_sub_tar))
 	fi
 endif
 ifneq (, $(config_rpath_tar))
-	if test -e /usr/share/gnulib/config/config.rpath ; then \
+	if test -e /usr/share/gnulib/build-aux/config.rpath ; then \
 		for i in $(config_rpath_tar) ; do \
-			cp --remove-destination /usr/share/gnulib/config/config.rpath \
+			cp --remove-destination /usr/share/gnulib/build-aux/config.rpath \
 			$(_cdbs_tarball_dir)/$$i ; \
 		done ; \
 	fi

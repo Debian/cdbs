@@ -137,11 +137,11 @@ ifneq (, $(config_sub))
 	fi
 endif
 ifneq (, $(config_rpath))
-	if test -e /usr/share/gnulib/config/config.rpath ; then \
+	if test -e /usr/share/gnulib/build-aux/config.rpath ; then \
 		for i in $(config_rpath) ; do \
 			if ! test -e $$i.cdbs-orig ; then \
 				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination /usr/share/gnulib/config/config.rpath $$i ; \
+				cp --remove-destination /usr/share/gnulib/build-aux/config.rpath $$i ; \
 			fi ; \
 		done ; \
 	fi
