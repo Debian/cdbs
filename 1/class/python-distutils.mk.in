@@ -1,0 +1,82 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2003 Colin Walters <walters@debian.org>
+# Description: configure, compile, binary, and clean Python libraries and programs
+#  This class works for Python packages which use the Python
+#  "distutils".  Note that optionally it can also use the
+#  dh_python program which does some nice stuff.  See
+#  the manual page for that program for more information.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
+
+
+ifndef _cdbs_bootstrap
+@PATH_RULES@
+endif
+
+ifndef _cdbs_class_python_distutils
+_cdbs_class_python_distutils := 1
+
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
+
+DEB_PYTHON_COMPILE_VERSION = 
+
+DEB_PYTHON_VERSIONS = 2.1 2.2 2.3 2.4
+
+DEB_PYTHON_SETUP_CMD = setup.py
+DEB_PYTHON_CLEAN_ARGS = -a
+DEB_PYTHON_BUILD_ARGS = --build-base="$(DEB_BUILDDIR)/build"
+DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
+
+# make: *** No rule to make target `voodoo'.  Stop.
+DEB_PYTHON_REAL_LIB_PACKAGES := $(strip $(filter $(patsubst %,python%%,$(DEB_PYTHON_VERSIONS)),$(DEB_ALL_PACKAGES)))
+# If no versioned python library packages found, grab all simpler ones
+ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
+DEB_PYTHON_SIMPLE_PACKAGES := $(strip $(filter python-%,$(DEB_ALL_PACKAGES)))
+endif
+
+cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst install/python%,%,$@)))
+
+common-build-arch common-build-indep:: common-build-impl
+common-build-impl::
+	cd $(DEB_SRCDIR) && python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+
+clean::
+# Ignore errors from this rule.  In a tarball build, the file
+# may not exist.
+	-python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+
+# See if this package doesn't appear to need to be compiled by multiple
+# Python versions.
+ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
+common-install-arch common-install-indep:: common-install-impl
+common-install-impl::
+	cd $(DEB_SRCDIR) && /usr/bin/python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg)
+else
+$(patsubst %,install/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: install/% :
+	cd $(DEB_SRCDIR) && /usr/bin/python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) install --root=debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg)
+endif
+
+$(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root="debian/$(cdbs_curpkg)" $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg)
+
+# This class can optionally utilize debhelper's "dh_python" command.  Just
+# be sure you include debhelper.mk before including this file.
+ifdef _cdbs_rules_debhelper
+$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
+	dh_python -p$(cdbs_curpkg)
+endif
+
+endif

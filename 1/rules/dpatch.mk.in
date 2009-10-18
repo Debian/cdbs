@@ -1,0 +1,71 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2002,2003 Colin Walters <walters@debian.org>
+#              2004 David B Harris <dbharris@eelf.ddts.net
+#
+# Description: A CDBS frontend to the dpatch patch system
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
+
+####
+# If you use autotools.mk, or any other rule/class which uses it, include
+# this file (dpatch.mk) *after* those.
+####
+
+ifndef _cdbs_bootstrap
+@PATH_RULES@
+endif
+
+ifndef _cdbs_rules_dpatch
+_cdbs_rules_dpatch := 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+
+ifeq ($(_cdbs_included_dpatch),)
+_cdbs_included_dpatch := 1
+
+CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), dpatch
+
+_cdbs_dpatch_apply_rule := apply-dpatches
+_cdbs_dpatch_unapply_rule := deapply-dpatches
+
+CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), patchutils
+evil_patches_that_do_nasty_things := $(shell\
+if lsdiff=`which lsdiff` ; then \
+  $$lsdiff -H $(DEB_PATCHES) \
+  | egrep "/config\.(guess|sub|rpath)$" | tr "\n" " " ; \
+fi)
+ifneq (, $(evil_patches_that_do_nasty_things))
+$(warning WARNING:  The following patches are modifiing auto-updated files.  This can result in serious trouble:  $(evil_patches_that_do_nasty_things))
+endif
+
+post-patches:: apply-dpatches
+
+clean:: deapply-dpatches
+
+deapply-dpatches:
+	$(MAKE) -f debian/rules reverse-config
+	dpatch deapply-all
+	$(MAKE) -f debian/rules update-config
+
+# The patch subsystem 
+apply-dpatches: pre-build
+	$(MAKE) -f debian/rules reverse-config
+	dpatch apply-all
+	$(MAKE) -f debian/rules update-config
+
+endif
+
+endif

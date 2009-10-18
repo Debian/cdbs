@@ -1,0 +1,47 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+# Including this file gets us a simple patch system.  You can just
+# drop patches in debian/patches, and they will be automatically
+# applied and unapplied.
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+# Including this gives us a number of rules typical to a KDE
+# program, including adding toggles for enable-debug and enable-final
+# and setting the following: kde_htmldir, --with-qt-dir,
+# --disable-rpath, --with-xinerama, --includedir=/usr/include/kde.
+# Note that this class inherits from autotools.mk so you don't need
+# to include it too.
+include /usr/share/cdbs/1/class/kde.mk
+
+# This variable adds several arguments to the ./configure invocation,
+# in *addition* to what autotools.mk does normally.  So the end command
+# will look something like:
+# ./configure --prefix=/usr/ --sysconfdir=/etc ... [--with-alsa]
+ifeq ($(DEB_HOST_GNU_SYSTEM), linux)
+# alsa only works on linux-gnu
+DEB_CONFIGURE_EXTRA_FLAGS := --with-alsa
+endif
+
+# These variables are used by debhelper.mk; we are telling it to
+# 1. dh_compress not to compress any files with the below extensions.
+# 2. dh_makeshlibs to create automatic conservative version dependencies
+# 3. dh_shlibdeps which directories to look in to resolve internal dependencies
+DEB_COMPRESS_EXCLUDE := .bz2 .css .dcl .docbook -license
+DEB_DH_MAKESHLIBS_ARGS := -V
+DEB_SHLIBDEPS_INCLUDE := debian/libartsc0/usr/lib debian/libarts1/usr/lib
+
+# Here we hook in creating manpages into the build process.
+common-build::
+	for i in debian/*.sgml; do \
+		docbook-to-man $$i > `dirname $$i`/`basename $$i .sgml`.1 ;\
+	done
+
+# Here we make artswrapper suid root right before creating the deb;
+# this happens *after* permissions are fixed.
+binary-predeb/libarts1::
+	chmod 4755 debian/tmp/usr/bin/artswrapper
+
+# Here we hook in deleting the generated manpages into the build process.
+clean::
+	rm -f debian/*.1

@@ -1,0 +1,140 @@
+hdparm (5.4-2) unstable; urgency=low
+
+  * Added cdbs to Build-Depends.
+
+ -- Christopher L Cheney <ccheney@debian.org>  Mon,  4 Aug 2003 23:00:00 -0500
+
+hdparm (5.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Move contrib scripts. (Closes: #122644)
+  * Suggest apmd. (Closes: #137434)
+  * Include upstream documentation. (Closes: #155171)
+  * Bumped debhelper version. (Closes: #190866)
+
+ -- Christopher L Cheney <ccheney@debian.org>  Mon,  4 Aug 2003 22:00:00 -0500
+
+hdparm (5.3-0.1) unstable; urgency=low
+
+  * NMU with permission of maintainer.
+  * New upstream release. (closes: #135708)
+  * This should build on s390/hppa/ia64 again (closes: #155725, #185704)
+
+ -- Andrew Suffield <asuffield@debian.org>  Wed,  9 Apr 2003 21:40:35 +0100
+
+hdparm (5.2-1) unstable; urgency=low
+
+  * New upstream.
+
+ -- Christopher L Cheney <ccheney@debian.org>  Wed, 31 Jul 2002 14:35:00 -0500
+
+hdparm (4.5-1.2) unstable; urgency=low
+
+  * NMU
+  * Change "Conflicts: apmd" to "Replaces: apmd", to comply with section
+    7.5 of policy.  This should eliminate upgrade problems.
+
+ -- Chris Hanson <cph@debian.org>  Thu, 14 Mar 2002 00:26:38 -0500
+
+hdparm (4.5-1.1) unstable; urgency=low
+
+  * NMU with permission of maintainer.
+  * Move "/etc/apm/event.d/20hdparm" from the apmd package to the hdparm
+    package.
+
+ -- Chris Hanson <cph@debian.org>  Thu, 7 Mar 2002 23:06:39 -0500
+
+hdparm (4.5-1) unstable; urgency=high
+
+  * New Upstream. (Closes: #101531)
+  * New Maintainer.
+  * Included contrib scripts. (Closes: #92620)
+
+ -- Christopher L Cheney <ccheney@debian.org>  Wed, 28 Nov 2001 14:10:00 -0600
+
+hdparm (3.9a-1) unstable woody; urgency=low
+
+  * New upstream version (patch). Closes #85351, #77979, #58265
+  * Hack around compilation issues. Closes #80897, #84520
+  * Back out manpage patch. Closes #67060
+  * Add upstream changelog. Closes #80126
+  * Change doc for -q. Closes #37594 
+
+ -- Steve Dunham <dunham@debian.org>  Wed, 14 Feb 2001 16:35:12 -0800
+
+hdparm (3.9-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Steve Dunham <dunham@debian.org>  Tue, 16 May 2000 08:30:32 -0700
+
+hdparm (3.6-2) unstable; urgency=low
+
+  * Patch to unregister interfaces for thinkpads
+  * Closes: #54715
+
+ -- Steve Dunham <dunham@debian.org>  Tue, 25 Jan 2000 10:10:20 -0800
+
+hdparm (3.6-1) unstable; urgency=low
+
+  * New upstream version
+  * Fix problem with no media on CDs
+  * Add comment about -q option
+  * Closes: #30866, #39511
+
+ -- Steve Dunham <dunham@debian.org>  Fri, 29 Oct 1999 23:38:58 -0700
+
+hdparm (3.5-1) unstable; urgency=low
+
+  * New upstream version (#30010,#26368)
+
+ -- Steve Dunham <dunham@debian.org>  Fri, 27 Nov 1998 11:49:03 -0500
+
+hdparm (3.3-3) unstable; urgency=low
+
+  * Switch to debhelper (#17219)
+
+ -- Steve Dunham <dunham@debian.org>  Fri, 14 Aug 1998 00:15:38 -0400
+
+hdparm (3.3-2) unstable; urgency=low
+
+  * Fixed problem with automake
+
+ -- Steve Dunham <dunham@cps.msu.edu>  Mon, 21 Jul 1997 18:31:41 -0400
+
+hdparm (3.3-1) unstable; urgency=low
+
+  * New upstream version - upstream changes:
+        - add -C, -y, and -Y flags for IDE power management
+        - force BLKFLSBUF after -T or -t  -- kmg@barco.com
+        - fix minor -T/-t mixup in manpage -- hankedr@mail.auburn.edu
+
+
+ -- Steve Dunham <dunham@cps.msu.edu>  Sun,  8 Jun 1997 13:18:10 -0400
+
+hdparm (3.1-2) unstable; urgency=low
+
+  * Fixed Architecture: field
+
+  * Upgrade to 3.1.  Change to "Package format of the month"(TM)
+
+ -- Steve Dunham <dunham@gdl.msu.edu>  Thu, 10 Oct 1996 19:51:22 -0800
+
+old changelog
+
+23-December-1994 Bruce Perens <Bruce@Pixar.com>
+        Added Debian GNU/Linux package maintenance system files, and configured
+        for Debian.
+
+22-June-1995 Guy R. Thomas <gthomas@native-ed.bc.ca>
+        Took over maintenance of package.  New Debian revision.
+
+22-June-1995 Guy R. Thomas <gthomas@native-ed.bc.ca>
+        Upgraded to current version.  ( May 31, 1995 )
+
+25-June-1996 Steve Dunham <dunham@gdl.msu.edu>
+        Upgraded to current version.
+
+Local variables:
+mode: debian-changelog
+End:

@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<article lang="en">
+  <title>Introduction to the Common Debian Build System</title>
+
+  <articleinfo>
+    <editor>
+      <firstname></firstname>
+      <surname></surname>
+    </editor>
+    <pubdate>2003-09-29</pubdate>
+    <corpauthor><ulink
+    url="http://www.debian.org/">Debian</ulink></corpauthor>
+    <date>2003-09-29</date>
+    <authorgroup>
+      <author>
+        <firstname>Colin</firstname>
+        <surname>Walters</surname>
+        <affiliation>
+          <orgname>Debian</orgname>
+        </affiliation>
+	<email>walters@debian.org</email>
+      </author>
+    </authorgroup>
+    <legalnotice>
+      <para>Copyright 2003 Colin Walters.  Permission is granted to copy,
+      distribute and/or modify this document under the terms of the GPL.</para>
+    </legalnotice>
+    <keywordset>
+      <keyword>Debian</keyword>
+      <keyword>dpkg</keyword>
+      <keyword>make</keyword>
+      <keyword>debhelper</keyword>
+    </keywordset>
+    <revhistory>
+      <revision>
+	<revnumber>2</revnumber>
+	<date></date>
+	<revremark></revremark>
+      </revision>
+      <revision>
+	<revnumber>1</revnumber>
+	<date>2003-09-29</date>
+	<revremark>First DocBook/XML version.</revremark>
+      </revision>
+    </revhistory>
+  </articleinfo>
+
+  <para>In a single sentence: CDBS is a framework based on <filename>Makefile</filename>
+  inheritance for building Debian packages.</para>
+
+  <para>It is essentially a set of Makefile fragments which you may
+  include into your <filename>debian/rules</filename>.  Each makefile
+  fragment can have effects in different parts of your build
+  process.</para>
+
+  <para>The original motivating factor for CDBS was originally that
+  more and more programs today are created using GNU configure scripts
+  and GNU automake, and as such they are all very similar to configure
+  and build.  I realized that a lot of duplicated code in everyone's
+  <filename>debian/rules</filename> could be factored out.
+  But CDBS isn't only useful for
+  packages which use the GNU autotools.  It is a flexible core upon
+  which you can create your own custom build systems.</para>
+
+  <section>
+    <title>Versioning note</title>
+
+    <para>CDBS might change incompatibly in the future, and to allow
+    for this, all the rules and classes are in a verison-specific
+    subdirectory.  That's the reason for the <literal>1</literal> in
+    <filename>/usr/share/cbds/1</filename>.  For right now though,
+    during the initial development of cdbs, when few packages are
+    using it, I might break compatibility in small ways.  You will be
+    warned if this happens.</para>
+  </section>
+
+  <section>
+    <title><filename>buildcore.mk</filename>: A framework</title>
+
+    <para>Every CDBS-using <filename>debian/rules</filename> should
+    eventually include
+    <filename>/usr/share/cdbs/1/rules/buildcore.mk</filename> (it
+    might be included automatically via dependencies, as we will see
+    later).  This <filename>Makefile</filename> fragment sets up all
+    of the core default <filename>Makefile</filename> structure and
+    variables, but doesn't actually
+    <emphasis>do</emphasis> anything on its own.</para>
+
+    <para>You can use the <filename>buildcore.mk</filename> rules to
+    hook in your own build system to actually implement each stage of
+    compiling, installing, and building <filename>.deb</filename>s
+    if you wish.</para>
+  </section>
+
+  <section>
+    <title>Introduction to classes</title>
+
+    <para>However, cdbs also provides <emphasis>classes</emphasis>
+    which contain makefile rules and variables implementing some or
+    all of these steps.  Classes tend to be declarative; they say your
+    program has particular properties.  Suppose for instance that your
+    package uses a regular Makefile to compile, and has the normal
+    <command>make</command> and <command>make install</command>
+    targets.  In that case, you can say:</para>
+
+    <programlisting>include /usr/share/cdbs/1/class/makefile.mk</programlisting>
+
+    <para>And you get all the code to run <command>make</command>
+    automagically.  This basically works by adding code to the
+    <literal>common-build-arch</literal>,
+    <literal>common-build-indep</literal>,
+    <literal>common-install-arch</literal>, and
+    <literal>common-install-indep</literal> targets inside
+    <filename>buildcore.mk</filename>.  It might be instructive to
+    look at <filename>makefile.mk</filename> now.</para>
+  </section>
+
+  <section>
+    <title><filename>debhelper.mk</filename>: A rule fragment</title>
+
+    <para>The next important piece of the puzzle is to actually build
+    <filename>.deb</filename>s from the now compiled software.
+    You could implement this
+    step yourself if you wished, but most people will want to take
+    advantage of Debhelper to do it mostly automatically.  To do this,
+    simply add another line like:</para>
+
+    <programlisting>include /usr/share/cdbs/1/rules/debhelper.mk</programlisting>
+
+    <para>Note that if you use <filename>debhelper.mk</filename>, you
+    must add a Build-Depends on debhelper (>= 4.1.0).  This is the minimum version; it
+    is recommended to use at least 4.1.46 to get some additional Debhelper features.</para>
+  </section>
+
+  <section>
+    <title>A full example</title>
+
+    <para>With just the two lines above, you should have a reasonable
+    first cut at a fully functional build system!  To recap, your
+    <filename>debian/rules</filename> should now look like:</para>
+
+    <programlisting>#!/usr/bin/make -f
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk</programlisting>
+
+    <para>And that's all!  Note that <filename>makefile.mk</filename>
+    and <filename>debhelper.mk</filename> both include
+    <filename>buildcore.mk</filename>, so you don't need to include it
+    explicitly.</para>
+
+    <para>Incidentally, you should usually include
+    <filename>debhelper.mk</filename> first, before other rules.  This
+    will turn on optional Debhelper-using parts of other rules, if
+    any, which is usually what you want.</para>
+  </section>
+
+  <section>
+    <title>Class inheritance</title>
+
+    <para>Now, let's look at some common situations.  Say that your
+    package uses GNU autoconf and automake.  In that case, you can use
+    the provided <classname>autotools</classname> class.  One thing to
+    note is that the autotools class actually builds upon the
+    <classname>makefile</classname> class.  This
+    <classname>autotools</classname> class will take care of details
+    such as updating the <filename>config.{sub,guess}</filename>
+    files, running <command>./configure</command> with the standard
+    arguments, etc.  So now our debian/rules looks like:</para>
+
+    <programlisting>#!/usr/bin/make -f
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk</programlisting>
+  </section>
+
+  <section>
+    <title>Customization</title>
+
+    <para>However, suppose you need to pass --disable-frobnication to
+    <command>./configure</command>.  How do you do this?  Well, it couldn't be easier.
+    The <filename>autotools.mk</filename> file includes a number of
+    variables which you can override, like this:</para>
+
+    <programlisting>#!/usr/bin/make -f
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+DEB_CONFIGURE_EXTRA_FLAGS := --disable-frobnication</programlisting>
+
+    <para>Note that the variable is set <emphasis>after</emphasis> the
+    rule fragment is included.  This is necessary for it to have any
+    effect.  There are a few exceptions to this; but generally
+    variables should be set after rule fragments are included.</para>
+
+    <para>Now, let's suppose your package is a little bit strange
+    (e.g. Perl); perhaps it has a <command>./Configure</command>
+    script which isn't made
+    by autoconf; this script might instead expect the user to
+    interactively configure the program .  In that case, you can just
+    implement the <literal>common-configure</literal> rule, by adding
+    something like the following to your <filename>debian/rules</filename>:</para>
+
+    <programlisting>common-configure::
+	./Configure --blah --blargh &lt; debian/answers</programlisting>
+
+    <para>Note that if you do this, you can't include
+    <filename>autotools.mk</filename>, since then you'll get
+    <emphasis>two</emphasis> implementations of common-configure,
+    which is sure to fail.  It would be nice to be able to partially
+    override rule fragments; this is a tricky problem, but I hope to
+    address it.</para>
+  </section>
+
+  <section>
+    <title>Adding extra code</title>
+
+    <para>Suppose that your package generates extra cruft as a side
+    effect of the build process that's not taken care of by the
+    upstream <literal>clean</literal> rule, and ends up bloating your
+    diff.  To handle this (until upstream fixes it), you can simply
+    add stuff to the <literal>clean</literal> rule as follows:</para>
+
+    <programlisting>clean::
+	rm -f foo/blah.o po/.intltool-merge-cache</programlisting>
+
+    <para>Almost all of the current rules are <emphasis>double
+    colon</emphasis> rules (See the GNU Make manual).  This means you
+    can simply add to them without overriding the default.</para>
+
+    <para>You can also add dependencies to the rules.  For example,
+    suppose you have a multi-binary package which builds both a
+    program and a shared library, and the program depends on the
+    shared library.  To tell CDBS to build the shared library before
+    the program, just do something like:</para>
+
+    <programlisting>binary/program:: binary/libfoo</programlisting>
+
+    <para>However, this must come <emphasis>before</emphasis> you
+    include <filename>buildcore.mk</filename>.  This is due to the way
+    make works.</para>
+
+    <para>And speaking of multi-binary packages:</para>
+  </section>
+
+  <section>
+    <title><filename>makefile.mk</filename> and Single vs. Multi
+    Binary packages</title>
+
+    <para>If you have a single binary package, the default
+    <literal>common-install</literal> implementation in
+    <filename>makefile.mk</filename> tries to use the upstream
+    <filename>Makefile</filename> to install everything into
+    <filename>debian/packagename</filename>, so it will
+    all appear in the binary package.  If you're using
+    <filename>debhelper.mk</filename>, to remove files, move them
+    around, just override the binary-post-install/&lt;packagename&gt;
+    target</para>
+
+    <programlisting>binary-post-install/mypackage:
+	mv debian/mypackage/usr/sbin/myprogram \
+	  debian/mypackage/usr/bin/myprogram
+	rm debian/mypackage/usr/share/doc/mypackage/INSTALL</programlisting>
+
+    <para>If you have a multi-binary package,
+    <filename>makefile.mk</filename> (by default) uses the upstream
+    Makefile to install everything in <filename>debian/tmp</filename>.
+    After this, the
+    recommended method is to use <filename>debhelper.mk</filename>
+    (which uses <command>dh_install</command>) to copy these files
+    into the appropriate package.  To do this, just create
+    <filename>packagename.install</filename> files; see the
+    <command>dh_install</command> man page.</para>
+  </section>
+
+  <section>
+    <title>A simple patch system</title>
+
+    <para>Suppose you'd like to keep separated patches, instead of
+    having them all in your <filename>.diff.gz</filename>.  
+    cdbs lets you hook in arbitrary
+    patch systems, but (as with the rest of cdbs), it has its own
+    default implementation, called
+    <filename>simple-patchsys.mk</filename>.  To use it, just
+    add:</para>
+
+    <programlisting>include /usr/share/cdbs/1/rules/simple-patchsys.mk</programlisting>
+
+    <para>to your <filename>debian/rules</filename>.  Now, you can
+    drop patch files into the <filename>debian/patches</filename>
+    directory, and they will be automatically applied and unapplied.
+    Note that currently patches must end in
+    <filename>.patch</filename>.</para>
+  </section>
+
+  <section>
+    <title>dpatch patch system</title>
+
+    <para>Like the simple patch system detailed previously, the dpatch
+    patch system allows you to seperate your changes to the upstream
+    tarball into multiple seperate patches instead of a monolithic
+    diff.gz. This is a wrapper to the <command>dpatch</command> tools
+    contained in the dpatch Debian package, and it's named
+    <filename>dpatch.mk</filename>.  To use it, add:</para>
+
+    <programlisting>include /usr/share/cdbs/1/rules/dpatch.mk</programlisting>
+
+    <para>to your <filename>debian/rules</filename>.  If you use
+    <filename>autotools.mk</filename>, be sure to include
+    <filename>dpatch.mk</filename> <emphasis>after</emphasis>
+    <filename>autotools.mk</filename>.  Additionally, remember to add
+    dpatch to your Build-Depends.</para>
+
+    <para>Finally, for a more complete treatment of dpatch files, their
+    format, and their application, please read the documentation included
+    in the dpatch package. Notably,
+    <filename>/usr/share/doc/dpatch/README.gz</filename> and the
+    <command>dpatch(1)</command> manpage.</para>
+  </section>
+
+  <section>
+    <title>DBS (tarball-inside-a-tarball) build system</title>
+
+    <para>Some Debian developers may be familiar with DBS, where you
+    include a tarball of the source inside the Debian source package
+    itself.  This has some advantages, and some disadvantages.  If
+    you'd like to use this, just include
+    <filename>tarball.mk</filename>, and specify
+    <varname>DEB_TAR_SRCDIR</varname>.  Note that it must be
+    <emphasis>first</emphasis> in the list of included rules.</para>
+  </section>
+
+  <section>
+    <title>Common build problems</title>
+
+    <section>
+      <title>Build fails to missing include files or something</title>
+
+      <para>Often this is caused by the fact that cdbs passes
+      <varname>CFLAGS</varname> along with the make invocation.  A
+      sane build system allows this - <varname>CFLAGS</varname> are
+      for the user to customize.  Setting <varname>CFLAGS</varname>
+      shouldn't override other internal flags used in the package like
+      <command>-I</command>.  However if fixing the upstream source is
+      too difficult, you
+      may do this:</para>
+
+      <programlisting>DEB_MAKE_INVOKE := $(DEB_MAKE_ENVVARS) \
+	make -C $(DEB_BUILDDIR)</programlisting>
+
+      <para>That will avoid passing <varname>CFLAGS</varname>.  But
+      note this breaks the automatic implementation of
+      <varname>DEB_BUILD_OPTIONS</varname>.</para>
+    </section>
+  </section>
+</article>

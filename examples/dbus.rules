@@ -1,0 +1,45 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2002,2003 Colin Walters <walters@verbum.org>
+
+# This ensures that the dbus-glib-1 package (which depends
+# on the dbus-1 package) is built after it.  Note that it
+# comes *before* including buildcore.mk, since this is
+# necessary to make make happy.
+binary/dbus-glib-1:: binary/dbus-1 
+
+# This implements the .deb package creation using debhelper.
+include /usr/share/cdbs/1/rules/debhelper.mk
+# Since dbus uses GNU autoconf/automake, we can use the
+# standard autotools.mk "class".
+include /usr/share/cdbs/1/class/autotools.mk
+
+# This variable adds several arguments to the ./configure invocation,
+# in *addition* to what autotools.mk does normally.  So the end command
+# will look something like:
+# ./configure --prefix=/usr/ --sysconfdir=/etc ... --enable-glib --disable-qt ...
+DEB_CONFIGURE_EXTRA_FLAGS := --enable-glib --disable-qt --with-xml=expat --enable-docs
+
+# This variable changes how debhelper.mk calls dh_shlibdeps.  This is needed
+# to tell the dbus-glib-1 package build process to look in the dbus-1 build
+# directory for shared libraries.
+DEB_SHLIBDEPS_INCLUDE_dbus-glib-1 := debian/dbus-1/usr/lib/
+
+# This is another variable which is used in debhelper.mk.  It is just passed
+# on directly to dh_makeshlibs.  See the man page for that program.
+DEB_DH_MAKESHLIBS_ARGS_ALL := -V
+
+# binary-post-install is a target created by debhelper.mk.  In this case,
+# I am using it to remove extra files which were installed by
+# dbus-1-dev.install
+binary-post-install/dbus-1-dev::
+	rm -f debian/dbus-1-dev/usr/include/dbus*/dbus/dbus-glib.h
+
+# This target is called to do extra stuff for the dbus-1-doc build process.
+# Note that we aren't overriding the rest of the build, just adding to it.
+build/dbus-1-doc::
+	doxygen Doxyfile
+
+# This adds extra stuff to the clean rule.
+clean::
+	rm -rf doc/api

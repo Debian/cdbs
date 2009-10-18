@@ -1,0 +1,81 @@
+#!@PERLPATH@ -w
+# -*- mode: cperl; coding: utf-8 -*-
+# Most of this code was stolen from Debhelper 4.1. which is:
+# Joey Hess, GPL copyright 1997-2000.
+# Adapted for CDBS purposes by Colin Walters <walters@debian.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+# 02111-1307 USA.
+
+sub error {
+  my $err = shift;
+  print STDERR $err;
+  exit 1;
+}
+
+# stolen from debhelper
+sub GetPackages {
+	my $type=shift;
+
+	$type="" if ! defined $type;
+
+	# Look up the build arch if we need to.
+	my $buildarch='';
+	if ($type eq 'same') {
+		$buildarch=`dpkg-architecture -qDEB_HOST_ARCH 2>/dev/null` || die "dpkg-architecture failed: $!";
+		chomp $buildarch;
+	}
+
+	my $package="";
+	my $arch="";
+	my @list=();
+	my %seen;
+	open (CONTROL, 'debian/control') ||
+		error("cannot read debian/control: $!\n");
+	while (<CONTROL>) {
+		chomp;
+		s/\s+$//;
+		if (/^Package:\s*(.*)/) {
+			$package=$1;
+			# Detect duplicate package names in the same control file.
+			if (! $seen{$package}) {
+				$seen{$package}=1;
+			}
+			else {
+				error("debian/control has a duplicate entry for $package");
+			}
+		}
+		if (/^Architecture:\s*(.*)/) {
+			$arch=$1;
+		}
+	
+		if (!$_ or eof) { # end of stanza.
+			if ($package &&
+			    (($type eq 'indep' && $arch eq 'all') ||
+			     ($type eq 'arch' && $arch ne 'all') ||
+			     ($type eq 'same' && ($arch eq 'any' || $arch =~ /\b$buildarch\b/)) ||
+			     ! $type)) {
+				push @list, $package;
+				$package="";
+				$arch="";
+			}
+		}
+	}
+	close CONTROL;
+
+	return @list;
+}
+
+print join(' ', GetPackages($ARGV[0])) . "\n";

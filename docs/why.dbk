@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<article>
+  <title>Why does CDBS exist?</title>
+
+  <articleinfo>
+    <editor>
+      <firstname></firstname>
+      <surname></surname>
+    </editor>
+    <pubdate>2003-09-29</pubdate>
+    <corpauthor><ulink
+    url="http://www.debian.org/">Debian</ulink></corpauthor>
+    <date>2003-09-29</date>
+    <authorgroup>
+      <author>
+        <firstname>Colin</firstname>
+        <surname>Walters</surname>
+        <affiliation>
+          <orgname>Debian</orgname>
+        </affiliation>
+	<email>walters@debian.org</email>
+      </author>
+    </authorgroup>
+    <legalnotice>
+      <para>Copyright 2003 Colin Walters.  Permission is granted to copy,
+      distribute and/or modify this document under the terms of the GPL.</para>
+    </legalnotice>
+    <keywordset>
+      <keyword>Debian</keyword>
+      <keyword>dpkg</keyword>
+      <keyword>make</keyword>
+      <keyword>debhelper</keyword>
+    </keywordset>
+    <revhistory>
+      <revision>
+	<revnumber>2</revnumber>
+	<date></date>
+	<revremark></revremark>
+      </revision>
+      <revision>
+	<revnumber>1</revnumber>
+	<date>2003-09-29</date>
+	<revremark>First DocBook/XML version.</revremark>
+      </revision>
+    </revhistory>
+  </articleinfo>
+
+  <para>The current generally accepted practice for creating new
+  Debian packages is to run <command>dh_make</command>, which
+  generates a bunch of files, the most important of which are
+  <filename>debian/control</filename>,
+  <filename>debian/copyright</filename>, and
+  <filename>debian/rules</filename>.  The first two are relatively
+  straightforward.</para>
+
+  <para>But <filename>debian/rules</filename> is not.  Debhelper was
+  an enormous step forward in this area, greatly reducing redundant
+  and incomprehensible code from the Debian package creation process.
+  But it doesn't go far enough; the typical <command>dh_make</command>
+  generated <filename>debian/rules</filename> is hundreds of lines,
+  only some of which applies.  In my experience with helping several
+  people to learn Debian packaging, <filename>debian/rules</filename>
+  was by far the hardest part for them to understand.</para>
+
+  <para>Moreover, this generated code will become stale with time, as
+  the Debian policy changes.  A few months ago the
+  <varname>DEB_BUILD_OPTIONS</varname> variable dropped the
+  <literal>debug</literal> flag in favor of <literal>noopt</literal>.
+  But I gradually realized that since the code to check this variable
+  was duplicated over hundreds (if not thousands) of
+  <command>dh_make</command> generated source packages (and had
+  possibly been modified), it would likely be years before most
+  packages were updated.  And there are many packages which predate
+  <varname>DEB_BUILD_OPTIONS</varname> which don't even use it at all,
+  when they easily could.</para>
+
+  <para>The Unix and hacker cultures in general have long looked down
+  upon generated code, and for good reason.  It is often hard to edit,
+  and there is almost always no way to regenerate the code, but keep
+  your local changes.  Instead of generating code (like all the
+  Microsoft tools tend to do), the Unix tradition is to create a
+  metalanguage, a compiler, or some other form of abstraction.</para>
+
+  <para>CDBS is that abstraction.  It's not the first attempt at
+  abstracting the Debian build process; before Debhelper, many
+  attempts came along and had only marginal success, if any.  So now
+  the question you're asking yourself is probably:</para>
+
+  <section>
+    <title>What makes CDBS better?</title>
+
+    <para>First of all, it is not monolithic (as opposed to
+    e.g. debstd).  CDBS is quite simply a set of Makefile fragments
+    which can be included; if you don't want a particular part, you
+    just don't include the Makefile fragment for it.</para>
+
+    <para>Second, CDBS does not attempt to supplant Debhelper (which
+    has generally done an excellent job of the
+    <literal>binary</literal> stage of Debian package building).  CDBS
+    can optionally use Debhelper to implement various parts of
+    building a Debian package.  This is the recommended mode of
+    operation, actually.  But some people may find debhelper doesn't
+    work for them; if that's the case, you just don't include
+    <filename>debhelper.mk</filename>, and you can do the work
+    yourself.</para>
+
+    <para>Third, CDBS tries to make the common case easy.  If you have
+    a package which uses the GNU autotools and such, you can have a
+    working build system simply by including about 2-3 Makefile
+    fragments.  No custom code required at all.  Additionally, it has
+    even higher-level Makefile fragments; for example, there are
+    <filename>gnome.mk</filename> and <filename>kde.mk</filename> rule
+    files which handle a number of common things required by GNOME and
+    KDE packages.</para>
+
+    <para>Finally, CDBS (along with Debhelper) should make it much
+    easier to effect systemwide changes.  For example, if we later
+    decide to switch our default <literal>i386</literal> architecture
+    to <literal>i486</literal> (as we probably will), all I have to do
+    is change <filename>autotools.mk</filename>, and the correct
+    <option>--host</option> and <option>--build</option> will be
+    passed to all <command>./configure</command> invocations.
+    Currently <emphasis>some</emphasis> packages have the
+    <varname>DEB_HOST_ARCH</varname> boilerplate code in their
+    <filename>debian/rules</filename>; many don't.</para>
+
+    <para>Another example: currently many packages use DocBook/XML,
+    but since Debian doesn't have an XML catalog, we have to
+    substitute the global identifiers for local system ones.  I placed
+    the code to do this in a <filename>docbook.mk</filename> rule
+    file.  But Debian will (hopefully!) eventually get an XML catalog.
+    Once we do, to stop making these changes, all I have to do is
+    remove the code from <filename>docbook.mk</filename>.</para>
+  </section>
+
+  <section>
+    <title>Why not just Debhelper?</title>
+
+    <para>Some things done in CDBS could just as well go into a
+    <command>dh_foo</command> program (for example, some of
+    <filename>autotools.mk</filename>).  Likewise, some
+    <command>dh_programs</command> would probably do better as CDBS
+    makefile fragments (<filename>dh_python</filename> comes to
+    mind).</para>
+
+    <para>But CDBS' Makefile fragment orientation allows it to do
+    things that Debhelper can't, or can't easily do.  For example,
+    CDBS automatically generates a ton of Makefile rules corresponding
+    to package building.  This saves a great deal of redundant code in
+    <filename>debian/rules</filename>.</para>
+
+    <para>CDBS automatically creates <literal>build-arch</literal> and
+    <literal>build-indep</literal> targets, and builds arch and indep
+    packages under them.  It also can cleanly affect a number of
+    different parts of the build system
+    (e.g. <literal>clean</literal>, <literal>configure</literal>,
+    <literal>build</literal>), by simply including one Makefile
+    fragment; doing this as a dh_foo would require inserting a call
+    like <command>dh_foo --clean</command>, <command>dh_foo
+    --configure</command> at each step.  And doing things this way
+    wouldn't allow future expansion; you'd have to change your code to
+    say <command>dh_foo --build</command> if the foo helper wanted to
+    modify the build process too.</para>
+
+    <para>So CDBS compliments Debhelper (or it can; again, CDBS does
+    not require Debhelper).</para>
+  </section>
+
+  <section>
+    <title>Summary</title>
+
+    <para>In summary, I believe CDBS (typically combined with
+    Debhelper) should be the future of Debian packaging.  By reducing
+    the complexity in each package, we make sweeping changes much
+    easier.  Debian has made several major transitions in the past,
+    and we will in the future.  It shouldn't be as painful as it has
+    been.  Moreover, CDBS makes creating simple packages very easy, as
+    it should be.</para>
+  </section>
+</article>

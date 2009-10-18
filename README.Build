@@ -1,0 +1,9 @@
+This package has a lot of Build-Depends; however, not all of them are
+necessary for getting a working package.  We have split the Build-Depends
+line up.  Everything on the first line is absolutely required for building.
+Currently, this is just debhelper.
+
+Everything on the second line is required for auxilliary parts of the
+package such as documentation images.
+
+The third line is all the packages required for the various test suites.
