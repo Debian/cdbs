@@ -84,7 +84,7 @@ DEB_ANT_INVOKE = cd $(DEB_BUILDDIR) && $(JAVACMD) -classpath $(DEB_CLASSPATH) \
 # multiple targets for each step.
 DEB_ANT_BUILD_TARGET = 
 DEB_ANT_INSTALL_TARGET =
-DEB_ANT_TEST_TARGET =
+DEB_ANT_CHECK_TARGET =
 DEB_ANT_CLEAN_TARGET = clean
 
 endif

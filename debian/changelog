@@ -1,3 +1,23 @@
+cdbs (0.4.35) unstable; urgency=low
+
+  * Fixed build dependencies in hdparm test case (closes: #354361)
+  * Removed special handling of udebs; use debhelper's built-in support
+    now (debhelper.mk) (closes: #248654, #340299, #340866)
+  * Raised implicit debhelper dependency to 4.2.0 for udeb support
+    (debhelper.mk)
+  * Don't conditionalize dh_installlogcheck anymore as it's included in
+    debhelper 4.2.0 (debhelper.mk)
+  * Added call to dh_installmime (debhelper.mk) (closes: #260173)
+  * Removed erroneous references to nonexistent variable DEB_ANT_TEST_TARGET
+    (closes: #307813)
+  * Added support for dh_clean excludes with DEB_CLEAN_EXCLUDES
+    (debhelper.mk) (closes: #314341)
+  * Added debhelper test case for DEB_*_EXCLUDES functionality
+  * Don't play unnecessary tricks with build-essential in the automatic
+    dependencies (buildcore.mk, buildvars.mk) (closes: #316034)
+
+ -- Peter Eisentraut <petere@debian.org>  Tue, 28 Feb 2006 12:17:35 +0100
+
 cdbs (0.4.34) unstable; urgency=low
 
   * Removed old FSF address from copyright file

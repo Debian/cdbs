@@ -28,7 +28,8 @@ TESTS = autotools-1.sh \
 	autotools-5.sh \
 	recursive.sh \
 	udeb-1.sh \
-	hdparm.sh
+	hdparm.sh \
+	debhelper-1.sh
 
 if HAVE_PYTHON
 TESTS += distutils-1.sh distutils-2.sh

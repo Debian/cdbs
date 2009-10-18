@@ -2,7 +2,8 @@ Source: hdparm
 Section: admin
 Priority: optional
 Maintainer: Christopher L Cheney <ccheney@debian.org>
-Build-Depends: cdbs (>> 0.4.5), debhelper (>> 4.0.18)
+Build-Depends: debhelper (>> 4.0.18)
+# It actually build-depends on cdbs (>> 0.4.5) also but not in this test suite.
 Standards-Version: 3.6.0
 
 Package: hdparm

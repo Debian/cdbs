@@ -1030,7 +1030,7 @@ DEB_ANT_BUILD_TARGET = makeitrule
 DEB_ANT_CLEAN_TARGET = super-clean
 # i want install and test rules to be run
 DEB_ANT_INSTALL_TARGET = install-all
-DEB_ANT_TEST_TARGET = check
+DEB_ANT_CHECK_TARGET = check
 					</programlisting>
 				</informalexample>
 			</para>

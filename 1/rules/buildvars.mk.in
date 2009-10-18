@@ -68,17 +68,14 @@ DEB_BUILD_GNU_SYSTEM ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_SYSTEM)
 DEB_BUILD_GNU_CPU ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_CPU)
 DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
-ifeq ($(words $(DEB_PACKAGES)),1)
-	DEB_DESTDIR = $(CURDIR)/debian/$(strip $(DEB_PACKAGES))/
+ifeq ($(words $(DEB_ALL_PACKAGES)),1)
+	DEB_DESTDIR = $(CURDIR)/debian/$(strip $(DEB_ALL_PACKAGES))/
 else
 	DEB_DESTDIR = $(CURDIR)/debian/tmp/
 endif
 
-# make sure it is initialised.  this dummy string can be nuked later
-CDBS_BUILD_DEPENDS	?= build-essential
-
 ifeq ($(_cdbs_bootstrap), )
-CDBS_BUILD_DEPENDS	:= cdbs (>= 0.4.23-1.1), $(CDBS_BUILD_DEPENDS)
+CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.23-1.1)
 endif
 
 endif

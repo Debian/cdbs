@@ -45,7 +45,8 @@ Maintainer: Colin Walters <walters@debian.org>
 Standards-Version: 3.6.0
 
 Package: cdbs-udeb
-Architecture: any
+XC-Package-Type: udeb
+Architecture: all
 Description: common build system test suite udeb
  This package is the testsuite for the CDBS build system.  If you've 
  managed to install this, something has gone horribly wrong.
@@ -54,6 +55,7 @@ EOF
 # Put our simple autotools test environment in place.
 cp -R autotools/* $WORKDIR
 build_package
+test -f $WORKDIR/../cdbs-udeb_0.1_all.udeb || return_fail
 clean_workdir
 return_pass
 

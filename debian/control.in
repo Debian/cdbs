@@ -11,7 +11,7 @@ Package: cdbs
 Cpu: all
 System: all
 Conflicts: build-common
-Recommends: autotools-dev, debhelper (>= 4.1.0)
+Recommends: autotools-dev, debhelper (>= 4.2.0)
 Suggests: devscripts, doc-base
 Description: common build system for Debian packages
  This package contains the Common Debian Build System, an abstract

@@ -35,18 +35,18 @@ testdir: debian/control
 testroot:
 	test "`id -u`" = 0
 
-$(patsubst %,makebuilddir/%,$(DEB_PACKAGES)) :: makebuilddir/% : 
+$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% : 
 	if [ -n "$(DEB_BUILDDIR_$(cdbs_curpkg))" ]; then \
 	  mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))"; \
 	fi
-makebuilddir:: $(patsubst %,makebuilddir/%,$(DEB_PACKAGES))
+makebuilddir:: $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES))
 	if [ ! -d "$(DEB_BUILDDIR)" ]; then \
 	  mkdir -p "$(DEB_BUILDDIR)"; \
 	fi
 
-cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_PACKAGES))
+cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES))
 	-if test "$(DEB_BUILDDIR)" != "$(DEB_SRCDIR)"; then rmdir $(DEB_BUILDDIR); fi
-$(patsubst %,cleanbuilddir/%,$(DEB_PACKAGES)) :: cleanbuilddir/% : 
+$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% : 
 	-if test -n "$(DEB_BUILDDIR_$(cdbs_curpkg))" && test "$(DEB_BUILDDIR_$(cdbs_curpkg))" != "$(DEB_SRCDIR)"; then rmdir "$(DEB_BUILDDIR_$(cdbs_curpkg))"; fi
 
 
@@ -219,7 +219,6 @@ debian/control::
 ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
 	sed \
 		-e "s/@cdbs@/$(CDBS_BUILD_DEPENDS)/g" \
-		-e "s/^Build-Depends\(\|-Indep\): build-essential, /Build-Depends\1: /g" \
 		-e "s/^Build-Depends\(\|-Indep\): ,/Build-Depends\1:/g" \
 		\
 		-e "s/^Cpu: .*/Architecture: $(control_arch)/g" \

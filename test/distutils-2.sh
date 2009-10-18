@@ -39,6 +39,15 @@ include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 EOF
 chmod +x $WORKDIR/debian/rules
 
+cat >>$WORKDIR/debian/control <<EOF
+
+Package: python-cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+EOF
+
 # Make sure tarball is in place for this test.
 test_tarballs
 cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
