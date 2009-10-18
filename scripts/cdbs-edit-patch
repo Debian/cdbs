@@ -19,10 +19,12 @@ trap "rm -rf $TMP" 0 1 2 3 9 11 13 15
 ORIGDIR=$(basename $(pwd))
 NEWDIR=$ORIGDIR.new
 
+mkdir -p debian/patches
+
 # create clean source package in temporary dir
 cp -a . $TMP/$ORIGDIR
 cd $TMP/$ORIGDIR
-debclean
+debian/rules clean
 
 # create an empty patch if necessary so that the following loop stops at the
 # lexicographic patch position

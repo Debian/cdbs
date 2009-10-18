@@ -1,3 +1,24 @@
+cdbs (0.4.33) unstable; urgency=low
+
+  * Added myself to uploaders
+  * Allow specifying a makefile (makefile-vars.mk) (closes: #282959)
+  * Skip cleaning if DEB_MAKE_CLEAN_TARGET is unset (makefile.mk)
+    (closes: #338625)
+  * Add unpatch target for dpatch-edit-patch (dpatch.mk) (closes: #284231)
+  * Remove debian/patched/ on clean (dpatch.mk) (closes: #285244)
+  * Remove leading comma in Build-Depends line (buildcore.mk)
+    (closes: #294537)
+  * Propagate CPPFLAGS (autotools-vars.mk) (closes: #301667)
+  * Recognize "changelog" as upstream changelog name (debhelper.mk)
+    (closes: #311517)
+  * cdbs-edit-patch: Use debian/rules clean instead of debclean
+    (closes: #327151)
+  * cdbs-edit-patch: Create debian/patches directory (closes: #344383)
+  * Fix typo in documentation (closes: #260408)
+  * Add missing parentheses in python-distutils.mk (closes: #281053)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat,  4 Feb 2006 00:07:53 +0100
+
 cdbs (0.4.32) unstable; urgency=high
 
   * Forgot some build-deps (/me need some more sleep) (Closes: #317640).

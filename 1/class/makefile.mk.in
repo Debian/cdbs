@@ -37,7 +37,12 @@ debian/stamp-makefile-build:
 
 clean:: makefile-clean
 makefile-clean::
-	$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET) || true
+	@if test -n "$(DEB_MAKE_CLEAN_TARGET)"; then \
+	  echo $(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET); \
+	  $(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET) || true; \
+	 else \
+	  echo "DEB_MAKE_CLEAN_TARGET unset, not running clean"; \
+	fi
 	rm -f debian/stamp-makefile-build
 
 common-install-arch common-install-indep:: common-install-impl

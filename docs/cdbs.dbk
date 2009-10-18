@@ -256,7 +256,7 @@ DEB_CONFIGURE_EXTRA_FLAGS := --disable-frobnication</programlisting>
     around, just override the binary-post-install/&lt;packagename&gt;
     target</para>
 
-    <programlisting>binary-post-install/mypackage:
+    <programlisting>binary-post-install/mypackage::
 	mv debian/mypackage/usr/sbin/myprogram \
 	  debian/mypackage/usr/bin/myprogram
 	rm debian/mypackage/usr/share/doc/mypackage/INSTALL</programlisting>

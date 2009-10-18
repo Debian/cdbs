@@ -85,7 +85,7 @@ endif
 is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
 
 DEB_INSTALL_DIRS_ALL =
-DEB_INSTALL_CHANGELOGS_ALL = $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
+DEB_INSTALL_CHANGELOGS_ALL = $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
 DEB_INSTALL_DOCS_ALL = $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
