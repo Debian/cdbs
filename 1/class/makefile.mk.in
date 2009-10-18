@@ -37,32 +37,17 @@ debian/stamp-makefile-build:
 
 clean:: makefile-clean
 makefile-clean::
-	@if test -n "$(DEB_MAKE_CLEAN_TARGET)"; then \
-	  echo $(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET); \
-	  $(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET) || true; \
-	 else \
-	  echo "DEB_MAKE_CLEAN_TARGET unset, not running clean"; \
-	fi
+	$(if $(DEB_MAKE_CLEAN_TARGET),-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),@echo "DEB_MAKE_CLEAN_TARGET unset, not running clean")
 	rm -f debian/stamp-makefile-build
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	@if test -n "$(DEB_MAKE_INSTALL_TARGET)"; then \
-	  echo $(DEB_MAKE_ENVVARS) make -C $(DEB_BUILDDIR) $(DEB_MAKE_INSTALL_TARGET); \
-	  $(DEB_MAKE_INVOKE) $(DEB_MAKE_INSTALL_TARGET); \
-	 else \
-	   echo "DEB_MAKE_INSTALL_TARGET unset, skipping default makefile.mk common-install target"; \
-	 fi
+	$(if $(DEB_MAKE_INSTALL_TARGET),$(DEB_MAKE_INVOKE) $(DEB_MAKE_INSTALL_TARGET),@echo "DEB_MAKE_INSTALL_TARGET unset, skipping default makefile.mk common-install target")
 
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
-	@if test -n "$(DEB_MAKE_CHECK_TARGET)"; then \
-	  echo $(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET); \
-	  $(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET); \
-	else \
-	   echo "DEB_MAKE_CHECK_TARGET unset, not running checks"; \
-	fi
+	$(if $(DEB_MAKE_CHECK_TARGET),$(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET),@echo "DEB_MAKE_CHECK_TARGET unset, not running checks")
 endif
 
 endif

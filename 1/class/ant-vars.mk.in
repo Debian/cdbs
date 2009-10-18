@@ -25,12 +25,16 @@ endif
 ifndef _cdbs_class_ant_vars
 _cdbs_class_ant_vars := 1
 
+# Ant home directory.  Doesn't need to be changed except when using
+# nonstandard Ant installations.
+ANT_HOME = /usr/share/ant
+
 # The home directory of the Java Runtime Environment (JRE) or Java Development
 # Kit (JDK). You can either directly set JAVA_HOME in debian/rules or set
 # JAVA_HOME_DIRS to multiple possible home directories. The first existing
 # directory from this list is used for JAVA_HOME. You can also override
 # JAVACMD in case you don't want to use the default JAVA_HOME/bin/java.
-JAVA_HOME = $(shell for jh in $(JAVA_HOME_DIRS); do if [ -d "$$jh" ]; then \
+JAVA_HOME = $(shell for jh in $(JAVA_HOME_DIRS); do if [ -x "$$jh/bin/java" ]; then \
 	    echo $${jh}; exit 0; fi; done)
 JAVACMD   = $(JAVA_HOME)/bin/java
 
@@ -41,7 +45,7 @@ JAVACMD   = $(JAVA_HOME)/bin/java
 # end of the class path if it exists in the JDK's lib directory.
 # You can override the complete class path using DEB_CLASSPATH.
 DEB_JARS_BASE := /usr/share/java
-DEB_CLASSPATH = $(ANT_HOME)/lib/ant.jar:$(shell for jar in $(DEB_JARS); do \
+DEB_CLASSPATH = $(ANT_HOME)/lib/ant.jar:$(ANT_HOME)/lib/ant-launcher.jar:$(shell for jar in $(DEB_JARS); do \
 		if [ -f "$$jar" ]; then echo -n "$${jar}:"; fi; \
 		if [ -f "$$jar".jar ]; then echo -n "$${jar}.jar:"; fi; \
 		if [ -f $(DEB_JARS_BASE)/"$$jar" ]; then echo -n "$(DEB_JARS_BASE)/$${jar}:"; fi; \

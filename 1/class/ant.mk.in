@@ -47,27 +47,17 @@ debian/stamp-ant-build:
 	touch debian/stamp-ant-build
 
 clean:: ant-sanity-check
-	$(DEB_ANT_INVOKE) $(DEB_ANT_CLEAN_TARGET) || true
+	-$(DEB_ANT_INVOKE) $(DEB_ANT_CLEAN_TARGET)
 	rm -f debian/stamp-ant-build
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	@if test -n "$(DEB_ANT_INSTALL_TARGET)"; then \
-	  echo $(DEB_ANT_INVOKE) $(DEB_ANT_INSTALL_TARGET); \
-	  $(DEB_ANT_INVOKE) $(DEB_ANT_INSTALL_TARGET); \
-	 else \
-	   echo "DEB_ANT_INSTALL_TARGET unset, skipping default ant.mk common-install target"; \
-	 fi
+	$(if $(DEB_ANT_INSTALL_TARGET),$(DEB_ANT_INVOKE) $(DEB_ANT_INSTALL_TARGET),@echo "DEB_ANT_INSTALL_TARGET unset, skipping default ant.mk common-install target")
 
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
-	@if test -n "$(DEB_ANT_CHECK_TARGET)"; then \
-	  echo $(DEB_ANT_INVOKE) $(DEB_ANT_CHECK_TARGET); \
-	  $(DEB_ANT_INVOKE) $(DEB_ANT_CHECK_TARGET); \
-	else \
-	   echo "DEB_ANT_CHECK_TARGET unset, not running checks"; \
-	fi
+	$(if $(DEB_ANT_CHECK_TARGET),$(DEB_ANT_INVOKE) $(DEB_ANT_CHECK_TARGET),@echo "DEB_ANT_CHECK_TARGET unset, not running checks")
 endif
 
 endif

@@ -994,9 +994,6 @@ include /usr/share/cdbs/1/class/ant.mk
 JAVA_HOME := /usr/lib/kaffe
 # or set JAVACMD if you don't use default '<JAVA_HOME>/bin/java' path
 #JAVACMD := /usr/bin/java
-
-# Set Ant location
-ANT_HOME := /usr/share/ant-cvs
 					]]></programlisting>
 				</informalexample>
 			</para>
@@ -1009,11 +1006,6 @@ ANT_HOME := /usr/share/ant-cvs
 DEB_JARS := /usr/lib/java-bonus/ldap-connector adml-adapter.jar
 					</programlisting>
 				</informalexample>
-				<warning>
-					<para>
-						Due to a CDBS bug, you must always add "$(ANT_HOME)/lib/ant-launcher.jar" to DEB_JARS or Ant will fail.
-					</para>
-				</warning>
 			</para>
 			<para>
 				The property file defaults to 'debian/ant.properties'.

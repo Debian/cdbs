@@ -16,10 +16,8 @@ include /usr/share/cdbs/1/class/ant.mk
 # want to use the default JAVA_HOME/bin/java.
 JAVA_HOME := /usr/lib/kaffe
 
-# Ant's home directory. Use /usr/share/ant1.5 for the libant1.5-java package
-# in main. If you need optional Ant tasks, use /usr/share/ant and add
-# $(ANT_HOME)/lib/ant-optional.jar to DEB_JARS below.
-ANT_HOME := /usr/share/ant1.5
+# Ant's home directory.
+ANT_HOME := /usr/share/ant
 
 # Additional JARs to add to the class path, either full path or just the
 # basename for JARs in /usr/share/java. The ".jar" suffix may also be ommitted.

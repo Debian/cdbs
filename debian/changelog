@@ -1,3 +1,21 @@
+cdbs (0.4.36) unstable; urgency=low
+
+  * Conditionalized targets using make conditionals rather than shell
+    tests (ant.mk, makefile.mk); fixes various quoting problems and is
+    more elegant (closes: #262861, #285583, #320097)
+  * Propagate CPPFLAGS to make (makefile-vars.mk)
+  * Added ant test case, entails new build dependencies ant, kaffe
+  * Check for java executable when checking the JAVA_HOME_DIRS (ant-vars.mk)
+    (closes: #239123)
+  * Added ant-launcher.jar to DEB_CLASSPATH (ant-vars.mk)
+    (closes: #239128, #341275)
+  * Set ANT_HOME to /usr/share/ant by default (ant-vars.mk)
+    (closes: #212196)
+  * Removed build dependency on ocaml-native-compilers; ocaml is enough
+    (closes: #355504)
+
+ -- Peter Eisentraut <petere@debian.org>  Mon,  6 Mar 2006 20:55:02 +0100
+
 cdbs (0.4.35) unstable; urgency=low
 
   * Fixed build dependencies in hdparm test case (closes: #354361)
