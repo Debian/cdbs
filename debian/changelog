@@ -1,3 +1,9 @@
+cdbs (0.4.32) unstable; urgency=high
+
+  * Forgot some build-deps (/me need some more sleep) (Closes: #317640).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sun, 10 Jul 2005 17:41:45 +0200
+
 cdbs (0.4.31) unstable; urgency=low
 
   * Added CDBS guide from DuckCorp.

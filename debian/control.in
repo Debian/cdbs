@@ -2,7 +2,7 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep: @cdbs@, docbook-xsl, xsltproc, springgraph, ocaml-native-compilers | ocaml, realpath, fakeroot, python-dev
+Build-Depends-Indep: @cdbs@, springgraph, ocaml-native-compilers | ocaml, realpath, fakeroot, python-dev, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, db2latex-xsl, tetex-extra, catdvi
 Build-Conflicts-Indep: autoconf (<< 2.54)
 Uploaders: Colin Walters <walters@debian.org>, Jeff Bailey <jbailey@raspberryginger.com>, Jonas Smedegaard <dr@jones.dk>, Chris Cheney <ccheney@debian.org>, Stefan Gybas <sgybas@debian.org>, Robert Millan <rmh@debian.org>, Marc Dequènes (Duck) <Duck@DuckCorp.org>
 Standards-Version: 3.6.2.1
