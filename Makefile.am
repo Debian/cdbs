@@ -16,9 +16,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-AUTOMAKE_OPTIONS = 1.7 foreign
+AUTOMAKE_OPTIONS = 1.8 foreign no-dist
 
-SUBDIRS = test
+SUBDIRS = guide test
 
 BUILT_SOURCES =
 
@@ -84,6 +84,7 @@ rules_DATA = $(wildcard 1/rules/*.mk)
 rulesdir = $(pkgdatadir)/1/rules
 
 bin_SCRIPTS = scripts/cdbs-edit-patch
+dist_man_MANS = scripts/cdbs-edit-patch.1
 
 all_scripts_in_files := $(wildcard scripts/*.in)
 scripts_SCRIPTS = scripts/list-packages
@@ -99,13 +100,12 @@ endif
 if HAVE_DOCBOOK
 DBKXSL=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl
 
-noinst_dbkdocs_DATA = docs/why.dbk docs/cdbs.dbk
-noinst_dbkdocsdir = $(docdir)
-builtdbkdocs_DATA = $(noinst_dbkdocs_DATA:%.dbk=%.html)
-BUILT_SOURCES += $(builtdbkdocs_DATA)
-CLEANFILES += $(builtdbkdocs_DATA)
-builtdbkdocsdir = $(docdir)
+dbksources = docs/why.dbk docs/cdbs.dbk
+dbktargets = $(dbksources:%.dbk=%.html)
 
+docbook_DATA = $(dbktargets)
+docbookdir = $(docdir)
+CLEANFILES += $(dbktargets)
 
 %.html: %.dbk
 	xsltproc --nonet $(DBKXSL) $<
@@ -115,4 +115,4 @@ endif
 example_DATA = $(wildcard examples/*.rules)
 exampledir = $(docdir)/examples
 
-EXTRA_DIST = $(all_mk_in_files) $(all_scripts_in_files) $(example_DATA) $(regulardocs_DATA) gen-dotty.ml OCamlMakefile tests/pbuilder-all.sh
+EXTRA_DIST = $(all_mk_in_files) $(all_scripts_in_files) $(example_DATA) $(regulardocs_DATA) $(dbksources) gen-dotty.ml OCamlMakefile tests/pbuilder-all.sh

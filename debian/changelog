@@ -1,3 +1,31 @@
+cdbs (0.4.34) unstable; urgency=low
+
+  * Removed old FSF address from copyright file
+  * Removed spurious leftover confstatMD3O4Y directory
+  * Only print "deprecated" warning if variable is actually changed from
+    default (closes: #256079)
+  * Corrected DEB_COMPRESS_EXCLUDE, DEB_FIXPERMS_EXCLUDE documentation
+    (debhelper.mk) (closes: #260531)
+  * Cosmetic change to make emacs font-lock happier (buildcore.mk)
+    (closes: #317870)
+  * Corrected typo in guide (closes: #348536)
+  * Use elinks to build better-looking plain-text documentation
+    (closes: #330707)
+  * Properly (un)indented makefile comments so they don't appear in the
+    output (closes: #311464)
+  * Removed useless old changelogs
+  * Renamed documentation files from .xhtml to .html
+  * Integrated guide build better with Automake
+  * Eliminated installation of .dbk files
+  * Added man page for cdbs-edit-patch and accept --help (closes: #312736)
+  * Added Suggests of devscripts (better fix for #327151)
+  * Fixed testsuite so that it actually fails if there is an error
+  * Added a python-* package to testsuite so the distutils tests actually
+    do something; fixed Makefile.am so that they have a chance of being
+    called
+
+ -- Peter Eisentraut <petere@debian.org>  Fri, 17 Feb 2006 19:19:02 +0100
+
 cdbs (0.4.33) unstable; urgency=low
 
   * Added myself to uploaders

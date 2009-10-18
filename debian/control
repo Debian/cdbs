@@ -2,16 +2,16 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep: autotools-dev, type-handling (>= 0.2.5), debhelper (>= 4.1.0), springgraph, ocaml-native-compilers | ocaml, realpath, fakeroot, python-dev, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, db2latex-xsl, tetex-extra, catdvi
+Build-Depends-Indep: autotools-dev, type-handling (>= 0.2.5), debhelper (>= 4.1.0), springgraph, ocaml-native-compilers | ocaml, realpath, fakeroot, python-dev, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, db2latex-xsl, tetex-extra, elinks
 Build-Conflicts-Indep: autoconf (<< 2.54)
 Uploaders: Colin Walters <walters@debian.org>, Jeff Bailey <jbailey@raspberryginger.com>, Jonas Smedegaard <dr@jones.dk>, Chris Cheney <ccheney@debian.org>, Stefan Gybas <sgybas@debian.org>, Robert Millan <rmh@debian.org>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
-Standards-Version: 3.6.2.1
+Standards-Version: 3.6.2
 
 Package: cdbs
 Architecture: all
 Conflicts: build-common
 Recommends: autotools-dev, debhelper (>= 4.1.0)
-Suggests: doc-base
+Suggests: devscripts, doc-base
 Description: common build system for Debian packages
  This package contains the Common Debian Build System, an abstract
  build system based on Makefile inheritance which is completely

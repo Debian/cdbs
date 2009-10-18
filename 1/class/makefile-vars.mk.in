@@ -46,6 +46,7 @@ DEB_MAKE_BUILD_TARGET = $(DEB_BUILD_MAKE_TARGET)
 # This variable is deprecated.
 DEB_CLEAN_MAKE_TARGET = clean
 _cdbs_deprecated_vars += DEB_CLEAN_MAKE_TARGET
+_cdbs_deprecated_DEB_CLEAN_MAKE_TARGET_default := $(DEB_CLEAN_MAKE_TARGET)
 # New in 0.2.8.
 DEB_MAKE_CLEAN_TARGET = $(DEB_CLEAN_MAKE_TARGET)
 

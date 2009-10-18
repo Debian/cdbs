@@ -32,9 +32,9 @@
 # DEB_INSTALL_CHANGELOGS_ALL
 #   File which should be interpreted as upstream changelog
 # DEB_COMPRESS_EXCLUDE
-#   Shell wildcards matching files which should not be compressed.
+#   Regular expressions matching files which should not be compressed.
 # DEB_FIXPERMS_EXCLUDE
-#   Shell wildcards matching files which should not have their permissions changed.
+#   Regular expressions matching files which should not have their permissions changed.
 # DEB_DH_ALWAYS_EXCLUDE
 #   Force builddeb to exclude files.  See the DH_ALWAYS_EXCLUDE section
 #   in debhelper(7) for more details.
@@ -213,7 +213,7 @@ $(patsubst %,binary-makeudeb/%,$(DEB_UDEB_PACKAGES)) :: binary-makeudeb/% : comm
 	dh_installdeb -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEB_ARGS)
 	dh_perl -p$(cdbs_curpkg) $(DEB_DH_PERL_ARGS)
 	dh_shlibdeps -p$(cdbs_curpkg) $(DEB_DH_SHLIBDEPS_ARGS)
-	# udebs should only have a 'control' file
+# udebs should only have a 'control' file
 	rm -f debian/$(cdbs_curpkg)/DEBIAN/*
 	dh_gencontrol -p$(cdbs_curpkg) -- -fdebian/files~
 	dpkg-distaddfile $(cdbs_curpkg)_$(DEB_NOEPOCH_VERSION)_$(DEB_ARCH).udeb debian-installer optional

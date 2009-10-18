@@ -75,10 +75,10 @@ deapply-dpatches:
 	$(MAKE) -f debian/rules reverse-config
 	dpatch deapply-all
 	rm -rf debian/patched
-	# after reverting patches, we don't need update-config because:
-	#  - the tree is already in a consistent state.
-	#  - the initialisation of this routine is already in charge of making
-	#    the tree not only consistent, but also prepared to accept patching.
+# after reverting patches, we don't need update-config because:
+#  - the tree is already in a consistent state.
+#  - the initialisation of this routine is already in charge of making
+#    the tree not only consistent, but also prepared to accept patching.
 
 # for the benefit of dpatch-edit-patch
 unpatch: deapply-dpatches

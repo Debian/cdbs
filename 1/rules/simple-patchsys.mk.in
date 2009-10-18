@@ -141,10 +141,10 @@ debian/stamp-patched reverse-patches:
 	elif [ "$@" = "reverse-patches" ] ; then rm -f debian/stamp-patch* ; \
 	fi
 
-	# after reverting patches, we don't need update-config because:
-	#  - the tree is already in a consistent state.
-	#  - the initialisation of this routine is already in charge of making
-	#    the tree not only consistent, but also prepared to accept patching.
+# after reverting patches, we don't need update-config because:
+#  - the tree is already in a consistent state.
+#  - the initialisation of this routine is already in charge of making
+#    the tree not only consistent, but also prepared to accept patching.
 	if [ "$@" != "reverse-patches" ] ; then \
 		$(MAKE) -f debian/rules update-config ; \
 	fi

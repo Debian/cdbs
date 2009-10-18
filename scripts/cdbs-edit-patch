@@ -6,7 +6,7 @@
 
 dh_testdir
 
-if [ -z "$1" ]; then
+if [ -z "$1" ] || [ "$1" = "--help" ]; then
     echo "Usage: $0 <patch name>"
     exit 0
 fi
@@ -24,7 +24,7 @@ mkdir -p debian/patches
 # create clean source package in temporary dir
 cp -a . $TMP/$ORIGDIR
 cd $TMP/$ORIGDIR
-debian/rules clean
+debclean
 
 # create an empty patch if necessary so that the following loop stops at the
 # lexicographic patch position

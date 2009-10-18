@@ -243,7 +243,7 @@ install/foo::
    cp debian/tmp/myfoocmd debian/foo/foocmd
    find debian/foo/ -name "CVS" -depth -exec rm -rf {} \;
 
-install/foo-date::
+install/foo-data::
    cp data/*.png debian/foo-data/usr/share/foo-data/images/
    dh_stuff -m ipot -f plop.bz3 debian/foo-data/libexec/
 					</programlisting>

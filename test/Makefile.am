@@ -31,7 +31,7 @@ TESTS = autotools-1.sh \
 	hdparm.sh
 
 if HAVE_PYTHON
-	TESTS += distutils-1.sh distutils-2.sh
+TESTS += distutils-1.sh distutils-2.sh
 endif
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \

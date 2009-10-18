@@ -5,8 +5,8 @@ Abstract: Documentation for the CDBS build system
 Section: Apps/Tools
 
 Format: HTML
-Index: /usr/share/doc/cdbs/cdbs-doc.xhtml
-Files: /usr/share/doc/cdbs/*.xhtml
+Index: /usr/share/doc/cdbs/cdbs-doc.html
+Files: /usr/share/doc/cdbs/*.html
 
 Format: PDF
 Files: /usr/share/doc/cdbs/cdbs-doc.pdf.gz
@@ -16,4 +16,3 @@ Files: /usr/share/doc/cdbs/cdbs-doc.ps.gz
 
 Format: text
 Files: /usr/share/doc/cdbs/cdbs-doc.txt.gz
-
