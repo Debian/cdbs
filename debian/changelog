@@ -1,8 +1,11 @@
 cdbs (0.4.62) UNRELEASED; urgency=low
 
   [ Jonas Smedegaard ]
+  * Move source to collab-maint Git at Alioth. Update Vcs-* stanzas.
   * Fix detect exit code in for loops in python-distutils.mk. Closes:
     bug#546589.
+  * Disable silent rules (introduced in automake 1.11) in autotools-
+    vars.mk.  Closes: bug#551453, thanks to Josselin Mouette.
 
   [ Marc Dequènes (Duck) ]
   * Applied patch from Barry deFreese <bdefreese@debian.org> and Torsten
@@ -20,10 +23,10 @@ cdbs (0.4.62) UNRELEASED; urgency=low
 
   [ Peter Eisentraut ]
   * Updated standards version
-  * Document more clearly that a build dependency on autotools-dev should be
-    added to get config.{guess,sub} updates reliably
+  * Document more clearly that a build dependency on autotools-dev
+    should be added to get config.{guess,sub} updates reliably
 
- -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Sun, 11 Oct 2009 00:32:56 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Oct 2009 14:45:29 +0200
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 
