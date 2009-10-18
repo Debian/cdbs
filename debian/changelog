@@ -1,3 +1,13 @@
+cdbs (0.4.63) UNRELEASED; urgency=low
+
+  * Update autotools using automake 1.11 and autoconf 2.64, config.guess
+    and config.sub snapshots from 20090611.
+  * Update licensing years and merge now (after autotools update)
+    identically licensed files in debian/copyright.
+  * Reformat debian/copyright to follow draft DEP5 rev59.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Oct 2009 21:17:11 +0200
+
 cdbs (0.4.62) unstable; urgency=low
 
   [ Jonas Smedegaard ]
