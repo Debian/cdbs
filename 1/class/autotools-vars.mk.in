@@ -65,20 +65,20 @@ DEB_CONFIGURE_LIBEXECDIR ="\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
 DEB_CONFIGURE_EXTRA_FLAGS =
 
 ifneq (, $(DEB_AUTO_UPDATE_LIBTOOL))
-CDBS_BUILD_DEPENDS += , libtool
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), libtool
 endif
 
 ifneq (:, $(DEB_AUTO_UPDATE_ACLOCAL):$(DEB_AUTO_UPDATE_AUTOMAKE))
 ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), $(DEB_AUTO_UPDATE_AUTOMAKE))
 # avoid duped build-dependencies
-CDBS_BUILD_DEPENDS += , automake-$(DEB_AUTO_UPDATE_ACLOCAL)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake-$(DEB_AUTO_UPDATE_ACLOCAL)
 else
 # either only one of them is required, or different versions are
 ifneq (, $(DEB_AUTO_UPDATE_ACLOCAL))
-CDBS_BUILD_DEPENDS += , automake-$(DEB_AUTO_UPDATE_ACLOCAL)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake-$(DEB_AUTO_UPDATE_ACLOCAL)
 endif
 ifneq (, $(DEB_AUTO_UPDATE_AUTOMAKE))
-CDBS_BUILD_DEPENDS += , automake-$(DEB_AUTO_UPDATE_AUTOMAKE)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake-$(DEB_AUTO_UPDATE_AUTOMAKE)
 endif
 endif
 endif
@@ -87,24 +87,24 @@ ifneq (:, $(DEB_AUTO_UPDATE_AUTOCONF):$(DEB_AUTO_UPDATE_AUTOHEADER))
 ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), $(DEB_AUTO_UPDATE_AUTOHEADER))
 # avoid duped build-dependencies
 ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), 2.13)
-CDBS_BUILD_DEPENDS += , autoconf2.13
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
 else
-CDBS_BUILD_DEPENDS += , autoconf
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
 endif
 else
 # either only one of them is required, or different versions are
 ifneq (, $(DEB_AUTO_UPDATE_AUTOCONF))
 ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), 2.13)
-CDBS_BUILD_DEPENDS += , autoconf2.13
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
 else
-CDBS_BUILD_DEPENDS += , autoconf
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
 endif
 endif
 ifneq (, $(DEB_AUTO_UPDATE_AUTOHEADER))
 ifeq ($(DEB_AUTO_UPDATE_AUTOHEADER), 2.13)
-CDBS_BUILD_DEPENDS += , autoconf2.13
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
 else
-CDBS_BUILD_DEPENDS += , autoconf
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
 endif
 endif
 endif

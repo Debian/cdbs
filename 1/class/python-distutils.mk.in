@@ -56,7 +56,7 @@ common-build-impl::
 clean::
 # Ignore errors from this rule.  In a tarball build, the file
 # may not exist.
-	-python $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 
 # See if this package doesn't appear to need to be compiled by multiple
 # Python versions.

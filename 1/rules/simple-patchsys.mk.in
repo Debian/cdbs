@@ -48,7 +48,7 @@ done)
 # if we have any patches, check if some are patching config.{guess,sub,rpath}
 # and print a warning
 ifneq (, $(DEB_PATCHES))
-CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), patchutils
+CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), patchutils (>= 0.2.25)
 evil_patches_that_do_nasty_things := $(shell\
 if lsdiff=`which lsdiff` ; then \
   $$lsdiff -H $(DEB_PATCHES) \
@@ -62,7 +62,9 @@ endif
 post-patches:: apply-patches
 
 clean:: reverse-patches
-	rm -f debian/patches/*.log
+	for dir in $(DEB_PATCHDIRS) ; do \
+	    rm -f $$dir/*.log ; \
+	done
 
 # The patch subsystem 
 apply-patches: pre-build debian/stamp-patched
@@ -138,8 +140,14 @@ debian/stamp-patched reverse-patches:
 	if [ "$@" = "debian/stamp-patched" ] ; then touch debian/stamp-patched ; \
 	elif [ "$@" = "reverse-patches" ] ; then rm -f debian/stamp-patch* ; \
 	fi
-	$(MAKE) -f debian/rules update-config
 
+	# after reverting patches, we don't need update-config because:
+	#  - the tree is already in a consistent state.
+	#  - the initialisation of this routine is already in charge of making
+	#    the tree not only consistent, but also prepared to accept patching.
+	if [ "$@" != "reverse-patches" ] ; then \
+		$(MAKE) -f debian/rules update-config ; \
+	fi
 endif
 
 endif

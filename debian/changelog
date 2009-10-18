@@ -1,3 +1,37 @@
+cdbs (0.4.29) unstable; urgency=low
+
+  * The "back from vac" release.
+
+  * Add DEB_PATCHES initialisation.  (Closes: #295250, #296763, #300465)
+    - 1/rules/dpatch.mk.in
+  * Don't call update-config after reverting patches.  (Closes: #299010)
+    - 1/rules/simple-patchsys.mk.in
+    - 1/rules/dpatch.mk.in
+  * Make sure CDBS_BUILD_DEPENDS is _always_ initialised.  (Closes: #308664)
+    - 1/rules/buildvars.mk.in: Initialise it with "build-essential".
+    - 1/rules/buildcore.mk.in: Strip "build-essential" which isn't needed.
+  * Fix minor syntax error in CDBS_BUILD_DEPENDS construction.
+    - 1/class/autotools-vars.mk.in
+  * Turn patchutils weak dependency into versioned (>= 0.2.25).
+    (Closes: #308983)
+    - 1/rules/simple-patchsys.mk.in
+    - 1/rules/dpatch.mk.in
+  * Fix for parsing of double quotes in control file generation.  This is
+    related to #301607.  Thanks Jonas Smedegaard.
+    - 1/rules/buildcore.mk.in
+  * Clean *.log files from each dir listed in $(DEB_PATCHDIRS).  Thanks
+    Adeodato Simo.  (Closes: #296984)
+    - 1/rules/simple-patchsys.mk.in
+  * Add perl-modules support to CDBS_BUILD_DEPENDS.  (Closes: #305488)
+    - 1/class/perlmodule.mk.in
+  * Add $(DEB_PYTHON_COMPILE_VERSION) to python command.  Thanks Bastian
+    Kleineidam.  (Closes: #307342)
+    - 1/class/python-distutils.mk.in
+  * Fix typo in automake weak dependencies.  (Closes: #301692)
+    - 1/class/autotools-vars.mk
+
+ -- Robert Millan <rmh@debian.org>  Wed, 18 May 2005 12:52:21 +0200
+
 cdbs (0.4.28-1) unstable; urgency=low
 
   * Merge changes from Ubuntu (0.4.26-1ubuntu1):

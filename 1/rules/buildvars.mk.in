@@ -74,12 +74,11 @@ else
 	DEB_DESTDIR = $(CURDIR)/debian/tmp/
 endif
 
+# make sure it is initialised.  this dummy string can be nuked later
+CDBS_BUILD_DEPENDS	?= build-essential
+
 ifeq ($(_cdbs_bootstrap), )
-ifeq ($(CDBS_BUILD_DEPENDS), )
-CDBS_BUILD_DEPENDS	= cdbs (>= 0.4.23-1.1)
-else
 CDBS_BUILD_DEPENDS	:= cdbs (>= 0.4.23-1.1), $(CDBS_BUILD_DEPENDS)
-endif
 endif
 
 endif
