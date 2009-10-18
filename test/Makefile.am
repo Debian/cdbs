@@ -34,10 +34,11 @@ TESTS = autotools-1.sh \
 	debhelper-3.sh \
 	debhelper-4.sh \
 	debhelper-5.sh \
-	ant-1.sh
+	ant-1.sh \
+	patchsys-1.sh
 
 if HAVE_PYTHON
-TESTS += distutils-1.sh distutils-2.sh
+TESTS += distutils-1.sh distutils-2.sh distutils-3.sh distutils-4.sh
 endif
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \

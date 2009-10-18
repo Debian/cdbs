@@ -173,8 +173,9 @@ common-build-indep:: testdir $(patsubst %,configure/%,$(DEB_INDEP_PACKAGES))
 $(patsubst %,build/%,$(DEB_ARCH_PACKAGES)) :: build/% : common-build-arch configure/%
 $(patsubst %,build/%,$(DEB_INDEP_PACKAGES)) :: build/% : common-build-indep configure/%
 
-# This rule is for stuff to run after the build process.  Typically
-# this will be things like 'make check'. 
+# This rule is for stuff to run after the build process.  Note that this
+# may run under fakeroot or sudo, so it's inappropriate for things that
+# should be run under the build target.
 common-post-build-arch:: common-build-arch $(patsubst %,build/%,$(DEB_ARCH_PACKAGES)) 
 common-post-build-indep:: common-build-indep $(patsubst %,build/%,$(DEB_INDEP_PACKAGES)) 
 
@@ -280,5 +281,10 @@ common-install:: common-install-arch common-install-indep
 common-binary:: common-binary-arch common-binary-indep
 
 .PHONY: pre-build apply-patches post-patches common-configure-arch common-configure-indep $(patsubst %,configure/%,$(DEB_ALL_PACKAGES)) build common-build-arch common-build-indep $(patsubst %,build/%,$(DEB_ALL_PACKAGES)) build-arch build-indep clean common-install-arch common-install-indep install-arch install-indep $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) common-binary-arch common-binary-indep $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) binary-indep binary-arch binary $(DEB_PHONY_RULES)
+
+# Parallel execution of the cdbs makefile fragments will fail, but
+# this way you can call dpkg-buildpackage with MAKEFLAGS=-j in the
+# environment and the package's own makefiles can use parallel make.
+.NOTPARALLEL:
 
 endif

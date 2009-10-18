@@ -33,7 +33,7 @@ _cdbs_included_patchsys := 1
 _cdbs_patch_system_apply_rule := apply-patches
 _cdbs_patch_system_unapply_rule := reverse-patches
 
-DEB_PATCH_SUFFIX ?= .diff .diff.gz .diff.bz2 .patch .patch.gz .patch.bz2 
+DEB_PATCH_SUFFIX ?= .diff .diff.gz .diff.bz2 .diff.uu .patch .patch.gz .patch.bz2 .patch.uu
 DEB_PATCHDIRS ?= debian/patches
 close_parenthesis ?= )
 DEB_PATCHES := $(shell\
@@ -86,6 +86,7 @@ debian/stamp-patched reverse-patches:
           case $$patch in \
             *.gz) cat=zcat ;; \
             *.bz2) cat=bzcat ;; \
+            *.uu) cat="uudecode -o -" ;; \
             *) cat=cat ;; \
           esac; \
 	  level=$$(head $$patch | egrep '^#DPATCHLEVEL=' | cut -f 2 -d '='); \
@@ -114,6 +115,7 @@ debian/stamp-patched reverse-patches:
 	    if test -z "$$success"; then \
 	      if test -z "$$reverse"; then \
 	        echo "failure."; \
+	        touch debian/stamp-patched; \
 	        exit 1; \
 	       else \
 	         echo "failure (ignored)."; \
@@ -133,6 +135,7 @@ debian/stamp-patched reverse-patches:
 	    else \
 	      echo "failure:"; \
 	      cat $$logfile; \
+	      touch debian/stamp-patched; \
 	      if test -z "$$reverse"; then exit 1; fi; \
             fi; \
 	  fi; \

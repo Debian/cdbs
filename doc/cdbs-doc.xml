@@ -107,14 +107,14 @@
       hundreds (if not thousands) of
       <command>dh_make</command>-generated source packages (and had
       possibly been modified), it would likely be years before most
-      packages were updated.  And there are many packages which
+      packages were updated.  And there are many packages that
       predate <varname>DEB_BUILD_OPTIONS</varname> and don't even use
       it at all, when they easily could.</para>
 
       <para>The Unix and hacker cultures in general have long looked
       down upon generated code, and for good reason.  It is often hard
       to edit, and there is almost always no way to regenerate the
-      code, but keep your local changes.  Instead of generating code
+      code but keep your local changes.  Instead of generating code
       (like all the Microsoft tools tend to do), the Unix tradition is
       to create a metalanguage, a compiler, or some other form of
       abstraction.</para>
@@ -144,7 +144,7 @@
       yourself.</para>
 
       <para>Third, CDBS tries to make the common case easy.  If you
-      have a package which uses the GNU autotools and such, you can
+      have a package that uses the GNU autotools and such, you can
       have a working build system simply by including about two or
       three makefile fragments.  No custom code required at all.
       Additionally, CDBS has even higher-level makefile fragments; for
@@ -290,7 +290,7 @@ include /usr/share/cdbs/1/class/autotools.mk
       <filename><replaceable>package</replaceable>.info</filename>,
       etc. as you usually do with <command>dh_*</command> commands,
       and CDBS will call them if necessary, autodetecting a lot of
-      things.  In case of a missing compatibility information, CDBS
+      things.  In case of missing Debhelper compatibility information, CDBS
       will create a <filename>debian/compat</filename> file with
       compatibility level 5.</para>
 
@@ -343,7 +343,7 @@ DEB_BUILDDIR = $(DEB_SRCDIR)/build
 # in which directory to install the sofware
 DEB_DESTDIR = $(CURDIR)/plop/
 </programlisting>
-      Remember you can get the package directory using the
+      Remember that you can get the package directory using the
       <varname>CURDIR</varname> variable.</para>
 
       <para>Note that the variables should be set
@@ -527,7 +527,7 @@ cleanbuilddir/foo::
 
       <para>Now, let's suppose your package is a little bit strange
       (e.g. Perl); perhaps it has a <command>Configure</command>
-      script which isn't made by Autoconf; this script might instead
+      script that isn't made by Autoconf; this script might instead
       expect the user to interactively configure the program.  In that
       case, you can just implement the
       <literal>common-configure</literal> rule, by adding something
@@ -544,7 +544,7 @@ common-configure::
       <filename>autotools.mk</filename>, since then you'll get
       <emphasis>two</emphasis> implementations of common-configure,
       which is sure to fail.  It would be nice to be able to partially
-      override rule fragments, but this is a tricky problem.</para>
+      override rule fragments, but that is a tricky problem.</para>
 
       <para>Rules that add commands should normally be written
       <emphasis>after</emphasis> including any CDBS rule fragments,
@@ -646,6 +646,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
           <listitem><para>dh_installmenu</para></listitem>
           <listitem><para>dh_installmime</para></listitem>
           <listitem><para>dh_installpam</para></listitem>
+          <listitem><para>dh_installudev</para></listitem>
           <listitem><para>dh_link</para></listitem>
           <listitem><para>dh_makeshlibs</para></listitem>
           <listitem><para>dh_md5sums</para></listitem>
@@ -769,13 +770,33 @@ binary-install/foo::
         packages built from the same source package.  Debhelper
         facilitates the creation of these debug packages by the
         <option>--dbg-package</option> option in the command
-        <command>dh_strip</command>.  CDBS in turn will automatically
-        call <command>dh_strip</command> with the right options if
-        exactly one debug package is mentioned in
-        <filename>debian/control</filename> and Debhelper level 5
-        compatibility is used, so that the debugging symbols of all
-        other binary packages are included in that debug
-        package.</para>
+        <command>dh_strip</command>.  CDBS has support for creating
+        debug packages, if Debhelper level 5 compatibility is
+        used.</para>
+
+        <para>CDBS will automatically call <command>dh_strip</command>
+        with the right options if exactly one debug package is
+        mentioned in <filename>debian/control</filename> and so that
+        the debugging symbols of all other binary packages are
+        included in that debug package.  This takes care of the most
+        common situation.</para>
+
+        <para>To control more finely which debug symbols go where, in
+        particular if you want to build more than one debug package,
+        there are variables
+        <varname>DEB_DBG_PACKAGE_<replaceable>package</replaceable></varname>
+        that specify the debug package target for each individual
+        binary package.  An example usage would be:
+<programlisting>
+DEB_DBG_PACKAGE_libfoo4 = libfoo-dbg
+DEB_DBG_PACKAGE_foo-bin = foo-bin-dbg
+</programlisting>
+        </para>
+
+        <para>If exactly one debug package is defined but you do not
+        want to put all debug symbols into it, unset the variable
+        <varname>DEB_DBG_PACKAGE_ALL</varname> and optionally assign
+        the debug packages individually as shown above.</para>
       </sect2>
     </sect1>
   </chapter>
@@ -968,7 +989,7 @@ include /usr/share/cdbs/1/class/autotools.mk
       <para>Suppose you need to pass some additional options to
       <command>configure</command>.  The
       <filename>autotools.mk</filename> file includes a number of
-      variables which you can override for that purpose, like this:
+      variables that you can override for that purpose, like this:
 
 <programlisting>
 DEB_CONFIGURE_EXTRA_FLAGS := --enable-ipv6 --with-foo
@@ -1313,13 +1334,18 @@ include /usr/share/cdbs/1/class/kde.mk
       following options:
       <variablelist>
         <varlistentry>
-          <term><literal>nofinal</literal></term>
+          <term><literal>noopt</literal></term>
           <listitem><para>disable KDE final mode</para></listitem>
         </varlistentry>
 
         <varlistentry>
           <term><literal>nostrip</literal></term>
           <listitem><para>enable KDE debug mode and disable KDE final mode</para></listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><literal>debug</literal></term>
+          <listitem><para>enable full KDE debug mode</para></listitem>
         </varlistentry>
       </variablelist>
       </para>
@@ -1495,7 +1521,8 @@ include /usr/share/cdbs/1/class/hbuild.mk
       after clean.  It is possible to use patch level 0 to 3, and CDBS
       will try them and use the right level automatically.  The system
       can handle compressed patches with an additionnal
-      <filename>.gz</filename> or <filename>.bz2</filename>
+      <filename>.gz</filename> or <filename>.bz2</filename> suffix as
+      well as uuencoded patches with a <filename>.uu</filename>
       suffix.</para>
 
       <para>You can customize the directories where patches are
@@ -1506,8 +1533,9 @@ DEB_PATCH_SUFFIX := .plop
 </programlisting>
       The defaults are: <filename>.diff</filename>,
       <filename>.diff.gz</filename>, <filename>.diff.bz2</filename>,
-      <filename>.patch</filename>, <filename>.patch.gz</filename>,
-      <filename>.patch.bz2</filename>.</para>
+      <filename>.diff.uu</filename>, <filename>.patch</filename>,
+      <filename>.patch.gz</filename>, <filename>.patch.bz2</filename>,
+      <filename>.patch.uu</filename>.</para>
 
       <para>In case of errors when applying, for example
       <filename>debian/pacthes/01_hurd_ftbfs_pathmax.patch</filename>,

@@ -38,7 +38,7 @@ DEB_PYTHON_VERSIONS = 2.1 2.2 2.3 2.4
 
 DEB_PYTHON_SETUP_CMD = setup.py
 DEB_PYTHON_CLEAN_ARGS = -a
-DEB_PYTHON_BUILD_ARGS = --build-base="$(DEB_BUILDDIR)/build"
+DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile -O0
 
 # make: *** No rule to make target `voodoo'.  Stop.
@@ -48,7 +48,7 @@ ifeq (,$(DEB_PYTHON_REAL_LIB_PACKAGES))
 DEB_PYTHON_SIMPLE_PACKAGES := $(strip $(filter python-%,$(DEB_ALL_PACKAGES)))
 endif
 
-cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst install/python%,%,$@)))
+cdbs_python_ver = $(filter-out -%,$(subst -, -,$(patsubst python%,%,$(cdbs_curpkg))))
 
 common-build-arch common-build-indep:: common-build-impl
 common-build-impl::
@@ -67,11 +67,11 @@ common-install-impl::
 	cd $(DEB_SRCDIR) && /usr/bin/python$(DEB_PYTHON_COMPILE_VERSION) $(DEB_PYTHON_SETUP_CMD) install --root=$(DEB_DESTDIR) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 else
 $(patsubst %,install/%,$(DEB_PYTHON_REAL_LIB_PACKAGES)) :: install/% :
-	cd $(DEB_SRCDIR) && /usr/bin/python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) install --root=debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
+	cd $(DEB_SRCDIR) && /usr/bin/python$(cdbs_python_ver) $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 endif
 
 $(patsubst %,install/%,$(DEB_PYTHON_SIMPLE_PACKAGES)) :: install/% :
-	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root="debian/$(cdbs_curpkg)" $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
+	cd $(DEB_SRCDIR) && python $(DEB_PYTHON_SETUP_CMD) install --root=$(CURDIR)/debian/$(cdbs_curpkg) $(DEB_PYTHON_INSTALL_ARGS_ALL) $(DEB_PYTHON_INSTALL_ARGS_$(cdbs_curpkg))
 
 # This class can optionally utilize debhelper's "dh_python" command.  Just
 # be sure you include debhelper.mk before including this file.

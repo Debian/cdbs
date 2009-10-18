@@ -1,3 +1,37 @@
+cdbs (0.4.38) unstable; urgency=low
+
+  * Added support for uuencoded patches (patch by Christopher Martin)
+    (simple-patchsys.mk) (closes: #305857); test case in patchsys-1.sh
+  * Enabled use of $(cdbs_python_ver) in all package-specific targets
+    (patch by Tommi Virtanen) (python-distutils.mk) (closes: #295906);
+    test case in distutils-3.sh
+  * cdbs-edit-patch: Preserve comment in patch (closes: #332501)
+  * Added .NOTPARALLEL target in buildcore.mk to allow parallel make to
+    work (see comment there) (closes: #240981)
+  * Added call to dh_installudev if available (debhelper.mk)
+  * Clean target now reverses patches if some failed to apply
+    (simple-patchsys.mk) (closes: #263168)
+  * Added dpatch stamp file so dpatch apply-all is called only once per
+    build (dpatch.mk) (closes: #318295)
+  * Arranged dh_installinit call so that DEB_UPDATE_RCD_PARAMS is always
+    quoted (debhelper.mk) (closes: #242831)
+  * Run checks under build (not binary) target (ant.mk, makefile.mk);
+    adjusted comments accordingly (buildcore.mk) (closes: #244692)
+  * Enhanced debug package support, with support for multiple debug
+    packages (debhelper.mk)
+  * Merged changes from KDE team (kde.mk):
+    - Support for tarball builds
+    - Directories more flexible
+    - Corrected and improved handling of debug and final options
+    - More files excluded from compression
+    - dh_makeshlibs does not use -V by default anymore
+    - Support for building apidox
+  * Fixed certain cases of Python distutils plus tarball installing in
+    wrong directory (python-distutils.mk) (closes: #281055); test case
+    in distutils-4.sh
+
+ -- Peter Eisentraut <petere@debian.org>  Thu,  6 Apr 2006 22:10:35 +0200
+
 cdbs (0.4.37) unstable; urgency=low
 
   * Merged all existing documentation, readmes, and examples into one

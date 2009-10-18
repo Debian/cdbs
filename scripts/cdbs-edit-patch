@@ -2,7 +2,25 @@
 # create or edit a cdbs simple-patchsys.mk patch
 #
 # (C) 2005 Martin Pitt <mpitt@debian.org>
-# This file is distributed as public domain.
+#
+#  This script is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2 as
+#  published by the Free Software Foundation.
+
+
+# Stolen from quilt
+patch_header()
+{
+    awk '
+        $1 == "***" || $1 == "---" \
+                { exit }
+        /^Index:[ \t]|^diff[ \t]|^==*$|^RCS file: |^retrieving revision [0-9]+(\.[0-9]+)*$/ \
+                { eat = eat $0 "\n"
+                  next }
+                { print eat $0
+                  eat = "" }
+        '
+}
 
 dh_testdir
 
@@ -14,7 +32,8 @@ fi
 SRCDIR=$(pwd)
 PATCHNAME=${1%.patch}.patch
 TMP=$(mktemp -t -d cdbs-new-patch.XXXXXX)
-trap "rm -rf $TMP" 0 1 2 3 9 11 13 15
+TMP2=$(mktemp -t cdbs-old-patch-header.XXXXXX)
+trap "rm -rf $TMP $TMP2" 0 1 2 3 9 11 13 15
 
 ORIGDIR=$(basename $(pwd))
 NEWDIR=$ORIGDIR.new
@@ -72,6 +91,8 @@ SH=$(getent passwd $USER | cut -f 7 -d:)
 [ "$SH" ] || SH=/bin/sh
 
 if $SH; then
+    cat $SRCDIR/debian/patches/$PATCHNAME | patch_header > $TMP2
+    cat $TMP2 > $SRCDIR/debian/patches/$PATCHNAME
     cd $TMP
-    diff -Nur $ORIGDIR $NEWDIR > $SRCDIR/debian/patches/$PATCHNAME
+    diff -Nur $ORIGDIR $NEWDIR >> $SRCDIR/debian/patches/$PATCHNAME
 fi

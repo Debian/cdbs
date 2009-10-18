@@ -75,6 +75,7 @@ deapply-dpatches:
 	$(MAKE) -f debian/rules reverse-config
 	dpatch deapply-all
 	rm -rf debian/patched
+	rm -f debian/stamp-patched
 # after reverting patches, we don't need update-config because:
 #  - the tree is already in a consistent state.
 #  - the initialisation of this routine is already in charge of making
@@ -84,10 +85,12 @@ deapply-dpatches:
 unpatch: deapply-dpatches
 
 # The patch subsystem 
-apply-dpatches: pre-build
+apply-dpatches: pre-build debian/stamp-patched
+debian/stamp-patched:
 	$(MAKE) -f debian/rules reverse-config
 	dpatch apply-all
 	$(MAKE) -f debian/rules update-config
+	touch $@
 
 endif
 

@@ -17,45 +17,35 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-# Test a tarball distutils setup
+# Test distutils indep package + tarball
 
-# Bring in the testsuite functions
 . testsuite_functions
 
-# Check any command line options
 options $@
-
-# Setup the work environment
 setup_workdir
 
-# Create the debian/rules file
 cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
 DEB_TAR_SRCDIR=distutils-test-0.1
 include debian/testsuite.mk
+include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
 include \$(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
-include \$(_cdbs_package_root_dir)/1/rules/tarball.mk.in
 EOF
 chmod +x $WORKDIR/debian/rules
 
-cat >>$WORKDIR/debian/control <<EOF
-
-Package: python-cdbs-testsuite
-Architecture: any
-Description: common build system test suite
- This package is part of the testsuite for the CDBS build system.  If you've
- managed to install this, something has gone horribly wrong.
-EOF
+sed -i \
+	-e 's/Package: cdbs-testsuite/Package: python-cdbs-testsuite/' \
+	-e 's/Architecture: any/Architecture: all/' \
+	$WORKDIR/debian/control
 
 # Make sure tarball is in place for this test.
 test_tarballs
 cp tarballs/distutils-test-0.1.tar.gz $WORKDIR
 
-# Build the Package (This would've been hard to guess, right?)
 build_package
-# Clean up
-clean_workdir
-# If we made it this far, then we passed!
-return_pass
 
+dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_all.deb | grep -q /usr/lib/python.../site-packages/testing/foo.py || return_fail
+
+clean_workdir
+return_pass

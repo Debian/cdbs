@@ -81,7 +81,7 @@ build_package_1 () {
 }  
 
 test_tarballs () {
-  make tarballs
+  eval "make tarballs $_cdbs_silent"
 }
 
 options () {
