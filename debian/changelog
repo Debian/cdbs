@@ -1,3 +1,10 @@
+cdbs (0.4.30) unstable; urgency=low
+
+  * This time do it right.  (Closes: #301692)
+    - 1/class/autotools-vars.mk.in
+
+ -- Robert Millan <rmh@debian.org>  Mon, 23 May 2005 20:40:03 +0200
+
 cdbs (0.4.29) unstable; urgency=low
 
   * The "back from vac" release.
@@ -28,7 +35,7 @@ cdbs (0.4.29) unstable; urgency=low
     Kleineidam.  (Closes: #307342)
     - 1/class/python-distutils.mk.in
   * Fix typo in automake weak dependencies.  (Closes: #301692)
-    - 1/class/autotools-vars.mk
+    - 1/class/autotools-vars.mk.in
 
  -- Robert Millan <rmh@debian.org>  Wed, 18 May 2005 12:52:21 +0200
 
