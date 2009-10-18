@@ -1,0 +1,10 @@
+pre {
+  border: 1px solid #CBCBCB;
+  background-color: #FFF8ED;
+  color: black;
+}
+
+.warning {
+  border: 2px solid #FF0000;
+  padding: 1ex;
+}

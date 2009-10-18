@@ -61,6 +61,10 @@
 #   Arguments passed directly to dh_makeshlibs, for a particular package <package>
 # DEB_DH_MAKESHLIBS_ARGS
 #   Completely override argument passing to dh_makeshlibs. 
+# DEB_DH_SHLIBDEPS_ARGS_ALL
+#   Arguments passed directly to dh_shlibdeps, for all packages
+# DEB_DH_SHLIBDEPS_ARGS_<package>
+#   Arguments passed directly to dh_shlibdeps, for a particular package <package>
 # DEB_DH_SHLIBDEPS_ARGS
 #   Completely override argument passing to dh_shlibdeps.
 # DEB_DH_PERL_ARGS
@@ -76,9 +80,13 @@ _cdbs_rules_debhelper := 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
+DH_COMPAT = 5
 
-DH_COMPAT=4
+ifeq ($(shell cat debian/compat 2>/dev/null),4)
+CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), debhelper (>= 4.2.0)
+else
+CDBS_BUILD_DEPENDS	:= $(CDBS_BUILD_DEPENDS), debhelper (>= 5)
+endif
 
 ifeq ($(DEB_VERBOSE_ALL), yes)
 DH_VERBOSE = 1
@@ -93,15 +101,15 @@ DEB_INSTALL_DOCS_ALL = $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 
 DEB_DH_MAKESHLIBS_ARGS = $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
-DEB_DH_SHLIBDEPS_ARGS = $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;'))
+DEB_DH_SHLIBDEPS_ARGS = $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
 
 DEB_DH_BUILDDEB_ENV = $(if $(DEB_DH_ALWAYS_EXCLUDE),DH_ALWAYS_EXCLUDE=$(DEB_DH_ALWAYS_EXCLUDE),)
 DEB_DH_PERL_ARGS = $(if $(DEB_PERL_INCLUDE_$(cdbs_curpkg))$(DEB_PERL_INCLUDE),$(shell echo $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE)))
 
-pre-build::
-	if [ -z "$(DEB_DH_COMPAT_DISABLE)" ]; then \
-	  if ! test -f debian/compat; then echo $(DH_COMPAT) > debian/compat; fi; \
-	fi
+pre-build:: debian/compat
+
+debian/compat:
+	$(if $(DEB_DH_COMPAT_DISABLE),,echo $(DH_COMPAT) >$@)
 
 clean::
 	dh_clean $(call cdbs_add_dashx,$(DEB_CLEAN_EXCLUDE))
@@ -135,6 +143,7 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_installinit -p$(cdbs_curpkg) $(if $(DEB_UPDATE_RCD_PARAMS),--update-rcd-params=$(DEB_UPDATE_RCD_PARAMS),$(if $(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)),--update-rcd-params=$(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)))) $(DEB_DH_INSTALLINIT_ARGS) 
 	dh_installdebconf -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEBCONF_ARGS)
 	dh_installemacsen -p$(cdbs_curpkg) $(if $(DEB_EMACS_PRIORITY),--priority=$(DEB_EMACS_PRIORITY)) $(if $(DEB_EMACS_FLAVOR),--flavor=$(DEB_EMACS_FLAVOR)) $(DEB_DH_INSTALLEMACSEN_ARGS)
+	dh_installcatalogs -p$(cdbs_curpkg) $(DEB_DH_INSTALLCATALOGS_ARGS)
 	dh_installpam -p$(cdbs_curpkg) $(DEB_DH_INSTALLPAM_ARGS)
 	dh_installlogrotate -p$(cdbs_curpkg) $(DEB_DH_INSTALLLOGROTATE_ARGS)
 	dh_installlogcheck -p$(cdbs_curpkg) $(DEB_DH_INSTALLLOGCHECK_ARGS)
@@ -152,19 +161,23 @@ common-binary-post-install-indep:: $(patsubst %,binary-post-install/%,$(DEB_INDE
 # to do things like remove files, etc.
 $(patsubst %,binary-post-install/%,$(DEB_ALL_PACKAGES)) :: binary-post-install/%: binary-install/%
 
+ifeq ($(words $(DEB_DBG_PACKAGES)),1)
+cdbs_dbg_package_option = $(shell if [ "`cat debian/compat`" -eq 5 ]; then echo "--dbg-package=$(strip $(DEB_DBG_PACKAGES))"; fi)
+endif
+
 # This rule is called after installation and the post-install hooks,
 # to strip files.
 $(patsubst %,binary-strip/%,$(DEB_ARCH_PACKAGES)) :: binary-strip/%: common-binary-post-install-arch binary-strip-IMPL/%
 $(patsubst %,binary-strip/%,$(DEB_INDEP_PACKAGES)) :: binary-strip/%: common-binary-post-install-indep binary-strip-IMPL/%
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%: 
-	if test "$(is_debug_package)"; then :; else dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_STRIP_EXCLUDE)) $(DEB_DH_STRIP_ARGS); fi
+	$(if $(is_debug_package),,dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_STRIP_EXCLUDE)) $(DEB_DH_STRIP_ARGS) $(cdbs_dbg_package_option))
 
 # This rule is called after stripping; it compresses, fixes permissions,
 # and sets up shared library information.
 $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) :: binary-fixup/%: binary-strip/%
 	dh_compress -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_COMPRESS_EXCLUDE)) $(DEB_DH_COMPRESS_ARGS)
 	dh_fixperms -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_FIXPERMS_EXCLUDE)) $(DEB_DH_FIXPERMS_ARGS)
-	if test "$(is_debug_package)"; then :; else dh_makeshlibs -p$(cdbs_curpkg) $(DEB_DH_MAKESHLIBS_ARGS); fi
+	$(if $(is_debug_package),,dh_makeshlibs -p$(cdbs_curpkg) $(DEB_DH_MAKESHLIBS_ARGS))
 
 # This rule is called right before building the binary .deb packages
 # for each package, but after the binary-predeb hooks have been run.

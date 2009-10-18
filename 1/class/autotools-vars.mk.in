@@ -35,7 +35,7 @@ DEB_AC_AUX_DIR = $(DEB_SRCDIR)
 
 DEB_CONFIGURE_SCRIPT = $(CURDIR)/$(DEB_SRCDIR)/configure 
 DEB_CONFIGURE_SCRIPT_ENV = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)"
-DEB_CONFIGURE_NORMAL_ARGS = --build=$(DEB_BUILD_GNU_TYPE) --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR)
+DEB_CONFIGURE_NORMAL_ARGS = --build=$(DEB_BUILD_GNU_TYPE) --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) --disable-maintainer-mode --disable-dependency-tracking
 
 # Provide --host only if different from --build, as recommended in
 # autotools-dev README.Debian: When provided (even if equal) autotools
@@ -54,7 +54,7 @@ endif
 # absolute certainly that this is NOT a VPATH build.
 DEB_CONFIGURE_NORMAL_ARGS += $(if $(subst $(DEB_SRCDIR),,$(DEB_BUILDDIR)),,--srcdir=.)
 
-DEB_CONFIGURE_INVOKE = if test "$(DEB_BUILDDIR_$(cdbs_curpkg))"; then cd "$(DEB_BUILDDIR_$(cdbs_curpkg))"; else cd "$(DEB_BUILDDIR)"; fi && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS) --disable-maintainer-mode
+DEB_CONFIGURE_INVOKE = if test "$(DEB_BUILDDIR_$(cdbs_curpkg))"; then cd "$(DEB_BUILDDIR_$(cdbs_curpkg))"; else cd "$(DEB_BUILDDIR)"; fi && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
 DEB_CONFIGURE_PREFIX =/usr
 DEB_CONFIGURE_INCLUDEDIR = "\$${prefix}/include"
 DEB_CONFIGURE_MANDIR ="\$${prefix}/share/man"

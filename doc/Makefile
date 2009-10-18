@@ -1,4 +1,4 @@
-all: html pdf ps txt
+all: html pdf
 
 xmllint-stamp-%: %.xml
 	xmllint --xinclude --postvalid --noblanks --noout $<

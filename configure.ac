@@ -30,37 +30,22 @@ AC_MSG_RESULT([yes])
 
 AM_MAINTAINER_MODE
 
-AC_PATH_PROG(PERLPATH, [perl])
-if test "x$PERLPATH" == "x"; then
+AC_PATH_PROG(PERL, [perl])
+if test "x$PERL" == "x"; then
   AC_MSG_ERROR([you must have Perl 5 installed])
 fi
-AC_SUBST(PERLPATH)
+AC_SUBST(PERL)
 
-AC_PATH_PROG(PYTHONPATH, [python])
-if test "x$PYTHONPATH" == "x"; then
-  AC_PATH_PROG(PYTHONPATH, [python2.2])
+AC_PATH_PROG(PYTHON, [python])
+if test "x$PYTHON" == "x"; then
+  AC_PATH_PROG(PYTHON, [python2.2])
 fi
-AC_SUBST(PYTHONPATH)
-AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHONPATH" != x)
+AC_SUBST(PYTHON)
+AM_CONDITIONAL(HAVE_PYTHON, test x"$PYTHON" != x)
 
-AC_PATH_PROG(OCAMLPATH, [ocamlopt])
-if test "x$OCAMLPATH" == "x"; then
-  AC_PATH_PROG(OCAMLPATH, [ocamlc])
-fi
-AC_SUBST(OCAMLPATH)
-AM_CONDITIONAL(HAVE_OCAML, test x"$OCAMLPATH" != x)
-
-AC_PATH_PROG(SPRINGGRAPHPATH, [springgraph])
-AC_SUBST(SPRINGGRAPHPATH)
-AM_CONDITIONAL(HAVE_SPRINGGRAPH, test x"$SPRINGGRAPHPATH" != x)
-
-if test x"$OCAMLPATH" = x || test x"$SPRINGGRAPHPATH" = x; then
-  AC_MSG_NOTICE([Couldn't find ocaml and springgraph; dependency graph will not be generated])
-fi
-
-AC_PATH_PROG(XSLTPROCPATH, [xsltproc])
-AC_SUBST(XSLTPROCPATH)
-if test x"$XSLTPROCPATH" != x; then
+AC_PATH_PROG(XSLTPROC, [xsltproc])
+AC_SUBST(XSLTPROC)
+if test x"$XSLTPROC" != x; then
   AC_MSG_CHECKING([for docbook onechunk.xsl stylesheet])
   if test -f /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl; then
     stylesheet=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl
@@ -69,7 +54,7 @@ if test x"$XSLTPROCPATH" != x; then
     AC_MSG_RESULT([no])
   fi  
 fi
-AM_CONDITIONAL(HAVE_DOCBOOK, test x"$XSLTPROCPATH" != x && test x"$stylesheet" != x)
+AM_CONDITIONAL(HAVE_DOCBOOK, test x"$XSLTPROC" != x && test x"$stylesheet" != x)
 
 AC_CONFIG_FILES([Makefile scripts/list-packages test/Makefile])
 

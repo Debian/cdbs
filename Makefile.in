@@ -53,7 +53,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-@HAVE_DOCBOOK_TRUE@am__append_1 = $(dbktargets)
 subdir = .
 DIST_COMMON = AUTHORS $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) mkinstalldirs \
@@ -68,7 +67,6 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = scripts/list-packages
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" \
 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" \
-	"$(DESTDIR)$(docbookdir)" "$(DESTDIR)$(exampledir)" \
 	"$(DESTDIR)$(regulardocsdir)" "$(DESTDIR)$(rulesdir)"
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 scriptsSCRIPT_INSTALL = $(INSTALL_SCRIPT)
@@ -90,12 +88,9 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 classDATA_INSTALL = $(INSTALL_DATA)
-docbookDATA_INSTALL = $(INSTALL_DATA)
-exampleDATA_INSTALL = $(INSTALL_DATA)
 regulardocsDATA_INSTALL = $(INSTALL_DATA)
 rulesDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(class_DATA) $(docbook_DATA) $(example_DATA) \
-	$(regulardocs_DATA) $(rules_DATA)
+DATA = $(class_DATA) $(regulardocs_DATA) $(rules_DATA)
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
@@ -112,12 +107,8 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 HAVE_DOCBOOK_FALSE = @HAVE_DOCBOOK_FALSE@
 HAVE_DOCBOOK_TRUE = @HAVE_DOCBOOK_TRUE@
-HAVE_OCAML_FALSE = @HAVE_OCAML_FALSE@
-HAVE_OCAML_TRUE = @HAVE_OCAML_TRUE@
 HAVE_PYTHON_FALSE = @HAVE_PYTHON_FALSE@
 HAVE_PYTHON_TRUE = @HAVE_PYTHON_TRUE@
-HAVE_SPRINGGRAPH_FALSE = @HAVE_SPRINGGRAPH_FALSE@
-HAVE_SPRINGGRAPH_TRUE = @HAVE_SPRINGGRAPH_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -129,7 +120,6 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
-OCAMLPATH = @OCAMLPATH@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -137,14 +127,13 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PERLPATH = @PERLPATH@
-PYTHONPATH = @PYTHONPATH@
+PERL = @PERL@
+PYTHON = @PYTHON@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
-SPRINGGRAPHPATH = @SPRINGGRAPHPATH@
 STRIP = @STRIP@
 VERSION = @VERSION@
-XSLTPROCPATH = @XSLTPROCPATH@
+XSLTPROC = @XSLTPROC@
 ac_ct_STRIP = @ac_ct_STRIP@
 am__leading_dot = @am__leading_dot@
 am__tar = @am__tar@
@@ -170,10 +159,10 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
-SUBDIRS = guide test
+SUBDIRS = doc test
 BUILT_SOURCES = 
-docdir = $(prefix)/share/doc/@PACKAGE@
-edit = @PERLPATH@ -pe 's,\@PACKAGE_VERSION\@,@PACKAGE_VERSION@,;s,\@PATH_RULES\@,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
+docdir = $(prefix)/share/doc/$(PACKAGE)
+edit = $(PERL) -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\@PATH_RULES\@,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
 all_mk_in_files := $(wildcard 1/class/*.mk.in 1/rules/*.mk.in)
 all_mk_files := 1/rules/buildvars.mk		\
 		1/rules/buildcore.mk		\
@@ -198,8 +187,7 @@ all_mk_files := 1/rules/buildvars.mk		\
 		1/class/python-distutils.mk	\
 		1/class/hbuild.mk
 
-@HAVE_OCAML_TRUE@@HAVE_SPRINGGRAPH_TRUE@otherdeps = gen-dotty docs/depgraph.png
-CLEANFILES = $(all_mk_files) $(am__append_1)
+CLEANFILES = $(all_mk_files)
 class_DATA = $(wildcard 1/class/*.mk)
 classdir = $(pkgdatadir)/1/class
 rules_DATA = $(wildcard 1/rules/*.mk)
@@ -209,16 +197,8 @@ dist_man_MANS = scripts/cdbs-edit-patch.1
 all_scripts_in_files := $(wildcard scripts/*.in)
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)
-@HAVE_OCAML_TRUE@@HAVE_SPRINGGRAPH_TRUE@regulardocs_DATA = docs/depgraph.png
-@HAVE_OCAML_TRUE@@HAVE_SPRINGGRAPH_TRUE@regulardocsdir = $(docdir)
-@HAVE_DOCBOOK_TRUE@DBKXSL = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl
-@HAVE_DOCBOOK_TRUE@dbksources = docs/why.dbk docs/cdbs.dbk
-@HAVE_DOCBOOK_TRUE@dbktargets = $(dbksources:%.dbk=%.html)
-@HAVE_DOCBOOK_TRUE@docbook_DATA = $(dbktargets)
-@HAVE_DOCBOOK_TRUE@docbookdir = $(docdir)
-example_DATA = $(wildcard examples/*.rules)
-exampledir = $(docdir)/examples
-EXTRA_DIST = $(all_mk_in_files) $(all_scripts_in_files) $(example_DATA) $(regulardocs_DATA) $(dbksources) gen-dotty.ml OCamlMakefile tests/pbuilder-all.sh
+regulardocs_DATA = doc/depgraph.png
+regulardocsdir = $(docdir)
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -358,40 +338,6 @@ uninstall-classDATA:
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(classdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(classdir)/$$f"; \
-	done
-install-docbookDATA: $(docbook_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(docbookdir)" || $(mkdir_p) "$(DESTDIR)$(docbookdir)"
-	@list='$(docbook_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(docbookDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(docbookdir)/$$f'"; \
-	  $(docbookDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(docbookdir)/$$f"; \
-	done
-
-uninstall-docbookDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(docbook_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(docbookdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(docbookdir)/$$f"; \
-	done
-install-exampleDATA: $(example_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(exampledir)" || $(mkdir_p) "$(DESTDIR)$(exampledir)"
-	@list='$(example_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(exampleDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(exampledir)/$$f'"; \
-	  $(exampleDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(exampledir)/$$f"; \
-	done
-
-uninstall-exampleDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(example_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(exampledir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(exampledir)/$$f"; \
 	done
 install-regulardocsDATA: $(regulardocs_DATA)
 	@$(NORMAL_INSTALL)
@@ -565,7 +511,7 @@ check: $(BUILT_SOURCES)
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" "$(DESTDIR)$(docbookdir)" "$(DESTDIR)$(exampledir)" "$(DESTDIR)$(regulardocsdir)" "$(DESTDIR)$(rulesdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(classdir)" "$(DESTDIR)$(regulardocsdir)" "$(DESTDIR)$(rulesdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -614,8 +560,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-classDATA install-docbookDATA \
-	install-exampleDATA install-man install-regulardocsDATA \
+install-data-am: install-classDATA install-man install-regulardocsDATA \
 	install-rulesDATA install-scriptsSCRIPTS
 
 install-exec-am: install-binSCRIPTS
@@ -645,9 +590,8 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-binSCRIPTS uninstall-classDATA \
-	uninstall-docbookDATA uninstall-exampleDATA uninstall-info-am \
-	uninstall-man uninstall-regulardocsDATA uninstall-rulesDATA \
-	uninstall-scriptsSCRIPTS
+	uninstall-info-am uninstall-man uninstall-regulardocsDATA \
+	uninstall-rulesDATA uninstall-scriptsSCRIPTS
 
 uninstall-info: uninstall-info-recursive
 
@@ -659,19 +603,17 @@ uninstall-man: uninstall-man1
 	distclean-generic distclean-recursive distclean-tags dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-binSCRIPTS install-classDATA install-data \
-	install-data-am install-docbookDATA install-exampleDATA \
-	install-exec install-exec-am install-info install-info-am \
-	install-man install-man1 install-regulardocsDATA \
-	install-rulesDATA install-scriptsSCRIPTS install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-binSCRIPTS \
-	uninstall-classDATA uninstall-docbookDATA \
-	uninstall-exampleDATA uninstall-info-am uninstall-man \
-	uninstall-man1 uninstall-regulardocsDATA uninstall-rulesDATA \
-	uninstall-scriptsSCRIPTS
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-man1 \
+	install-regulardocsDATA install-rulesDATA \
+	install-scriptsSCRIPTS install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-recursive pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-binSCRIPTS uninstall-classDATA uninstall-info-am \
+	uninstall-man uninstall-man1 uninstall-regulardocsDATA \
+	uninstall-rulesDATA uninstall-scriptsSCRIPTS
 
 
 %.mk: %.mk.in
@@ -679,21 +621,16 @@ uninstall-man: uninstall-man1
 	$(edit) <$(srcdir)/$< >$@.tmp
 	mv $@.tmp $@
 
-gen-dotty: gen-dotty.ml OCamlMakefile
-	SOURCES=gen-dotty.ml LIBS=str RESULT=gen-dotty make -f OCamlMakefile native-code
+%.png: %.dot
+	dot -Tpng -o $@ $^
 
-docs/depgraph.png: gen-dotty $(all_mk_files)
-	./gen-dotty $(all_mk_files) | @SPRINGGRAPHPATH@ -s0.5 > docs/depgraph.png
+doc/depgraph.dot: doc/gen-dotty.pl $(all_mk_files)
+	$(PERL) $^ >$@
 
-all-local: $(all_mk_files) $(otherdeps) $(scripts_SCRIPTS)
+all-local: $(all_mk_files) $(scripts_SCRIPTS) doc/depgraph.png
 
 clean-local: 
-@HAVE_OCAML_TRUE@	SOURCES=gen-dotty.ml LIBS=str RESULT=gen-dotty make -f OCamlMakefile clean
-	rm -f docs/depgraph.png
-
-@HAVE_DOCBOOK_TRUE@%.html: %.dbk
-@HAVE_DOCBOOK_TRUE@	xsltproc --nonet $(DBKXSL) $<
-@HAVE_DOCBOOK_TRUE@	mv index.html $@
+	rm -f doc/depgraph.png doc/depgraph.dot
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

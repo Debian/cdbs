@@ -32,22 +32,22 @@ DEB_PHONY_RULES += makefile-clean
 
 common-build-arch common-build-indep:: debian/stamp-makefile-build
 debian/stamp-makefile-build:
-	$(DEB_MAKE_INVOKE) $(DEB_MAKE_BUILD_TARGET)
+	+$(DEB_MAKE_INVOKE) $(DEB_MAKE_BUILD_TARGET)
 	touch debian/stamp-makefile-build
 
 clean:: makefile-clean
 makefile-clean::
-	$(if $(DEB_MAKE_CLEAN_TARGET),-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),@echo "DEB_MAKE_CLEAN_TARGET unset, not running clean")
+	$(if $(DEB_MAKE_CLEAN_TARGET),+-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),@echo "DEB_MAKE_CLEAN_TARGET unset, not running clean")
 	rm -f debian/stamp-makefile-build
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	$(if $(DEB_MAKE_INSTALL_TARGET),$(DEB_MAKE_INVOKE) $(DEB_MAKE_INSTALL_TARGET),@echo "DEB_MAKE_INSTALL_TARGET unset, skipping default makefile.mk common-install target")
+	$(if $(DEB_MAKE_INSTALL_TARGET),+$(DEB_MAKE_INVOKE) $(DEB_MAKE_INSTALL_TARGET),@echo "DEB_MAKE_INSTALL_TARGET unset, skipping default makefile.mk common-install target")
 
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
-	$(if $(DEB_MAKE_CHECK_TARGET),$(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET),@echo "DEB_MAKE_CHECK_TARGET unset, not running checks")
+	$(if $(DEB_MAKE_CHECK_TARGET),+$(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET),@echo "DEB_MAKE_CHECK_TARGET unset, not running checks")
 endif
 
 endif

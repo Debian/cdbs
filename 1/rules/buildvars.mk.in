@@ -52,6 +52,8 @@ DEB_ALL_PACKAGES = $(DEB_PACKAGES) $(DEB_UDEB_PACKAGES)
 DEB_INDEP_REGULAR_PACKAGES := $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_INDEP_PACKAGES))
 DEB_ARCH_REGULAR_PACKAGES := $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_ARCH_PACKAGES))
 
+DEB_DBG_PACKAGES = $(filter %-dbg, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+
 # Some support for srcdir != builddir builds.
 # These are relative to the root of the package
 DEB_SRCDIR ?= .

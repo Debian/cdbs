@@ -272,7 +272,7 @@ PACKAGE_STRING='cdbs 0.4.7'
 PACKAGE_BUGREPORT=''
 
 ac_unique_file="1/rules/buildcore.mk.in"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT PERLPATH PYTHONPATH HAVE_PYTHON_TRUE HAVE_PYTHON_FALSE OCAMLPATH HAVE_OCAML_TRUE HAVE_OCAML_FALSE SPRINGGRAPHPATH HAVE_SPRINGGRAPH_TRUE HAVE_SPRINGGRAPH_FALSE XSLTPROCPATH HAVE_DOCBOOK_TRUE HAVE_DOCBOOK_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT PERL PYTHON HAVE_PYTHON_TRUE HAVE_PYTHON_FALSE XSLTPROC HAVE_DOCBOOK_TRUE HAVE_DOCBOOK_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1718,12 +1718,12 @@ fi
 set dummy perl; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PERLPATH+set}" = set; then
+if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PERLPATH in
+  case $PERL in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PERLPATH="$PERLPATH" # Let the user override the test with a path.
+  ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -1733,7 +1733,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PERLPATH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -1743,17 +1743,17 @@ done
   ;;
 esac
 fi
-PERLPATH=$ac_cv_path_PERLPATH
+PERL=$ac_cv_path_PERL
 
-if test -n "$PERLPATH"; then
-  echo "$as_me:$LINENO: result: $PERLPATH" >&5
-echo "${ECHO_T}$PERLPATH" >&6
+if test -n "$PERL"; then
+  echo "$as_me:$LINENO: result: $PERL" >&5
+echo "${ECHO_T}$PERL" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-if test "x$PERLPATH" == "x"; then
+if test "x$PERL" == "x"; then
   { { echo "$as_me:$LINENO: error: you must have Perl 5 installed" >&5
 echo "$as_me: error: you must have Perl 5 installed" >&2;}
    { (exit 1); exit 1; }; }
@@ -1764,12 +1764,12 @@ fi
 set dummy python; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PYTHONPATH+set}" = set; then
+if test "${ac_cv_path_PYTHON+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PYTHONPATH in
+  case $PYTHON in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PYTHONPATH="$PYTHONPATH" # Let the user override the test with a path.
+  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -1779,7 +1779,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PYTHONPATH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_PYTHON="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -1789,27 +1789,27 @@ done
   ;;
 esac
 fi
-PYTHONPATH=$ac_cv_path_PYTHONPATH
+PYTHON=$ac_cv_path_PYTHON
 
-if test -n "$PYTHONPATH"; then
-  echo "$as_me:$LINENO: result: $PYTHONPATH" >&5
-echo "${ECHO_T}$PYTHONPATH" >&6
+if test -n "$PYTHON"; then
+  echo "$as_me:$LINENO: result: $PYTHON" >&5
+echo "${ECHO_T}$PYTHON" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-if test "x$PYTHONPATH" == "x"; then
+if test "x$PYTHON" == "x"; then
   # Extract the first word of "python2.2", so it can be a program name with args.
 set dummy python2.2; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PYTHONPATH+set}" = set; then
+if test "${ac_cv_path_PYTHON+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PYTHONPATH in
+  case $PYTHON in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PYTHONPATH="$PYTHONPATH" # Let the user override the test with a path.
+  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -1819,7 +1819,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PYTHONPATH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_PYTHON="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -1829,11 +1829,11 @@ done
   ;;
 esac
 fi
-PYTHONPATH=$ac_cv_path_PYTHONPATH
+PYTHON=$ac_cv_path_PYTHON
 
-if test -n "$PYTHONPATH"; then
-  echo "$as_me:$LINENO: result: $PYTHONPATH" >&5
-echo "${ECHO_T}$PYTHONPATH" >&6
+if test -n "$PYTHON"; then
+  echo "$as_me:$LINENO: result: $PYTHON" >&5
+echo "${ECHO_T}$PYTHON" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -1843,7 +1843,7 @@ fi
 
 
 
-if test x"$PYTHONPATH" != x; then
+if test x"$PYTHON" != x; then
   HAVE_PYTHON_TRUE=
   HAVE_PYTHON_FALSE='#'
 else
@@ -1852,164 +1852,16 @@ else
 fi
 
 
-# Extract the first word of "ocamlopt", so it can be a program name with args.
-set dummy ocamlopt; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_OCAMLPATH+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $OCAMLPATH in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_OCAMLPATH="$OCAMLPATH" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_OCAMLPATH="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-OCAMLPATH=$ac_cv_path_OCAMLPATH
-
-if test -n "$OCAMLPATH"; then
-  echo "$as_me:$LINENO: result: $OCAMLPATH" >&5
-echo "${ECHO_T}$OCAMLPATH" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-if test "x$OCAMLPATH" == "x"; then
-  # Extract the first word of "ocamlc", so it can be a program name with args.
-set dummy ocamlc; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_OCAMLPATH+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $OCAMLPATH in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_OCAMLPATH="$OCAMLPATH" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_OCAMLPATH="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-OCAMLPATH=$ac_cv_path_OCAMLPATH
-
-if test -n "$OCAMLPATH"; then
-  echo "$as_me:$LINENO: result: $OCAMLPATH" >&5
-echo "${ECHO_T}$OCAMLPATH" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-fi
-
-
-
-if test x"$OCAMLPATH" != x; then
-  HAVE_OCAML_TRUE=
-  HAVE_OCAML_FALSE='#'
-else
-  HAVE_OCAML_TRUE='#'
-  HAVE_OCAML_FALSE=
-fi
-
-
-# Extract the first word of "springgraph", so it can be a program name with args.
-set dummy springgraph; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_SPRINGGRAPHPATH+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $SPRINGGRAPHPATH in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_SPRINGGRAPHPATH="$SPRINGGRAPHPATH" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_SPRINGGRAPHPATH="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-SPRINGGRAPHPATH=$ac_cv_path_SPRINGGRAPHPATH
-
-if test -n "$SPRINGGRAPHPATH"; then
-  echo "$as_me:$LINENO: result: $SPRINGGRAPHPATH" >&5
-echo "${ECHO_T}$SPRINGGRAPHPATH" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
-
-
-if test x"$SPRINGGRAPHPATH" != x; then
-  HAVE_SPRINGGRAPH_TRUE=
-  HAVE_SPRINGGRAPH_FALSE='#'
-else
-  HAVE_SPRINGGRAPH_TRUE='#'
-  HAVE_SPRINGGRAPH_FALSE=
-fi
-
-
-if test x"$OCAMLPATH" = x || test x"$SPRINGGRAPHPATH" = x; then
-  { echo "$as_me:$LINENO: Couldn't find ocaml and springgraph; dependency graph will not be generated" >&5
-echo "$as_me: Couldn't find ocaml and springgraph; dependency graph will not be generated" >&6;}
-fi
-
 # Extract the first word of "xsltproc", so it can be a program name with args.
 set dummy xsltproc; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_XSLTPROCPATH+set}" = set; then
+if test "${ac_cv_path_XSLTPROC+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $XSLTPROCPATH in
+  case $XSLTPROC in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_XSLTPROCPATH="$XSLTPROCPATH" # Let the user override the test with a path.
+  ac_cv_path_XSLTPROC="$XSLTPROC" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -2019,7 +1871,7 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_XSLTPROCPATH="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_XSLTPROC="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -2029,18 +1881,18 @@ done
   ;;
 esac
 fi
-XSLTPROCPATH=$ac_cv_path_XSLTPROCPATH
+XSLTPROC=$ac_cv_path_XSLTPROC
 
-if test -n "$XSLTPROCPATH"; then
-  echo "$as_me:$LINENO: result: $XSLTPROCPATH" >&5
-echo "${ECHO_T}$XSLTPROCPATH" >&6
+if test -n "$XSLTPROC"; then
+  echo "$as_me:$LINENO: result: $XSLTPROC" >&5
+echo "${ECHO_T}$XSLTPROC" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 
-if test x"$XSLTPROCPATH" != x; then
+if test x"$XSLTPROC" != x; then
   echo "$as_me:$LINENO: checking for docbook onechunk.xsl stylesheet" >&5
 echo $ECHO_N "checking for docbook onechunk.xsl stylesheet... $ECHO_C" >&6
   if test -f /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl; then
@@ -2054,7 +1906,7 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-if test x"$XSLTPROCPATH" != x && test x"$stylesheet" != x; then
+if test x"$XSLTPROC" != x && test x"$stylesheet" != x; then
   HAVE_DOCBOOK_TRUE=
   HAVE_DOCBOOK_FALSE='#'
 else
@@ -2202,20 +2054,6 @@ if test -z "${HAVE_PYTHON_TRUE}" && test -z "${HAVE_PYTHON_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"HAVE_PYTHON\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"HAVE_PYTHON\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_OCAML_TRUE}" && test -z "${HAVE_OCAML_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_OCAML\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_OCAML\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_SPRINGGRAPH_TRUE}" && test -z "${HAVE_SPRINGGRAPH_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_SPRINGGRAPH\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_SPRINGGRAPH\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -2771,17 +2609,11 @@ s,@am__untar@,$am__untar,;t t
 s,@MAINTAINER_MODE_TRUE@,$MAINTAINER_MODE_TRUE,;t t
 s,@MAINTAINER_MODE_FALSE@,$MAINTAINER_MODE_FALSE,;t t
 s,@MAINT@,$MAINT,;t t
-s,@PERLPATH@,$PERLPATH,;t t
-s,@PYTHONPATH@,$PYTHONPATH,;t t
+s,@PERL@,$PERL,;t t
+s,@PYTHON@,$PYTHON,;t t
 s,@HAVE_PYTHON_TRUE@,$HAVE_PYTHON_TRUE,;t t
 s,@HAVE_PYTHON_FALSE@,$HAVE_PYTHON_FALSE,;t t
-s,@OCAMLPATH@,$OCAMLPATH,;t t
-s,@HAVE_OCAML_TRUE@,$HAVE_OCAML_TRUE,;t t
-s,@HAVE_OCAML_FALSE@,$HAVE_OCAML_FALSE,;t t
-s,@SPRINGGRAPHPATH@,$SPRINGGRAPHPATH,;t t
-s,@HAVE_SPRINGGRAPH_TRUE@,$HAVE_SPRINGGRAPH_TRUE,;t t
-s,@HAVE_SPRINGGRAPH_FALSE@,$HAVE_SPRINGGRAPH_FALSE,;t t
-s,@XSLTPROCPATH@,$XSLTPROCPATH,;t t
+s,@XSLTPROC@,$XSLTPROC,;t t
 s,@HAVE_DOCBOOK_TRUE@,$HAVE_DOCBOOK_TRUE,;t t
 s,@HAVE_DOCBOOK_FALSE@,$HAVE_DOCBOOK_FALSE,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

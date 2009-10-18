@@ -24,6 +24,7 @@ endif
 ifndef _cdbs_class_hbuild
 _cdbs_class_hbuild := 1
 
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 cdbs_hugs_packages = $(filter %-hugs,$(DEB_PAKCAGES))

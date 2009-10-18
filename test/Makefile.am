@@ -22,7 +22,7 @@ TESTS_ENVIRONMENT = TESTS_SILENT=true
 EXTRA_DIST = testsuite_functions
 
 TESTS = autotools-1.sh \
-        autotools-2.sh \
+	autotools-2.sh \
 	autotools-3.sh \
 	autotools-4.sh \
 	autotools-5.sh \
@@ -30,6 +30,10 @@ TESTS = autotools-1.sh \
 	udeb-1.sh \
 	hdparm.sh \
 	debhelper-1.sh \
+	debhelper-2.sh \
+	debhelper-3.sh \
+	debhelper-4.sh \
+	debhelper-5.sh \
 	ant-1.sh
 
 if HAVE_PYTHON

@@ -1,3 +1,36 @@
+cdbs (0.4.37) unstable; urgency=low
+
+  * Merged all existing documentation, readmes, and examples into one
+    coherent document
+  * Dropped more-or-less redundant text and PostScript formatted
+    documentation
+  * Rewrote gen-dotty in Perl; ocaml dependency is gone
+  * Process depgraph.dot using graphviz instead of springgraph for better
+    looks and speed
+  * Removed autogen.sh; it was nonfunctional (use autoreconf instead)
+  * Document that rules that add commands should come after including
+    CDBS makefiles (closes: #273835)
+  * Added buildcore.mk dependency to hbuild.mk and python-distutils.mk
+  * Use debhelper level 5 by default (debhelper.mk) (closes: #353820);
+    test cases in debhelper-{4,5}.sh
+  * Generate properly versioned build dependency on debhelper depending
+    on level used (debhelper.mk) (closes: #345615)
+  * Automatically add --dbg-package to dh_strip if one debug package is
+    defined and debhelper level 5 is used (buildvars.mk, debhelper.mk)
+    (closes: #228044); test case in debhelper-2.sh
+  * Added call to dh_installcatalogs (debhelper.mk)
+  * Call make as $(MAKE) (autotools.mk, makefile-vars.mk,
+    perlmodule-vars.mk)
+  * Added + to rules calling $(MAKE) indirectly, for correct interaction
+    with parallel make (makefile.mk)
+  * Automatically use --disable-dependency-tracking (autotools-vars.mk)
+    (closes: #337487)
+  * Added DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg) (debhelper.mk)
+    (closes: #262757)
+  * Don't use auto-update debian/control feature (closes: #339720)
+
+ -- Peter Eisentraut <petere@debian.org>  Sat, 25 Mar 2006 00:27:15 +0100
+
 cdbs (0.4.36) unstable; urgency=low
 
   * Conditionalized targets using make conditionals rather than shell

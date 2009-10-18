@@ -20,10 +20,10 @@
 
 set -e
 
-progname="`basename \"$0\"`"
+progname=$(basename "$0")
 
 usage () {
-    echo "usage:"
+    echo "Usage:"
     echo " --buildir DIR	Build packages in directory DIR"
     echo " --printonly		Print CDBS-using packages and exit"
     echo " --sourceonly		Download source for CDBS-using packages and exit"
@@ -42,7 +42,7 @@ while [ $# != 0 ]; do
 done
 
 if test -z "$allpkgs"; then
-  allpkgs=`(for f in /var/lib/apt/lists/*debian_dists_{sid,unstable}_main_source_Sources; do if test -f $f; then grep-dctrl -FBuild-Depends -sPackage cdbs $f; grep-dctrl -FBuild-Depends-Indep -sPackage cdbs $f; fi; done) | sed -e 's/^Package: //' | sort -u`
+  allpkgs=$(for f in /var/lib/apt/lists/*debian_dists_{sid,unstable}_main_source_Sources; do if test -f $f; then grep-dctrl -F Build-Depends,Build-Depends-Indep -n -s Package cdbs $f; fi; done | sort -u)
 fi
 
 echo "$allpkgs"

@@ -2,6 +2,8 @@
 # -*- mode: sh; coding: utf-8 -*-
 # Copyright © 2006 Peter Eisentraut <petere@debian.org>
 
+# Test exclude functionality
+
 . testsuite_functions
 
 options $@

@@ -18,13 +18,13 @@
 
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
 
-SUBDIRS = guide test
+SUBDIRS = doc test
 
 BUILT_SOURCES =
 
-docdir = $(prefix)/share/doc/@PACKAGE@
+docdir = $(prefix)/share/doc/$(PACKAGE)
 
-edit = @PERLPATH@ -pe 's,\@PACKAGE_VERSION\@,@PACKAGE_VERSION@,;s,\@PATH_RULES\@,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
+edit = $(PERL) -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\@PATH_RULES\@,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
 
 %.mk: %.mk.in
 	rm -f $@ $@.tmp
@@ -55,25 +55,16 @@ all_mk_files := 1/rules/buildvars.mk		\
 		1/class/python-distutils.mk	\
 		1/class/hbuild.mk
 
-gen-dotty: gen-dotty.ml OCamlMakefile
-	SOURCES=gen-dotty.ml LIBS=str RESULT=gen-dotty make -f OCamlMakefile native-code
+%.png: %.dot
+	dot -Tpng -o $@ $^
 
-docs/depgraph.png: gen-dotty $(all_mk_files)
-	./gen-dotty $(all_mk_files) | @SPRINGGRAPHPATH@ -s0.5 > docs/depgraph.png
+doc/depgraph.dot: doc/gen-dotty.pl $(all_mk_files)
+	$(PERL) $^ >$@
 
-if HAVE_OCAML
-if HAVE_SPRINGGRAPH
-otherdeps=gen-dotty docs/depgraph.png
-endif
-endif
-
-all-local: $(all_mk_files) $(otherdeps) $(scripts_SCRIPTS)
+all-local: $(all_mk_files) $(scripts_SCRIPTS) doc/depgraph.png
 
 clean-local: 
-if HAVE_OCAML
-	SOURCES=gen-dotty.ml LIBS=str RESULT=gen-dotty make -f OCamlMakefile clean
-endif
-	rm -f docs/depgraph.png
+	rm -f doc/depgraph.png doc/depgraph.dot
 
 CLEANFILES = $(all_mk_files)
 
@@ -90,29 +81,5 @@ all_scripts_in_files := $(wildcard scripts/*.in)
 scripts_SCRIPTS = scripts/list-packages
 scriptsdir = $(libexecdir)
 
-if HAVE_OCAML
-if HAVE_SPRINGGRAPH
-regulardocs_DATA = docs/depgraph.png
+regulardocs_DATA = doc/depgraph.png
 regulardocsdir = $(docdir)
-endif
-endif
-
-if HAVE_DOCBOOK
-DBKXSL=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/onechunk.xsl
-
-dbksources = docs/why.dbk docs/cdbs.dbk
-dbktargets = $(dbksources:%.dbk=%.html)
-
-docbook_DATA = $(dbktargets)
-docbookdir = $(docdir)
-CLEANFILES += $(dbktargets)
-
-%.html: %.dbk
-	xsltproc --nonet $(DBKXSL) $<
-	mv index.html $@
-endif
-
-example_DATA = $(wildcard examples/*.rules)
-exampledir = $(docdir)/examples
-
-EXTRA_DIST = $(all_mk_in_files) $(all_scripts_in_files) $(example_DATA) $(regulardocs_DATA) $(dbksources) gen-dotty.ml OCamlMakefile tests/pbuilder-all.sh

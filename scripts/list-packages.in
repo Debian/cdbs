@@ -1,4 +1,4 @@
-#!@PERLPATH@ -w
+#!@PERL@ -w
 # -*- mode: cperl; coding: utf-8 -*-
 # Most of this code was stolen from Debhelper 4.1. which is:
 # Joey Hess, GPL copyright 1997-2000.

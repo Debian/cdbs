@@ -65,8 +65,8 @@ fi
 echo "
 You are now in a subshell in a cleaned copy of your source package.
 Please make the changes necessary for the patch $PATCHNAME
-in this directory and exit with status 0 to create/update the patch. Exiting
-with a non-zero value will cancel the patch modification."
+in this directory and exit with status 0 to create/update the patch.
+Exiting with a non-zero value will cancel the patch modification."
 
 SH=$(getent passwd $USER | cut -f 7 -d:)
 [ "$SH" ] || SH=/bin/sh
