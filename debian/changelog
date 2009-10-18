@@ -1,4 +1,4 @@
-cdbs (0.4.62) UNRELEASED; urgency=low
+cdbs (0.4.62) unstable; urgency=low
 
   [ Jonas Smedegaard ]
   * Move source to collab-maint Git at Alioth. Update Vcs-* stanzas.
@@ -26,7 +26,7 @@ cdbs (0.4.62) UNRELEASED; urgency=low
   * Document more clearly that a build dependency on autotools-dev
     should be added to get config.{guess,sub} updates reliably
 
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Oct 2009 14:45:29 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Oct 2009 15:12:10 +0200
 
 cdbs (0.4.61+nmu1) unstable; urgency=low
 
