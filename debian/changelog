@@ -1,3 +1,14 @@
+cdbs (0.4.31) unstable; urgency=low
+
+  * Added CDBS guide from DuckCorp.
+  * Register guide into doc-base, and suggest it.
+  * Added myself to Uploaders as i am officially in charge of
+    documentation.
+  * Updated 'debian/copyright'.
+  * Increased Standards-Version (no changes needed).
+
+ -- Marc Dequènes (Duck) <Duck@DuckCorp.org>  Tue,  5 Jul 2005 21:49:38 +0200
+
 cdbs (0.4.30) unstable; urgency=low
 
   * This time do it right.  (Closes: #301692)

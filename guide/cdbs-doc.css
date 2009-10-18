@@ -1,0 +1,19 @@
+
+img {
+	border: none;
+}
+
+pre {
+        border: 1px solid #CBCBCB;
+        background-color: #FFF8ED;
+        color: black;
+}
+
+.warning {
+	color: #FF0000;
+}
+
+.strong {
+	font-weight:bold;
+}
+

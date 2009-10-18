@@ -35,3 +35,12 @@ include 1/rules/simple-patchsys.mk.in
 
 DEB_INSTALL_DOCS_ALL += ChangeLog
 DEB_MAKE_CHECK_TARGET := check
+
+DEB_COMPRESS_EXCLUDE := .xhtml
+
+build/cdbs::
+	make -C guide
+
+clean::
+	make -C guide dist-clean
+

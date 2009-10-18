@@ -1,0 +1,1470 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "docbook/dtd/xml/4.3/docbookx.dtd">
+
+<book>
+	<bookinfo>
+		<title>CDBS Documentation</title>
+		<date>2005-03-29</date>
+		<corpname>DuckCorp</corpname>
+		<authorgroup>
+			<author>
+				<firstname>Marc</firstname>
+				<othername>(Duck)</othername>
+				<surname>Dequènes</surname>
+				<email>duck@duckcorp.org</email>
+			</author>
+			<author>
+				<firstname>Arnaud</firstname>
+				<othername>(Rtp)</othername>
+				<surname>Patard</surname>
+				<email>arnaud.patard@rtp-net.org</email>
+			</author>
+		</authorgroup>
+		<revhistory>
+			<revision>
+				<revnumber>0.1.0</revnumber>
+				<date>2005-04-03</date>
+				<revremark>
+					First Public Release (for CDBS V0.4.27-3)
+				</revremark>
+			</revision>
+			<revision>
+				<revnumber>0.1.1</revnumber>
+				<date>2005-06-07</date>
+				<revremark>
+					Updated for CDBS V0.4.30 (perl class build dependency management, cdbs-edit-patch script)
+				</revremark>
+			</revision>
+			<revision>
+				<revnumber>0.1.2</revnumber>
+				<date>2005-07-05</date>
+				<revremark>
+					Added DEB_CONFIGURE_SCRIPT_ENV usage warning, fixed typo.
+				</revremark>
+			</revision>
+		</revhistory>
+		<legalnotice>
+			<para>
+				Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink url="http://www.gnu.org/licenses/gpl.html">GNU General Public License</ulink>, Version 2 or any later version published by the Free Software Foundation.
+			</para>
+		</legalnotice>
+		<copyright>
+			<year>2004-2005</year>
+			<holder>DuckCorp</holder>
+		</copyright>
+		<subjectset scheme="Debian">
+			<subject>
+				<subjectterm>Debian build system</subjectterm>
+				<subjectterm>Debian Packaging</subjectterm>
+			</subject>
+			<subject>
+				<subjectterm>CDBS</subjectterm>
+			</subject>
+		</subjectset>
+	</bookinfo>
+
+	<preface>
+		<title>Foreword</title>
+		<para>
+			This documentation describes what we succeeded to learn about CDBS usage, with as much details as possible.
+			Nevertheless, we are not using the whole set of available features ourselves, and some parts of this documentation were written for mere convinience and completeness.
+		</para>
+		<para>
+			Please note some examples in this documentation contains folded content which is necessary to keep the pages at a reasonnable width ; take care to unfold them when necessary before using them (eg: 'debian/control' content must not be folded or build will fail or result be incorrect).
+		</para>
+		<para>
+			If you find mistakes or missing information, feel free to contact Marc Dequènes (Duck) <email>duck@duckcorp.org</email>.
+		</para>
+	</preface>
+
+	<toc />
+
+	<lot />
+
+	<chapter>
+		<title>Introduction</title>
+		<sect1>
+			<title>A bit of history</title>
+			<para>
+				CDBS was written by Jeff Bailey and Colin Walters in march 2003, later joined by 4 other developpers.
+			</para>
+			<para>
+				Basic information can be found on their <ulink url="http://alioth.debian.org/projects/build-common/">project page</ulink>.
+				In the package is provided <ulink url="http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/cdbs/examples/?cvsroot=build-common">a small set of examples</ulink> (also available in the package here : /usr/share/doc/cdbs/examples/).
+			</para>
+			<para>
+				Since we were experimenting CDBS, it was obvious the lack of documention was preventing us from using it widely in our packages.
+				Thus we started to write some notes on CDBS usage, quickly growing to several pages.
+				This documentation is a revised version from the original <ulink url="https://wiki.duckcorp.org/DebianPackagingTutorial_2fCDBS">DuckCorp Wiki page</ulink>.
+			</para>
+		</sect1>
+		<sect1>
+			<title>Why CDBS ?</title>
+			<para>
+				CDBS is designed to simplify the maintainer's work so that they only need to think about packaging and not maintaining a 'debian/rules' file that keeps growing bigger and more complicated.
+				So CDBS can handle for you most of common rules and detect some parts of your configuration.
+			</para>
+			<para>
+				CDBS only uses simple makefile rules and is easily extensible using classes. Classes for handling autotools buildsys, applying patches to source, gnome softwares, python intall, and so on are available.
+			</para>
+			<para>
+				CDBS advantages :
+				<itemizedlist>
+					<listitem><simpara>short, readable and efficient 'debian/rules'</simpara></listitem>
+					<listitem><simpara>automates debhelper and autotools for you so you don't have to bother about this unpleasant and repetitive tasks</simpara></listitem>
+					<listitem><simpara>maintainer can focus on real packaging problems because CDBS helps you but do not limit customization</simpara></listitem>
+					<listitem><simpara>classes used in CDBS have been well tested so you are using error-proof rules and avoid dirty hacks to solve common problems</simpara></listitem>
+					<listitem><simpara>switching to CDBS is easy</simpara></listitem>
+					<listitem><simpara>can be used to generate debian files (like 'debian/control' for GNOME Team Uploaders inclusion)</simpara></listitem>
+					<listitem><simpara>CDBS is easily extendable</simpara></listitem>
+					<listitem><simpara>It |70&gt;&lt; !!!</simpara></listitem>
+				</itemizedlist>
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>First steps</title>
+		<sect1>
+			<title>Convert pkg to CDBS</title>
+			<para>
+				Converting to CDBS is easy; A simple 'debian/rules' for a C/C++ software with no extra rules would be written as this :
+				<informalexample>
+					<programlisting>
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				No, i'm not joking, this is sufficient to handle autotools management, like updating config.{guess|sub}, cleanup temp files after build and launch all common debhelper stuff.
+			</para>
+			<para>
+				Just use compat level 4 (i don't know if 3 works), create your &lt;pkg&gt;.install, &lt;pkg&gt;.info, etc as you usually do with dh_* scripts, and CDBS would call them if necessary, autodetecting a lot of things. (in case of a missing compat information, CDBS would create 'debian/compat' file with compatibility level 4)
+			</para>
+			<important>
+				<para>
+					If 'debian/control' management is activated (see below), build dependency on 'cdbs' is automatically added, if not, you will have to do it yourself.
+				</para>
+			</important>
+		</sect1>
+		<sect1>
+			<title>Basic settings and available variables</title>
+			<para>
+				Remember you can get the pkg directory using the $(CURDIR) variable.
+			</para>
+			<para>
+				You can change common build parameters this way :
+				<informalexample>
+					<programlisting>
+# where sources are
+DEB_SRCDIR = $(CURDIR)/src
+# in which directory to build
+DEB_BUILDDIR = $(DEB_SRCDIR)/build
+# in which directory to install the sofware
+DEB_DESTDIR = $(CURDIR)/plop/
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				Some various variables you can use in 'debian/rules' :
+				<table>
+					<title>Common variables available in 'debian/rules'</title>
+					<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+						<tbody>
+							<row><entry>DEB_SOURCE_PACKAGE</entry><entry>name of the source package</entry></row>
+							<row><entry>DEB_VERSION</entry><entry>full Debian version</entry></row>
+							<row><entry>DEB_NOEPOCH_VERSION</entry><entry>Debian version without epoch</entry></row>
+							<row><entry>DEB_ISNATIVE</entry><entry>non-empty if package is native</entry></row>
+							<row><entry></entry><entry></entry></row>
+							<row><entry>DEB_ALL_PACKAGES</entry><entry>list of all binary packages</entry></row>
+							<row><entry>DEB_INDEP_PACKAGES</entry><entry>list of architecture independant binary packages</entry></row>
+							<row><entry>DEB_ARCH_PACKAGES</entry><entry>list of architecture dependant binary packages</entry></row>
+							<row><entry>DEB_PACKAGES</entry><entry>list of normal (non-udeb) binary packages</entry></row>
+							<row><entry>DEB_UDEB_PACKAGES</entry><entry>list of udeb binary packages, if any</entry></row>
+							<row><entry></entry><entry></entry></row>
+							<row><entry>DEB_ARCH</entry><entry>the old Debian architecture name</entry></row>
+							<row><entry></entry><entry><emphasis>/!\ deprecated, only use to provide backward compatibility /!\</emphasis></entry></row>
+							<row><entry></entry><entry>(see man dpkg-architecture for more information)</entry></row>
+							<row><entry>DEB_HOST_GNU_TYPE</entry><entry>the GNU system type of the host machine</entry></row>
+							<row><entry>DEB_HOST_GNU_SYSTEM</entry><entry>the CPU part of DEB_HOST_GNU_TYPE</entry></row>
+						</tbody>
+					</tgroup>
+				</table>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Basic custom build rules</title>
+			<para>
+				Suppose you want custom rules for the source package foo, creating foo (arch-dep) and foo-data (arch-indep), you simply need to add some lines to 'debian/rules'.
+			</para>
+			<para>
+				To add pre-configure actions :
+				<informalexample>
+					<programlisting>
+makebuilddir/foo::
+   ln -s plop plop2
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				To add post-configure actions :
+				<informalexample>
+					<programlisting>
+configure/foo::
+   sed -ri 's/PLOP/PLIP/' Makefile
+
+configure/foo-data::
+   touch src/z.xml
+					</programlisting>
+				</informalexample>
+				<emphasis>/!\ in this case we are talking about package configuration and NOT about a configure script made with autotools.</emphasis>
+			</para>
+			<para>
+				To add post-build actions :
+				<informalexample>
+					<programlisting>
+build/foo::
+   /bin/bash debian/scripts/toto.sh
+
+build/foo-data::
+   $(MAKE) helpfiles
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				To add post-install actions :
+				<informalexample>
+					<programlisting>
+install/foo::
+   cp debian/tmp/myfoocmd debian/foo/foocmd
+   find debian/foo/ -name "CVS" -depth -exec rm -rf {} \;
+
+install/foo-date::
+   cp data/*.png debian/foo-data/usr/share/foo-data/images/
+   dh_stuff -m ipot -f plop.bz3 debian/foo-data/libexec/
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				To add post deb preparation actions :
+				<informalexample>
+					<programlisting>
+binary/foo::
+   strip --remove-section=.comment --remove-section=.note --strip-unneeded \
+      debian/foo/usr/lib/foo/totoz.so
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				To add pre-clean actions :
+				<informalexample>
+					<programlisting>
+cleanbuilddir/foo::
+   rm -f debian/fooman.1
+					</programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Common Build Options</title>
+			<para>
+				CFLAGS and CXXFLAGS are set to "-g -Wall -O2" by default.
+			</para>
+			<para>
+				DEB_BUILD_OPTIONS is a well known Debian environment variable, not a CDBS one, containing special build options (a comma-separated list of keywords).
+				CDBS does check DEB_BUILD_OPTIONS to take these options into account ; see details in each class.
+			</para>
+		</sect1>
+		<sect1>
+			<title>Debhelper stuff</title>
+			<sect2>
+				<title>Not managing Debhelper</title>
+				<para>
+					Yes, CDBS is doing almost everything for you :) .
+				</para>
+				<para>
+					Just add this line to the beginning of your 'debian/rules' file :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/rules/debhelper.mk
+					</programlisting>
+				</informalexample>
+				</para>
+				<para>
+					CDBS debhelper rules handle the following dh_* scripts for each binary package automatically :
+					<table>
+						<title>Debhelper scripts commonly managed</title>
+						<tgroup cols='5' align='left' colsep='1' rowsep='1'>
+							<tbody>
+								<row>
+									<entry>dh_builddeb</entry>
+									<entry>dh_installchangelogs</entry>
+									<entry>dh_installemacsen</entry>
+									<entry>dh_installman</entry>
+									<entry>dh_perl</entry>
+								</row>
+								<row>
+									<entry>dh_clean</entry>
+									<entry>dh_installcron</entry>
+									<entry>dh_installexamples</entry>
+									<entry>dh_installmenu</entry>
+									<entry>dh_shlibdeps</entry>
+								</row>
+								<row>
+									<entry>dh_compress</entry>
+									<entry>dh_installdeb</entry>
+									<entry>dh_installinfo</entry>
+									<entry>dh_installpam</entry>
+									<entry>dh_strip</entry>
+								</row>
+								<row>
+									<entry>dh_fixperms</entry>
+									<entry>dh_installdebconf</entry>
+									<entry>dh_installinit</entry>
+									<entry>dh_link</entry>
+									<entry></entry>
+								</row>
+								<row>
+									<entry>dh_gencontrol</entry>
+									<entry>dh_installdirs</entry>
+									<entry>dh_installlogcheck</entry>
+									<entry>dh_makeshlibs</entry>
+									<entry></entry>
+								</row>
+								<row>
+									<entry>dh_install</entry>
+									<entry>dh_installdocs</entry>
+									<entry>dh_installlogrotate</entry>
+									<entry>dh_md5sums</entry>
+									<entry></entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</table>
+					Other dh_* scripts can be handled in specific classes or may be called in custom rules.
+				</para>
+				<important>
+					<para>
+						If 'debian/control' management is activated (see below), build dependency on 'debhelper' is automatically added, if not, you will have to do it yourself.
+					</para>
+					<para>
+						Having a versioned dependency on 'debhelper' is recommended as it will ensure people will use the version providing the necessary features (CDBS 'debian/control' management will do it).
+					</para>
+				</important>
+			</sect2>
+			<sect2>
+				<title>Debhelper parameters</title>
+				<para>
+					The following parameters allow debhelper calls customization while most common calls are still handled without writing any rule.
+					Some of them apply on all binary packaged, like DEB_INSTALL_DOCS_ALL, and some apply only to a specific package, like DEB_SHLIBDEPS_LIBRARY_&lt;pkg&gt; (where &lt;pkg&gt; is the name of the binary package).
+					Read the comments in '/usr/share/cdbs/1/rules/debhelper.mk' for a complete listing.
+					Some non-exhaustive examples follow.
+				</para>
+				<para>
+					To specify a tight dependency on a package containing shared libraries :
+					<informalexample>
+						<programlisting>
+DEB_DH_MAKESHLIBS_ARGS_libfoo := -V"libfoo (>= 0.1.2-3)"
+DEB_SHLIBDEPS_LIBRARY_arkrpg := libfoo
+DEB_SHLIBDEPS_INCLUDE_arkrpg := debian/libfoo/usr/lib/
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					To install a changelog file with an uncommon name as 'ProjectChanges.txt.gz' :
+					<informalexample>
+						<programlisting>
+DEB_INSTALL_CHANGELOGS_ALL := ProjectChanges.txt
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					To avoid compressing files with '.py' extension :
+					<informalexample>
+						<programlisting>
+DEB_COMPRESS_EXCLUDE := .py
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					To register a debug library package libfoo-dbg for libfoo (which needs unstripped '.so') :
+					<informalexample>
+						<programlisting>
+DEB_DH_STRIP_ARGS := --dbg-package=libfoo
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					Perl-specific debhelper options (dh_perl call is always performed) :
+					<informalexample>
+						<programlisting>
+# Add a space-separated list of paths to search for perl modules
+DEB_PERL_INCLUDE := /usr/lib/perl-z
+# Like the above, but for the 'libperl-stuff' package
+DEB_PERL_INCLUDE_libperl-stuff := /usr/lib/perl-plop
+
+# Overrides options passed to dh_perl
+DEB_DH_PERL_ARGS := -d
+						</programlisting>
+					</informalexample>
+				</para>
+			</sect2>
+			<sect2>
+				<title>Debhelper custom build rules</title>
+				<para>
+					CDBS debhelper rules also add more adequate build rules.
+				</para>
+				<para>
+					To add post deb preparation (including debhelper stuff) actions :
+					<informalexample>
+						<programlisting>
+binary-install/foo::
+   chmod a+x debian/foo/usr/bin/pouet
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					To add post clean actions :
+					<informalexample>
+						<programlisting>
+clean::
+   rm -rf plop.tmp
+						</programlisting>
+					</informalexample>
+				</para>
+				<para>
+					Several other rules exists, but we have not tested them :
+					<itemizedlist>
+						<listitem><simpara>binary-strip/foo (called after stripping)</simpara></listitem>
+						<listitem><simpara>binary-fixup/foo (called after gzipping and fixing permissions)</simpara></listitem>
+						<listitem><simpara>binary-predeb (called just before creating .deb)</simpara></listitem>
+					</itemizedlist>
+				</para>
+			</sect2>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>Common tasks</title>
+		<sect1>
+			<title>Patching sources (using simple-patchsys)</title>
+			<para>
+				First, patching sources directly is really BAD(tm), so you need a way to apply patches without touching any files.
+				These rules, inpired by the Dpatch system, are quite similar and powerful.
+				All you need is diff/patch knowledge, CDBS is doing the rest.
+			</para>
+			<para>
+				That's quite hard, so please listen carefully and prepare for examination.
+			</para>
+			<para>
+				First, add this line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+					</programlisting>
+				</informalexample>
+				And then use it !
+			</para>
+			<para>
+				Create the directory 'debian/patches' and put your patches in it.
+				Files should be named so as to reflect in which order they have to be applied, and must finish with the '.patch' or '.diff' suffix.
+				The class would take care of patching before configure and unpatch after clean.
+				It is possible to use patch level 0 to 3, and CDBS would try them and use the right level automatically.
+				The system can handle compressed patch with additionnal '.gz' or '.bz2' suffix.
+			</para>
+			<para>
+				You can customize the directories where patches are searched, and the suffix like this :
+				(defaults are : .diff .diff.gz .diff.bz2 .patch .patch.gz .patch.bz2)
+				<informalexample>
+					<programlisting>
+DEB_PATCHDIRS := debian/mypatches
+DEB_PATCH_SUFFIX := .plop
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				In case of errors when applying, for example 'debian/pacthes/01_hurd_ftbfs_pathmax.patch', you can read the log for this patch in 'debian/pacthes/01_hurd_ftbfs_pathmax.patch.level-0.log' ('0' because a level 0 patch).
+			</para>
+			<important>
+				<para>
+					If 'debian/control' management is activated (see below), build dependency on 'patchutils' is automatically added, if not, you will have to do it yourself.
+				</para>
+			</important>
+		</sect1>
+		<sect1>
+			<title>Patching sources (using dpatch)</title>
+			<para>
+				To use Dpatch as an alternative to the CDBS included patch system, just add his line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/rules/dpatch.mk
+					</programlisting>
+				</informalexample>
+				Now you can use Dpatch as usual and CDBS would call it automatically.
+			</para>
+			<important>
+				<para>
+					If 'debian/control' management is activated (see below), build dependency on 'dpatch' and 'patchutils' is automatically added, if not, you will have to do it yourself.
+				</para>
+			</important>
+		</sect1>
+		<sect1>
+			<title>Automatic tarball management</title>
+			<para>
+				To use the CDBS tarball system, just add his line to your 'debian/rules', and specify the name of the top directory of the extracted tarball :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/rules/tarball.mk
+
+DEB_TAR_SRCDIR := foosoft
+					</programlisting>
+				</informalexample>
+				CDBS will recognize tarballs with the following extensions : .tar .tgz .tar.gz .tar.bz .tar.bz2 .zip
+			</para>
+			<para>
+				The tarball location is autodetected if in the top source directory, or can be specified :
+				<informalexample>
+					<programlisting>
+DEB_TARBALL := $(CURDIR)/tarballdir/mygnustuff_beta-1.2.3.tar.gz
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				CDBS will handle automatic uncompression and cleanups, automagically set DEB_SRCDIR and DEB_BUILDDIR for you, and integrate well with other CDBS parts (like autotools class).
+			</para>
+			<para>
+				Moreover, if you want sources to be cleaned up from dirty SCM-specific dirs and file, just add this at the top of your 'debian/rules', before any include :
+				<informalexample>
+					<programlisting>
+DEB_AUTO_CLEANUP_RCS := yes
+					</programlisting>
+				</informalexample>
+			</para>
+			<important>
+				<para>
+					If needed, and if 'debian/control' management is activated (see below), build dependency on 'bzip2' or 'unzip' is automatically added, if not, you will have to do it yourself.
+				</para>
+			</important>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>Advanced customisation</title>
+		<sect1>
+			<title>'debian/control' management</title>
+			<para>
+				This feature allow :
+ 				<itemizedlist>
+					<listitem><simpara>CDBS to automatically manage some build-related Build-Depends automatically</simpara></listitem>
+					<listitem><simpara>use of embedded shell commands</simpara></listitem>
+					<listitem><simpara>use of CPU and System criterias to specify architecture (<emphasis>EXPERIMENTAL</emphasis>)</simpara></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				Build-related Build-Depends are dependencies introduced by the use of certain CDBS features, or autodetected needs.
+			</para>
+			<para>
+				Embedded shell commands allows including hacks like :
+				<informalexample>
+					<programlisting>
+Build-Depends: libgpm-dev [`type-handling any linux-gnu`]
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				CPU and System criterias implements support for Cpu/System fields, as a replacement for the Architecture field (which is to be implemented in dpkg in the long term, but still <emphasis>EXPERIMENTAL</emphasis>).
+				Here is an exemple, before :
+				<informalexample>
+					<programlisting>
+Architecture: all
+					</programlisting>
+				</informalexample>
+				and after :
+				<informalexample>
+					<programlisting>
+Cpu: all
+System: all
+					</programlisting>
+				</informalexample>
+				If these fields are used, it is also possible to include special tags to easily take advantage of the 'type-handling' tool, like in this example :
+				<informalexample>
+					<programlisting>
+Build-Depends: @cdbs@, procps [system: linux], plop [cpu: s390]
+					</programlisting>
+				</informalexample>
+				(look at the 'type-handling' package documentation, for more information)
+			</para>
+			<formalpara>
+				<title>Here is the recipe :</title>
+				<para>
+					<orderedlist>
+						<listitem><simpara>Rename 'debian/control' into 'debian/control.in'.</simpara></listitem>
+						<listitem>
+							<simpara>Replace cdbs / debhelper / ... Build-Depends with @cdbs@ in your 'debian/control.in' like this :</simpara>
+							<informalexample>
+								<programlisting><![CDATA[
+Build-Depends-Indep: @cdbs@, python-dev (>= 2.3), python-soya (>= 0.9), \
+   python-soya (<< 0.10), python-openal(>= 0.1.4-4), gettext
+						]]></programlisting>
+							</informalexample>
+						</listitem>
+						<listitem>
+							<simpara>Add the following line to 'debian/rules', before <emphasis>any</emphasis> include :</simpara>
+							<informalexample>
+								<programlisting>
+DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+								</programlisting>
+							</informalexample>
+						</listitem>
+						<listitem><simpara>Then do a "<command>debian/rules clean</command>" run to (re)generate 'debian/control'.</simpara></listitem>
+					</orderedlist>
+				</para>
+			</formalpara>
+		</sect1>
+		<sect1>
+			<title>Using the Autotools class</title>
+			<para>
+				This class is able to use configure scripts and makefiles generated with autotools (and possibly libtool).
+				All rules are called automatically and clean rules to remove generated files during build are also added.
+			</para>
+			<para>
+				To use it, just add this line to your 'debian/rules'
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/autotools.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				CDBS automatically handles common flags to pass to the configure script, but it is possible to give some extra parameters :
+				<informalexample>
+					<programlisting>
+DEB_CONFIGURE_EXTRA_FLAGS := --with-ipv6 --with-foo
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				If the build system uses non-standard configure options you can override CDBS default behavior :
+				<informalexample>
+					<programlisting>
+COMMON_CONFIGURE_FLAGS := --program-dir=/usr
+					</programlisting>
+				</informalexample>
+				(notice that DEB_CONFIGURE_EXTRA_FLAGS would still be appended)
+			</para>
+			<para>
+				If some specific environnement variables need to be setup, use :
+				<informalexample>
+					<programlisting>
+DEB_CONFIGURE_SCRIPT_ENV += LDFLAGS=" -Wl,-z,defs -Wl,-O1"
+					</programlisting>
+				</informalexample>
+				<warning>
+					<para>
+						Prefer use of += instead of := not to override other environment variables (like CC / CXX / ...) defined in the CDBS default.
+					</para>
+				</warning>
+			</para>
+			<para>
+				CDBS will automatically update 'config.sub', 'config.guess', and 'config.rpath' before build and restore the old ones at clean stage (even if using the tarball system).
+				If needed, and if 'debian/control' management is activated, 'autotools-dev' and/or 'gnulib' will then be automatically added to the build dependencies (needed to find updated versions of the files).
+			</para>
+			<para>
+				If the program does not use the top source directory to store autoconf files, you can teach CDBS where it is to be found :
+				<informalexample>
+					<programlisting>
+DEB_AC_AUX_DIR = $(DEB_SRCDIR)/autoconf
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				CDBS can be asked to update libtool, autoconf, and automake files, but this behavior is likely to break the build system and is '''STRONGLY''' discouraged.
+				Nevertheless, if you still want this feature, set the following variables :
+ 				<itemizedlist>
+					<listitem><simpara>DEB_AUTO_UPDATE_LIBTOOL</simpara></listitem>
+					<listitem><simpara>DEB_AUTO_UPDATE_AUTOCONF</simpara></listitem>
+					<listitem><simpara>DEB_AUTO_UPDATE_AUTOMAKE</simpara></listitem>
+ 				</itemizedlist>
+				(corresponding build dependencies will automatically be added)
+			</para>
+			<para>
+				The following make parameters can be overridden :
+				<informalexample>
+					<programlisting>
+# these are the defaults CDBS provides
+DEB_MAKE_INSTALL_TARGET := install DESTDIR=$(DEB_DESTDIR)
+DEB_MAKE_CLEAN_TARGET := distclean
+DEB_MAKE_CHECK_TARGET :=
+
+# example to work around dirty makefile
+DEB_MAKE_INSTALL_TARGET := install prefix=$(CURDIR)/debian/tmp/usr
+
+# example with unexistant install rule for make
+DEB_MAKE_INSTALL_TARGET :=
+
+# example to activate check rule
+DEB_MAKE_CHECK_TARGET := check
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				DEB_BUILD_OPTIONS is checked for the following options :
+ 				<itemizedlist>
+					<listitem><simpara>noopt : use -O0 instead of -O2</simpara></listitem>
+					<listitem><simpara>nocheck : skip the check rule</simpara></listitem>
+ 				</itemizedlist>
+			</para>
+			<para>
+				CDBS automagically cleans autotools files generated during build ('config.cache', 'config.log', and 'config.status').
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the Makefile class</title>
+			<para>
+				This class is for the guys who only have a Makefile to build the program. You only need to have four rules in the Makefile : 
+				<itemizedlist>
+					<listitem><simpara>one for cleaning the build directory (i.e. mrproper)</simpara></listitem>
+					<listitem><simpara>one for building your software (i.e. myprog)</simpara></listitem>
+					<listitem><simpara>one for checking if the software is working properly (i.e. check)</simpara></listitem>
+					<listitem><simpara>one for installing your software (i.e. install)</simpara></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				To be honest, the install rules is not a must-have, but it always helps a lot when you've got it.
+			</para>
+			<para>
+				The first operation, is to write the debian/rules. First, we add the include lines : 
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/makefile.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				Now, it remains to tell cdbs the name of our four Makefile rules. For the previous examples it gives : 
+				<informalexample>
+					<programlisting>
+DEB_MAKE_CLEAN_TARGET    := mrproper
+DEB_MAKE_BUILD_TARGET    := myprog 
+DEB_MAKE_INSTALL_TARGET  := install DESTDIR=$(CURDIR)/debian/tmp/
+# no check for this software
+DEB_MAKE_CHECK_TARGET :=
+
+# example when changing environnement variables is necessary :
+DEB_MAKE_ENVVARS    := CFLAGS="-pwet"
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				DEB_BUILD_OPTIONS is checked for the following options :
+				<itemizedlist>
+					<listitem><simpara>noopt : use -O0 instead of -O2</simpara></listitem>
+					<listitem><simpara>nocheck : skip the check rule</simpara></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				If your Makefile doesn't support the DESTDIR variable, take a look in it and find the variable responsible for setting installation directory. If you don't find some variable to do this, you'll have to patch the file...
+			</para>
+			<para>
+				That's all :)
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the Perl class</title>
+			<para>
+				This class can manage standard perl build and install with MakaMaker method.
+			</para>
+			<para>
+				To use this class, add this line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/perlmodule.mk
+					</programlisting>
+				</informalexample>
+				Optionally, it can take care of using dh_perl, depending the debhelper class is declared before the perl class or not.
+			</para>
+			<para>
+				Install path defaults to '&lt;first_pkg&gt;/usr' where &lt;first_pkg&gt; is the first package in 'debian/control'.
+			</para>
+			<para>
+				You can customize build options like this :
+				<informalexample>
+					<programlisting>
+# change MakeMaker defaults (should never be usefull)
+DEB_MAKE_BUILD_TARGET := build-all
+DEB_MAKE_CLEAN_TARGET := realclean
+DEB_MAKE_CHECK_TARGET :=
+DEB_MAKE_INSTALL_TARGET := install PREFIX=debian/stuff
+
+# add custom MakeMaker options
+DEB_MAKEMAKER_USER_FLAGS := --with-ipv6
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				Common makefile or general options can still be overrided : DEB_MAKE_ENVVARS, DEB_BUILDDIR (must match DEB_SRCDIR for Perl)
+			</para>
+			<para>
+				Have a look at Perl-specific debhelper options described above.
+			</para>
+			<important>
+				<para>
+					If 'debian/control' management is activated (see below), build dependency on 'perl' is automatically added, if not, you will have to do it yourself.
+				</para>
+			</important>
+		</sect1>
+		<sect1>
+			<title>Using the Python class</title>
+			<para>
+				This class can manage common python builds using 'distutils' automatically.
+			</para>
+			<para>
+				To use this class, add this line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/python-distutils.mk
+					</programlisting>
+				</informalexample>
+				Optionally, it can take care of using dh_python, depending the debhelper class is declared before the python class or not.
+			</para>
+			<para>
+				Most python packages are architecture all, and then don't need being build for multiple python versions ; your package should then be called 'python-&lt;foo&gt;' and CDBS would automatically use the current Debian python version to build it.
+				If your package contains a compiled part or a binding to an external lib, then you will have packages named 'python2.3-&lt;foo&gt;', 'python2.4-&lt;foo&gt;', and so on, depending on ${python:Depends} (and perhaps other packages), then CDBS would automatically build each package with the corresponding python version. In this case, don't forget to add a 'python-&lt;foo&gt;' convenience dummy package depending on the curent Debian python version.
+			</para>
+			<para>
+				You can customize build options like this :
+				<informalexample>
+					<programlisting>
+# force using a specific python version for build
+# (should not be necessary)
+DEB_PYTHON_COMPILE_VERSION := 2.3
+
+# change the python build script name (default is 'setup.py')
+DEB_PYTHON_SETUP_CMD := install.py
+
+# clean options for the python build script
+DEB_PYTHON_CLEAN_ARGS = -all
+
+# build options for the python build script
+DEB_PYTHON_BUILD_ARGS = --build-base="$(DEB_BUILDDIR)/specific-build-dir"
+
+# common additional install options for all binary packages
+#   ('--root' option is always set)
+DEB_PYTHON_INSTALL_ARGS_ALL = --no-compile --optimize --force
+
+# specific additional install options for binary package 'foo'
+#   ('--root' option is always set)
+DEB_PYTHON_INSTALL_ARGS_foo := --root=debian/foo-install-dir/
+					</programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the GNOME class</title>
+			<para>
+				This class adds a make environnement variable :	GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL = 1
+				(''This is necessary because the Gconf schemas have to be registered at install time.
+				In the case of packaging, this registration cannot be done when building the package, so this variable disable schema registration in 'make install'.
+				This procedure if defered until gconftool-2 is called in 'debian/postinst' to register them, and in 'debian/prerm' to unregister them.
+				The dh_gconf script is able to add the right rules automatically for you.'')
+			</para>
+			<para>
+				It can handle the following dh_* scripts automagically :
+				<table>
+					<title>Debhelper scripts managed by the GNOME class</title>
+					<tgroup cols='3' align='left' colsep='1' rowsep='1'>
+						<tbody>
+							<row><entry>dh_desktop</entry><entry>dh_gconf</entry><entry>dh_scrollkeeper</entry></row>
+						</tbody>
+					</tgroup>
+				</table>
+			</para>
+			<para>
+				Moreover it adds some more clean rules :
+				<itemizedlist>
+					<listitem><simpara>to remove intltool generated files</simpara></listitem>
+					<listitem><simpara>to remove scrollkeeper generated files</simpara></listitem>
+ 				</itemizedlist>
+			</para>
+			<para>
+				To use it, just add this line to your 'debian/rules', after the debhelper class include :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/gnome.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				For more information on GNOME specific packaging rules, look at the <ulink url="http://alioth.debian.org/docman/view.php/30194/18/gnome-policy-20030502-1.html">Debian GNOME packaging policy</ulink>.
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the Debian GNOME Team class</title>
+			<para>
+				If you are part of the GNOME Team, or having the Team as Uploaders, and you feel bored maintaining the list of developpers, this class is made for you.
+			</para>
+			<para>
+				To use this class, add this line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				Rename your 'debian/control' file to 'debian/control.in' and run the clean rule (./debian/rules clean) to regenerate the 'debian/control' file, replacing the '@GNOME_TEAM@' tag with the list of developpers automatically.
+			</para>
+			<warning>
+				<para>
+					If you are using the 'debian/control' file management described below, please note this class will override this feature
+					To cope with this problem, allowing at least Build-Depends handling, use the following work-arround (until it is solved in a proper way) :
+				<informalexample>
+					<programlisting>
+# deactivate 'debian/control' file management
+#DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+
+# ...
+# includes and other stuff
+# ...
+
+clean::
+  sed -i "s/@cdbs@/$(CDBS_BUILD_DEPENDS)/g" debian/control
+  # other clean stuff
+					</programlisting>
+				</informalexample>
+				</para>
+			</warning>
+		</sect1>
+		<sect1>
+			<title>Using the KDE class</title>
+			<para>
+				To use this class, add this line to your 'debian/rules' file :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/kde.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				CDBS automatically exports the following variables with the right value :
+				<itemizedlist>
+					<listitem><simpara>kde_cgidir (/usr/lib/cgi-bin)</simpara></listitem>
+					<listitem><simpara>kde_confdir (/etc/kde3)</simpara></listitem>
+					<listitem><simpara>kde_htmldir (/usr/share/doc/kde/HTML)</simpara></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				DEB_BUILDDIR, DEB_AC_AUX_DIR and DEB_CONFIGURE_INCLUDEDIR are set to KDE defaults.
+			</para>
+			<para>
+				The following files are excluded from compression :
+				<itemizedlist>
+					<listitem><simpara>.dcl</simpara></listitem>
+					<listitem><simpara>.docbook</simpara></listitem>
+					<listitem><simpara>-license</simpara></listitem>
+ 				</itemizedlist>
+			</para>
+			<para>
+				It can handle configure options specific to KDE (not forgeting disabling rpath and activating xinerama), set the correct autotools directory, and launch make rules adequately.
+			</para>
+			<para>
+				DEB_BUILD_OPTIONS is checked for the following options :
+				<itemizedlist>
+					<listitem><simpara>nofinal : disable KDE final mode</simpara></listitem>
+					<listitem><simpara>nostrip : enable KDE debug and disable KDE final mode</simpara></listitem>
+ 				</itemizedlist>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the Ant class</title>
+			<para>
+				(Ant is a java-based build tool)
+			</para>
+			<para>
+				To use this class, add this include to your 'debian/rules' and set the following variables :
+				<informalexample>
+					<programlisting><![CDATA[
+include /usr/share/cdbs/1/class/ant.mk
+
+# Set either a single (JAVA_HOME) or multiple (JAVA_HOME_DIRS) java locations
+JAVA_HOME := /usr/lib/kaffe
+# or set JAVACMD if you don't use default '<JAVA_HOME>/bin/java' path
+#JAVACMD := /usr/bin/java
+
+# Set Ant location
+ANT_HOME := /usr/share/ant-cvs
+					]]></programlisting>
+				</informalexample>
+			</para>
+			<para>
+				You may add additionnal JARs like in the following example :
+				<informalexample>
+					<programlisting>
+# list of additionnal JAR files ('.jar' extension may be omited)
+#   (path must be absolute of relative to '/usr/share/java')
+DEB_JARS := /usr/lib/java-bonus/ldap-connector adml-adapter.jar
+					</programlisting>
+				</informalexample>
+				<warning>
+					<para>
+						Due to a CDBS bug, you must always add "$(ANT_HOME)/lib/ant-launcher.jar" to DEB_JARS or Ant will fail.
+					</para>
+				</warning>
+			</para>
+			<para>
+				The property file defaults to 'debian/ant.properties'.
+			</para>
+			<para>
+				You can provide additionnal JVM arguments using ANT_OPTS. You can provide as well additionnal Ant command line arguments using ANT_ARGS (global) and/or ANT_ARGS_&lt;pkg&gt; (for package &lt;pkg&gt;), thus overriding the settings in 'build.xml' and the property file.
+			</para>
+			<para>
+				CDBS will build and clean using defaults target from 'build.xml'. To override these rules, or run the install / check rules, set the following variables to your needs :
+				<informalexample>
+					<programlisting>
+# override build and clean target
+DEB_ANT_BUILD_TARGET = makeitrule
+DEB_ANT_CLEAN_TARGET = super-clean
+# i want install and test rules to be run
+DEB_ANT_INSTALL_TARGET = install-all
+DEB_ANT_TEST_TARGET = check
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				DEB_BUILD_OPTIONS is checked for the following options :
+				<itemizedlist>
+					<listitem><simpara>noopt : set 'compile.optimize' Ant option to false</simpara></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				You should be able to fetch some more information on this java-based build tool in the <ulink url="http://ant.apache.org/">Ant Apache web site</ulink>.
+			</para>
+		</sect1>
+		<sect1>
+			<title>Using the HBuild class</title>
+			<para>
+				(HBuild is the Haskell mini-distutils)
+			</para>
+			<para>
+				CDBS can take care of -hugs and -ghc packages : invoke 'Setup.lhs' properly for clean and install part.
+			</para>
+			<para>
+				To use this class, add this line to your 'debian/rules' :
+				<informalexample>
+					<programlisting>
+include /usr/share/cdbs/1/class/hbuild.mk
+					</programlisting>
+				</informalexample>
+			</para>
+			<para>
+				You should be able to fetch some more information on Haskell distutils in <ulink url="http://www.haskell.org/pipermail/libraries/2003-July/001239.html">this thread</ulink>.
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>Hall of examples</title>
+		<sect1>
+			<title>GNOME + autotools + simple patchsys example</title>
+			<para>
+				(example from the 'gnome-panel' package)
+			</para>
+			<para>
+				'debian/control.in':
+				<informalexample>
+					<programlisting><![CDATA[
+Source: gnome-panel
+Section: gnome
+Priority: optional
+Maintainer: Marc Dequènes (Duck) <Duck@DuckCorp.org>
+Uploaders: Sebastien Bacher <seb128@debian.org>, Arnaud Patard \
+   <arnaud.patard@rtp-net.org>, @GNOME_TEAM@
+Standards-Version: 3.6.1.1
+Build-Depends: @cdbs@, liborbit2-dev (>= 2.10.2-1.1), intltool, gnome-pkg-tools, \
+   libglade2-dev (>= 1:2.4.0), libwnck-dev (>= 2.8.1-3), scrollkeeper \
+   (>= 0.3.14-9.1), libgnome-desktop-dev (>= 2.8.3-2), libpng3-dev, sharutils, \
+   libbonobo2-dev (>= 2.8.0-3), libxmu-dev, autotools-dev, libedata-cal-dev \
+   (>= 1.0.2-3)
+
+Package: gnome-panel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, gnome-panel-data \
+   (= ${Source-Version}), gnome-desktop-data (>= 2.8.1-2), gnome-session \
+   (>= 2.8.1-4), gnome-control-center (>= 1:2.8.1-3)
+Conflicts: gnome-panel2, quick-lounge-applet (<= 0.98-1), system-tray-applet, \
+   metacity (<= 2.6.0), menu (<< 2.1.9-1)
+Recommends: gnome-applets (>= 2.8.2-1)
+Suggests: menu (>= 2.1.9-1), yelp, gnome2-user-guide, gnome-terminal | \
+   x-terminal-emulator, gnome-system-tools
+Description: launcher and docking facility for GNOME 2
+ This package contains toolbar-like “panels” which can be attached to
+ the sides of your X desktop, or left “floating”. It is designed to be
+ used in conjunction with the Gnome Desktop Environment. Many features
+ are provided for use with the panels – including an application menu,
+ clock, mail checker, network monitor, quick launch icons and the like.
+
+Package: libpanel-applet2-0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Replaces: gnome-panel (<< 2.6.0-2)
+Description: library for GNOME 2 panel applets
+ This library is used by GNOME 2 panel applets.
+
+Package: libpanel-applet2-dbg
+Section: libdevel
+Architecture: any
+Depends: libpanel-applet2-0 (= ${Source-Version})
+Description: library for GNOME 2 panel applets - library with debugging symbols
+ This library is used by GNOME 2 panel applets.
+ .
+ This package contains unstripped shared libraries. It is provided primarily
+ to provide a backtrace with names in a debugger, this makes it somewhat
+ easier to interpret core dumps. The libraries are installed in
+ /usr/lib/debug and can be used by placing that directory in
+ LD_LIBRARY_PATH.
+ Most people will not need this package.
+
+Package: libpanel-applet2-dev
+Section: libdevel
+Architecture: any
+Depends: libpanel-applet2-0 (= ${Source-Version}), libgnomeui-dev (>= 2.7.1-1)
+Replaces: gnome-panel (<< 2.6.0-2), gnome-panel-data (<< 2.6.0)
+Description: library for GNOME 2 panel applets - development files
+ This packages provides the include files and static library for the GNOME 2
+ panel applet library functions.
+
+Package: libpanel-applet2-doc
+Section: doc
+Architecture: all
+Suggests: doc-base
+Replaces: libpanel-applet2-dev (<= 2.0.11-1)
+Description: library for GNOME 2 panel applets - documentation files
+ This packages provides the documentation files for the GNOME 2 panel applet
+ library functions.
+
+Package: gnome-panel-data
+Section: gnome
+Architecture: all
+Depends: gnome-panel (= ${Source-Version}), scrollkeeper (>= 0.3.14-9.1), \
+   ${misc:Depends}
+Conflicts: gnome-panel-data2, gnome-core (<< 1.5)
+Replaces: gnome-desktop-data (<= 2.2.2-1), gnome-panel (<< 2.6.0-2)
+Description: common files for GNOME 2 panel
+ This package includes some files that are needed by the GNOME 2 panel
+ (Pixmaps, .desktop files and internationalization files).
+					]]></programlisting>
+				</informalexample>
+			</para>
+			<para>
+				'debian/rules':
+				<informalexample>
+					<programlisting><![CDATA[
+#!/usr/bin/make -f
+
+# Gnome Team
+include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+# Including this file gets us a simple patch system.  You can just
+# drop patches in debian/patches, and they will be automatically
+# applied and unapplied.
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+# Including this gives us a number of rules typical to a GNOME
+# program, including setting GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1.
+# Note that this class inherits from autotools.mk and docbookxml.mk,
+# so you don't need to include those too.
+include /usr/share/cdbs/1/class/gnome.mk
+
+DEB_CONFIGURE_SCRIPT_ENV := LDFLAGS="-Wl,-z,defs -Wl,-O1"
+DEB_CONFIGURE_EXTRA_FLAGS := --enable-eds
+
+# debug lib
+DEB_DH_STRIP_ARGS := --dbg-package=libpanel-applet-2
+
+# tight versioning
+DEB_NOREVISION_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | \
+   cut -f 2 -d ' ' | cut -f 1 -d '-')
+DEB_DH_MAKESHLIBS_ARGS_libpanel-applet2-0 := -V"libpanel-applet2-0 \
+   (>= $(DEB_NOREVISION_VERSION))"
+DEB_SHLIBDEPS_LIBRARY_gnome-panel:= libpanel-applet2-0
+DEB_SHLIBDEPS_INCLUDE_gnome-panel := debian/libpanel-applet2-0/usr/lib/
+
+
+binary-install/gnome-panel::
+        chmod a+x debian/gnome-panel/usr/lib/gnome-panel/*
+
+binary-install/gnome-panel-data::
+        chmod a+x debian/gnome-panel-data/etc/menu-methods/gnome-panel-data
+        find debian/gnome-panel-data/usr/share -type f -exec chmod -R a-x {} \;
+
+binary-install/libpanel-applet2-doc::
+        find debian/libpanel-applet2-doc/usr/share/doc/libpanel-applet2-doc/ \
+	-name ".arch-ids" -depth -exec rm -rf {} \;
+
+clean::
+        # GNOME Team 'uploaders.mk' should not override this behavior
+        #   here is a workarround :
+        sed -i "s/@cdbs@/$(CDBS_BUILD_DEPENDS)/g" debian/control
+        # cleanup not done by buildsys
+        -find help -name '*omf.out' -exec rm -f {} \;
+        -find . -name "Makefile" -exec rm -f {} \;
+        # binary unpatch
+        uudecode -o po/fr.gmo debian/maintfiles/fr.gmo.uu
+        uudecode -o po/or.gmo debian/maintfiles/or.gmo.uu
+        uudecode -o po/uk.gmo debian/maintfiles/uk.gmo.uu
+
+					]]></programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Python example</title>
+			<para>
+				(example from 'python-dice', an unofficial DC package)
+			</para>
+			<para>
+				'debian/control.in':
+				<informalexample>
+					<programlisting><![CDATA[
+Source: python-dice
+Section: python
+Priority: optional
+Maintainer: Marc Dequènes (Duck) <Duck@DuckCorp.org>
+Standards-Version: 3.6.1.1
+Build-Depends: @cdbs@, python2.3-dev, python2.4-dev, swig, libdice2-dev \
+   (>= 0.6.2.fixed.1)
+
+Package: python-dice
+Architecture: all
+Depends: python2.3-dice
+Description: python bindings for dice rolling and simulation library
+ PyDice is a python module for dice rolling and simulation (using fuzzy
+ logic).
+ .
+ It provides a Python API to the libdice2 library.
+ .
+ This is a dummy package automatically selecting the current Debian
+ python version.
+
+Package: python2.3-dice
+Architecture: any
+Depends: ${python:Depends}
+Description: python bindings for dice rolling and simulation library
+ PyDice is a python module for dice rolling and simulation (using fuzzy
+ logic).
+ .
+ It provides a Python API to the libdice2 library.
+
+Package: python2.4-dice
+Architecture: any
+Depends: ${python:Depends}
+Description: python 2.4 bindings for dice rolling and simulation library
+ PyDice is a python module for dice rolling and simulation (using fuzzy
+ logic).
+ .
+ It provides a Python 2.4 API to the libdice2 library.
+
+					]]></programlisting>
+				</informalexample>
+			</para>
+			<para>
+				'debian/rules':
+				<informalexample>
+					<programlisting><![CDATA[
+#!/usr/bin/make -f
+
+DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+
+clean::
+        # hack (CDBS bug -- see #300149)
+        -rm -rf build
+					]]></programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Makefile + Dpatch example</title>
+			<para>
+				(example from the 'apg' package)
+			</para>
+			<para>
+				'debian/control.in':
+				<informalexample>
+					<programlisting><![CDATA[
+Source: apg
+Section: admin
+Priority: optional
+Maintainer: Marc Haber <mh+debian-packages@zugschlus.de>
+Build-Depends: @cdbs@
+Standards-Version: 3.6.1
+
+Package: apg
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Automated Password Generator - Standalone version
+ APG (Automated Password Generator) is the tool set for random
+ password generation. It generates some random words of required type
+ and prints them to standard output. This binary package contains only
+ the standalone version of apg.
+ Advantages:
+  * Built-in ANSI X9.17 RNG (Random Number Generator)(CAST/SHA1)
+  * Built-in password quality checking system (now it has support for Bloom
+    filter for faster access)
+  * Two Password Generation Algorithms:
+     1. Pronounceable Password Generation Algorithm (according to NIST
+        FIPS 181)
+     2. Random Character Password Generation Algorithm with 35
+        configurable modes of operation
+  * Configurable password length parameters
+  * Configurable amount of generated passwords
+  * Ability to initialize RNG with user string
+  * Support for /dev/random
+  * Ability to crypt() generated passwords and print them as additional output.
+  * Special parameters to use APG in script
+  * Ability to log password generation requests for network version
+  * Ability to control APG service access using tcpd
+  * Ability to use password generation service from any type of box (Mac,
+    WinXX, etc.) that connected to network
+  * Ability to enforce remote users to use only allowed type of password
+    generation
+ The client/server version of apg has been deliberately omitted.
+ .
+ Upstream URL: http://www.adel.nursat.kz/apg/download.shtml
+					]]></programlisting>
+				</informalexample>
+			</para>
+			<para>
+				'debian/rules':
+				<informalexample>
+					<programlisting><![CDATA[
+#!/usr/bin/make -f
+
+DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+
+DEB_MAKE_CLEAN_TARGET    := clean
+DEB_MAKE_BUILD_TARGET    := standalone
+DEB_MAKE_INSTALL_TARGET  := install INSTALL_PREFIX=$(CURDIR)/debian/apg/usr
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/dpatch.mk
+include /usr/share/cdbs/1/class/makefile.mk
+
+cleanbuilddir/apg::
+        rm -f build-stamp configure-stamp php.tar.gz
+
+install/apg::
+        mv $(CURDIR)/debian/apg/usr/bin/apg \
+	   $(CURDIR)/debian/apg/usr/lib/apg/apg
+        tar --create --gzip --file php.tar.gz --directory \
+	   $(CURDIR)/php/apgonline/ .
+        install -D --mode=0644 php.tar.gz \
+	   $(CURDIR)/debian/apg/usr/share/doc/apg/php.tar.gz
+        rm php.tar.gz
+        install -D --mode=0755 $(CURDIR)/debian/apg.wrapper \
+	   $(CURDIR)/debian/apg/usr/bin/apg
+        install -D --mode=0644 $(CURDIR)/debian/apg.conf \
+	   $(CURDIR)/debian/apg/etc/apg.conf
+
+# bug #284231
+unpatch: deapply-dpatches
+					]]></programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+		<sect1>
+			<title>Perl example</title>
+			<para>
+				(example from the 'libmidi-perl' package)
+			</para>
+			<para>
+				'debian/control':
+				<informalexample>
+					<programlisting><![CDATA[
+Source: libmidi-perl
+Section: interpreters
+Priority: optional
+Build-Depends: cdbs (>= 0.4.4), debhelper (>= 4.1.0), perl (>= 5.8.0-7)
+Maintainer: Mario Lang <mlang@debian.org>
+Standards-Version: 3.5.10
+
+Package: libmidi-perl
+Architecture: all
+Depends: ${perl:Depends}
+Description: read, compose, modify, and write MIDI files in Perl
+ This suite of Perl modules provides routines for reading, composing,
+ modifying, and writing MIDI files.
+
+					]]></programlisting>
+				</informalexample>
+			</para>
+			<para>
+				'debian/rules':
+				<informalexample>
+					<programlisting><![CDATA[
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/perlmodule.mk
+
+					]]></programlisting>
+				</informalexample>
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>Useful tools</title>
+		<sect1>
+			<title>cdbs-edit-patch (provided with CDBS)</title>
+			<para>
+				This script is intended to help lazy people edit or create patches easily.
+			</para>
+			<para>
+				Invoke this script with the name of the patch as argument, and you will enter a copy of your work directory in a subshell where you can edit sources.
+				When your work is done and you are satisfied with your changes, just exit the subshell and you will get back to normal world with 'debian/patches/&lt;patch_name&gt;.patch' created or modified accordingly.
+				The script takes care to apply previous patches (ordered patches needed !), current patch if already existing (in case you want to update it), then generate an incremental diff to only get desired modifications.
+				If you want to cancel the patch creation / modification, you only need to exit the subshell with a non-zero value and the diff will not be generated (only cleanups will be done).
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter>
+		<title>Conclusion</title>
+		<para>
+			CDBS solves most common problems and is very pleasant to use. More and more DD are using it, not because they are obliged to, but because they tasted and found it could improve their packages and avoid loosing time on designing silly and complicated rules.
+		</para>
+		<para>
+			CDBS is not perfect, the BTS entry is not clear, but fixing a single bug most of the time fix a problem for plenty of other packages. CDBS is not yet capable of handling very complicated situations (like packages where multiple C/C++ builds with different options and/or patches are required), but this only affects a very small number of packages. These limitations would be solved in CDBS2, which is work in progress (please contact Jeff Bailey <email>jbailey@raspberryginger.com</email> if you want to help).
+		</para>
+		<para>
+			Using CDBS more widely would improve Debian's overall quality.
+			Don't hesitate trying it, talking to your friends about it, and contributing.
+		</para>
+		<para>
+			Have a Lot of FUN with CDBS !!! :-)
+		</para>
+	</chapter>
+
+	<colophon>
+		<title>Thanks</title>
+		<para>
+			Thanks to Jeff for his patience and for replying my so many questions.
+		</para>
+		<para>
+			Special thanks to GuiHome for his help to review this documentation.
+		</para>
+		<para>
+			This document is a <ulink url="http://docbook.org/">DocBook</ulink> application, checked using xmllint (from <ulink url="http://www.xmlsoft.org/">libxml2</ulink>), produced using xsltproc (from <ulink url="http://xmlsoft.org/XSLT/">libxslt</ulink>), using the <ulink url="http://nwalsh.com/">N. Walsh</ulink> and <ulink url="http://db2latex.sourceforge.net/">DB2LaTeX</ulink> XLST stylesheets, and converted with <ulink url="http://www.latex-project.org/">LaTeX</ulink> tools (latex, mkindex, pdflatex &amp; dvips) / <ulink url="http://research.compaq.com/SRC/virtualpaper/pstotext.html">pstotext</ulink> (with <ulink url="http://www.cs.wisc.edu/~ghost/">GS</ulink>).
+		</para>
+	</colophon>
+
+</book>
+
