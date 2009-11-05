@@ -25,7 +25,7 @@ _cdbs_class_autotools_vars = 1
 
 include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 
-DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(DEB_DESTDIR)
+DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(cdbs_make_curdestdir)
 DEB_MAKE_CLEAN_TARGET = distclean
 #DEB_MAKE_CHECK_TARGET = check
 
@@ -46,9 +46,9 @@ endif
 # This magic is required because otherwise configure wants to analyse
 # $0 to see whether a VPATH build is needed.  This tells it with
 # absolute certainly that this is NOT a VPATH build.
-DEB_CONFIGURE_NORMAL_ARGS += $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,--srcdir=.)
+DEB_CONFIGURE_NORMAL_ARGS += $(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_SRCDIR)),,--srcdir=.)
 
-DEB_CONFIGURE_INVOKE = cd $(or $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR)) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
+DEB_CONFIGURE_INVOKE = cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
 DEB_CONFIGURE_PREFIX =/usr
 DEB_CONFIGURE_INCLUDEDIR = "\$${prefix}/include"
 DEB_CONFIGURE_MANDIR ="\$${prefix}/share/man"

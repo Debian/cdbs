@@ -35,7 +35,7 @@ common-configure-impl:: $(cdbs_autotools_configure_stamps)
 $(cdbs_autotools_configure_stamps):
 	chmod a+x $(DEB_CONFIGURE_SCRIPT)
 	$(DEB_CONFIGURE_INVOKE) $(cdbs_configure_flags) $(DEB_CONFIGURE_EXTRA_FLAGS) $(DEB_CONFIGURE_USER_FLAGS)
-	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),if [ -e $(DEB_BUILDDIR)/libtool ]; then cp -f /usr/bin/libtool $(DEB_BUILDDIR)/libtool; fi)
+	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),if [ -e $(cdbs_make_curbuilddir)/libtool ]; then cp -f /usr/bin/libtool $(cdbs_make_curbuilddir)/libtool; fi)
 	touch $@
 
 cleanbuilddir::

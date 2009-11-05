@@ -33,7 +33,7 @@ DEB_MAKE_PARALLEL = $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PAR
 # should set this variable to empty.
 DEB_MAKE_EXTRA_ARGS = CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" CPPFLAGS="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" LDFLAGS="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))" $(DEB_MAKE_PARALLEL)
 
-DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(DEB_BUILDDIR) $(DEB_MAKE_EXTRA_ARGS)
+DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(cdbs_make_curbuilddir) $(DEB_MAKE_EXTRA_ARGS)
 
 # This variable is deprecated.
 DEB_BUILD_MAKE_TARGET = 
@@ -43,7 +43,8 @@ DEB_MAKE_BUILD_TARGET = $(DEB_BUILD_MAKE_TARGET)
 
 # If your Makefile provides an "install" target, you need to give the requisite commands
 # here to install it into the staging directory.  For automake-using programs, this
-# looks like: install DESTDIR=$(DEB_DESTDIR)
+# looks like: install DESTDIR=$(cdbs_make_curdestdir)
+# (which expands to either DEB_DESTDIR_$(curpkg) or DEB_DESTDIR)
 # If you're using automake though, you likely want to be including autotools.mk instead
 # of this file.
 

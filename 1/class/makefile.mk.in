@@ -27,6 +27,9 @@ include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
 DEB_PHONY_RULES += makefile-clean
 
+cdbs_make_curbuilddir = $(or $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR))
+cdbs_make_curdestdir = $(or $(DEB_DESTDIR_$(cdbs_curpkg)),$(DEB_DESTDIR))
+
 common-build-arch common-build-indep:: debian/stamp-makefile-build
 debian/stamp-makefile-build:
 	+$(DEB_MAKE_INVOKE) $(DEB_MAKE_BUILD_TARGET)
