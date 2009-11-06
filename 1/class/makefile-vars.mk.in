@@ -44,7 +44,7 @@ DEB_MAKE_BUILD_TARGET = $(DEB_BUILD_MAKE_TARGET)
 # If your Makefile provides an "install" target, you need to give the requisite commands
 # here to install it into the staging directory.  For automake-using programs, this
 # looks like: install DESTDIR=$(cdbs_make_curdestdir)
-# (which expands to either DEB_DESTDIR_$(curpkg) or DEB_DESTDIR)
+# (which expands to either DEB_DESTDIR_xxx or DEB_DESTDIR)
 # If you're using automake though, you likely want to be including autotools.mk instead
 # of this file.
 
