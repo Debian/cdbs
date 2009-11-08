@@ -32,7 +32,8 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 # default package is the first one declared in 'debian/control'
 # NB! override needs to be done _before_ including this file!
 #DEB_PYTHON_MODULE_PACKAGES =
-DEB_PYTHON_PRIVATE_MODULES_DIRS =
+
+#DEB_PYTHON_PRIVATE_MODULES_DIRS =
 
 # common variables
 DEB_PYTHON_SETUP_CMD = setup.py
