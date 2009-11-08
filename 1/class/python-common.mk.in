@@ -28,8 +28,7 @@ _cdbs_class_python_common = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
 
-# Dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+# pysupport/pycentral dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS)$(deb_python_pysupport:%=, python-support)$(deb_python_pycentral:%=, python-central)
 
 # Optionally use debhelper (if not then these rules are simply ignored)
