@@ -29,7 +29,8 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/python-common.mk$(_cdbs_makefile_suffix)
 
 # Python-related dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+# also, warn about wrong number of resolved Python packages
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(cdbs_python_pkg_check)$(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
 
 DEB_PYTHON_SETUP_CMD = setup.py
 DEB_PYTHON_CLEAN_ARGS = -a
@@ -43,6 +44,17 @@ DEB_PYTHON_MODULE_PACKAGE = $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprec
 
 cdbs_python_current_binary := $(shell pyversions -d)
 cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
+
+# prepare sanity checks
+cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
+cdbs_python_pkgresolve_check = $(if $(call cdbs_streq,$(cdbs_python_arch_packages)$(cdbs_python_indep_packages),$(cdbs_python_packages_pre)),,$(warning WARNING: Redefining DEB_PYTHON_MODULE_PACKAGES late is currently unsupported: set DEB_PYTHON_MODULE_PACKAGES before including python-distutils.mk))
+## TODO: Rephrase when DEB_PYTHON_MODULE_PACKAGES is only expanded inside rules
+cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_packages),,$(warning WARNING: No Python packages found or declared - either rename binary packages or set DEB_PYTHON_MODULE_PACKAGES before including python-distutils.mk))
+
+
+# warn early about late changes to DEB_PYTHON_MODULES_PACKAGES
+pre-build clean::
+	$(cdbs_python_pkgresolve_check)
 
 pre-build::
 	mkdir -p debian/python-module-stampdir
