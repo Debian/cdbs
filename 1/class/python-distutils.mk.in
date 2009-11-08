@@ -56,7 +56,7 @@ DEB_PYTHON_MODULE_PACKAGE = $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprec
 # check python system
 cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_pycompat_explicit := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
-cdbs_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
+cdbs_python_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
 
 # TODO: expand recursively (drop colon) when no longer used for rules expansion
 cdbs_python_pysupport := $(filter pysupport,$(DEB_PYTHON_SYSTEM))
@@ -154,7 +154,7 @@ $(addprefix python-clean-, $(cdbs_python_build_versions)):
 # (dh_clean choke on dirs named stamp, so need to happen before clean::)
 clean:: clean-python-distutils
 clean-python-distutils::
-	$(if $(cdbs_pycompat_explicit)$(cdbs_use_xs_field)$(cdbs_selected_pyversions),,echo "$(cdbs_pycompat)" >debian/pycompat)
+	$(if $(cdbs_pycompat_explicit)$(cdbs_use_xs_field)$(cdbs_python_selected_pyversions),,echo "$(cdbs_pycompat)" >debian/pycompat)
 	rm -rf debian/python-module-stampdir
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
