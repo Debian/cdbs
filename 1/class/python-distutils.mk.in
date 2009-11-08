@@ -85,7 +85,6 @@ $(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pycentral),$(error invali
 
 # Dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(deb_python_pysupport),python-support,python-central)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS)$(deb_python_pysupport:%=, python-support)$(deb_python_pycentral:%=, python-central)
 
 
