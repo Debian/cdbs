@@ -159,8 +159,6 @@ python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
 # This class can optionally use debhelper's commands.
 # (if unused, below build targets should simply be ignored)
 
-DEB_DH_PYTHON_ARGS = $(DEB_DH_PYTHON_ARGS_ALL) $(DEB_DH_PYTHON_ARGS_$(cdbs_curpkg)) $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
-
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%: binary-install-python/%
 $(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%:
 ifeq (pysupport, $(DEB_PYTHON_SYSTEM))
