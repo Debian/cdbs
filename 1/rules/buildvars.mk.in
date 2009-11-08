@@ -1,5 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2002,2003 Colin Walters <walters@debian.org>
+# Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
 # Description: Defines some useful variables, but no rules
 #
 # This program is free software; you can redistribute it and/or
@@ -95,5 +96,12 @@ CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs
 cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
 
 cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
+
+comma = ,
+close_parenthesis = )
+cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
+
+# List "packages multiplied with branches", or just packages if no branches
+cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(call cdbs_delimit,$(if $2,$(foreach pkg,$1,$(call cdbs_delimit,$(foreach branch,$2,$(pkg)$(branch:%=-%)),BRANCHDELIMITER)),$1),WORDDELIMITER)))
 
 endif

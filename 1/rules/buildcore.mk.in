@@ -55,9 +55,6 @@ ifneq (, $(findstring .zip, $(DEB_TARBALL)))
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), unzip
 endif
 
-# make is dumb
-close_parenthesis = )
-
 ifneq (, $(DEB_TARBALL))
 $(warning parsing $(DEB_TARBALL) ...)
 config_all_tar		:= $(shell \
