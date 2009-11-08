@@ -26,67 +26,17 @@ ifndef _cdbs_class_python_distutils
 _cdbs_class_python_distutils = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
-include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/python-common.mk$(_cdbs_makefile_suffix)
 
-
-# default package is the first one declared in 'debian/control'
-# NB! override needs to be done _before_ including this file!
-#DEB_PYTHON_MODULE_PACKAGES =
-
-#DEB_PYTHON_PRIVATE_MODULES_DIRS =
-
-# common variables
 DEB_PYTHON_SETUP_CMD = setup.py
 DEB_PYTHON_CLEAN_ARGS = -a
 DEB_PYTHON_BUILD_ARGS = --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL = --prefix=/usr --no-compile -O0
 
-#DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
-
-cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
-cdbs_python_packages = $(or $(DEB_PYTHON_MODULE_PACKAGES),$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
-cdbs_python_arch_packages = $(filter $(cdbs_python_packages), $(DEB_ARCH_PACKAGES))
-cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
-
 # DEB_PYTHON_MODULE_PACKAGE is deprecated.
 # use DEB_PYTHON_MODULE_PACKAGES instead (since CDBS 0.4.54)
 # (warn even when used as-is: plural form breaks use in build targets)
 DEB_PYTHON_MODULE_PACKAGE = $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprecated, please use DEB_PYTHON_MODULE_PACKAGES instead)$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
-
-# check python system
-cdbs_python_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
-cdbs_python_pycompat_explicit := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
-cdbs_python_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
-
-# TODO: expand recursively (drop colon) when no longer used for rules expansion
-cdbs_python_pysupport := $(filter pysupport,$(DEB_PYTHON_SYSTEM))
-cdbs_python_pycentral := $(filter pycentral,$(DEB_PYTHON_SYSTEM))
-cdbs_python_system = $(or $(cdbs_python_pysupport),$(cdbs_python_pycentral),$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral)))
-
-cdbs_python_pycompat_default_pysupport = 2
-cdbs_python_pycompat_default_pycentral = 2
-cdbs_python_pycompat = $(or $(cdbs_python_pycompat_explicit),$(cdbs_python_pycompat_default_$(cdbs_python_system)))
-
-# warning pysupport compatibility mode
-$(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
-
-# Calculate cdbs_python_build_versions
-cdbs_python_current_version := $(shell pyversions -vd)
-cdbs_python_supported_versions := $(shell pyversions -vr)
-cdbs_python_first_supported_version = $(firstword $(strip $(sort $(cdbs_python_supported_versions))))
-# arch(+indep): none; indep: none if current is supported, else first supported
-cdbs_python_compile_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),,$(cdbs_python_first_supported_version)))
-# arch(+indep): all; indep: current if supported, else first supported
-cdbs_python_build_versions = $(or $(if $(cdbs_python_arch_packages),$(cdbs_python_supported_versions)),$(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),$(cdbs_python_first_supported_version))
-
-# check if build is possible
-$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pysupport),$(error invalid setting in debian/pyversions)))
-$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pycentral),$(error invalid setting for XS-Python-Version)))
-
-# Dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS)$(deb_python_pysupport:%=, python-support)$(deb_python_pycentral:%=, python-central)
-
 
 cdbs_python_current_binary := $(shell pyversions -d)
 cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
@@ -124,15 +74,6 @@ $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix p
 # Deprecated targets.  You should use above targets instead.
 $(addprefix python-build-stamp-, $(cdbs_python_build_versions)):
 python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
-
-
-
-# This class can optionally use debhelper's commands.
-# (if unused, below build targets should simply be ignored)
-
-$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%: binary-install-python/%
-$(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%:
-	dh_$(cdbs_python_system) -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg))
 
 
 # clean stage

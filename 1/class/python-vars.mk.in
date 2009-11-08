@@ -1,0 +1,75 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2003 Colin Walters <walters@debian.org>
+# Copyright © 2006 Marc Dequènes (Duck) <Duck@DuckCorp.org>
+# Copyright © 2003,2006-2009 Jonas Smedegaard <dr@jones.dk>
+# Description: Common variables for Python packages
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+# 02111-1307 USA.
+#
+
+#PATH_RULES#
+
+ifndef _cdbs_class_python_vars
+_cdbs_class_python_vars = 1
+
+include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
+
+# default package is the first one declared in 'debian/control'
+# NB! override needs to be done _before_ including this file!
+#DEB_PYTHON_MODULE_PACKAGES =
+
+#DEB_PYTHON_PRIVATE_MODULES_DIRS =
+
+#DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
+
+cdbs_python_packages = $(or $(DEB_PYTHON_MODULE_PACKAGES),$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
+cdbs_python_arch_packages = $(filter $(cdbs_python_packages), $(DEB_ARCH_PACKAGES))
+cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
+
+cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
+
+# check python system
+cdbs_python_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
+cdbs_python_pycompat_explicit := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
+cdbs_python_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
+
+# TODO: expand recursively (drop colon) when no longer used for rules expansion
+cdbs_python_pysupport := $(filter pysupport,$(DEB_PYTHON_SYSTEM))
+cdbs_python_pycentral := $(filter pycentral,$(DEB_PYTHON_SYSTEM))
+cdbs_python_system = $(or $(cdbs_python_pysupport),$(cdbs_python_pycentral),$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral)))
+
+cdbs_python_pycompat_default_pysupport = 2
+cdbs_python_pycompat_default_pycentral = 2
+cdbs_python_pycompat = $(or $(cdbs_python_pycompat_explicit),$(cdbs_python_pycompat_default_$(cdbs_python_system)))
+
+# warning pysupport compatibility mode
+$(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
+
+# Calculate cdbs_python_build_versions
+cdbs_python_current_version := $(shell pyversions -vd)
+cdbs_python_supported_versions := $(shell pyversions -vr)
+cdbs_python_first_supported_version = $(firstword $(strip $(sort $(cdbs_python_supported_versions))))
+# arch(+indep): none; indep: none if current is supported, else first supported
+cdbs_python_compile_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),,$(cdbs_python_first_supported_version)))
+# arch(+indep): all; indep: current if supported, else first supported
+cdbs_python_build_versions = $(or $(if $(cdbs_python_arch_packages),$(cdbs_python_supported_versions)),$(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),$(cdbs_python_first_supported_version))
+
+# check if build is possible
+$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pysupport),$(error invalid setting in debian/pyversions)))
+$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pycentral),$(error invalid setting for XS-Python-Version)))
+
+endif

@@ -1,0 +1,40 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2003 Colin Walters <walters@debian.org>
+# Copyright © 2006 Marc Dequènes (Duck) <Duck@DuckCorp.org>
+# Copyright © 2003,2006-2009 Jonas Smedegaard <dr@jones.dk>
+# Description: rules common to all(?) Python build systems
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+# 02111-1307 USA.
+#
+
+#PATH_RULES#
+
+ifndef _cdbs_class_python_common
+_cdbs_class_python_common = 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
+
+# Dependencies according to Python policy, appendix A
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS)$(deb_python_pysupport:%=, python-support)$(deb_python_pycentral:%=, python-central)
+
+# Optionally use debhelper (if not then these rules are simply ignored)
+$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%: binary-install-python/%
+$(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%:
+	dh_$(cdbs_python_system) -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg))
+
+endif
