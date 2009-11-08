@@ -54,7 +54,7 @@ cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKA
 DEB_PYTHON_MODULE_PACKAGE = $(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprecated, please use DEB_PYTHON_MODULE_PACKAGES instead)$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES)))
 
 # check python system
-cdbs_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
+cdbs_python_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_pycompat_explicit := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
 cdbs_python_selected_pyversions := $(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi)
 
@@ -68,7 +68,7 @@ cdbs_pycompat_default_pycentral = 2
 cdbs_pycompat = $(or $(cdbs_pycompat_explicit),$(cdbs_pycompat_default_$(cdbs_python_system)))
 
 # warning pysupport compatibility mode
-$(if $(cdbs_python_pysupport),$(if $(cdbs_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
+$(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
 
 # Calculate cdbs_python_build_versions
 cdbs_python_current_version := $(shell pyversions -vd)
@@ -154,7 +154,7 @@ $(addprefix python-clean-, $(cdbs_python_build_versions)):
 # (dh_clean choke on dirs named stamp, so need to happen before clean::)
 clean:: clean-python-distutils
 clean-python-distutils::
-	$(if $(cdbs_pycompat_explicit)$(cdbs_use_xs_field)$(cdbs_python_selected_pyversions),,echo "$(cdbs_pycompat)" >debian/pycompat)
+	$(if $(cdbs_pycompat_explicit)$(cdbs_python_use_xs_field)$(cdbs_python_selected_pyversions),,echo "$(cdbs_pycompat)" >debian/pycompat)
 	rm -rf debian/python-module-stampdir
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
