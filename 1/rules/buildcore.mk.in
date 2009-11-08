@@ -25,9 +25,6 @@ _cdbs_rules_buildcore = 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
-# Can we change this to cdbs_curpkg = $(notdir $@) ?
-cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
-
 testdir: debian/control
 	test -x debian/rules
 
@@ -39,8 +36,6 @@ $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% :
 
 makebuilddir:: $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES))
 	mkdir -p "$(DEB_BUILDDIR)"
-
-cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
 cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES))
 	-$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,rmdir $(DEB_BUILDDIR))
