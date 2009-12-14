@@ -5,8 +5,30 @@ cdbs (0.4.63) UNRELEASED; urgency=low
   * Update licensing years and merge now (after autotools update)
     identically licensed files in debian/copyright.
   * Reformat debian/copyright to follow draft DEP5 rev59.
+  * autotools.mk: Use stamp file for configure target. Closes:
+    bug#493631, #534868, thanks to Felix Zielcke and Robert Millan.
+  * Adjust perlmodule.mk to call cdbs_streq when comparing DEB_BUILDDIR
+    and DEB_SRCDIR.
+  * makefile.mk, autotools.mk: support DEB_BUILDDIR_xxx and
+    DEB_DESTDIR_xxx.
+  * Take credit for recent work, and some not so recent (last year).
+  * Tighten python-distutils.mk...:
+    + Drop variable DEB_DH_PYTHON_ARGS unused since 0.4.53.
+    + Fix allow variable DEB_PYTHON_PRIVATE_MODULES_DIRS to be declared
+      before including cdbs snippets.
+    + Avoid ifeq syntax, in preparation for future support for declaring
+      DEB_PYTHON_SYSTEM after including cdbs snippets.
+    + Support per-package DEB_PYTHON_PRIVATE_MODULES_DIRS_xxx, and also
+      apply to dh_python-central (not only dh_python-support) as it has
+      apparently been supported since at least python-central 0.6.6.
+    + Rename some internal variables for clarity.
+    + Add package-selection sanity checks.
+  * Split out reusable parts of python-distutils.mk as python-vars.mk
+    and python-module.mk.
+  * Fix invoke Python debhelper hook right after dh_install (not before)
+    to include files installed through debhelper.
 
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 18 Oct 2009 21:17:11 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 14 Dec 2009 16:24:47 +0100
 
 cdbs (0.4.62) unstable; urgency=low
 
