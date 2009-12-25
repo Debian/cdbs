@@ -1,4 +1,4 @@
-cdbs (0.4.63) UNRELEASED; urgency=low
+cdbs (0.4.63) unstable; urgency=low
 
   * Update autotools using automake 1.11 and autoconf 2.64, config.guess
     and config.sub snapshots from 20090611.
@@ -27,8 +27,11 @@ cdbs (0.4.63) UNRELEASED; urgency=low
     and python-module.mk.
   * Fix invoke Python debhelper hook right after dh_install (not before)
     to include files installed through debhelper.
+  * Build-depend on texlive-font-utils (and only fallback on older
+    texlive-extra-utils): provides epstopdf. Closes: bug#562336.
+  * Use source format 3.0 (quilt).
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 14 Dec 2009 16:24:47 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 25 Dec 2009 23:08:48 +0100
 
 cdbs (0.4.62) unstable; urgency=low
 
