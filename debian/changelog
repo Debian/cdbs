@@ -1,3 +1,14 @@
+cdbs (0.4.64) unstable; urgency=low
+
+  * Fix install new python-vars.mk and python-module.mk snippets.
+    Closes: bug#562590, thanks to Mario Izquierdo.
+  * Update autotools using automake 1.11 and autoconf 2.66.
+  * Use 'native' flavor of source format 3.0 (not quilt), thanks to
+    Raphaël Hertzog: Native packages have no gain (I knew that already)
+    and even spit annoying warnings.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 26 Dec 2009 13:15:21 +0100
+
 cdbs (0.4.63) unstable; urgency=low
 
   * Update autotools using automake 1.11 and autoconf 2.64, config.guess
