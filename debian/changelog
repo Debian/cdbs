@@ -1,3 +1,10 @@
+cdbs (0.4.65) unstable; urgency=low
+
+  * Acknowledge NMU 0.4.62+nmu1. Closes: bug#507966, #549801, #562650,
+    thanks to Piotr Ożarowski (and apologies for missing it at first).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 26 Dec 2009 22:20:13 +0100
+
 cdbs (0.4.64) unstable; urgency=low
 
   * Fix install new python-vars.mk and python-module.mk snippets.
