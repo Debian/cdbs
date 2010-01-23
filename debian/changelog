@@ -1,3 +1,10 @@
+cdbs (0.4.66) unstable; urgency=low
+
+  * Fix resolve pysupport/pycentral build-dependency in python-
+    module.mk.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 23 Jan 2010 06:24:54 +0100
+
 cdbs (0.4.65) unstable; urgency=low
 
   * Acknowledge NMU 0.4.62+nmu1. Closes: bug#507966, #549801, #562650,
