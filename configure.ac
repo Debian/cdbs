@@ -13,9 +13,8 @@ dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 dnl General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-dnl 02111-1307 USA.
+dnl along with this program.  If not, see
+dnl <http://www.gnu.org/licenses/>.
 
 AC_INIT(cdbs, something)
 AC_CONFIG_SRCDIR(1/rules/buildcore.mk.in)
