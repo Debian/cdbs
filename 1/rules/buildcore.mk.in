@@ -187,6 +187,11 @@ ifneq (::, $(config_guess):$(config_sub):$(config_rpath))
 	done
 endif
 
+# Routines convenient for maintainers but unsuitable for build daemons
+ifneq (,$(DEB_MAINTAINER_MODE))
+  DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
+endif
+
 ifneq (, $(DEB_AUTO_UPDATE_DEBIAN_CONTROL))
 control_cpu		:= $(shell grep "^Cpu:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 ifeq (, $(control_cpu))
