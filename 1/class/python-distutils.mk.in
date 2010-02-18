@@ -25,7 +25,6 @@
 ifndef _cdbs_class_python_distutils
 _cdbs_class_python_distutils = 1
 
-include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 # Python-related dependencies according to Python policy, appendix A
