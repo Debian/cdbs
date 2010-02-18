@@ -101,7 +101,6 @@ $(addprefix python-clean-, $(cdbs_python_build_versions)):
 # (dh_clean choke on dirs named stamp, so need to happen before clean::)
 clean:: clean-python-distutils
 clean-python-distutils::
-	$(if $(cdbs_python_pycompat_explicit)$(cdbs_python_use_xs_field)$(cdbs_python_selected_pyversions),,echo "$(cdbs_python_pycompat)" >debian/pycompat)
 	rm -rf debian/python-module-stampdir
 
 # Calling setup.py clean may create .pyc files, so we need a final cleanup
