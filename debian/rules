@@ -18,6 +18,7 @@
 # cdbs uses itself to build itself.
 _cdbs_rules_path = 1/rules
 _cdbs_class_path = 1/class
+_cdbs_scripts_path = scripts
 _cdbs_makefile_suffix = .in
 
 include 1/rules/copyright-check.mk.in
