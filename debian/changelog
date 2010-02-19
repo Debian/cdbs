@@ -20,7 +20,7 @@ cdbs (0.4.67) UNRELEASED; urgency=low
   * Add new class python-sugar.mk and new rules buildinfo.mk and
     copyright-check.mk to Makefile.am.
   * Update autotools using automake 1.11.1.
-  * Bump debhelper compat level to 6 an tighten build-dependency to
+  * Bump debhelper compat level to 6, and tighten build-dependency to
     6.0.1.
   * Rewrite copyright file using draft DEP5 rev135.
   * Use copyright-check.mk ourselves. Build-depend on recent devscripts.
