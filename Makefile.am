@@ -1,6 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2002,2003 Colin Walters <walters@debian.org>
-# Copyright © 2009 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2009-2010 Jonas Smedegaard <dr@jones.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -30,6 +30,8 @@ edit = perl -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdb
 
 all_mk_files =	1/rules/buildvars.mk		\
 		1/rules/buildcore.mk		\
+		1/rules/buildinfo.mk		\
+		1/rules/copyright-check.mk	\
 		1/rules/debhelper.mk		\
 		1/rules/simple-patchsys.mk	\
 		1/rules/dpatch.mk		\
@@ -52,6 +54,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/python-vars.mk		\
 		1/class/python-module.mk	\
 		1/class/python-distutils.mk	\
+		1/class/python-sugar.mk		\
 		1/class/qmake.mk		\
 		1/class/hbuild.mk
 
