@@ -20,6 +20,7 @@ _cdbs_rules_path = 1/rules
 _cdbs_class_path = 1/class
 _cdbs_makefile_suffix = .in
 
+include 1/rules/copyright-check.mk.in
 include 1/rules/debhelper.mk.in
 include 1/class/autotools.mk.in
 
