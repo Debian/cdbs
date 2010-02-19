@@ -192,6 +192,7 @@ ifneq (,$(DEB_MAINTAINER_MODE))
   DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
 endif
 
+ifneq (,$(wildcard debian/control.in))
 ifneq (, $(DEB_AUTO_UPDATE_DEBIAN_CONTROL))
 control_cpu		:= $(shell grep "^Cpu:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 ifeq (, $(control_cpu))
@@ -225,6 +226,7 @@ ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
 		-e "s/$$/\"/g" \
 	< debian/control.in | $(SHELL) > debian/control
 	-dpkg-checkbuilddeps -B
+endif
 endif
 
 # This rule is called before the common-install target.  It's currently only
