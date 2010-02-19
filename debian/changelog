@@ -1,4 +1,4 @@
-cdbs (0.4.67) UNRELEASED; urgency=low
+cdbs (0.4.67) unstable; urgency=low
 
   * Fix python-distutils.mk pkg check: Move preparation to python-
     vars.mk. While at it, move cdbs_python_binary too.
@@ -27,7 +27,7 @@ cdbs (0.4.67) UNRELEASED; urgency=low
   * Fix only update control file if control.in exist.
   * Fix set custom _cdbs_scripts_path during our own build.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Feb 2010 02:11:39 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Feb 2010 07:51:15 +0100
 
 cdbs (0.4.66) unstable; urgency=low
 
