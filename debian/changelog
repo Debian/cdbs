@@ -1,3 +1,34 @@
+cdbs (0.4.67) UNRELEASED; urgency=low
+
+  * Fix python-distutils.mk pkg check: Move preparation to python-
+    vars.mk. While at it, move cdbs_python_binary too.
+  * Move setting pycompat from python-distutils.mk to python-module.mk.
+  * Drop superfluous buildcore.mk inclusion from python-distutils.mk.
+  * Add internal variable expansion cdbs_pkgsrcdir to buildvars.mk.
+  * Add new class python-sugar.mk for building Python-based Sugar
+    packages.
+  * Bump Standards-Version to 3.8.4.
+  * Take credit for my recent changes.
+  * Refer to FSF website (not postal address) in headers.
+  * Introduce DEB_MAINTAINER_MODE for routines convenient for
+    maintainers but unsuitable for build daemons. Have it enable
+    DEB_AUTO_UPDATE_DEBIAN_CONTROL.
+  * Add new rule copyright-check.mk to check for changes to copyright
+    notices in source.
+  * Add new rule buildinfo.mk to generate and include build information
+    with binary packages.
+  * Add new class python-sugar.mk and new rules buildinfo.mk and
+    copyright-check.mk to Makefile.am.
+  * Update autotools using automake 1.11.1.
+  * Bump debhelper compat level to 6 an tighten build-dependency to
+    6.0.1.
+  * Rewrite copyright file using draft DEP5 rev135.
+  * Use copyright-check.mk ourselves. Build-depend on recent devscripts.
+  * Fix only update control file if control.in exist.
+  * Fix set custom _cdbs_scripts_path during our own build.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Feb 2010 02:11:39 +0100
+
 cdbs (0.4.66) unstable; urgency=low
 
   * Fix resolve pysupport/pycentral build-dependency in python-
