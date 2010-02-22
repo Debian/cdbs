@@ -28,6 +28,12 @@ include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 # NB! This variable must be declared *above* inclusion of this snippet
 #DEB_SUGAR_BRANCHES = 0.84 0.86
 
+# Convenience variable for e.g. conflicts/provides/replaces
+DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
+
+# include both simple and versioned activity packages by default
+DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES)), $(DEB_PACKAGES))
+
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
 cdbs_python_sugar_pkgresolve_check = $(if $(call cdbs_streq,$(DEB_PYTHON_SUGAR_PACKAGES),$(cdbs_python_packages_pre)),,$(warning WARNING: Redefining DEB_PYTHON_SUGAR_PACKAGES late is currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk))
@@ -44,12 +50,6 @@ CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.67~)
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(cdbs_python_sugar_pkg_check)$(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
 # Sugar-related dependencies
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit), unzip
-
-# Convenience variable for e.g. conflicts/provides/replaces
-DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
-
-# include both simple and versioned activity packages by default
-DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES)), $(DEB_PACKAGES))
 
 # warn early about late changes to DEB_PYTHON_SUGAR_PACKAGES
 pre-build clean::
