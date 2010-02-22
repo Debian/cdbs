@@ -42,12 +42,6 @@ cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 cdbs_python_current_binary := $(shell pyversions -d)
 cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python_current_binary),$(1)),python,$(1))
 
-# prepare sanity checks
-cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
-cdbs_python_pkgresolve_check = $(if $(call cdbs_streq,$(cdbs_python_arch_packages)$(cdbs_python_indep_packages),$(cdbs_python_packages_pre)),,$(warning WARNING: Redefining DEB_PYTHON_MODULE_PACKAGES late is currently unsupported: set DEB_PYTHON_MODULE_PACKAGES before including python-distutils.mk))
-## TODO: Rephrase when DEB_PYTHON_MODULE_PACKAGES is only expanded inside rules
-cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_packages),,$(warning WARNING: No Python packages found or declared - either rename binary packages or set DEB_PYTHON_MODULE_PACKAGES before including python-distutils.mk))
-
 # check python system
 cdbs_python_use_xs_field := $(shell grep -q "^XS-Python-Version:" debian/control && echo yes)
 cdbs_python_pycompat_explicit := $(shell if [ -e debian/pycompat ]; then cat debian/pycompat; fi)
