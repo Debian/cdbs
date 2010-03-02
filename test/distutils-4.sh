@@ -53,7 +53,7 @@ build_package
 
 for v in `pyversions -vs`; do
 	dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb \
-		| grep -F -q /usr/lib/python$v/site-packages/testing/foo.py \
+		| grep -F -q /usr/lib/python$v/\(site\|dist\)-packages/testing/foo.py \
 		|| return_fail
 done
 
