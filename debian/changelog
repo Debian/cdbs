@@ -1,3 +1,17 @@
+cdbs (0.4.68) unstable; urgency=medium
+
+  * Fix do snippet-specific sanity checks in python-sugar.mk.
+  * Cosmetics: List user-editable variables first in python-sugar.mk.
+  * Move snippet-specific sanity checks to python-distutils.mk (from
+    python-vars.mk), and list user-editable variables first.
+  * Fix force use LC_ALL=C in copyright-check.mk.
+  * Fix testsuite support for Python 2.6 install path.
+    Closes: bug#571486, thanks to Jakub Wilk.
+  * Set urgency=medium as above are small fixes and earlier 0.4.67
+    changes are quite nice to soon get into testing.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 02 Mar 2010 13:47:52 +0100
+
 cdbs (0.4.67) unstable; urgency=low
 
   * Fix python-distutils.mk pkg check: Move preparation to python-
