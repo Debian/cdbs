@@ -44,7 +44,7 @@ foreach $file (@files) {
 	my @ownerlines_clean = ();
 	my %owneryears = ();
 	for $ownerline ( @ownerlines ) {
-		my ($owneryear, $owner) = $ownerline =~ /^([\d-,\s]*)\s*+(.*)/;
+		my ($owneryear, $owner) = $ownerline =~ /^([\d\-,\s]*)\s*+(.*)/;
 		$owner =~ s/^by\s+//;
 		$owner =~ s/,?\s+All Rights Reserved\.?//gi;
 		push @ownerlines_clean, "$owneryear$owner";
@@ -62,7 +62,7 @@ foreach $pattern ( sort {
 			$a cmp $b
 		} keys %patternfiles ) {
 	my $prev;
-	@ownerlines_unique = grep($_ ne $prev && (($prev) = $_), sort @{ $patternownerlines{$pattern} });
+	@ownerlines_unique = grep((!defined $prev || $_ ne $prev) && (($prev) = $_), sort @{ $patternownerlines{$pattern} });
 	print "Files: ", join(",\n\t", sort @{ $patternfiles{$pattern} }), "\n";
 	print "Copyright: ", join("\n\t", @ownerlines_unique), "\n";
 	print "License: $patternlicense{$pattern}\n FIXME\n\n";
