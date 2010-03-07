@@ -51,9 +51,7 @@ debian/stamp-copyright-check:
 		$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints; \
 	fi
 	@if [ -f debian/copyright_hints ]; then \
-		export LC_ALL=C; \
-		patterncount="`cat debian/copyright_newhints | sed 's/^[^:]*://' | sort -u | grep . -c -`"; \
-		echo "Found $$patterncount different copyright and licensing combinations."; \
+		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
 	fi
 	@if [ -f debian/copyright_hints ]; then \
 		export LC_ALL=C; \
