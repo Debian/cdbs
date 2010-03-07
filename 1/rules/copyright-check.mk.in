@@ -82,13 +82,12 @@ debian/stamp-copyright-check:
 			$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
 		else \
 			echo 'No new copyright notices found - assuming no news is good news...'; \
-			rm -f debian/copyright_newhints; \
 		fi; \
+		rm -f debian/copyright_newhints; \
 	fi
 	touch $@
 
 clean::
-	$(if $(DEB_COPYRIGHT_CHECK_STRICT),:,rm -f debian/copyright_newhints)
 	rm -f debian/stamp-copyright-check
 
 endif
