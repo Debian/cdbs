@@ -22,7 +22,7 @@ _cdbs_rules_copyright_check := 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.67~), devscripts (>= 2.10.7~)
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.67~)
 
 # Routines convenient for maintainers but unsuitable for build daemons
 #  * strict checking makes rule fail if changed/new hints are found
@@ -45,8 +45,19 @@ pre-build:: debian/stamp-copyright-check
 debian/stamp-copyright-check:
 	@set -e; if [ ! -f debian/copyright_hints ]; then \
 		echo; \
-		echo 'Please touch debian/copyright_hints to enable copyright-check.'; \
+		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - touch debian/copyright_hints to enable.'; \
 		echo; \
+		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
+	elif [ licensecheck = $(DEB_COPYRIGHT_CHECK_SCRIPT) ] && ! which licensecheck > /dev/null; then \
+		echo; \
+		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - licensecheck (from devscripts package) is missing.'; \
+		echo; \
+		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
+	elif [ licensecheck = $(DEB_COPYRIGHT_CHECK_SCRIPT) ] && licensecheck --help | grep -qv -- --copyright; then \
+		echo; \
+		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - licensecheck (from devscripts package) seems older than needed 2.10.7.'; \
+		echo; \
+		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
 	else \
 		echo; \
 		echo 'Scanning upstream source for new/changed copyright notices...'; \
