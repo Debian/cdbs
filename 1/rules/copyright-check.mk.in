@@ -43,18 +43,18 @@ DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHEC
 
 pre-build:: debian/stamp-copyright-check
 debian/stamp-copyright-check:
-	@[ -f debian/copyright_hints ] || echo 'Please touch debian/copyright_hints to enable copyright-check.'
-	@[ ! -f debian/copyright_hints ] || echo 'Scanning upstream source for new/changed copyright notices...'
-	@[ ! -f debian/copyright_hints ] || echo "$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints"
-	@if [ -f debian/copyright_hints ]; then \
+	@set -e; if [ ! -f debian/copyright_hints ]; then \
+		echo; \
+		echo 'Please touch debian/copyright_hints to enable copyright-check.'; \
+		echo; \
+	else \
+		echo; \
+		echo 'Scanning upstream source for new/changed copyright notices...'; \
+		echo; \
+		echo "$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints"; \
 		export LC_ALL=C; \
 		$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints; \
-	fi
-	@if [ -f debian/copyright_hints ]; then \
 		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
-	fi
-	@if [ -f debian/copyright_hints ]; then \
-		export LC_ALL=C; \
 		newstrings=`diff -a -u debian/copyright_hints debian/copyright_newhints | sed '1,2d' | egrep -a '^\+' - | sed 's/^\+//'`; \
 		if [ -n "$$newstrings" ]; then \
 			echo "$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): The following (and possibly more) new or changed notices discovered:"; \
