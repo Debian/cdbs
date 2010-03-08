@@ -26,6 +26,9 @@ include 1/rules/utils.mk.in
 include 1/rules/debhelper.mk.in
 include 1/class/autotools.mk.in
 
+# Suppress build-dependency on ourselves
+CDBS_BUILD_DEPENDS_rules_buildvars =
+
 DEB_MAKE_CHECK_TARGET = check
 
 # Unset these variables so config.guess/config.sub in the test suite are not 
