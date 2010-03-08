@@ -1,3 +1,10 @@
+cdbs (0.4.71) unstable; urgency=low
+
+  * Merge build-info.mk rule with utils.mk, and gracefully handle
+    missing binary instead of tightened build-dependency.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 08 Mar 2010 23:00:17 +0100
+
 cdbs (0.4.70) unstable; urgency=low
 
   * Brown paperbag release...
