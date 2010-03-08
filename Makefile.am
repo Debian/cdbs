@@ -30,7 +30,6 @@ edit = perl -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdb
 
 all_mk_files =	1/rules/buildvars.mk		\
 		1/rules/buildcore.mk		\
-		1/rules/buildinfo.mk		\
 		1/rules/debhelper.mk		\
 		1/rules/simple-patchsys.mk	\
 		1/rules/dpatch.mk		\
