@@ -111,8 +111,8 @@ debian/stamp-buildinfo:
 		echo; \
 		$(if $(DEB_BUILDINFO_STRICT),exit 1,:); \
 	else \
-		echo $(DEB_BUILDINFO_SCRIPT);
-		$(DEB_BUILDINFO_SCRIPT);
+		echo '$(DEB_BUILDINFO_SCRIPT)'; \
+		$(DEB_BUILDINFO_SCRIPT); \
 	fi
 	touch $@
 
