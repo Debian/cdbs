@@ -47,10 +47,10 @@ $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% :
 DEB_TARBALL ?= $(wildcard *.tar *.tgz *.tar.gz *.tar.bz *.tar.bz2 *.tar.lzma *.zip)
 
 CDBS_BUILD_DEPENDS_rules_buildcore_bz2 ?= bzip2
-CDBS_BUILD_DEPENDS += $(if $(findstring .bz2,$(DEB_TARBALL)),$(CDBS_BUILD_DEPENDS_rules_buildcore_bz2:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(findstring .bz2,$(DEB_TARBALL)),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_bz2))
 
 CDBS_BUILD_DEPENDS_rules_buildcore_zip ?= unzip
-CDBS_BUILD_DEPENDS += $(if $(findstring .zip,$(DEB_TARBALL)),$(CDBS_BUILD_DEPENDS_rules_buildcore_zip:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(findstring .zip,$(DEB_TARBALL)),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_zip))
 
 ifneq (, $(DEB_TARBALL))
 $(warning parsing $(DEB_TARBALL) ...)
@@ -89,10 +89,10 @@ endif
 endif
 
 CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub ?= autotools-dev
-CDBS_BUILD_DEPENDS += $(if $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar),$(CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub))
 
 CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath ?= gnulib
-CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),$(CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath))
 
 # This target is called before almost anything else happens.  It's a good place
 # to do stuff like unpack extra source tarballs, apply patches, and stuff.  In
@@ -205,7 +205,7 @@ endif
 else
 # Prevent recursive braindamage when building type-handling with cdbs.
 CDBS_BUILD_DEPENDS_rules_buildcore_type-handling ?= type-handling
-CDBS_BUILD_DEPENDS += $(if $(shell grep -x 'Package: type-handling' debian/control),,$(CDBS_BUILD_DEPENDS_rules_buildcore_type-handling:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(shell grep -x 'Package: type-handling' debian/control),,$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_type-handling))
 
 control_system		:= $(shell grep "^System:" debian/control.in | sed -e "s/^.*: //g" -e "s/ /,/g")
 control_arch		:= $(shell type-handling $(control_cpu) $(control_system))

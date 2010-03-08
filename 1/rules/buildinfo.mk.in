@@ -23,7 +23,7 @@ _cdbs_rules_buildinfo = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
 CDBS_BUILD_DEPENDS_rules_buildinfo ?= dh-buildinfo
-CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_rules_buildinfo:%=, %)
+CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_rules_buildinfo)
 
 common-install-arch common-install-indep:: debian/stamp-buildinfo
 

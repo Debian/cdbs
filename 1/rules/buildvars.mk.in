@@ -87,7 +87,7 @@ else
 endif
 
 CDBS_BUILD_DEPENDS_rules_buildvars ?= cdbs
-CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_rules_buildvars:%=, %)
+CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_rules_buildvars)
 
 # Internal useful variables/expansions
 

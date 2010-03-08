@@ -45,14 +45,14 @@ cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),
 cdbs_sugar_anybranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) , | )
 
 CDBS_BUILD_DEPENDS_class_python-sugar ?= cdbs (>= 0.4.67~)
-CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_class_python-sugar:%=, %)
+CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-sugar)
 # Python-related dependencies according to Python policy, appendix A
 # also, warn about wrong number of resolved packages
 CDBS_BUILD_DEPENDS_class_python-sugar_python ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
-CDBS_BUILD_DEPENDS += $(cdbs_python_sugar_pkg_check)$(CDBS_BUILD_DEPENDS_class_python-sugar_python:%=, %)
+CDBS_BUILD_DEPENDS += $(cdbs_python_sugar_pkg_check)$(comma) $(CDBS_BUILD_DEPENDS_class_python-sugar_python)
 # Sugar-related dependencies
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar ?= $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit), unzip
-CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_class_python-sugar_sugar:%=, %)
+CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-sugar_sugar)
 
 # warn early about late changes to DEB_PYTHON_SUGAR_PACKAGES
 pre-build clean::

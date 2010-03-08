@@ -28,7 +28,7 @@ DEB_MAKE_ENVVARS += GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
 # for dh_desktop
 CDBS_BUILD_DEPENDS_class_gnome ?= debhelper
-CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_class_gnome:%=, %)
+CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_gnome)
 
 # Most GNOME upstreams don't bother to fix this.
 clean::

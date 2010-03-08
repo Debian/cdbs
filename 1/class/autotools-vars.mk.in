@@ -57,18 +57,18 @@ DEB_CONFIGURE_LIBEXECDIR ="\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
 DEB_CONFIGURE_EXTRA_FLAGS =
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_libtool ?= libtool
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),$(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_automake ?= automake$(DEB_AUTO_UPDATE_AUTOMAKE)
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOMAKE),$(CDBS_BUILD_DEPENDS_class_autotools-vars_automake:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOMAKE),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_automake))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal ?= automake$(DEB_AUTO_UPDATE_ACLOCAL)
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_ACLOCAL),$(CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_ACLOCAL),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf ?= autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOCONF))
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOCONF),$(CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOCONF),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader ?= autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOHEADER))
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),$(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader:%=, %))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader))
 
 endif
