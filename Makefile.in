@@ -187,7 +187,6 @@ edit = perl -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdb
 all_mk_files = 1/rules/buildvars.mk		\
 		1/rules/buildcore.mk		\
 		1/rules/buildinfo.mk		\
-		1/rules/copyright-check.mk	\
 		1/rules/debhelper.mk		\
 		1/rules/simple-patchsys.mk	\
 		1/rules/dpatch.mk		\
@@ -221,7 +220,7 @@ rules_DATA = $(wildcard 1/rules/*.mk)
 rulesdir = $(pkgdatadir)/1/rules
 bin_SCRIPTS = scripts/cdbs-edit-patch
 dist_man_MANS = scripts/cdbs-edit-patch.1
-scripts_SCRIPTS = scripts/list-packages
+scripts_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5
 scriptsdir = $(libexecdir)
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
