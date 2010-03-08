@@ -1,3 +1,20 @@
+cdbs (0.4.70) unstable; urgency=low
+
+  * Brown paperbag release...
+  * Fix install upstream-tarball.mk properly. Bump its build-dependency
+    hint.
+  * Fix declare debhelper.mk build-dependency hints.
+  * Fix add comma only in front of each build-dependency set (not
+    accidentally within).
+  * Fix drop old-style build-dependency hint from simple-patchsys.mk.
+  * Fix hint only about one of pysupport/pycentral in python-module.mk.
+  * Cosmetics: cleanup trailing space for the corner case of only a
+    single CDBS-declared build-dependency.
+  * Eat our own dog food: Auto-update debian/control build-dependencies
+    of cdbs package itself when DEB_MAINTAINER_MODE=1.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 08 Mar 2010 17:08:08 +0100
+
 cdbs (0.4.69) unstable; urgency=low
 
   * Merge recently added copyright-check.mk with utils.mk.

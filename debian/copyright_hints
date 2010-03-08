@@ -5,6 +5,7 @@ Files: ./TODO,
 	./debian/NEWS,
 	./debian/compat,
 	./debian/control,
+	./debian/control.in,
 	./debian/doc-base,
 	./debian/docs,
 	./debian/gbp.conf,
@@ -170,7 +171,7 @@ License: GPL
 
 Files: ./1/class/python-sugar.mk.in,
 	./1/rules/buildinfo.mk.in,
-	./1/rules/upstream-tarball.mk
+	./1/rules/upstream-tarball.mk.in
 Copyright: 2004-2007, Jonas Smedegaard <dr@jones.dk>
 	2007-2010, Jonas Smedegaard <dr@jones.dk>
 	2008-2010, Jonas Smedegaard <dr@jones.dk>
