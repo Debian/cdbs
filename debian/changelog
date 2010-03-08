@@ -1,3 +1,29 @@
+cdbs (0.4.69) unstable; urgency=low
+
+  * Merge recently added copyright-check.mk with utils.mk.
+  * Improve copyright-check:
+    + Skip check if debian/copyright_hints is missing.
+    + Skip check if licensecheck is missing or too old.
+    + Drop build-depending on devscripts: now only required in
+      DEB_MAINTAINER_MODE (where check fails instead of being skipped).
+    + Separate perl part as licensecheck2dep5 script. Fix some warnings.
+    + Fix pattern count and related wording.
+    + Ensure parsing fails on error.
+    + Add space around intro text to emphasize in build logs.
+    + Preserve copyright_newhints file only if maintainer-mode fails.
+  * Improve debian/control semi-auto-update rule:
+    + Rewrite in Perl.
+    + Pass build-dependencies through ENV (not expand inside regex) to
+      protect against surprises in user-added data.
+    + Merge duplicate build-dependencies.
+  * Declare build-dependencies recursively expanded ( = not := ) and
+    individually (using CDBS_BUILD_DEPENDS_xxx) to allow late override
+    and silencing e.g. when a class or rules file is only dash-included.
+  * Add new rule upstream-tarball.mk implementing get-orig-source with
+    repackaging support.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 08 Mar 2010 12:13:42 +0100
+
 cdbs (0.4.68) unstable; urgency=medium
 
   * Fix do snippet-specific sanity checks in python-sugar.mk.
