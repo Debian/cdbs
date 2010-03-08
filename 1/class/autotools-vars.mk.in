@@ -56,50 +56,19 @@ DEB_CONFIGURE_LOCALSTATEDIR =/var
 DEB_CONFIGURE_LIBEXECDIR ="\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
 DEB_CONFIGURE_EXTRA_FLAGS =
 
-ifneq (, $(DEB_AUTO_UPDATE_LIBTOOL))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), libtool
-endif
+CDBS_BUILD_DEPENDS_class_autotools-vars_libtool ?= libtool
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),$(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool:%=, %))
 
-ifneq (:, $(DEB_AUTO_UPDATE_ACLOCAL):$(DEB_AUTO_UPDATE_AUTOMAKE))
-ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), $(DEB_AUTO_UPDATE_AUTOMAKE))
-# avoid duped build-dependencies
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake$(DEB_AUTO_UPDATE_ACLOCAL)
-else
-# either only one of them is required, or different versions are
-ifneq (, $(DEB_AUTO_UPDATE_ACLOCAL))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake$(DEB_AUTO_UPDATE_ACLOCAL)
-endif
-ifneq (, $(DEB_AUTO_UPDATE_AUTOMAKE))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), automake$(DEB_AUTO_UPDATE_AUTOMAKE)
-endif
-endif
-endif
+CDBS_BUILD_DEPENDS_class_autotools-vars_automake ?= automake$(DEB_AUTO_UPDATE_AUTOMAKE)
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOMAKE),$(CDBS_BUILD_DEPENDS_class_autotools-vars_automake:%=, %))
 
-ifneq (:, $(DEB_AUTO_UPDATE_AUTOCONF):$(DEB_AUTO_UPDATE_AUTOHEADER))
-ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), $(DEB_AUTO_UPDATE_AUTOHEADER))
-# avoid duped build-dependencies
-ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), 2.13)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
-else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
-endif
-else
-# either only one of them is required, or different versions are
-ifneq (, $(DEB_AUTO_UPDATE_AUTOCONF))
-ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), 2.13)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
-else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
-endif
-endif
-ifneq (, $(DEB_AUTO_UPDATE_AUTOHEADER))
-ifeq ($(DEB_AUTO_UPDATE_AUTOHEADER), 2.13)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf2.13
-else
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), autoconf
-endif
-endif
-endif
-endif
+CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal ?= automake$(DEB_AUTO_UPDATE_ACLOCAL)
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_ACLOCAL),$(CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal:%=, %))
+
+CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf ?= autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOCONF))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOCONF),$(CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf:%=, %))
+
+CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader ?= autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOHEADER))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),$(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader:%=, %))
 
 endif

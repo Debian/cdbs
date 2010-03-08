@@ -31,7 +31,8 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 ifeq ($(_cdbs_included_dpatch),)
 _cdbs_included_dpatch = 1
 
-CDBS_BUILD_DEPENDS    := $(CDBS_BUILD_DEPENDS), dpatch
+CDBS_BUILD_DEPENDS_rules_dpatch ?= dpatch
+CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_rules_dpatch:%=, %)
 
 _cdbs_dpatch_apply_rule = apply-dpatches
 _cdbs_dpatch_unapply_rule = deapply-dpatches
@@ -51,7 +52,8 @@ done)
 # if we have any patches, check if some are patching config.{guess,sub,rpath}
 # and print a warning
 ifneq (, $(DEB_PATCHES))
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), patchutils
+CDBS_BUILD_DEPENDS_rules_dpatch_patchutils ?= patchutils
+CDBS_BUILD_DEPENDS += $(CDBS_BUILD_DEPENDS_rules_dpatch_patchutils:%=, %)
 evil_patches_that_do_nasty_things := $(shell\
 if lsdiff=`which lsdiff` ; then \
   $$lsdiff -H $(DEB_PATCHES) \

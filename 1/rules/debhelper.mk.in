@@ -89,19 +89,17 @@ ifeq (,$(DH_COMPAT))
 DH_COMPAT = 5
 endif
 
-ifeq ($(DH_COMPAT),4)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
-endif
-ifeq ($(DH_COMPAT),5)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper
-endif
-ifeq ($(DH_COMPAT),6)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 6)
-endif
-ifeq ($(DH_COMPAT),7)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), cdbs (>= 0.4.53)
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), debhelper (>= 7.0.1)
-endif
+CDBS_BUILD_DEPENDS_class_rules_debhelper_v4 ?= debhelper
+CDBS_BUILD_DEPENDS += $(if $(filter 4,$(DH_COMPAT)),$(CDBS_BUILD_DEPENDS_rules_debhelper_v4:%=, %))
+
+CDBS_BUILD_DEPENDS_class_rules_debhelper_v5 ?= debhelper
+CDBS_BUILD_DEPENDS += $(if $(filter 5,$(DH_COMPAT)),$(CDBS_BUILD_DEPENDS_rules_debhelper_v5:%=, %))
+
+CDBS_BUILD_DEPENDS_class_rules_debhelper_v6 ?= debhelper (>= 6)
+CDBS_BUILD_DEPENDS += $(if $(filter 6,$(DH_COMPAT)),$(CDBS_BUILD_DEPENDS_rules_debhelper_v6:%=, %))
+
+CDBS_BUILD_DEPENDS_class_rules_debhelper_v7 ?= cdbs (>= 0.4.53), debhelper (>= 7.0.1)
+CDBS_BUILD_DEPENDS += $(if $(filter 7,$(DH_COMPAT)),$(CDBS_BUILD_DEPENDS_rules_debhelper_v7:%=, %))
 
 ifeq ($(DEB_VERBOSE_ALL), yes)
 DH_VERBOSE = 1

@@ -42,7 +42,8 @@ cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_pac
 
 # Python-related dependencies according to Python policy, appendix A
 # also, warn about wrong number of resolved Python packages
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(cdbs_python_pkg_check)$(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS_class_python-distutils ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS += $(cdbs_python_pkg_check)$(CDBS_BUILD_DEPENDS_class_python-distutils:%=, %)
 
 # warn early about late changes to DEB_PYTHON_MODULES_PACKAGES
 pre-build clean::
