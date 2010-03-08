@@ -98,6 +98,7 @@ cdbs_pkgsrcdir = $(if $(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_PKGSRCDIR_$(cdbs_cur
 cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
 comma = ,
+open_parenthesis = (
 close_parenthesis = )
 cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
 
