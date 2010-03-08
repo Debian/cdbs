@@ -47,7 +47,6 @@ done)
 # if we have any patches, check if some are patching config.{guess,sub,rpath}
 # and print a warning
 ifneq (, $(DEB_PATCHES))
-CDBS_BUILD_DEPENDS_rules_simple-patchsys ?= patchutils
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_simple-patchsys)
 evil_patches_that_do_nasty_things := $(shell\
 if lsdiff=`which lsdiff` ; then \
