@@ -27,10 +27,10 @@ include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
 
 # pysupport/pycentral dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-module_pysupport ?= python-support
-CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pysupport)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-module_pysupport)
 
 CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
-CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-module_pycentral)
 
 # Optionally use debhelper (if not then these rules are simply ignored)
 $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python/%

@@ -32,7 +32,7 @@ ifeq ($(_cdbs_included_dpatch),)
 _cdbs_included_dpatch = 1
 
 CDBS_BUILD_DEPENDS_rules_dpatch ?= dpatch
-CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_rules_dpatch)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_dpatch)
 
 _cdbs_dpatch_apply_rule = apply-dpatches
 _cdbs_dpatch_unapply_rule = deapply-dpatches
