@@ -95,6 +95,8 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_buildvars)
 cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
 
 cdbs_cursrcdir = $(or $(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_SRCDIR))
+cdbs_curbuilddir = $(or $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR))
+cdbs_curdestdir = $(or $(DEB_DESTDIR_$(cdbs_curpkg)),$(DEB_DESTDIR))
 
 cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
