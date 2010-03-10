@@ -66,19 +66,19 @@ pre-build::
 	mkdir -p debian/stamps-configure
 
 $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
-	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST ] || [ -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || mv $(cdbs_pkgsrcdir)/MANIFEST $(cdbs_pkgsrcdir)/MANIFEST.upstream
-	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' $(cdbs_pkgsrcdir)/MANIFEST.upstream > $(cdbs_pkgsrcdir)/MANIFEST
+	[ ! -e $(cdbs_cursrcdir)/MANIFEST ] || [ -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || mv $(cdbs_cursrcdir)/MANIFEST $(cdbs_cursrcdir)/MANIFEST.upstream
+	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' $(cdbs_cursrcdir)/MANIFEST.upstream > $(cdbs_cursrcdir)/MANIFEST
 	set -e; for buildver in $(cdbs_python_build_versions); do \
-		$(call cdbs_python_binary,python$$buildver) $(cdbs_pkgsrcdir)/setup.py build; \
+		$(call cdbs_python_binary,python$$buildver) $(cdbs_cursrcdir)/setup.py build; \
 	done
-	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || IFS="`printf '\n'`" find "$(cdbs_pkgsrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
-		echo "$$path" | sed 's!^$(cdbs_pkgsrcdir)/!!' >> $(cdbs_pkgsrcdir)/MANIFEST; \
+	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
+		echo "$$path" | sed 's!^$(cdbs_cursrcdir)/!!' >> $(cdbs_cursrcdir)/MANIFEST; \
 	done
 
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	set -e; for buildver in $(cdbs_python_build_versions); do \
-		LANG=C $(call cdbs_python_binary,python$$buildver) $(cdbs_pkgsrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
+		LANG=C $(call cdbs_python_binary,python$$buildver) $(cdbs_cursrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
 	done
 
 # Replace superfluous COPYING files with symlinks
@@ -89,13 +89,13 @@ $(patsubst %,binary-post-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-post-
 
 reverse-config:: $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES))
 $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar-reverse-config/% : 
-	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || mv -f $(cdbs_pkgsrcdir)/MANIFEST.upstream $(cdbs_pkgsrcdir)/MANIFEST
+	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || mv -f $(cdbs_cursrcdir)/MANIFEST.upstream $(cdbs_cursrcdir)/MANIFEST
 
 $(patsubst %,cleanpythonsugar/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar/% : 
-	-IFS="`printf '\n'`" find "$(cdbs_pkgsrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
+	-IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
 		rm -f "$$path"; \
 		rmdir --ignore-fail-on-non-empty "`dirname "$$path"`"; \
 	done
-	-rmdir --ignore-fail-on-non-empty "$(cdbs_pkgsrcdir)/locale"
+	-rmdir --ignore-fail-on-non-empty "$(cdbs_cursrcdir)/locale"
 
 endif
