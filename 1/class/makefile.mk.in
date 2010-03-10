@@ -37,8 +37,8 @@ cdbs_make_curbuilddir = $(if $(cdbs_make_flavors),$(subst @FLAVOR@,$(cdbs_make_c
 cdbs_make_curdestdir = $(cdbs_curdestdir)
 
 # Tighten to versions supporting multiflavors if feature actually used
-CDBS_BUILD_DEPENDS_class_autotools_multibuilds ?= cdbs (>= 0.4.72~)
-CDBS_BUILD_DEPENDS += $(if $(cdbs_make_flavors),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-multibuilds))
+CDBS_BUILD_DEPENDS_class_autotools_flavors ?= cdbs (>= 0.4.72~)
+CDBS_BUILD_DEPENDS += $(if $(cdbs_make_flavors),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-flavors))
 
 pre-build::
 	$(if $(cdbs_make_flavors),mkdir -p debian/stamp-makefile-build debian/stamp-makefile-install)
