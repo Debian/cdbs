@@ -63,8 +63,9 @@ $(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING
 cdbs_python_current_version := $(shell pyversions -vd)
 cdbs_python_supported_versions := $(shell pyversions -vr)
 cdbs_python_first_supported_version = $(firstword $(strip $(sort $(cdbs_python_supported_versions))))
+# Non-default Python version used (only valid for arch-indendent builds)
 # arch(+indep): none; indep: none if current is supported, else first supported
-cdbs_python_compile_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),,$(cdbs_python_first_supported_version)))
+cdbs_python_nondefault_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),,$(cdbs_python_first_supported_version)))
 # arch(+indep): all; indep: current if supported, else first supported
 cdbs_python_build_versions = $(or $(if $(cdbs_python_arch_packages),$(cdbs_python_supported_versions)),$(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),$(cdbs_python_first_supported_version))
 

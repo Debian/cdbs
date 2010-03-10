@@ -41,7 +41,7 @@ cdbs_python_pkgresolve_check = $(if $(call cdbs_streq,$(cdbs_python_arch_package
 cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_packages),,$(warning WARNING: No Python packages found or declared - either rename binary packages or set DEB_PYTHON_MODULE_PACKAGES before including python-distutils.mk))
 
 # Python-related dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS_class_python-distutils ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_compile_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS_class_python-distutils ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev))
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
 
 # warn about wrong number of resolved Python packages
@@ -60,7 +60,7 @@ common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_p
 $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : debian/python-module-stampdir/%
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
@@ -72,8 +72,8 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) \
-		--install-purelib=/usr/lib/python$(if $(call cdbs_streq,$(cdbs_python_compile_version),),$(cdbs_python_current_version),$(cdbs_python_compile_version))/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) \
+		--install-purelib=/usr/lib/python$(if $(call cdbs_streq,$(cdbs_python_nondefault_version),),$(cdbs_python_current_version),$(cdbs_python_nondefault_version))/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	set -e; for buildver in $(cdbs_python_build_versions); do \
@@ -91,7 +91,7 @@ python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
 clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
-	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_compile_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-for buildver in $(cdbs_python_build_versions); do \
