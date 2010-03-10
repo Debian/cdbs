@@ -60,7 +60,7 @@ common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_p
 $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : debian/python-module-stampdir/%
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
+	cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(DEB_PYTHON_SETUP_CMD) build $(DEB_PYTHON_BUILD_ARGS)
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
@@ -72,8 +72,8 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
-	cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) \
-		--install-purelib=/usr/lib/python$(if $(call cdbs_streq,$(cdbs_python_nondefault_version),),$(cdbs_python_current_version),$(cdbs_python_nondefault_version))/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
+	cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) \
+		--install-purelib=/usr/lib/python$(cdbs_python_build_versions)/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	set -e; for buildver in $(cdbs_python_build_versions); do \
@@ -91,7 +91,7 @@ python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
 clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
-	-cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$(cdbs_python_nondefault_version)) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
+	-cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(DEB_PYTHON_SETUP_CMD) clean $(DEB_PYTHON_CLEAN_ARGS)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-for buildver in $(cdbs_python_build_versions); do \
