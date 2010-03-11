@@ -215,6 +215,8 @@ debian/control::
 ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
 	bdep='$(strip $(CDBS_BUILD_DEPENDS))' perl -n \
 		-e 'my $$bd = $$ENV{"bdep"};' \
+		-e '$$bd =~ /\bcdbs \(>= 0\.4\.71~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.53|0\.4\.67~|0\.4\.69~|0\.4\.70~)\)/, /g;' \
+		-e '$$bd =~ /\bcdbs \(>= 0\.4\.70~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.53|0\.4\.67~|0\.4\.69~)\)/, /g;' \
 		-e '$$bd =~ /\bcdbs \(>= 0\.4\.69~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.53|0\.4\.67~)\)/, /g;' \
 		-e '$$bd =~ /\bcdbs \(>= 0\.4\.67~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.53)\)/, /g;' \
 		-e '$$bd =~ $(re_pkg_strip_unversioned_before_maybeversioned);' \
