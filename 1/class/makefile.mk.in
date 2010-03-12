@@ -24,8 +24,6 @@ _cdbs_class_makefile = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
-DEB_PHONY_RULES += makefile-clean $(cdbs_make_clean_nonstamps)
-
 cdbs_make_flavors = $(sort $(DEB_MAKE_FLAVORS))
 cdbs_make_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),$(error DEB_MAKE_FLAVORS in use: DEB_BUILDDIR must be different from DEB_SRCDIR, and needs to be declared before including makefile.mk))
 cdbs_make_build_stamps = $(if $(cdbs_make_flavors),$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-makefile-build/%,$(cdbs_make_flavors)),debian/stamp-makefile-build)
@@ -35,6 +33,8 @@ cdbs_make_clean_nonstamps = $(if $(cdbs_make_flavors),$(patsubst %,makefile-clea
 cdbs_make_curflavor = $(filter-out %/,$(subst /,/ ,$@))
 cdbs_make_curbuilddir = $(if $(cdbs_make_flavors),$(subst @FLAVOR@,$(cdbs_make_curflavor),$(DEB_MAKE_BUILDDIRSKEL)),$(cdbs_curbuilddir))
 cdbs_make_curdestdir = $(cdbs_curdestdir)
+
+DEB_PHONY_RULES += makefile-clean $(cdbs_make_clean_nonstamps)
 
 # Tighten to versions supporting multiflavors if feature actually used
 CDBS_BUILD_DEPENDS_class_autotools_flavors ?= cdbs (>= 0.4.72~)
