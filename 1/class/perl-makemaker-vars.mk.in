@@ -1,7 +1,7 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2003 Colin Walters <walters@debian.org>
 # Copyright © 2003,2008-2009 Jonas Smedegaard <dr@jones.dk>
-# Description: Defines useful variables for Perl modules
+# Description: Defines useful variables for Perl MakeMaker modules
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -20,26 +20,21 @@
 
 #PATH_RULES#
 
-ifndef _cdbs_class_perlmodule_vars
-_cdbs_class_perlmodule_vars = 1
+ifndef _cdbs_class_perl_makemaker_vars
+_cdbs_class_perl_makemaker_vars = 1
 
+include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
-$(warning WARNING:  perlmodule-vars.mk is deprecated - please use perl-makemaker-vars.mk instead)
+# Override optimizations to follow Perl Policy § 3.3
+DEB_MAKE_EXTRA_ARGS ?= OPTIMIZE="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" $(DEB_MAKE_PARALLEL)
 
-# Override optimizations to follow Perl Policy 3.3
-DEB_MAKE_EXTRA_ARGS = OPTIMIZE="$(CFLAGS)" $(DEB_MAKE_PARALLEL)
-
-# Install into first listed package by default.
-# Unset for standard debhelper rules (use debian/tmp if multiple packages).
-DEB_MAKEMAKER_PACKAGE = $(firstword $(if $(_cdbs_rules_debhelper),$(shell dh_listpackages),$(shell $(_cdbs_scripts_path)/list-packages)))
-
-DEB_MAKEMAKER_INVOKE = /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor
+DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor
 
 # Set some MakeMaker defaults
-DEB_MAKE_BUILD_TARGET = all
-DEB_MAKE_CLEAN_TARGET = distclean
-DEB_MAKE_CHECK_TARGET = test
-DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(if $(DEB_MAKEMAKER_PACKAGE),$(CURDIR)/debian/$(DEB_MAKEMAKER_PACKAGE),$(DEB_DESTDIR))
+DEB_MAKE_BUILD_TARGET ?= all
+DEB_MAKE_CLEAN_TARGET ?= distclean
+DEB_MAKE_CHECK_TARGET ?= test
+DEB_MAKE_INSTALL_TARGET ?= install DESTDIR="$(DEB_PERL_DESTDIR)"
 
 endif
