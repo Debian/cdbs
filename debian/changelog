@@ -1,3 +1,32 @@
+cdbs (0.4.72) UNRELEASED; urgency=low
+
+  * Rename internal variable cdbs_pkgsrcdir → cdbs_cursrcdir, and
+    declare it more compact.
+  * Add convenience expansion variables cdbs_curbuilddir and
+    cdbs_curdestdir to buildvars.mk and makefile.mk.
+  * Extend makefile.mk and autotools.mk to support multiple flavors.
+  * Rename variable cdbs_python_compile_version →
+    cdbs_python_nondefault_version, and add comment about its purpose.
+  * Simplify arch-all python calls to check already fully resolved need
+    of versioned binary.
+  * Add class python-autotools.mk, using multiflavor support if building
+    for multiple Python versions.
+  * Fix prepend -flavors (not multibuilds) to a CDBS_BUILD_DEPENDS.
+  * Fix python-autotools.mk include path to autotools.mk.
+  * Fix syntax error in python-autotools.mk.
+  * Fix handle merging of all declared (by ourselves) build-dependencies
+    in buildcore.mk.
+  * Add class scons.mk (and scons-vars.mk. Closes: bug#470532, thanks to
+    Timothy G Abbott and Matthew A. Nicholson.
+  * Add class perl-build.mk (and perl-vars.mk and perl-build-vars.mk).
+  * Extend build-dependency merging to include newly added snippets.
+  * Add class perl-makemaker.mk (and perl-makemaker-vars.mk), and
+    deprecate perlmodule.mk (and perlmodule-vars.mk) due to too generic
+    snippet name and bad default binary package selection.
+  * Extend buildcore.mk to support binary package relations.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 15 Mar 2010 02:50:12 +0100
+
 cdbs (0.4.71) unstable; urgency=low
 
   * Merge build-info.mk rule with utils.mk, and gracefully handle

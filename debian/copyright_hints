@@ -39,6 +39,37 @@ Copyright: *No copyright*
 License: UNKNOWN
  FIXME
 
+Files: ./1/class/autotools-vars.mk.in,
+	./1/class/autotools.mk.in,
+	./1/class/makefile-vars.mk.in,
+	./1/class/makefile.mk.in,
+	./1/class/perl-build-vars.mk.in,
+	./1/class/perl-build.mk.in,
+	./1/class/perl-makemaker-vars.mk.in,
+	./1/class/perl-makemaker.mk.in,
+	./1/class/perl-vars.mk.in,
+	./1/class/perlmodule-vars.mk.in,
+	./1/class/perlmodule.mk.in,
+	./1/rules/buildcore.mk.in,
+	./1/rules/buildvars.mk.in,
+	./1/rules/debhelper.mk.in,
+	./Makefile.am,
+	./debian/rules
+Copyright: 2002-2003, Colin Walters <walters@debian.org>
+	2003, Colin Walters <walters@debian.org>
+	2003,2008, Jonas Smedegaard <dr@jones.dk>
+	2003,2008,2010, Jonas Smedegaard <dr@jones.dk>
+	2003,2008-2009, Jonas Smedegaard <dr@jones.dk>
+	2003,2009-2010, Jonas Smedegaard <dr@jones.dk>
+	2003,2010, Jonas Smedegaard <dr@jones.dk>
+	2008-2009, Jonas Smedegaard <dr@jones.dk>
+	2008-2010, Jonas Smedegaard <dr@jones.dk>
+	2009, Jonas Smedegaard <dr@jones.dk>
+	2009-2010, Jonas Smedegaard <dr@jones.dk>
+	2010, Jonas Smedegaard <dr@jones.dk>
+License: GPL
+ FIXME
+
 Files: ./1/rules/tarball.mk.in,
 	./test/autotools-1.sh,
 	./test/autotools-2.sh,
@@ -53,28 +84,6 @@ Files: ./1/rules/tarball.mk.in,
 	./test/hdparm/debian/rules,
 	./test/testsuite_functions
 Copyright: 2003, Jeff Bailey <jbailey@debian.org>
-License: GPL
- FIXME
-
-Files: ./1/class/autotools-vars.mk.in,
-	./1/class/autotools.mk.in,
-	./1/class/makefile-vars.mk.in,
-	./1/class/makefile.mk.in,
-	./1/class/perlmodule-vars.mk.in,
-	./1/class/perlmodule.mk.in,
-	./1/rules/buildcore.mk.in,
-	./1/rules/buildvars.mk.in,
-	./1/rules/debhelper.mk.in,
-	./Makefile.am,
-	./debian/rules
-Copyright: 2002-2003, Colin Walters <walters@debian.org>
-	2003, Colin Walters <walters@debian.org>
-	2003, Jonas Smedegaard <dr@jones.dk>
-	2003,2009, Jonas Smedegaard <dr@jones.dk>
-	2008-2009, Jonas Smedegaard <dr@jones.dk>
-	2009, Jonas Smedegaard <dr@jones.dk>
-	2009-2010, Jonas Smedegaard <dr@jones.dk>
-	2010, Jonas Smedegaard <dr@jones.dk>
 License: GPL
  FIXME
 
@@ -169,10 +178,18 @@ Copyright: 2003, Colin Walters <walters@debian.org>
 License: GPL
  FIXME
 
-Files: ./1/class/python-sugar.mk.in,
+Files: ./1/class/python-autotools.mk.in,
+	./1/class/python-sugar.mk.in,
 	./1/rules/upstream-tarball.mk.in
 Copyright: 2007-2010, Jonas Smedegaard <dr@jones.dk>
 	2008-2010, Jonas Smedegaard <dr@jones.dk>
+License: GPL
+ FIXME
+
+Files: ./1/class/scons-vars.mk.in,
+	./1/class/scons.mk.in
+Copyright: 2005, Matthew A. Nicholson <matt@matt-land.com>
+	2008,2010, Jonas Smedegaard <dr@jones.dk>
 License: GPL
  FIXME
 
