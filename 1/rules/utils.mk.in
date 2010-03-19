@@ -44,6 +44,12 @@ DEB_BUILDINFO_SCRIPT = dh_buildinfo
 
 DEB_PHONY_RULES += list-missing
 
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.67~), devscripts (>= 2.10.7~)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
+
+CDBS_BUILD_DEPENDS_rules_utils_buildinfo ?= cdbs (>= 0.4.67~), dh-buildinfo
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_buildinfo)
+
 list-missing:
 	@if test -d debian/tmp; then \
 	  (cd debian/tmp && find . -type f -o -type l | grep -v '/DEBIAN/' | sort) > debian/cdbs-install-list; \
