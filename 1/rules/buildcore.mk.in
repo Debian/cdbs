@@ -202,8 +202,8 @@ cdbs_pkgrel_varnames = $(patsubst %,CDBS_%,DEPENDS PREDEPENDS RECOMMENDS SUGGEST
 cdbs_pkgrel_allvars = $(foreach rel,$(cdbs_pkgrel_varnames),$($(rel)_ALL)$($(rel))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(rel)_$(pkg))))
 
 # require recent cdbs if binary relations are actually used
-CDBS_BUILD_DEPENDS_rules_utils_pkgrel ?= cdbs (>= 0.4.72~)
-CDBS_BUILD_DEPENDS += $(if $(cdbs_pkgrel_allvar),$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_pkgrel))
+CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel ?= cdbs (>= 0.4.72~)
+CDBS_BUILD_DEPENDS += $(if $(cdbs_pkgrel_allvar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel))
 
 
 ifneq (,$(wildcard debian/control.in))
