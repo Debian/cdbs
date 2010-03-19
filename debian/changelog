@@ -1,4 +1,4 @@
-cdbs (0.4.72) UNRELEASED; urgency=low
+cdbs (0.4.72) unstable; urgency=low
 
   * Rename internal variable cdbs_pkgsrcdir → cdbs_cursrcdir, and
     declare it more compact.
@@ -24,8 +24,14 @@ cdbs (0.4.72) UNRELEASED; urgency=low
     deprecate perlmodule.mk (and perlmodule-vars.mk) due to too generic
     snippet name and bad default binary package selection.
   * Extend buildcore.mk to support binary package relations.
+  * Consistently declare build-dependency hints (fix oddities/typos in
+    python-autotools.mk, buildcore.mk and upstream-tarbal.mk).
+  * Declare utils.mk build-dependency hints for optional copyright-check
+    and buildinfo rules.
+  * Fix declare simple-patchsys.mk build-dependency hint, accidentally
+    broken in 0.4.70.
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 15 Mar 2010 02:50:12 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Mar 2010 18:49:20 +0100
 
 cdbs (0.4.71) unstable; urgency=low
 
