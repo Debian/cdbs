@@ -1,3 +1,12 @@
+cdbs (0.4.73) unstable; urgency=low
+
+  * Fix install new snippets perl-vars.mk, perl-build-vars.mk, perl-
+    build.mk, perl-makemaker-vars.mk, perl-makemaker.mk, python-
+    autotools.mk, scons-vars.mk and scons.mk. Closes: bug#470532, thanks
+    to Jérémy Lal.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 20 Mar 2010 14:12:00 +0100
+
 cdbs (0.4.72) unstable; urgency=low
 
   * Rename internal variable cdbs_pkgsrcdir → cdbs_cursrcdir, and
