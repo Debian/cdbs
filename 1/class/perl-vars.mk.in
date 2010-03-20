@@ -36,4 +36,8 @@ DEB_PERL_SRCDIR ?= $(DEB_SRCDIR)
 # then set DEB_PERL_DESTDIR = $(cdbs_curdestdir)
 DEB_PERL_DESTDIR ?= $(if $(filter 1,$(words $(DEB_PERL_PACKAGES))),$(CURDIR)/debian/$(DEB_PERL_PACKAGES),$(cdbs_curdestdir))
 
+# Tighten to versions of cdbs actually providing this snippet
+CDBS_BUILD_DEPENDS_class_perl-makemaker ?= cdbs (>= 0.4.73~)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-makemaker)
+
 endif
