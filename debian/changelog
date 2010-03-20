@@ -1,3 +1,12 @@
+cdbs (0.4.74) unstable; urgency=low
+
+  * Fix tighten build-dependency hints to versions actually including
+    recently introduced snippets, and move a hint to perl-vars.mk from
+    dependent snippets.
+  * Extend buildcore.mk build-dependency cleanup to cover above change.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 20 Mar 2010 19:44:02 +0100
+
 cdbs (0.4.73) unstable; urgency=low
 
   * Fix install new snippets perl-vars.mk, perl-build-vars.mk, perl-
