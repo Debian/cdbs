@@ -204,13 +204,21 @@ all_mk_files = 1/rules/buildvars.mk		\
 		1/class/langcore.mk		\
 		1/class/makefile-vars.mk	\
 		1/class/makefile.mk		\
+		1/class/perl-vars.mk		\
+		1/class/perl-build-vars.mk	\
+		1/class/perl-build.mk		\
+		1/class/perl-makemaker-vars.mk	\
+		1/class/perl-makemaker.mk	\
 		1/class/perlmodule-vars.mk	\
 		1/class/perlmodule.mk		\
 		1/class/python-vars.mk		\
+		1/class/python-autotools.mk	\
 		1/class/python-module.mk	\
 		1/class/python-distutils.mk	\
 		1/class/python-sugar.mk		\
 		1/class/qmake.mk		\
+		1/class/scons-vars.mk		\
+		1/class/scons.mk		\
 		1/class/hbuild.mk
 
 CLEANFILES = $(all_mk_files)
