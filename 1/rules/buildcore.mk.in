@@ -196,7 +196,7 @@ cdbs_re_pkg_strip_unversioned_after_versioned = s/(?:(?<=\A)|(?<=,))( *([a-z0-9]
 cdbs_re_squash_commas_and_spaces = s/(?:(?<=\A)|(?<=[^, ]))[ ,]*([^,]*?)[ ,]*,(?= ?[^ ,]|\Z)/$$1,/g
 
 cdbs_squash_commas = $(shell echo '$1' | perl -pe '$(cdbs_re_squash_commas_and_spaces)')
-cdbs_all_cur_squash_commas = $(call cdbs_squash_commas,$($(1)_ALL)$(comma) $(call cdbs_curvar,$1))
+cdbs_all_cur_squash_commas = $(call cdbs_squash_commas,$(call cdbs_expand_curvar,$1,$(comma) ))
 
 cdbs_pkgrel_varnames = $(patsubst %,CDBS_%,DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES CONFLICTS ENHANCES)
 cdbs_pkgrel_allvars = $(foreach rel,$(cdbs_pkgrel_varnames),$($(rel)_ALL)$($(rel))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(rel)_$(pkg))))
