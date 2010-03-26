@@ -190,11 +190,17 @@ ifneq (,$(DEB_MAINTAINER_MODE))
   DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
 endif
 
+# Style of separating build-dependencies. Perl-style: tab=\t, newline=\n
+#  * Default follows recommended multiline style (see Debian Policy §7.1)
+#  * Unset to get recomended single-line style ", "
+CDBS_BUILD_DEPENDS_DELIMITER ?= ,\n$(space)
+
 cdbs_re_squash_extended_space = s/[ \t\n]+/ /g
 cdbs_re_pkg_strip_versioned_before_sameversioned = s/(?:(?<=\A)|(?<=,)) *([a-z0-9][a-z0-9+\-.]+) *(\([^$(close_parenthesis)]+\)) *,(?=(?:[^,]*,)*? *\1 *\2(?:,|\Z))//g
 cdbs_re_pkg_strip_unversioned_before_maybeversioned = s/(?:(?<=\A)|(?<=,)) *([a-z0-9][a-z0-9+\-.]+) *,(?=(?:[^,]*,)*? *\1 *(?:[\$(open_parenthesis),]|\Z))//g
 cdbs_re_pkg_strip_unversioned_after_versioned = s/(?:(?<=\A)|(?<=,))( *([a-z0-9][a-z0-9+\-.]+) +\$(open_parenthesis)[^,]+,)((?:[^,]*,)*?) *\2 *(?=,|\Z)/$$1$$3/g
 cdbs_re_squash_commas_and_spaces = s/(?:(?<=\A)|(?<=[^, ]))[ ,]*([^,]*?)[ ,]*,(?= ?[^ ,]|\Z)/$$1,/g
+cdbs_re_wrap_after_commas = s/, */$(or $(CDBS_BUILD_DEPENDS_DELIMITER),$(comma)$(space))/g
 
 cdbs_squash_commas = $(shell echo '$1' | perl -p -e '$(cdbs_re_squash_extended_space)' -e '$(cdbs_re_squash_commas_and_spaces)')
 cdbs_all_cur_squash_commas = $(call cdbs_squash_commas,$(call cdbs_expand_curvar,$1,$(comma) ))
@@ -239,6 +245,7 @@ ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
 		-e '$$bd =~ $(cdbs_re_pkg_strip_versioned_before_sameversioned);' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_unversioned_after_versioned);' \
 		-e '$$bd =~ $(cdbs_re_squash_commas_and_spaces);' \
+		-e '$$bd =~ $(cdbs_re_wrap_after_commas);' \
 		-e 's/\@cdbs\@/$$bd/g;' \
 		-e 's/^Build-Depends(|-Indep): ,/Build-Depends$$1:/g;' \
 		\

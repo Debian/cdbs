@@ -100,6 +100,8 @@ cdbs_curdestdir = $(or $(DEB_DESTDIR_$(cdbs_curpkg)),$(DEB_DESTDIR))
 
 cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
+nullstring =
+space = $(nullstring) # <- notice the trailing space (only leading is stripped)
 comma = ,
 open_parenthesis = (
 close_parenthesis = )
