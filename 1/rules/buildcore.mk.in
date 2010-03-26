@@ -202,9 +202,6 @@ cdbs_re_pkg_strip_unversioned_after_versioned = s/(?:(?<=\A)|(?<=,))( *([a-z0-9]
 cdbs_re_squash_commas_and_spaces = s/(?:(?<=\A)|(?<=[^, ]))[ ,]*([^,]*?)[ ,]*,(?= ?[^ ,]|\Z)/$$1,/g
 cdbs_re_wrap_after_commas = s/, */$(or $(CDBS_BUILD_DEPENDS_DELIMITER),$(comma)$(space))/g
 
-cdbs_squash_commas = $(shell echo '$1' | perl -p -e '$(cdbs_re_squash_extended_space)' -e '$(cdbs_re_squash_commas_and_spaces)')
-cdbs_all_cur_squash_commas = $(call cdbs_squash_commas,$(call cdbs_expand_curvar,$1,$(comma) ))
-
 cdbs_pkgrel_varnames = $(patsubst %,CDBS_%,DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES CONFLICTS ENHANCES)
 cdbs_pkgrel_allvars = $(foreach rel,$(cdbs_pkgrel_varnames),$($(rel)_ALL)$($(rel))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(rel)_$(pkg))))
 
@@ -283,15 +280,16 @@ $(patsubst %,install/%,$(DEB_INDEP_PACKAGES)) :: install/% : testdir testroot co
 # Apply CDBS-declared dependencies to binary packages
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
 	@echo 'Adding cdbs dependencies to debian/$(cdbs_curpkg).substvars'
-	@echo 'cdbs:Depends=$(call cdbs_all_cur_squash_commas,CDBS_DEPENDS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Pre-Depends=$(call cdbs_all_cur_squash_commas,CDBS_PREDEPENDS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Recommends=$(call cdbs_all_cur_squash_commas,CDBS_RECOMMENDS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Suggests=$(call cdbs_all_cur_squash_commas,CDBS_SUGGESTS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Breaks=$(call cdbs_all_cur_squash_commas,CDBS_BREAKS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Provides=$(call cdbs_all_cur_squash_commas,CDBS_PROVIDES)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Replaces=$(call cdbs_all_cur_squash_commas,CDBS_REPLACES)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Conflicts=$(call cdbs_all_cur_squash_commas,CDBS_CONFLICTS)' >> debian/$(cdbs_curpkg).substvars
-	@echo 'cdbs:Enhances=$(call cdbs_all_cur_squash_commas,CDBS_ENHANCES)' >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )'    | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Depends=$$_\n"'     >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )'    | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Depends=$$_\n"'     >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_PREDEPENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Pre-Depends=$$_\n"' >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_RECOMMENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Recommends=$$_\n"'  >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_SUGGESTS,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Suggests=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_BREAKS,$(comma) )'     | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Breaks=$$_\n"'      >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_PROVIDES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Provides=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_REPLACES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Replaces=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_CONFLICTS,$(comma) )'  | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Conflicts=$$_\n"'   >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_ENHANCES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Enhances=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
 
 # This rule is called after all packages are installed.
 common-binary-arch:: testdir testroot $(patsubst %,install/%,$(DEB_ARCH_PACKAGES))
