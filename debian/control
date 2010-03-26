@@ -2,7 +2,29 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep: debhelper (>= 6), graphviz, realpath, fakeroot, python-dev, python-all-dev, python-central, python-support, libxml2-utils, xsltproc, docbook-xml, docbook-xsl, dblatex, ant, default-jdk, sharutils, gs-common, texlive-font-utils | texlive-extra-utils (<< 2009), lzma, devscripts (>= 2.10.7)
+Build-Depends-Indep: devscripts (>= 2.10.7~),
+ cdbs (>= 0.4.67~),
+ dh-buildinfo,
+ debhelper (>= 6),
+ graphviz,
+ realpath,
+ fakeroot,
+ python-dev,
+ python-all-dev,
+ python-central,
+ python-support,
+ libxml2-utils,
+ xsltproc,
+ docbook-xml,
+ docbook-xsl,
+ dblatex,
+ ant,
+ default-jdk,
+ sharutils,
+ gs-common,
+ texlive-font-utils | texlive-extra-utils (<< 2009),
+ lzma,
+ devscripts (>= 2.10.7)
 Uploaders: Jonas Smedegaard <dr@jones.dk>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
 Standards-Version: 3.8.4
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git

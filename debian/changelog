@@ -1,3 +1,25 @@
+cdbs (0.4.75) unstable; urgency=medium
+
+  * Fix pkg check function in python-sugar.mk (caused bogus warnings
+    about redefining DEB_PYTHON_SUGAR_PACKAGES late).
+  * Fix python-autotools.mk to only try expand to flavored python when
+    flavors are in use (causes FTBFS of arch-all packages).
+    Tighten python-autotools.mk build-dependency hint, and extend
+    build-dependency cleanup to cover current release.
+  * Prepend cdbs_ to (recently added) re_* variables in buildcore.mk.
+  * Add convenience expansion variable cdbs_expand_curvar (replacing now
+    unused cdbs_curvar).
+  * Improve build-relation cleanup in buildcore.mk:
+    + Avoid shell-execution of control.in file.
+    + Generate multiline build-dependencies by default, tunable with new
+      variable CDBS_BUILD_DEPENDS_DELIMITER.
+    + Support multiline content in input variables.
+    + Skip virtually empty binary relations (avoids "unused substitution
+      variable" warnings).
+  * Set urgency=medium due to fix for potential FTBFS.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 26 Mar 2010 13:09:12 +0100
+
 cdbs (0.4.74) unstable; urgency=low
 
   * Fix tighten build-dependency hints to versions actually including
