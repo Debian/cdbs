@@ -32,7 +32,7 @@ include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
 
 # include both simple and versioned activity packages by default
-DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES)), $(DEB_PACKAGES))
+DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES), , ), $(DEB_PACKAGES))
 
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
