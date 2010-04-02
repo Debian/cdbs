@@ -22,16 +22,16 @@ _cdbs_class_ant_vars = 1
 
 # Ant home directory.  Doesn't need to be changed except when using
 # nonstandard Ant installations.
-ANT_HOME = /usr/share/ant
+ANT_HOME ?= /usr/share/ant
 
 # The home directory of the Java Runtime Environment (JRE) or Java Development
 # Kit (JDK). You can either directly set JAVA_HOME in debian/rules or set
 # JAVA_HOME_DIRS to multiple possible home directories. The first existing
 # directory from this list is used for JAVA_HOME. You can also override
 # JAVACMD in case you don't want to use the default JAVA_HOME/bin/java.
-JAVA_HOME = $(shell for jh in $(JAVA_HOME_DIRS); do if [ -x "$$jh/bin/java" ]; then \
+JAVA_HOME ?= $(shell for jh in $(JAVA_HOME_DIRS); do if [ -x "$$jh/bin/java" ]; then \
 	    echo $${jh}; exit 0; fi; done)
-JAVACMD   = $(JAVA_HOME)/bin/java
+JAVACMD ?= $(JAVA_HOME)/bin/java
 
 # You can list all Java ARchives (JARs) to be added to the class path in
 # DEB_JARS, either with their full path or just the basename if the JAR is
@@ -39,8 +39,8 @@ JAVACMD   = $(JAVA_HOME)/bin/java
 # files will silently be ignored. tools.jar is automatically added to the
 # end of the class path if it exists in the JDK's lib directory.
 # You can override the complete class path using DEB_CLASSPATH.
-DEB_JARS_BASE = /usr/share/java
-DEB_CLASSPATH = $(ANT_HOME)/lib/ant.jar:$(ANT_HOME)/lib/ant-launcher.jar:$(shell for jar in $(DEB_JARS); do \
+DEB_JARS_BASE ?= /usr/share/java
+DEB_CLASSPATH ?= $(ANT_HOME)/lib/ant.jar:$(ANT_HOME)/lib/ant-launcher.jar:$(shell for jar in $(DEB_JARS); do \
 		if [ -f "$$jar" ]; then echo -n "$${jar}:"; fi; \
 		if [ -f "$$jar".jar ]; then echo -n "$${jar}.jar:"; fi; \
 		if [ -f $(DEB_JARS_BASE)/"$$jar" ]; then echo -n "$(DEB_JARS_BASE)/$${jar}:"; fi; \
@@ -50,7 +50,7 @@ DEB_CLASSPATH = $(ANT_HOME)/lib/ant.jar:$(ANT_HOME)/lib/ant-launcher.jar:$(shell
 
 # Set compile.debug and compile.optimize depending on DEB_BUILD_OPTIONS to
 # match the behaviour of C/C++ programs
-DEB_ANT_ARGS = -Dcompile.debug=true
+DEB_ANT_ARGS ?= -Dcompile.debug=true
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
 	DEB_ANT_ARGS += -Dcompile.optimize=false
 else
@@ -62,14 +62,14 @@ endif
 # you don't have to modify upstream's build.xml. Please note that command-line
 # arguments in ANT_ARGS (see below) override the settings in build.xml and
 # the property file.
-DEB_ANT_PROPERTYFILE = $(shell test -f $(CURDIR)/debian/ant.properties && echo $(CURDIR)/debian/ant.properties)
+DEB_ANT_PROPERTYFILE ?= $(shell test -f $(CURDIR)/debian/ant.properties && echo $(CURDIR)/debian/ant.properties)
 
 # You can specify additional JVM arguments in ANT_OPTS and Ant command-line
 # arguments in ANT_ARGS, like for the Ant wrapper script and sepcified in
 # Ant's documentation ("Running Ant"). You can additionally define
 # ANT_ARGS_<package> for each individual package, e.g. to override the default
 # settings for compile.optimize.
-DEB_ANT_INVOKE = cd $(DEB_BUILDDIR) && $(JAVACMD) -classpath $(DEB_CLASSPATH) \
+DEB_ANT_INVOKE ?= cd $(DEB_BUILDDIR) && $(JAVACMD) -classpath $(DEB_CLASSPATH) \
 		 $(ANT_OPTS) -Dant.home=$(ANT_HOME) \
 		 org.apache.tools.ant.Main $(DEB_ANT_ARGS) \
 		 $(if $(ANT_ARGS_$(cdbs_curpkg)),$(ANT_ARGS_$(cdbs_curpkg)),$(ANT_ARGS)) \
@@ -81,9 +81,9 @@ DEB_ANT_INVOKE = cd $(DEB_BUILDDIR) && $(JAVACMD) -classpath $(DEB_CLASSPATH) \
 # Building uses the default target from build.xml, installing and testing is
 # only called if the corresponding variable is set. You can also specify
 # multiple targets for each step.
-DEB_ANT_BUILD_TARGET = 
-DEB_ANT_INSTALL_TARGET =
-DEB_ANT_CHECK_TARGET =
-DEB_ANT_CLEAN_TARGET = clean
+#DEB_ANT_BUILD_TARGET =
+#DEB_ANT_INSTALL_TARGET =
+#DEB_ANT_CHECK_TARGET =
+DEB_ANT_CLEAN_TARGET ?= clean
 
 endif

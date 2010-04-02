@@ -36,6 +36,7 @@ ifdef _cdbs_rules_debhelper
 # This odd piece of coding is necessary to hide the warning message
 # "I have no package to build" while preserving genuine error messages.
 # This was in fact an error before debhelper 5.0.30.
+# FIXME: revert: debhelper 5.0.30 is in stable!
 DEB_INDEP_PACKAGES := $(strip $(shell dh_listpackages -i 2>/dev/null || dh_listpackages -i))
 DEB_ARCH_PACKAGES := $(filter-out $(DEB_INDEP_PACKAGES),$(strip $(shell dh_listpackages -s 2>/dev/null || dh_listpackages -s)))
 else
@@ -45,20 +46,20 @@ endif
 endif
 # Split into normal and udeb packages
 ifeq ($(DEB_UDEB_PACKAGES),)
-DEB_PACKAGES = $(filter-out %-udeb, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
-DEB_UDEB_PACKAGES = $(filter %-udeb, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+DEB_PACKAGES ?= $(filter-out %-udeb, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+DEB_UDEB_PACKAGES ?= $(filter %-udeb, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
 else
-DEB_PACKAGES = $(filter-out $(DEB_UDEB_PACKAGES), $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+DEB_PACKAGES ?= $(filter-out $(DEB_UDEB_PACKAGES), $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
 endif
 # Too much bother for now.  If someone complains we'll fix it.
 #DEB_ARCH_UDEB_PACKAGES = $(filter %-udeb, $(DEB_ARCH_PACKAGES))
 #DEB_INDEP_UDEB_PACKAGES = $(filter %-udeb, $(DEB_INDEP_PACKAGES))
 # A handy list of every package, udeb or not
-DEB_ALL_PACKAGES = $(DEB_PACKAGES) $(DEB_UDEB_PACKAGES)
-DEB_INDEP_REGULAR_PACKAGES = $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_INDEP_PACKAGES))
-DEB_ARCH_REGULAR_PACKAGES = $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_ARCH_PACKAGES))
+DEB_ALL_PACKAGES ?= $(DEB_PACKAGES) $(DEB_UDEB_PACKAGES)
+DEB_INDEP_REGULAR_PACKAGES ?= $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_INDEP_PACKAGES))
+DEB_ARCH_REGULAR_PACKAGES ?= $(filter-out $(DEB_UDEB_PACKAGES),$(DEB_ARCH_PACKAGES))
 
-DEB_DBG_PACKAGES = $(filter %-dbg, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+DEB_DBG_PACKAGES ?= $(filter %-dbg, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
 
 # Some support for srcdir != builddir builds.
 # These are relative to the root of the package
@@ -66,6 +67,7 @@ DEB_SRCDIR ?= .
 DEB_BUILDDIR ?= $(strip $(DEB_SRCDIR))
 
 # Miscellaneous bits
+# TODO: Drop this when safe (dpkg-buildpackage exports them but since when?)
 DEB_ARCH = $(shell dpkg --print-architecture)
 DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_HOST_GNU_SYSTEM ?= $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
@@ -81,9 +83,9 @@ DEB_BUILD_ARCH_CPU ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH_CPU)
 DEB_BUILD_ARCH_OS ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH_OS)
 
 ifeq ($(words $(DEB_ALL_PACKAGES)),1)
-	DEB_DESTDIR = $(CURDIR)/debian/$(strip $(DEB_ALL_PACKAGES))/
+	DEB_DESTDIR ?= $(CURDIR)/debian/$(strip $(DEB_ALL_PACKAGES))/
 else
-	DEB_DESTDIR = $(CURDIR)/debian/tmp/
+	DEB_DESTDIR ?= $(CURDIR)/debian/tmp/
 endif
 
 CDBS_BUILD_DEPENDS_rules_buildvars ?= cdbs

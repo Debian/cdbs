@@ -24,6 +24,7 @@ _cdbs_class_kde = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
+# FIXME: Restructure to allow early override
 ifdef _cdbs_tarball_dir
 DEB_BUILDDIR = $(_cdbs_tarball_dir)/obj-$(DEB_BUILD_GNU_TYPE)
 else
@@ -53,6 +54,7 @@ endif
 
 cdbs_configure_flags += --with-qt-dir=/usr/share/qt3 --disable-rpath --with-xinerama $(cdbs_kde_enable_final) $(cdbs_kde_enable_debug)
 
+# FIXME: Restructure to allow early override
 DEB_AC_AUX_DIR = $(DEB_SRCDIR)/admin
 DEB_CONFIGURE_INCLUDEDIR = "\$${prefix}/include/kde"
 DEB_COMPRESS_EXCLUDE = .dcl .docbook -license .tag .sty .el

@@ -23,21 +23,21 @@ _cdbs_class_makefile_vars = 1
 
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
-DEB_MAKE_MAKEFILE =
-DEB_MAKE_ENVVARS = 
-DEB_MAKE_PARALLEL = $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
+#DEB_MAKE_MAKEFILE =
+#DEB_MAKE_ENVVARS =
+DEB_MAKE_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
 
 # Derived classes that supply the flags some other way (e.g., configure) 
 # should set this variable to empty.
-DEB_MAKE_EXTRA_ARGS = CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" CPPFLAGS="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" LDFLAGS="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))" $(DEB_MAKE_PARALLEL)
+DEB_MAKE_EXTRA_ARGS ?= CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" CPPFLAGS="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" LDFLAGS="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))" $(DEB_MAKE_PARALLEL)
 
-DEB_MAKE_INVOKE = $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(cdbs_make_curbuilddir) $(DEB_MAKE_EXTRA_ARGS)
+DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(cdbs_make_curbuilddir) $(DEB_MAKE_EXTRA_ARGS)
 
 # This variable is deprecated.
 DEB_BUILD_MAKE_TARGET = 
 _cdbs_deprecated_vars += DEB_BUILD_MAKE_TARGET
 # New in 0.2.8.
-DEB_MAKE_BUILD_TARGET = $(DEB_BUILD_MAKE_TARGET)
+DEB_MAKE_BUILD_TARGET ?= $(DEB_BUILD_MAKE_TARGET)
 
 # If your Makefile provides an "install" target, you need to give the requisite commands
 # here to install it into the staging directory.  For automake-using programs, this
@@ -51,14 +51,14 @@ DEB_CLEAN_MAKE_TARGET = clean
 _cdbs_deprecated_vars += DEB_CLEAN_MAKE_TARGET
 _cdbs_deprecated_DEB_CLEAN_MAKE_TARGET_default := $(DEB_CLEAN_MAKE_TARGET)
 # New in 0.2.8.
-DEB_MAKE_CLEAN_TARGET = $(DEB_CLEAN_MAKE_TARGET)
+DEB_MAKE_CLEAN_TARGET ?= $(DEB_CLEAN_MAKE_TARGET)
 
 # This variable is deprecated.
 DEB_MAKE_TEST_TARGET = 
 _cdbs_deprecated_vars += DEB_MAKE_TEST_TARGET
 # New in 0.2.8.
 # New in 0.4.2.
-DEB_MAKE_CHECK_TARGET = $(DEB_MAKE_TEST_TARGET)
+DEB_MAKE_CHECK_TARGET ?= $(DEB_MAKE_TEST_TARGET)
 
 # If DEB_MAKE_FLAVORS is set compilation is done once per flavor.
 # NB! This must be declared _before_ including makefile.mk
@@ -67,7 +67,7 @@ DEB_MAKE_CHECK_TARGET = $(DEB_MAKE_TEST_TARGET)
 # If building multiple flavors, skeleton strings are used for
 # DEB_BUILDDIR and DEB_DESTDIR, with @FLAVOR@ expanding to actual
 # flavor.
-DEB_MAKE_BUILDDIRSKEL = $(cdbs_curbuilddir)/@FLAVOR@
-DEB_MAKE_DESTDIRSKEL = $(cdbs_curdestdir)/@FLAVOR@
+DEB_MAKE_BUILDDIRSKEL ?= $(cdbs_curbuilddir)/@FLAVOR@
+DEB_MAKE_DESTDIRSKEL ?= $(cdbs_curdestdir)/@FLAVOR@
 
 endif

@@ -40,6 +40,7 @@ _cdbs_dpatch_unapply_rule = deapply-dpatches
 DEB_PATCH_SUFFIX ?= .diff .diff.gz .diff.bz2 .patch .patch.gz .patch.bz2 
 DEB_PATCHDIRS ?= debian/patches
 close_parenthesis ?= )
+# FIXME: Restructure to allow early override (or lowercase the variable!)
 DEB_PATCHES := $(shell\
 for dir in $(DEB_PATCHDIRS) ; do \
 	for file in $$dir/* ; do \

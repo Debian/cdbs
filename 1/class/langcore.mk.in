@@ -20,18 +20,19 @@
 ifndef _cdbs_class_langcore
 _cdbs_class_langcore = 1
 
+# FIXME: Restructure to allow early override
 CFLAGS += -g -Wall
 CXXFLAGS += -g -Wall
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-	DEB_OPT_FLAG = -O0
+	DEB_OPT_FLAG ?= -O0
 else
-	DEB_OPT_FLAG = -O2
+	DEB_OPT_FLAG ?= -O2
 endif
 CFLAGS += $(DEB_OPT_FLAG)
 CXXFLAGS += $(DEB_OPT_FLAG)
 
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
-	DEB_PARALLEL_JOBS := $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	DEB_PARALLEL_JOBS ?= $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 endif
 
 endif

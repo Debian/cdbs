@@ -25,8 +25,9 @@ include $(_cdbs_class_path)/autotools-files.mk$(_cdbs_makefile_suffix)
 
 cdbs_autotools_configure_stamps = $(if $(cdbs_make_flavors),$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-autotools/%,$(cdbs_make_flavors)),debian/stamp-autotools)
 
-# Overriden from makefile-vars.mk.  We pass CFLAGS and friends to ./configure, so
-# no need to pass them to make.
+# Overriden from makefile-vars.mk.  We pass CFLAGS and friends to
+# ./configure, so no need to pass them to make.
+# FIXME: Restructure to allow early override
 DEB_MAKE_EXTRA_ARGS = $(DEB_MAKE_PARALLEL)
 
 pre-build::

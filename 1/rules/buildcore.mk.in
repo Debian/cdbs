@@ -187,7 +187,7 @@ endif
 
 # Routines convenient for maintainers but unsuitable for build daemons
 ifneq (,$(DEB_MAINTAINER_MODE))
-  DEB_AUTO_UPDATE_DEBIAN_CONTROL = yes
+  DEB_AUTO_UPDATE_DEBIAN_CONTROL ?= yes
 endif
 
 # Style of separating build-dependencies. Perl-style: tab=\t, newline=\n

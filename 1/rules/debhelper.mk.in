@@ -107,37 +107,37 @@ endif
 
 is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
 
-DEB_DH_PREP = $(shell if [ "$(DH_COMPAT)" -gt 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
+DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -gt 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
 
-DEB_INSTALL_DIRS_ALL =
-DEB_INSTALL_CHANGELOGS_ALL = $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
-DEB_INSTALL_DOCS_ALL = $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
+#DEB_INSTALL_DIRS_ALL =
+DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
+DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 cdbs_strip_quotes = $(subst ',,$(subst ",,$(1)))
 # hello emacs '
 
-DEB_DH_GENCONTROL_ARGS = $(DEB_DH_GENCONTROL_ARGS_ALL) $(DEB_DH_GENCONTROL_ARGS_$(cdbs_curpkg))
-DEB_DH_MAKESHLIBS_ARGS = $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
-DEB_DH_SHLIBDEPS_ARGS = $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
+DEB_DH_GENCONTROL_ARGS ?= $(DEB_DH_GENCONTROL_ARGS_ALL) $(DEB_DH_GENCONTROL_ARGS_$(cdbs_curpkg))
+DEB_DH_MAKESHLIBS_ARGS ?= $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
+DEB_DH_SHLIBDEPS_ARGS ?= $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
 
-DEB_DH_BUILDDEB_ENV = $(if $(DEB_DH_ALWAYS_EXCLUDE),DH_ALWAYS_EXCLUDE=$(DEB_DH_ALWAYS_EXCLUDE),)
-DEB_DH_PERL_ARGS = $(if $(DEB_PERL_INCLUDE_$(cdbs_curpkg))$(DEB_PERL_INCLUDE),$(shell echo $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE)))
+DEB_DH_BUILDDEB_ENV ?= $(if $(DEB_DH_ALWAYS_EXCLUDE),DH_ALWAYS_EXCLUDE=$(DEB_DH_ALWAYS_EXCLUDE),)
+DEB_DH_PERL_ARGS ?= $(if $(DEB_PERL_INCLUDE_$(cdbs_curpkg))$(DEB_PERL_INCLUDE),$(shell echo $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE)))
 
 ifneq ($(words $(DEB_DBG_PACKAGES)),0)
 ifeq ($(words $(DEB_DBG_PACKAGES)),1)
-DEB_DBG_PACKAGE_ALL = $(if $(strip $(foreach x,$(DEB_PACKAGES),$(DEB_DBG_PACKAGE_$(x)))),,$(DEB_DBG_PACKAGES))
+DEB_DBG_PACKAGE_ALL ?= $(if $(strip $(foreach x,$(DEB_PACKAGES),$(DEB_DBG_PACKAGE_$(x)))),,$(DEB_DBG_PACKAGES))
 else
 ifeq (yes,$(if $(findstring no,$(foreach x,$(DEB_DBG_PACKAGES),$(if $(filter $(x:-dbg=),$(DEB_PACKAGES)),yes,no))),no,yes))
 define cdbs_deb_dbg_package_assign
-DEB_DBG_PACKAGE_$(1:-dbg=) = $(1)
+DEB_DBG_PACKAGE_$(1:-dbg=) ?= $(1)
 endef
 $(foreach x,$(DEB_DBG_PACKAGES),$(eval $(call cdbs_deb_dbg_package_assign,$(value x))))
 endif
 endif
 cdbs_dbg_package = $(or $(DEB_DBG_PACKAGE_$(cdbs_curpkg)),$(DEB_DBG_PACKAGE_ALL))
 cdbs_dbg_package_option = $(if $(cdbs_dbg_package),$(shell if [ "$(DH_COMPAT)" -ge 5 ]; then echo "--dbg-package=$(strip $(cdbs_dbg_package))"; fi))
-DEB_DH_STRIP_ARGS = $(cdbs_dbg_package_option)
+DEB_DH_STRIP_ARGS ?= $(cdbs_dbg_package_option)
 endif
 
 pre-build:: debian/compat

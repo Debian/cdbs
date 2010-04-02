@@ -24,15 +24,16 @@ _cdbs_class_qmake = 1
 
 include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 
+# FIXME: Restructure to allow early override
 DEB_MAKE_EXTRA_ARGS = $(DEB_MAKE_PARALLEL)
 
 DEB_MAKE_INSTALL_TARGET = install INSTALL_ROOT=$(DEB_DESTDIR)
 DEB_MAKE_CLEAN_TARGET = distclean
 
-QMAKE = qmake
+QMAKE ?= qmake
 
 ifneq (,$(filter nostrip,$(DEB_BUILD_OPTIONS)))
-DEB_QMAKE_CONFIG_VAL = nostrip
+DEB_QMAKE_CONFIG_VAL ?= nostrip
 endif
 
 common-configure-arch common-configure-indep:: common-configure-impl

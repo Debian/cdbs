@@ -23,15 +23,16 @@ _cdbs_class_autotools_vars = 1
 
 include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 
-DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(cdbs_make_curdestdir)
+DEB_MAKE_INSTALL_TARGET ?= install DESTDIR=$(cdbs_make_curdestdir)
+# FIXME: Restructure to allow early override
 DEB_MAKE_CLEAN_TARGET = distclean
 #DEB_MAKE_CHECK_TARGET = check
 
-DEB_AC_AUX_DIR = $(DEB_SRCDIR)
+DEB_AC_AUX_DIR ?= $(DEB_SRCDIR)
 
-DEB_CONFIGURE_SCRIPT = $(CURDIR)/$(DEB_SRCDIR)/configure
-DEB_CONFIGURE_SCRIPT_ENV = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
-DEB_CONFIGURE_NORMAL_ARGS = --build=$(DEB_BUILD_GNU_TYPE) --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) --disable-maintainer-mode --disable-dependency-tracking --disable-silent-rules
+DEB_CONFIGURE_SCRIPT ?= $(CURDIR)/$(DEB_SRCDIR)/configure
+DEB_CONFIGURE_SCRIPT_ENV ?= CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
+DEB_CONFIGURE_NORMAL_ARGS ?= --build=$(DEB_BUILD_GNU_TYPE) --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) --disable-maintainer-mode --disable-dependency-tracking --disable-silent-rules
 
 # Provide --host only if different from --build, to support cross-
 # compiling with autotools 2.52+ without slowing down normal builds.
@@ -46,15 +47,15 @@ endif
 # absolute certainly that this is NOT a VPATH build.
 DEB_CONFIGURE_NORMAL_ARGS += $(if $(subst $(DEB_SRCDIR),,$(cdbs_make_curbuilddir)),,--srcdir=.)
 
-DEB_CONFIGURE_INVOKE = cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
-DEB_CONFIGURE_PREFIX =/usr
-DEB_CONFIGURE_INCLUDEDIR = "\$${prefix}/include"
-DEB_CONFIGURE_MANDIR ="\$${prefix}/share/man"
-DEB_CONFIGURE_INFODIR ="\$${prefix}/share/info"
-DEB_CONFIGURE_SYSCONFDIR =/etc
-DEB_CONFIGURE_LOCALSTATEDIR =/var
-DEB_CONFIGURE_LIBEXECDIR ="\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
-DEB_CONFIGURE_EXTRA_FLAGS =
+DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
+DEB_CONFIGURE_PREFIX ?=/usr
+DEB_CONFIGURE_INCLUDEDIR ?= "\$${prefix}/include"
+DEB_CONFIGURE_MANDIR ?= "\$${prefix}/share/man"
+DEB_CONFIGURE_INFODIR ?= "\$${prefix}/share/info"
+DEB_CONFIGURE_SYSCONFDIR ?= /etc
+DEB_CONFIGURE_LOCALSTATEDIR ?= /var
+DEB_CONFIGURE_LIBEXECDIR ?= "\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
+#DEB_CONFIGURE_EXTRA_FLAGS =
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_libtool ?= libtool
 CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool))

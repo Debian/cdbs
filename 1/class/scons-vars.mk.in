@@ -23,25 +23,25 @@ _cdbs_class_scons_vars = 1
 
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
-DEB_SCONS_ENVVARS = 
-DEB_SCONS_PARALLEL = $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
-DEB_SCONS_INVOKE = $(DEB_SCONS_ENVVARS) scons --directory="$(DEB_BUILDDIR)" CC="$(or $(CC_$(cdbs_curpkg)),$(CC))" CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXX="$(or $(CXX_$(cdbs_curpkg)),$(CXX))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" $(DEB_SCONS_PARALLEL)
+#DEB_SCONS_ENVVARS =
+DEB_SCONS_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
+DEB_SCONS_INVOKE ?= $(DEB_SCONS_ENVVARS) scons --directory="$(DEB_BUILDDIR)" CC="$(or $(CC_$(cdbs_curpkg)),$(CC))" CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXX="$(or $(CXX_$(cdbs_curpkg)),$(CXX))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" $(DEB_SCONS_PARALLEL)
 
 # general options (passed on all scons commands)
-DEB_SCONS_OPTIONS =
+#DEB_SCONS_OPTIONS =
 
 # build target and options (only passed on build)
-DEB_SCONS_BUILD_TARGET =
-DEB_SCONS_BUILD_OPTIONS =
+#DEB_SCONS_BUILD_TARGET =
+#DEB_SCONS_BUILD_OPTIONS =
 
 # install target and options (only passed on install)
-DEB_SCONS_INSTALL_TARGET = install
-DEB_SCONS_INSTALL_OPTIONS =
+DEB_SCONS_INSTALL_TARGET ?= install
+#DEB_SCONS_INSTALL_OPTIONS =
 
 # clean target
-DEB_SCONS_CLEAN_TARGET = .
+DEB_SCONS_CLEAN_TARGET ?= .
 
-DEB_SCONS_CHECK_TARGET =
+#DEB_SCONS_CHECK_TARGET =
 
 CDBS_BUILD_DEPENDS_class_scons-vars ?= cdbs (>= 0.4.73~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_scons-vars)
