@@ -48,15 +48,27 @@ DEB_UPSTREAM_TARBALL_BASENAME ?= $(DEB_UPSTREAM_PACKAGE)-$(DEB_UPSTREAM_TARBALL_
 DEB_UPSTREAM_TARBALL_SRCDIR ?= $(cdbs_upstream_tarball_basename)
 
 # Space-delimited list of directories and files to strip (optional)
-#DEB_UPSTREAM_REPACKAGE_EXCLUDE = CVS .cvsignore doc/rfc*.txt doc/draft*.txt
+#  * strings with trailing / are located with "find -type d -path ..."
+#  * strings containing / not at end are located with "find -type f -path ..."
+#  * items without / are located with "find -type f -name ..."
+#DEB_UPSTREAM_REPACKAGE_EXCLUDES = ./CVS/ .cvsignore ./doc/rfc*.txt ./doc/draft*.txt
+
+# Deprecated variable important to fix to not ship badly licensed source
+DEB_UPSTREAM_REPACKAGE_EXCLUDES += $(if $(DEB_UPSTREAM_REPACKAGE_EXCLUDE),$(error ERROR: DEB_UPSTREAM_REPACKAGE_EXCLUDE no longer works - use find-style DEB_UPSTREAM_REPACKAGE_EXCLUDES instead))
+
+# Delimiter and tag to append if repackaging:
+#  * if DEB_UPSTREAM_REPACKAGE_EXCLUDES are declared
+#  * if upstream packaging format is not supported by dpkg
 DEB_UPSTREAM_REPACKAGE_TAG ?= dfsg
 DEB_UPSTREAM_REPACKAGE_DELIMITER ?= ~
 
 cdbs_upstream_tarball_basename = $(if $(strip $(DEB_UPSTREAM_TARBALL_BASENAME_MANGLE)),$(shell echo '$(DEB_UPSTREAM_TARBALL_BASENAME)' | perl -pe '$(DEB_UPSTREAM_TARBALL_BASENAME_MANGLE)'),$(DEB_UPSTREAM_TARBALL_BASENAME))
 cdbs_upstream_tarball = $(cdbs_upstream_tarball_basename).$(DEB_UPSTREAM_TARBALL_EXTENSION)
 cdbs_upstream_received_tarball = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_TARBALL_VERSION).orig.$(if $(findstring $(DEB_UPSTREAM_TARBALL_EXTENSION),tgz),tar.gz,$(DEB_UPSTREAM_TARBALL_EXTENSION))
-cdbs_upstream_local_basename = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_TARBALL_VERSION)$(if $(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDE)),$(DEB_UPSTREAM_REPACKAGE_DELIMITER)$(DEB_UPSTREAM_REPACKAGE_TAG))
-cdbs_upstream_local_srcdir = $(cdbs_upstream_tarball_basename)$(if $(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDE)),$(DEB_UPSTREAM_REPACKAGE_DELIMITER)$(DEB_UPSTREAM_REPACKAGE_TAG))
+cdbs_upstream_local_basename = $(DEB_SOURCE_PACKAGE)_$(DEB_UPSTREAM_TARBALL_VERSION)$(if $(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDES)),$(DEB_UPSTREAM_REPACKAGE_DELIMITER)$(DEB_UPSTREAM_REPACKAGE_TAG))
+cdbs_upstream_local_srcdir = $(cdbs_upstream_tarball_basename)$(if $(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDES)),$(DEB_UPSTREAM_REPACKAGE_DELIMITER)$(DEB_UPSTREAM_REPACKAGE_TAG))
+cdbs_upstream_findargs_dirs = $(if $(filter %/,$(DEB_UPSTREAM_REPACKAGE_EXCLUDES)),-type d \( $(call cdbs_findargs-path-or-name,$(patsubst %/,%,$(filter %/,$(DEB_UPSTREAM_REPACKAGE_EXCLUDES)))) \))
+cdbs_upstream_findargs_files = $(if $(filter-out %/,$(DEB_UPSTREAM_REPACKAGE_EXCLUDES)),-type f \( $(call cdbs_findargs-path-or-name,$(filter-out %/,$(DEB_UPSTREAM_REPACKAGE_EXCLUDES))) \))
 
 print-version:
 	@@echo "Debian version:          $(DEB_VERSION)"
@@ -104,15 +116,21 @@ get-orig-source:
 	    *.tar)     unpack="cat";           uncompress="true";; \
 	    *) echo "Unknown extension for upstream tarball $(cdbs_upstream_received_tarball)"; false;; \
 	esac && \
-	if [ -n "$(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDE))" ] || [ "$$uncompress" = "false" ]; then \
+	if [ -n "$(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDES))" ] || [ "$$uncompress" = "false" ]; then \
 		echo "Repackaging tarball ..." && \
 		mkdir -p "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)" && \
 		if [ -n "$$nopipe" ]; then \
 			$$unpack "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" \
-				$$untar "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)" $(patsubst %,--exclude='%',$(DEB_UPSTREAM_REPACKAGE_EXCLUDE)); \
+				$$untar "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)"; \
 		else \
 			$$unpack "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" \
-				| $$untar "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)" $(patsubst %,--exclude='%',$(DEB_UPSTREAM_REPACKAGE_EXCLUDE)); \
+				| $$untar "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)"; \
+		fi && \
+		if [ -n "$(cdbs_upstream_findargs_files)" ]; then \
+			(set -e; cd "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(DEB_UPSTREAM_TARBALL_SRCDIR)" && find $(cdbs_upstream_findargs_files) -delete); \
+		fi && \
+		if [ -n "$(cdbs_upstream_findargs_dirs)" ]; then \
+			(set -e; cd "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(DEB_UPSTREAM_TARBALL_SRCDIR)" && find $(cdbs_upstream_findargs_dirs) -exec rm -rf '{}' +;) \
 		fi && \
 		if [ "$(DEB_UPSTREAM_TARBALL_SRCDIR)" != "$(cdbs_upstream_local_srcdir)" ]; then \
 			mv -T "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(DEB_UPSTREAM_TARBALL_SRCDIR)" "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(cdbs_upstream_local_srcdir)"; \
@@ -127,12 +145,12 @@ get-orig-source:
 	fi
 
 fail-source-not-repackaged:
-	@if find . $(call cdbs_findargs-path-or-name,$(DEB_UPSTREAM_REPACKAGE_EXCLUDE)) | grep '.*'; then \
+	@if find $(cdbs_upstream_findargs_files) $(and $(cdbs_upstream_findargs_files),$(cdbs_upstream_findargs_files),-o) $(cdbs_upstream_findargs_files) | grep '.*'; then \
 		echo; \
 		echo 'ERROR: Source contains the files/paths listed above'; \
 		echo '       which was intended to not be distributed with the source.'; \
 		echo '       Please repackage source with these items stripped!'; \
-		echo '       (set DEB_UPSTREAM_REPACKAGE_EXCLUDE and use get-orig-source target)'; \
+		echo '       (set DEB_UPSTREAM_REPACKAGE_EXCLUDES and use get-orig-source target)'; \
 		exit 1; \
 	fi
 
