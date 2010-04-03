@@ -1,3 +1,16 @@
+cdbs (0.4.76) unstable; urgency=low
+
+  * Fix expansion of multiple DEB_SUGAR_BRANCHES in python-sugar.mk.
+  * Add find-style DEB_UPSTREAM_REPACKAGE_EXCLUDES (and drop
+    DEB_UPSTREAM_REPACKAGE_EXCLUDE apparently broken for dirs) in
+    upstream-tarball.mk.
+  * Add support for parallel build in scons-vars.mk. Closes: bug#575762,
+    thanks to Felipe Sateler.
+  * Only optionally-declare (i.e. using ?= not = ) when possible to
+    allow early override.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 03 Apr 2010 13:41:46 +0200
+
 cdbs (0.4.75) unstable; urgency=medium
 
   * Fix pkg check function in python-sugar.mk (caused bogus warnings
