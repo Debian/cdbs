@@ -53,8 +53,10 @@ DEB_UPSTREAM_TARBALL_SRCDIR ?= $(cdbs_upstream_tarball_basename)
 #  * items without / are located with "find -type f -name ..."
 #DEB_UPSTREAM_REPACKAGE_EXCLUDES = ./CVS/ .cvsignore ./doc/rfc*.txt ./doc/draft*.txt
 
+cdbs_python_exclude_check = $(if $(DEB_UPSTREAM_REPACKAGE_EXCLUDE),$(error ERROR: DEB_UPSTREAM_REPACKAGE_EXCLUDE no longer works - use find-style DEB_UPSTREAM_REPACKAGE_EXCLUDES instead))
+
 # Deprecated variable important to fix to not ship badly licensed source
-DEB_UPSTREAM_REPACKAGE_EXCLUDES += $(if $(DEB_UPSTREAM_REPACKAGE_EXCLUDE),$(error ERROR: DEB_UPSTREAM_REPACKAGE_EXCLUDE no longer works - use find-style DEB_UPSTREAM_REPACKAGE_EXCLUDES instead))
+DEB_UPSTREAM_REPACKAGE_EXCLUDES += $(cdbs_python_exclude_check)
 
 # Delimiter and tag to append if repackaging:
 #  * if DEB_UPSTREAM_REPACKAGE_EXCLUDES are declared
@@ -145,6 +147,7 @@ get-orig-source:
 	fi
 
 fail-source-not-repackaged:
+	$(cdbs_python_exclude_check)
 	@if find $(cdbs_upstream_findargs_files) $(and $(cdbs_upstream_findargs_files),$(cdbs_upstream_findargs_files),-o) $(cdbs_upstream_findargs_files) | grep '.*'; then \
 		echo; \
 		echo 'ERROR: Source contains the files/paths listed above'; \
