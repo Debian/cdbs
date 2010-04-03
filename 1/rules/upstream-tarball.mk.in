@@ -148,7 +148,7 @@ get-orig-source:
 
 fail-source-not-repackaged:
 	$(cdbs_python_exclude_check)
-	@if find $(cdbs_upstream_findargs_files) $(and $(cdbs_upstream_findargs_files),$(cdbs_upstream_findargs_files),-o) $(cdbs_upstream_findargs_files) | grep '.*'; then \
+	@if find $(cdbs_upstream_findargs_files) $(and $(cdbs_upstream_findargs_files),$(cdbs_upstream_findargs_dirs),-o) $(cdbs_upstream_findargs_dirs) | grep '.*'; then \
 		echo; \
 		echo 'ERROR: Source contains the files/paths listed above'; \
 		echo '       which was intended to not be distributed with the source.'; \
