@@ -24,7 +24,7 @@ _cdbs_class_makefile_vars = 1
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 #DEB_MAKE_MAKEFILE =
-#DEB_MAKE_ENVVARS =
+DEB_MAKE_ENVVARS ?= $(if $(cdbs_crossbuild),CC="$(DEB_HOST_GNU_TYPE)-gcc")
 DEB_MAKE_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
 
 # Derived classes that supply the flags some other way (e.g., configure) 
