@@ -1,3 +1,16 @@
+cdbs (0.4.77) unstable; urgency=low
+
+  * Fail the fail-source-not-repackaged rule (in addition to get-orig-
+    source) if old DEB_UPSTREAM_REPACKAGE_EXCLUDE is declared, in
+    upstream-tarball.mk.
+  * Fix check excluded directories (not files twice) in the fail-source-
+    not-repackaged rule, in upstream-tarball.mk.
+  * Support cross-building: Avoid setting CC or CXX in autotools.mk
+    except if explicitly declared, and set CC="-gcc" in makefile.mk when
+    cross-building. Closes: bug#450483, thanks to Neil Williams
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 04 Apr 2010 00:26:12 +0200
+
 cdbs (0.4.76) unstable; urgency=low
 
   * Fix expansion of multiple DEB_SUGAR_BRANCHES in python-sugar.mk.
