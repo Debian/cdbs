@@ -228,7 +228,7 @@ endif
 endif
 debian/control::
 ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
-	bdep='$(strip $(CDBS_BUILD_DEPENDS))' perl -n \
+	@bdep='$(strip $(CDBS_BUILD_DEPENDS))' perl -n \
 		-e 'my $$bd = $$ENV{"bdep"};' \
 		-e '$$bd =~ $(cdbs_re_squash_extended_space);' \
 		-e '$$bd =~ /\bcdbs \(>= 0\.4\.75~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.53|0\.4\.67~|0\.4\.69~|0\.4\.70~|0\.4\.71~|0\.4\.72~|0\.4\.73~)\)/, /g;' \
