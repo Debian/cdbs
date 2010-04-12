@@ -1,3 +1,13 @@
+cdbs (0.4.78) unstable; urgency=low
+
+  * Fix silence build-dependency resolving rule in buildcore.mk
+    (leftover from debugging session).
+  * Fix drop packlist files without failing with non-default
+    DEB_PERL_DESTDIR.
+  * Add TODO file with ideas for 2nd epoch (i.e. /usr/share/cdbs/2/*).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Apr 2010 15:18:18 +0200
+
 cdbs (0.4.77) unstable; urgency=low
 
   * Fail the fail-source-not-repackaged rule (in addition to get-orig-
