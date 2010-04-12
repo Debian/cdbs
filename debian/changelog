@@ -1,3 +1,11 @@
+cdbs (0.4.79) unstable; urgency=low
+
+  * Tighten build-dependency on cdbs in perl-build.mk, due to 0.4.78
+    bugfix.
+  * Fix build-dependency variable name in perl-vars.mk.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Apr 2010 17:02:21 +0200
+
 cdbs (0.4.78) unstable; urgency=low
 
   * Fix silence build-dependency resolving rule in buildcore.mk
