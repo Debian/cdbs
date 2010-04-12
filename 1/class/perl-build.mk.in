@@ -60,13 +60,11 @@ debian/stamp-perl-check: debian/stamp-perl-build
 	$(if $(findstring nocheck,$(DEB_BUILD_OPTIONS)),,$(if $(DEB_PERL_CHECK_TARGET),cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_CHECK_TARGET) $(DEB_PERL_CHECK_ARGS) $(DEB_PERL_CHECK_FLAGS)))
 	touch $@
 
+# Drop packlist files after install, to respect Debian Perl Policy § 4.1
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
 	cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_INSTALL_TARGET) $(DEB_PERL_INSTALL_ARGS) $(DEB_PERL_INSTALL_FLAGS)
-
-# Respect Debian Perl Policy § 4.1
-$(patsubst %,binary-post-install/%,$(DEB_PERL_PACKAGES)) :: binary-post-install/%:
-	find debian/$(cdbs_curpkg)/usr/lib -type f -name .packlist \
+	find $(cdbs_perl_curdestdir)/usr/lib -type f -name .packlist \
 		-exec rm -f '{}' ';' \
 		-exec sh -c "dirname '{}' | xargs rmdir --ignore-fail-on-non-empty -p" ';'
 
