@@ -35,8 +35,8 @@ CDBS_BUILD_DEPENDS_class_perl-build_module ?= perl-modules (>= 5.10.0) | libmodu
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_module)
 
 # Tighten to versions of cdbs providing working version of this snippet
-CDBS_BUILD_DEPENDS_class_perl-build_module ?= cdbs (>= 0.4.78~)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_module)
+CDBS_BUILD_DEPENDS_class_perl-build ?= cdbs (>= 0.4.78~)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build)
 
 # Sanity check: DEB_PERL_SRCDIR must be declared early
 cdbs_perl_srcdir_early := $(DEB_PERL_SRCDIR)
