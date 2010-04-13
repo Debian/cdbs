@@ -73,7 +73,7 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
 	cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(DEB_PYTHON_SETUP_CMD) install --root=$(cdbs_python_destdir) \
-		--install-purelib=/usr/lib/python$(cdbs_python_build_versions)/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
+		--install-purelib=/usr/lib/python$(or $(cdbs_python_nondefault_version),$(cdbs_python_current_version))/site-packages/ $(DEB_PYTHON_INSTALL_ARGS_ALL)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	set -e; for buildver in $(cdbs_python_build_versions); do \
