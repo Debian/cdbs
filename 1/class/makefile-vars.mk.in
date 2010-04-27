@@ -33,10 +33,6 @@ DEB_MAKE_EXTRA_ARGS ?= CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAG
 
 DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(cdbs_make_curbuilddir) $(DEB_MAKE_EXTRA_ARGS)
 
-# This variable is deprecated.
-DEB_BUILD_MAKE_TARGET = 
-_cdbs_deprecated_vars += DEB_BUILD_MAKE_TARGET
-# New in 0.2.8.
 DEB_MAKE_BUILD_TARGET ?= $(DEB_BUILD_MAKE_TARGET)
 
 # If your Makefile provides an "install" target, you need to give the requisite commands
@@ -46,19 +42,9 @@ DEB_MAKE_BUILD_TARGET ?= $(DEB_BUILD_MAKE_TARGET)
 # If you're using automake though, you likely want to be including autotools.mk instead
 # of this file.
 
-# This variable is deprecated.
-DEB_CLEAN_MAKE_TARGET = clean
-_cdbs_deprecated_vars += DEB_CLEAN_MAKE_TARGET
-_cdbs_deprecated_DEB_CLEAN_MAKE_TARGET_default := $(DEB_CLEAN_MAKE_TARGET)
-# New in 0.2.8.
-DEB_MAKE_CLEAN_TARGET ?= $(DEB_CLEAN_MAKE_TARGET)
+DEB_MAKE_CLEAN_TARGET ?= clean
 
-# This variable is deprecated.
-DEB_MAKE_TEST_TARGET = 
-_cdbs_deprecated_vars += DEB_MAKE_TEST_TARGET
-# New in 0.2.8.
-# New in 0.4.2.
-DEB_MAKE_CHECK_TARGET ?= $(DEB_MAKE_TEST_TARGET)
+#DEB_MAKE_CHECK_TARGET = test
 
 # If DEB_MAKE_FLAVORS is set compilation is done once per flavor.
 # NB! This must be declared _before_ including makefile.mk
