@@ -124,7 +124,8 @@ cdbs_findargs-path-or-name = $(if $(findstring /,$(firstword $(1))),-path './$(p
 cdbs_expand_nondefaultvar = $(if $(filter-out $(origin $1),default),$1)
 
 # Declare (shell-style) variables to itself if explicitly declared
-cdbs_set_nondefaultvars = $(foreach var,$1,$(patsubst %,$(var)="%",$(call cdbs_expand_nondefaultvar,$($(var)))))
+cdbs_set_nondefaultvar = $(if $(filter-out $(origin $1),default),$1="$($1)")
+cdbs_set_nondefaultvars = $(foreach var,$1,$(call cdbs_set_nondefaultvar,$(var)))
 
 # Return non-empty if build system is different from host system
 cdbs_crossbuild = $(if $(call cdbs_streq,$(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE)),,yes)
