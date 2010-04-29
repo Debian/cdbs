@@ -1,3 +1,19 @@
+cdbs (0.4.83) unstable; urgency=medium
+
+  * Drop support for variables DEB_*_MAKE_TARGET and
+    DEB_MAKE_TEST_TARGET, deprecated for ages.  Fixes accidentally
+    disabled regression tests in perl-* classes.
+  * Enable verbose output for regression tests in class
+    perl-makemaker.mk.
+  * Fix support multiword CC or CXX (broken since 0.4.77), and really
+    support cross-building (as intended in 0.4.77).
+    Closes: bug#576967, #578303, thanks to Peter Eisentraut for
+    insisting, and to Anders Kaseorg for solving.
+  * Set urgency=medium as broken CC/CXX multiword support causes FTBFS
+    of other packages.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 29 Apr 2010 10:56:31 +0200
+
 cdbs (0.4.82) unstable; urgency=low
 
   * Fix strip repackaging tag when DEB_UPSTREAM_REPACKAGE_EXCLUDES is
