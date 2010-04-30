@@ -143,9 +143,8 @@ License: Expat
  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  .
- Some files differ from above by using "the X Consortium" instead of
- "The authors or copyright holders", but otherwise identical license and
- disclaimer.
+ Some files differ from above by replacing "The authors or copyright
+ holders" with more specific term.
 
 License: other-X
  Except as contained in this notice, the name of the X Consortium shall
