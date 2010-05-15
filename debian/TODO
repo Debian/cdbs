@@ -10,3 +10,6 @@ Ideas for 2nd epoch (i.e. /usr/share/cdbs/2/* files):
   * enable regression tests by default
   * enable parallel build by default
   * warn if -dbg packages could be build but are missing
+  * Make auto-discovered docs easier overridable: Add collection to new
+    variable DEB_INSTALL_DOCS (not DEB_INSTALL_DOCS_ALL).
+    Closes: bug#207775.
