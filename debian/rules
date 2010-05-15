@@ -27,7 +27,8 @@ include 1/rules/debhelper.mk.in
 include 1/class/autotools.mk.in
 
 # Suppress build-dependency on ourselves
-CDBS_BUILD_DEPENDS_rules_buildvars =
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check =
+CDBS_BUILD_DEPENDS_rules_utils_buildinfo =
 
 DEB_MAKE_CHECK_TARGET = check
 
