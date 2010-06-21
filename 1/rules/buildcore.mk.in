@@ -282,7 +282,6 @@ $(patsubst %,install/%,$(DEB_INDEP_PACKAGES)) :: install/% : testdir testroot co
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
 	@echo 'Adding cdbs dependencies to debian/$(cdbs_curpkg).substvars'
 	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )'    | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Depends=$$_\n"'     >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )'    | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Depends=$$_\n"'     >> debian/$(cdbs_curpkg).substvars
 	@echo '$(call cdbs_expand_curvar,CDBS_PREDEPENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Pre-Depends=$$_\n"' >> debian/$(cdbs_curpkg).substvars
 	@echo '$(call cdbs_expand_curvar,CDBS_RECOMMENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Recommends=$$_\n"'  >> debian/$(cdbs_curpkg).substvars
 	@echo '$(call cdbs_expand_curvar,CDBS_SUGGESTS,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Suggests=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
