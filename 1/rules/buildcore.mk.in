@@ -278,6 +278,19 @@ install-indep: $(patsubst %,install/%,$(DEB_INDEP_PACKAGES))
 $(patsubst %,install/%,$(DEB_ARCH_PACKAGES)) :: install/% : testdir testroot common-install-arch build/%
 $(patsubst %,install/%,$(DEB_INDEP_PACKAGES)) :: install/% : testdir testroot common-install-indep build/%
 
+# These variables are deprecated.
+_cdbs_deprecated_vars += CDBS_DEPENDS CDBS_PREDEPENDS CDBS_RECOMMENDS CDBS_SUGGESTS CDBS_BREAKS CDBS_PROVIDES CDBS_REPLACES CDBS_CONFLICTS CDBS_ENHANCES
+# New in 0.4.85.
+CDBS_DEPENDS_DEFAULT ?= $(CDBS_DEPENDS)
+CDBS_PREDEPENDS_DEFAULT ?= $(CDBS_PREDEPENDS)
+CDBS_RECOMMENDS_DEFAULT ?= $(CDBS_RECOMMENDS)
+CDBS_SUGGESTS_DEFAULT ?= $(CDBS_SUGGESTS)
+CDBS_BREAKS_DEFAULT ?= $(CDBS_BREAKS)
+CDBS_PROVIDES_DEFAULT ?= $(CDBS_PROVIDES)
+CDBS_REPLACES_DEFAULT ?= $(CDBS_REPLACES)
+CDBS_CONFLICTS_DEFAULT ?= $(CDBS_CONFLICTS)
+CDBS_ENHANCES_DEFAULT ?= $(CDBS_ENHANCES)
+
 # Apply CDBS-declared dependencies to binary packages
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
 	@echo 'Adding cdbs dependencies to debian/$(cdbs_curpkg).substvars'

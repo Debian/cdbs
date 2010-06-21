@@ -109,11 +109,11 @@ open_parenthesis = (
 close_parenthesis = )
 cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
 
-# Resolve VAR_ALL and either VAR_pkg or VAR, space- or custom-delimited
+# Resolve VAR_ALL and either VAR_pkg or VAR_DEFAULT, space- or custom-delimited
 #  * VAR_ALL applies to all packages
 #  * VAR_pkg applies to current package
-#  * VAR applies to current package if not overridden by VAR_pkg
-cdbs_expand_curvar = $($(1)_ALL)$(or $2, )$(or $($(1)_$(cdbs_curpkg)),$($1))
+#  * VAR_DEFAULT applies to current package if not overridden by VAR_pkg
+cdbs_expand_curvar = $($(1)_ALL)$(or $2, )$(or $($(1)_$(cdbs_curpkg)),$($(1)_DEFAULT))
 
 # List "packages multiplied with branches", or just packages if no branches
 cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(call cdbs_delimit,$(if $2,$(foreach pkg,$1,$(call cdbs_delimit,$(foreach branch,$2,$(pkg)$(branch:%=-%)),BRANCHDELIMITER)),$1),WORDDELIMITER)))

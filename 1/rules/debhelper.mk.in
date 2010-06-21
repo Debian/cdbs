@@ -140,6 +140,11 @@ cdbs_dbg_package_option = $(if $(cdbs_dbg_package),$(shell if [ "$(DH_COMPAT)" -
 DEB_DH_STRIP_ARGS ?= $(cdbs_dbg_package_option)
 endif
 
+# This variable is deprecated.
+_cdbs_deprecated_vars += DEB_DH_INSTALLINIT_ARGS
+# New in 0.4.85.
+DEB_DH_INSTALLINIT_ARGS_DEFAULT ?= $(DEB_DH_INSTALLINIT_ARGS)
+
 pre-build:: debian/compat
 
 debian/compat:
