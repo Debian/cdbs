@@ -26,6 +26,8 @@ _cdbs_rules_patchsys = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
+$(warning WARNING:  simple-patchsys.mk is deprecated - please use source format 3.0 (quilt) instead)
+
 ifeq ($(_cdbs_included_patchsys),)
 _cdbs_included_patchsys = 1
 
