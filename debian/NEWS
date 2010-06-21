@@ -1,3 +1,23 @@
+cdbs (0.4.85) unstable; urgency=low
+
+  * Per-package variables in buildcore.mk and debhelper.mk now generally
+    use the following scheme:
+    + VAR_ALL applies to all packages
+    + VAR_<package> applies to current package
+    + VAR_DEFAULT applies to current package if VAR_pkg is empty
+    Use of VAR without "suffix" for per-package variables is now
+    deprecated, except for a few cases marked as TODO in those files.
+    Closes: bug#582693, thanks to Rudy Godoy.
+  * The following snippets are now deprecated:
+    + dpatch.mk
+    + simple-patchsys.mk
+    + tarball.mk
+    + perlmodule-vars.mk
+    + perlmodule.mk
+    Please use source format 3.0 and perl-makemaker.mk instead.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 21 Jun 2010 16:57:59 +0200
+
 cdbs (0.4.54) unstable; urgency=low
 
   * The variable DEB_PYTHON_MODULE_PACKAGE used in python-distutils.mk

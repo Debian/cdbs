@@ -1,3 +1,27 @@
+cdbs (0.4.85) unstable; urgency=low
+
+  * Per-package variables in buildcore.mk and debhelper.mk now generally
+    use the following scheme:
+    + VAR_ALL applies to all packages
+    + VAR_<package> applies to current package
+    + VAR_DEFAULT applies to current package if VAR_pkg is empty
+    Use of VAR without "suffix" for per-package variables is now
+    deprecated, except for a few cases marked as TODO in those files.
+    Closes: bug#582693, thanks to Rudy Godoy.
+  * Really fix suppress build-dependency on ourself (not only relax
+    versioning).
+  * Introduce new convenience variable cdbs_python_primary_version.
+  * Fix use dh_prep with debhelper 7 and newer (not only newer than 7).
+    Closes: bug#586616, thanks to Nelson A. de Oliveira.
+  * Fix double expansion of CDBS_DEPENDS (possibly the cause of
+    occasional spurious extra comma in build-dependencies).
+  * Deprecate dpatch.mk, simple-patchsys.mk and tarball.mk, suggesting
+    source format 3.0 as alternative.
+  * Add NEWS entry about new per-package variable scheme and deprecated
+    snippets.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 21 Jun 2010 16:57:59 +0200
+
 cdbs (0.4.84) unstable; urgency=low
 
   * Improve copyright file:
