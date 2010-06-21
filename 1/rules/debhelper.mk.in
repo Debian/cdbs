@@ -21,34 +21,32 @@
 #
 # DEB_INSTALL_DIRS_ALL
 #   Subdirectories to create in installation staging directory for every package
-# DEB_INSTALL_DIRS_<package>
-#   Like the above, but for a particular package <package>.
-# DEB_INSTALL_DOCS_ALL
-#   Files which should go in /usr/share/doc/<package> for every package
-# DEB_INSTALL_DOCS_<package>
-#   Files which should go in /usr/share/doc/<package> for package
-# DEB_INSTALL_CHANGELOGS_ALL
+# DEB_INSTALL_DIRS_<package> or DEB_INSTALL_DIRS_DEFAULT
+#   Like the above, but for a particular package <package>, and created in later rule.
+# DEB_INSTALL_DOCS_ALL and either ..._<package> or ..._DEFAULT
+#   Files which should go in /usr/share/doc/<package>
+# DEB_INSTALL_CHANGELOGS_ALL and either ..._<package> or ..._DEFAULT
 #   File which should be interpreted as upstream changelog
-# DEB_COMPRESS_EXCLUDE
+# DEB_COMPRESS_EXCLUDE_ALL and either ..._<package> or ..._DEFAULT
 #   Regular expressions matching files which should not be compressed.
-# DEB_FIXPERMS_EXCLUDE
+# DEB_FIXPERMS_EXCLUDE_ALL and either ..._<package> or ..._DEFAULT
 #   Regular expressions matching files which should not have their permissions changed.
 # DEB_CLEAN_EXCLUDE
 #   Regular expressions matching files which should not be cleaned.
 # DEB_DH_ALWAYS_EXCLUDE
 #   Force builddeb to exclude files.  See the DH_ALWAYS_EXCLUDE section
 #   in debhelper(7) for more details.
-# DEB_SHLIBDEPS_LIBRARY_package
+# DEB_SHLIBDEPS_LIBRARY_<package>
 #   The name of the current library package
 # DEB_SHLIBDEPS_INCLUDE
 #   A space-separated list of library paths to search for dependency info
-# DEB_SHLIBDEPS_INCLUDE_package
+# DEB_SHLIBDEPS_INCLUDE_<package>
 #   Like the above, but for a particular package.
 # DEB_PERL_INCLUDE
 #   A space-separated list of paths to search for perl modules
-# DEB_PERL_INCLUDE_package
+# DEB_PERL_INCLUDE_<package>
 #   Like the above, but for a particular package.
-# DEB_UPDATE_RCD_PARAMS
+# DEB_UPDATE_RCD_PARAMS_ALL and either ..._<package> or ..._DEFAULT
 #   Arguments to pass to update-rc.d in init scripts
 ####
 # Special variables used by this rule file:
@@ -110,18 +108,25 @@ is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
 DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -ge 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
 
 #DEB_INSTALL_DIRS_ALL =
+# TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_CHANGELOGS_ALL)
 DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
+# TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_DOCS_ALL)
 DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 cdbs_strip_quotes = $(subst ',,$(subst ",,$(1)))
 # hello emacs '
 
+# TODO: Use DEB_DH_GENCONTROL_ARGS as package-default var (not global override)
 DEB_DH_GENCONTROL_ARGS ?= $(DEB_DH_GENCONTROL_ARGS_ALL) $(DEB_DH_GENCONTROL_ARGS_$(cdbs_curpkg))
+# TODO: Use DEB_DH_MAKESHLIBS_ARGS as package-default var (not global override)
 DEB_DH_MAKESHLIBS_ARGS ?= $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
+# TODO: Use DEB_DH_SHLIBDEPS_ARGS as package-default var (not global override)
+# TODO: Use DEB_SHLIBDEPS_INCLUDE as package-default var (not global addon)
 DEB_DH_SHLIBDEPS_ARGS ?= $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
 
 DEB_DH_BUILDDEB_ENV ?= $(if $(DEB_DH_ALWAYS_EXCLUDE),DH_ALWAYS_EXCLUDE=$(DEB_DH_ALWAYS_EXCLUDE),)
+# TODO: Use DEB_PERL_INCLUDE as package-default var (not global addon)
 DEB_DH_PERL_ARGS ?= $(if $(DEB_PERL_INCLUDE_$(cdbs_curpkg))$(DEB_PERL_INCLUDE),$(shell echo $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE)))
 
 ifneq ($(words $(DEB_DBG_PACKAGES)),0)
@@ -135,15 +140,39 @@ endef
 $(foreach x,$(DEB_DBG_PACKAGES),$(eval $(call cdbs_deb_dbg_package_assign,$(value x))))
 endif
 endif
-cdbs_dbg_package = $(or $(DEB_DBG_PACKAGE_$(cdbs_curpkg)),$(DEB_DBG_PACKAGE_ALL))
+cdbs_dbg_package = $(call cdbs_expand_curvar,DEB_DBG_PACKAGE)
 cdbs_dbg_package_option = $(if $(cdbs_dbg_package),$(shell if [ "$(DH_COMPAT)" -ge 5 ]; then echo "--dbg-package=$(strip $(cdbs_dbg_package))"; fi))
 DEB_DH_STRIP_ARGS ?= $(cdbs_dbg_package_option)
 endif
 
-# This variable is deprecated.
-_cdbs_deprecated_vars += DEB_DH_INSTALLINIT_ARGS
+# These variables are deprecated.
+_cdbs_deprecated_vars += $(patsubst %,DEB_DH_INSTALL%_ARGS,_MENU _CRON INIT DEBCONF EMACSEN CATALOGS PAM LOGROTATE CHANGELOGS UDEV MIME DEB)
+_cdbs_deprecated_vars += $(patsubst %,DEB_DH_%_ARGS,LINTIAN INSTALL STRIP COMPRESS FIXPERMS MD5SUMS BUILDDEB)
+_cdbs_deprecated_vars += DEB_UPDATE_RCD_PARAMS DEB_STRIP_EXCLUDE DEB_COMPRESS_EXCLUDE DEB_FIXPERMS_EXCLUDE
 # New in 0.4.85.
+DEB_DH_INSTALL_MENU_ARGS_DEFAULT ?= $(DEB_DH_INSTALL_MENU_ARGS)
+DEB_DH_INSTALL_CRON_ARGS_DEFAULT ?= $(DEB_DH_INSTALL_CRON_ARGS)
 DEB_DH_INSTALLINIT_ARGS_DEFAULT ?= $(DEB_DH_INSTALLINIT_ARGS)
+DEB_DH_INSTALLDEBCONF_ARGS_DEFAULT ?= $(DEB_DH_INSTALLDEBCONF_ARGS)
+DEB_DH_INSTALLEMACSEN_ARGS_DEFAULT ?= $(DEB_DH_INSTALLEMACSEN_ARGS)
+DEB_DH_INSTALLCATALOGS_ARGS_DEFAULT ?= $(DEB_DH_INSTALLCATALOGS_ARGS)
+DEB_DH_INSTALLPAM_ARGS_DEFAULT ?= $(DEB_DH_INSTALLPAM_ARGS)
+DEB_DH_INSTALLLOGROTATE_ARGS_DEFAULT ?= $(DEB_DH_INSTALLLOGROTATE_ARGS)
+DEB_DH_INSTALLCHANGELOGS_ARGS_DEFAULT ?= $(DEB_DH_INSTALLCHANGELOGS_ARGS)
+DEB_DH_INSTALLUDEV_ARGS_DEFAULT ?= $(DEB_DH_INSTALLUDEV_ARGS)
+DEB_DH_INSTALLMIME_ARGS_DEFAULT ?= $(DEB_DH_INSTALLMIME_ARGS)
+DEB_DH_INSTALLDEB_ARGS_DEFAULT ?= $(DEB_DH_INSTALLDEB_ARGS)
+DEB_DH_LINTIAN_ARGS_DEFAULT ?= $(DEB_DH_LINTIAN_ARGS)
+DEB_DH_INSTALL_ARGS_DEFAULT ?= $(DEB_DH_INSTALL_ARGS)
+DEB_DH_STRIP_ARGS_DEFAULT ?= $(DEB_DH_STRIP_ARGS)
+DEB_DH_COMPRESS_ARGS_DEFAULT ?= $(DEB_DH_COMPRESS_ARGS)
+DEB_DH_FIXPERMS_ARGS_DEFAULT ?= $(DEB_DH_FIXPERMS_ARGS)
+DEB_DH_MD5SUMS_ARGS_DEFAULT ?= $(DEB_DH_MD5SUMS_ARGS)
+DEB_DH_BUILDDEB_ARGS_DEFAULT ?= $(DEB_DH_BUILDDEB_ARGS)
+DEB_UPDATE_RCD_PARAMS_DEFAULT ?= $(DEB_UPDATE_RCD_PARAMS)
+DEB_STRIP_EXCLUDE_DEFAULT ?= $(DEB_STRIP_EXCLUDE)
+DEB_COMPRESS_EXCLUDE_DEFAULT ?= $(DEB_COMPRESS_EXCLUDE)
+DEB_FIXPERMS_EXCLUDE_DEFAULT ?= $(DEB_FIXPERMS_EXCLUDE)
 
 pre-build:: debian/compat
 
@@ -159,7 +188,7 @@ common-install-prehook-impl::
 	dh_installdirs -A $(DEB_INSTALL_DIRS_ALL)
 
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
-	dh_installdirs -p$(cdbs_curpkg) $(DEB_INSTALL_DIRS_$(cdbs_curpkg))
+	dh_installdirs -p$(cdbs_curpkg) $(or $(DEB_INSTALL_DIRS),$(DEB_INSTALL_DIRS_$(cdbs_curpkg)))
 
 # Create .debs or .udebs as we see fit
 $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) :: binary/% : binary-makedeb/%
@@ -173,25 +202,26 @@ $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) :: binary/% : binary-makedeb/%
 # dh_install to split the source from debian/tmp, as well as installing
 # ChangeLogs and the like.
 $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
-	dh_installdocs -p$(cdbs_curpkg) $(DEB_INSTALL_DOCS_ALL) $(DEB_INSTALL_DOCS_$(cdbs_curpkg)) 
-	dh_installexamples -p$(cdbs_curpkg) $(DEB_INSTALL_EXAMPLES_$(cdbs_curpkg))
-	dh_installman -p$(cdbs_curpkg) $(DEB_INSTALL_MANPAGES_$(cdbs_curpkg)) 
-	dh_installinfo -p$(cdbs_curpkg) $(DEB_INSTALL_INFO_$(cdbs_curpkg)) 
-	dh_installmenu -p$(cdbs_curpkg) $(DEB_DH_INSTALL_MENU_ARGS)
-	dh_installcron -p$(cdbs_curpkg) $(DEB_DH_INSTALL_CRON_ARGS)
-	dh_installinit -p$(cdbs_curpkg) $(if $(DEB_UPDATE_RCD_PARAMS),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS))",$(if $(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)),--update-rcd-params="$(call cdbs_strip_quotes,$(DEB_UPDATE_RCD_PARAMS_$(cdbs_curpkg)))")) $(call cdbs_expand_curvar,DEB_DH_INSTALLINIT_ARGS)
-	dh_installdebconf -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEBCONF_ARGS)
-	dh_installemacsen -p$(cdbs_curpkg) $(if $(DEB_EMACS_PRIORITY),--priority=$(DEB_EMACS_PRIORITY)) $(if $(DEB_EMACS_FLAVOR),--flavor=$(DEB_EMACS_FLAVOR)) $(DEB_DH_INSTALLEMACSEN_ARGS)
-	dh_installcatalogs -p$(cdbs_curpkg) $(DEB_DH_INSTALLCATALOGS_ARGS)
-	dh_installpam -p$(cdbs_curpkg) $(DEB_DH_INSTALLPAM_ARGS)
-	dh_installlogrotate -p$(cdbs_curpkg) $(DEB_DH_INSTALLLOGROTATE_ARGS)
-	dh_installlogcheck -p$(cdbs_curpkg) $(DEB_DH_INSTALLLOGCHECK_ARGS)
-	dh_installchangelogs -p$(cdbs_curpkg) $(DEB_DH_INSTALLCHANGELOGS_ARGS) $(DEB_INSTALL_CHANGELOGS_ALL) $(DEB_INSTALL_CHANGELOGS_$(cdbs_curpkg))
-	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(DEB_DH_INSTALLUDEV_ARGS))
-	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(DEB_DH_LINTIAN_ARGS))
-	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(DEB_DH_INSTALL_ARGS)
+	dh_installdocs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_DOCS)
+	dh_installexamples -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_EXAMPLES)
+	dh_installman -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_MANPAGES) 
+	dh_installinfo -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_INFO) 
+	dh_installmenu -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALL_MENU_ARGS)
+	dh_installcron -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALL_CRON_ARGS)
+	dh_installinit -p$(cdbs_curpkg) $(if $(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS),--update-rcd-params="$(call cdbs_strip_quotes,$(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS))") $(call cdbs_expand_curvar,DEB_DH_INSTALLINIT_ARGS)
+	dh_installdebconf -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLDEBCONF_ARGS)
+	dh_installemacsen -p$(cdbs_curpkg) $(if $(DEB_EMACS_PRIORITY),--priority=$(DEB_EMACS_PRIORITY)) $(if $(DEB_EMACS_FLAVOR),--flavor=$(DEB_EMACS_FLAVOR)) $(call cdbs_expand_curvar,DEB_DH_INSTALLEMACSEN_ARGS)
+	dh_installcatalogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCATALOGS_ARGS)
+	dh_installpam -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLPAM_ARGS)
+	dh_installlogrotate -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGROTATE_ARGS)
+	dh_installlogcheck -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGCHECK_ARGS)
+	dh_installchangelogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCHANGELOGS_ARGS) $(call cdbs_expand_curvar,DEB_INSTALL_CHANGELOGS)
+	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLUDEV_ARGS))
+	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_LINTIAN_ARGS))
+	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(call cdbs_expand_curvar,DEB_DH_INSTALL_ARGS)
+# TODO: Use DEB_DH_LINK_ARGS as package-default var (not global addon)
 	dh_link -p$(cdbs_curpkg) $(DEB_DH_LINK_ARGS) $(DEB_DH_LINK_$(cdbs_curpkg))
-	dh_installmime -p$(cdbs_curpkg) $(DEB_DH_INSTALLMIME_ARGS)
+	dh_installmime -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLMIME_ARGS)
 
 # This rule is called after all packages have been installed, and their
 # post-install hooks have been run.
@@ -207,7 +237,7 @@ $(patsubst %,binary-post-install/%,$(DEB_ALL_PACKAGES)) :: binary-post-install/%
 $(patsubst %,binary-strip/%,$(DEB_ARCH_PACKAGES)) :: binary-strip/%: common-binary-post-install-arch binary-strip-IMPL/%
 $(patsubst %,binary-strip/%,$(DEB_INDEP_PACKAGES)) :: binary-strip/%: common-binary-post-install-indep binary-strip-IMPL/%
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%: 
-	$(if $(is_debug_package),,dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_STRIP_EXCLUDE)) $(DEB_DH_STRIP_ARGS))
+	$(if $(is_debug_package),,dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_STRIP_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_STRIP_ARGS))
 
 # This rule is called right before generating debs {post,pre}{inst,rm} and controls, deps, are calculated
 # for each package, but after the binary-fixup hooks have been run.
@@ -218,8 +248,9 @@ common-binary-fixup-indep:: $(patsubst %,binary-fixup/%,$(DEB_INDEP_PACKAGES))
 # This rule is called after stripping; it compresses, fixes permissions,
 # and sets up shared library information.
 $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) :: binary-fixup/%: binary-strip/%
-	dh_compress -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_COMPRESS_EXCLUDE)) $(DEB_DH_COMPRESS_ARGS)
-	dh_fixperms -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(DEB_FIXPERMS_EXCLUDE)) $(DEB_DH_FIXPERMS_ARGS)
+	dh_compress -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_COMPRESS_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_COMPRESS_ARGS)
+	dh_fixperms -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_FIXPERMS_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_FIXPERMS_ARGS)
+# TODO: Use DEB_DH_MAKESHLIBS_ARGS as package-default (not global override)
 	$(if $(is_debug_package),,dh_makeshlibs -p$(cdbs_curpkg) $(DEB_DH_MAKESHLIBS_ARGS))
 
 # This rule is called right before building the binary .deb packages
@@ -232,8 +263,9 @@ common-binary-predeb-indep:: $(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES))
 $(patsubst %,binary-predeb/%,$(DEB_ARCH_PACKAGES)) :: binary-predeb/%: common-binary-fixup-arch binary-predeb-IMPL/%
 $(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES)) :: binary-predeb/%: common-binary-fixup-indep binary-predeb-IMPL/%
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-predeb-IMPL/%:
-	dh_installdeb -p$(cdbs_curpkg) $(DEB_DH_INSTALLDEB_ARGS)
+	dh_installdeb -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLDEB_ARGS)
 	dh_perl -p$(cdbs_curpkg) $(DEB_DH_PERL_ARGS)
+# TODO: Use DEB_DH_SHLIBDEPS_ARGS as package-default (not global override)
 	dh_shlibdeps -p$(cdbs_curpkg) $(DEB_DH_SHLIBDEPS_ARGS)
 
 # This rule is called to create a package.  Generally it's not going to be
@@ -241,9 +273,10 @@ $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-predeb-IMPL/%:
 $(patsubst %,binary-makedeb/%,$(DEB_ARCH_PACKAGES)) :: binary-makedeb/% : common-binary-predeb-arch binary-makedeb-IMPL/%
 $(patsubst %,binary-makedeb/%,$(DEB_INDEP_PACKAGES)) :: binary-makedeb/% : common-binary-predeb-indep binary-makedeb-IMPL/%
 $(patsubst %,binary-makedeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-makedeb-IMPL/% : 
+# TODO: Use DEB_DH_GENCONTROL_ARGS as package-default (not global override)
 	dh_gencontrol -p$(cdbs_curpkg) $(DEB_DH_GENCONTROL_ARGS)
-	dh_md5sums -p$(cdbs_curpkg) $(DEB_DH_MD5SUMS_ARGS)
-	$(DEB_DH_BUILDDEB_ENV) dh_builddeb -p$(cdbs_curpkg) $(DEB_DH_BUILDDEB_ARGS)
+	dh_md5sums -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_MD5SUMS_ARGS)
+	$(DEB_DH_BUILDDEB_ENV) dh_builddeb -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUILDDEB_ARGS)
 
 ## Deprecated
 common-binary-post-install:: common-binary-post-install-arch common-binary-post-install-indep
