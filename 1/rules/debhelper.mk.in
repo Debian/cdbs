@@ -107,7 +107,7 @@ endif
 
 is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
 
-DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -gt 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
+DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -ge 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
 
 #DEB_INSTALL_DIRS_ALL =
 DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
