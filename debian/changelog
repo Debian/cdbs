@@ -1,3 +1,11 @@
+cdbs (0.4.86) unstable; urgency=high
+
+  * Fix space-separate variables expanded via cdbs_expand_curvar.
+    Closes: bug#586742, thanks to Yves-Alexis Perez and others.
+  * Raise to severity=high, as above caused FTBFS.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 23 Jun 2010 11:23:07 +0200
+
 cdbs (0.4.85) unstable; urgency=low
 
   * Per-package variables in buildcore.mk and debhelper.mk now generally
