@@ -26,7 +26,7 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 # Routines convenient for maintainers but unsuitable for build daemons
 #  * strict checking makes rule fail if changed/new hints are found
 ifneq (,$(DEB_MAINTAINER_MODE))
-  DEB_COPYRIGHT_CHECK_STRICT = yes
+  DEB_COPYRIGHT_CHECK_STRICT ?= yes
 endif
 
 # Single regular expression for files to include or ignore
