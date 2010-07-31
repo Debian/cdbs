@@ -109,7 +109,9 @@ debian/stamp-copyright-check:
 	fi
 	touch $@
 
-common-install-arch common-install-indep:: debian/stamp-buildinfo
+# Needs to run after dh_installdocs and dh_link
+# TODO: hook onto common-install-* instead when debhelper.mk not in use
+common-binary-post-install-arch common-binary-post-install-indep:: debian/stamp-buildinfo
 debian/stamp-buildinfo:
 	@set -e; if [ dh_buildinfo = $(DEB_BUILDINFO_SCRIPT) ] && ! which dh_buildinfo > /dev/null; then \
 		echo; \
