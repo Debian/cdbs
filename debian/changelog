@@ -1,3 +1,17 @@
+cdbs (0.4.88) unstable; urgency=medium
+
+  * Fix only optionally-declare ( using ?= ) DEB_COPYRIGHT_CHECK_STRICT,
+    to allow early override.
+  * Suppress sole delimiter in cdbs_expand_curvar function.
+    Closes:bug#590806, thanks to Kris Shannon.
+  * Fix invoke dh_buildinfo after dh_installdocs and dh_link.
+    Closes: bug#590601, thanks to Axel Beckert, Michael Biebl and Simon
+    McVittie.
+  * Bump Policy compliance to standards-version 3.9.1.
+  * Set urgency=medium as this fixes FTBFS of other packages.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 31 Jul 2010 11:07:59 -0400
+
 cdbs (0.4.87) unstable; urgency=low
 
   * Fix strip trailing comma in autoresolved build-dependencies.
