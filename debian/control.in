@@ -23,7 +23,7 @@ Build-Depends-Indep: @cdbs@,
  lzma,
  devscripts (>= 2.10.7)
 Uploaders: Jonas Smedegaard <dr@jones.dk>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
