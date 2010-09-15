@@ -40,15 +40,10 @@ DEB_COPYRIGHT_CHECK_SCRIPT ?= licensecheck
 DEB_COPYRIGHT_CHECK_ARGS ?= -c '$(DEB_COPYRIGHT_CHECK_REGEX)' -r --copyright -i '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' -l '$(DEB_COPYRIGHT_CHECK_PARSELINES)' ./*
 DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHECK_ARGS)
 
-DEB_BUILDINFO_SCRIPT ?= dh_buildinfo
-
 DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.67~), devscripts (>= 2.10.7~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
-
-CDBS_BUILD_DEPENDS_rules_utils_buildinfo ?= cdbs (>= 0.4.67~), dh-buildinfo
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_buildinfo)
 
 list-missing:
 	@if test -d debian/tmp; then \
@@ -109,22 +104,7 @@ debian/stamp-copyright-check:
 	fi
 	touch $@
 
-# Needs to run after dh_installdocs and dh_link
-# TODO: hook onto common-install-* instead when debhelper.mk not in use
-common-binary-post-install-arch common-binary-post-install-indep:: debian/stamp-buildinfo
-debian/stamp-buildinfo:
-	@set -e; if [ dh_buildinfo = $(DEB_BUILDINFO_SCRIPT) ] && ! which dh_buildinfo > /dev/null; then \
-		echo; \
-		echo '$(if $(DEB_BUILDINFO_STRICT),ERROR,WARNING): buildinfo disabled - dh_buildinfo (from dh-buildinfo package) is missing.'; \
-		echo; \
-		$(if $(DEB_BUILDINFO_STRICT),exit 1,:); \
-	else \
-		echo '$(DEB_BUILDINFO_SCRIPT)'; \
-		$(DEB_BUILDINFO_SCRIPT); \
-	fi
-	touch $@
-
 clean::
-	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check debian/stamp-buildinfo
+	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check
 
 endif

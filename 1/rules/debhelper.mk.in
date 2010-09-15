@@ -99,6 +99,9 @@ CDBS_BUILD_DEPENDS += $(if $(filter 6,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPEND
 CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= cdbs (>= 0.4.53), debhelper (>= 7.0.1)
 CDBS_BUILD_DEPENDS += $(if $(filter 7,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v7))
 
+CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo ?= dh-buildinfo
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo)
+
 ifeq ($(DEB_VERBOSE_ALL), yes)
 DH_VERBOSE = 1
 endif
@@ -221,6 +224,7 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(call cdbs_expand_curvar,DEB_DH_INSTALL_ARGS)
 # TODO: Use DEB_DH_LINK_ARGS as package-default var (not global addon)
 	dh_link -p$(cdbs_curpkg) $(DEB_DH_LINK_ARGS) $(DEB_DH_LINK_$(cdbs_curpkg))
+	$(if $(wildcard /usr/bin/dh_buildinfo),dh_buildinfo -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUILDINFO_ARGS))
 	dh_installmime -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLMIME_ARGS)
 
 # This rule is called after all packages have been installed, and their
