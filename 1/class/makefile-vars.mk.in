@@ -31,7 +31,7 @@ DEB_MAKE_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PA
 # should set this variable to empty.
 DEB_MAKE_EXTRA_ARGS ?= CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" CPPFLAGS="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" LDFLAGS="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))" $(DEB_MAKE_PARALLEL)
 
-DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(cdbs_make_curbuilddir) $(DEB_MAKE_EXTRA_ARGS)
+DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(or $(cdbs_make_curbuilddir),$(cdbs_curbuilddir)) $(DEB_MAKE_EXTRA_ARGS)
 
 DEB_MAKE_BUILD_TARGET ?= $(DEB_BUILD_MAKE_TARGET)
 
