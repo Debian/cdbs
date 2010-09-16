@@ -2,8 +2,8 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep:
- debhelper (>= 6),
+Build-Depends-Indep: debhelper (>= 6),
+ dh-buildinfo,
  graphviz,
  realpath,
  fakeroot,
@@ -30,7 +30,6 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
 Package: cdbs
 Architecture: all
-Conflicts: build-common
 Depends: debhelper (>= 5.0.30)
 Recommends: autotools-dev
 Suggests: devscripts, doc-base

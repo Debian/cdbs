@@ -1,3 +1,18 @@
+cdbs (0.4.89) unstable; urgency=low
+
+  * Stop conflicting against ancient/bogus build-common.
+  * Fix and simplify dh_buildinfo support: Invoke in debhelper (not
+    utils) snippet, limited to each binary package.
+    Closes: bug#590601. Thanks (again) to Michael Biebl.
+  * Fix ensure makefile-vars.mk is usable without makefile.mk: add
+    simpler fallback for cdbs_make_curbuilddir.
+    Closes: bug#596950. Thanks to Lucas Nussbaum and others.
+  * Add TODO item: Mention replacement variable in deprecation warnings.
+  * Fix tighten copyright-check auto-resolved build-dependency on cdbs.
+  * Build-depend on dh-buildinfo.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 16 Sep 2010 11:00:25 +0200
+
 cdbs (0.4.88) unstable; urgency=medium
 
   * Fix only optionally-declare ( using ?= ) DEB_COPYRIGHT_CHECK_STRICT,
