@@ -42,7 +42,7 @@ DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHEC
 
 DEB_PHONY_RULES += list-missing
 
-CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.67~), devscripts (>= 2.10.7~)
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts (>= 2.10.7~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 list-missing:
