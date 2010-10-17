@@ -96,7 +96,8 @@ CDBS_BUILD_DEPENDS += $(if $(filter 5,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPEND
 CDBS_BUILD_DEPENDS_rules_debhelper_v6 ?= debhelper (>= 6)
 CDBS_BUILD_DEPENDS += $(if $(filter 6,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v6))
 
-CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= cdbs (>= 0.4.53), debhelper (>= 7.0.1)
+# compat level 7 added at 0.4.53, but dh_prep fix applied at 0.4.85
+CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= cdbs (>= 0.4.85), debhelper (>= 7.0.1)
 CDBS_BUILD_DEPENDS += $(if $(filter 7,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v7))
 
 CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo ?= dh-buildinfo
