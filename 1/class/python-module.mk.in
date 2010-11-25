@@ -37,7 +37,4 @@ $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: bi
 $(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%: binary-install/%
 	dh_$(cdbs_python_system) -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg))
 
-clean::
-	$(if $(cdbs_python_pycompat_explicit)$(cdbs_python_use_xs_field)$(cdbs_python_selected_pyversions),,echo "$(cdbs_python_pycompat)" >debian/pycompat)
-
 endif
