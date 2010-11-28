@@ -47,6 +47,8 @@ DEB_UPSTREAM_TARBALL_BASENAME ?= $(DEB_UPSTREAM_PACKAGE)-$(DEB_UPSTREAM_TARBALL_
 # Base directory within tarball
 DEB_UPSTREAM_TARBALL_SRCDIR ?= $(cdbs_upstream_tarball_basename)
 
+DEB_UPSTREAM_WGET_OPTS ?= -nv -T10 -t3
+
 # Space-delimited list of directories and files to strip (optional)
 #  * strings with trailing / are located with "find -type d -path ..."
 #  * strings containing / not at end are located with "find -type f -path ..."
@@ -85,7 +87,7 @@ get-orig-source:
 			rm "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" ; \
 		fi ; \
 		echo "Downloading $(cdbs_upstream_received_tarball) from $(DEB_UPSTREAM_URL)/$(cdbs_upstream_tarball) ..." ; \
-		wget -nv -T10 -t3 -O "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" "$(DEB_UPSTREAM_URL)/$(cdbs_upstream_tarball)" ; \
+		wget $(DEB_UPSTREAM_WGET_OPTS) -O "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" "$(DEB_UPSTREAM_URL)/$(cdbs_upstream_tarball)" ; \
 	else \
 		echo "Upstream source tarball have been already downloaded: $(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)" ; \
 	fi
