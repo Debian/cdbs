@@ -27,7 +27,7 @@ include $(_cdbs_class_path)/python3-module.mk$(_cdbs_makefile_suffix)
 DEB_PYTHON3_SETUP_CMD ?= setup.py
 DEB_PYTHON3_CLEAN_ARGS ?= -a
 DEB_PYTHON3_BUILD_ARGS_ALL ?= --build-base="$(CURDIR)/$(DEB_BUILDDIR)/build"
-DEB_PYTHON3_BUILD_ARGS ?= --executable=/usr/bin/python3 
+DEB_PYTHON3_BUILD_ARGS ?= --executable=/usr/bin/python3
 DEB_PYTHON3_INSTALL_ARGS_ALL ?= --install-layout=deb
 #DEB_PYTHON3_INSTALL_ARGS
 
