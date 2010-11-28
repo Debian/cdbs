@@ -4,5 +4,5 @@ class foo:
     self.id = 555
 
   def output(self):
-    print self.name
-    print self.id
+    print(self.name)
+    print(self.id)

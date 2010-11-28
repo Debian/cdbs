@@ -1,0 +1,33 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2003 Colin Walters <walters@debian.org>
+# Copyright © 2006 Marc Dequènes (Duck) <Duck@DuckCorp.org>
+# Copyright © 2003,2006-2010 Jonas Smedegaard <dr@jones.dk>
+# Description: Rules common to Python module packaging
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#PATH_RULES#
+
+ifndef _cdbs_class_python3_module
+_cdbs_class_python3_module = 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/python3-vars.mk$(_cdbs_makefile_suffix)
+
+# Optionally use debhelper (if not then these rules are simply ignored)
+$(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python3/%
+$(patsubst %,binary-install-python3/%,$(DEB_PACKAGES)) :: binary-install-python3/%: binary-install/%
+	dh_python3 -p$(cdbs_curpkg) $(DEB_PYTHON3_PRIVATE_MODULES_DIRS) $(DEB_PYTHON3_PRIVATE_MODULES_DIRS_$(cdbs_curpkg))
+
+endif
