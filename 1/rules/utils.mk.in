@@ -31,13 +31,13 @@ endif
 
 # Single regular expression for files to include or ignore
 DEB_COPYRIGHT_CHECK_REGEX ?= .*
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= ^\./debian/(changelog|copyright(|_hints|_newhints))$
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= ^debian/(changelog|copyright(|_hints|_newhints))$
 
 # number of lines from the top of each file to investigate
 DEB_COPYRIGHT_CHECK_PARSELINES ?= 99999
 
 DEB_COPYRIGHT_CHECK_SCRIPT ?= licensecheck
-DEB_COPYRIGHT_CHECK_ARGS ?= -c '$(DEB_COPYRIGHT_CHECK_REGEX)' -r --copyright -i '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' -l '$(DEB_COPYRIGHT_CHECK_PARSELINES)' ./*
+DEB_COPYRIGHT_CHECK_ARGS ?= -c '$(DEB_COPYRIGHT_CHECK_REGEX)' -r --copyright -i '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' -l '$(DEB_COPYRIGHT_CHECK_PARSELINES)' *
 DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHECK_ARGS)
 
 DEB_PHONY_RULES += list-missing
