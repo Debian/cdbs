@@ -121,7 +121,7 @@ cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(cal
 cdbs_findargs-path-or-name = $(if $(findstring /,$(firstword $(1))),-path './$(patsubst ./%,%,$(firstword $(1)))',-name '$(firstword $(1))') $(foreach obj,$(wordlist 2,$(words $(1)),$(1)),-or $(if $(findstring /,$(obj)),-path './$(obj:./%=%)',-name '$(obj)'))
 
 # Resolve VAR only if declared explicitly in makefile or environment
-cdbs_expand_nondefaultvar = $(if $(filter-out $(origin $1),default),$1)
+cdbs_expand_nondefaultvar = $(if $(filter-out $(origin $1),default),$($1))
 
 # Declare (shell-style) variables to itself if explicitly declared
 cdbs_set_nondefaultvar = $(if $(filter-out $(origin $1),default),$1="$($1)")
