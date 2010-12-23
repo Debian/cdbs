@@ -57,7 +57,11 @@ DEB_CONFIGURE_PATH_ARGS ?= --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_C
 
 DEB_CONFIGURE_NORMAL_ARGS ?= $(DEB_CONFIGURE_CROSSBUILD_ARGS) $(DEB_CONFIGURE_PATH_ARGS) --disable-maintainer-mode --disable-dependency-tracking --disable-silent-rules
 
-DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS)
+ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
+DEB_CONFIGURE_DEBUG_ARGS ?= --enable-debug
+endif
+
+DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS) $(DEB_CONFIGURE_DEBUG_ARGS)
 
 #DEB_CONFIGURE_EXTRA_FLAGS =
 
