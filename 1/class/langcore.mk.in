@@ -20,16 +20,22 @@
 ifndef _cdbs_class_langcore
 _cdbs_class_langcore = 1
 
-# FIXME: Restructure to allow early override
-CFLAGS += -g -Wall
-CXXFLAGS += -g -Wall
+# Resolve our defaults
+deb_cflags = -g -Wall
+deb_cxxflags = -g -Wall
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-	DEB_OPT_FLAG ?= -O0
+DEB_OPT_FLAG ?= -O0
 else
-	DEB_OPT_FLAG ?= -O2
+DEB_OPT_FLAG ?= -O2
 endif
-CFLAGS += $(DEB_OPT_FLAG)
-CXXFLAGS += $(DEB_OPT_FLAG)
+deb_cflags += $(DEB_OPT_FLAG)
+deb_cxxflags += $(DEB_OPT_FLAG)
+
+# Add our defaults unconditionally for CFLAGS and CXXFLAGS
+# (not ideal but needed to not upset existing users - see bug#523642)
+# FIXME: Restructure to allow early override
+CFLAGS += $(deb_cflags)
+CXXFLAGS += $(deb_cxxflags)
 
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	DEB_PARALLEL_JOBS ?= $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
