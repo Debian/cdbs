@@ -344,7 +344,7 @@ include /usr/share/cdbs/1/class/autotools.mk
       <para>You can change common build parameters this way:
 <programlisting>
 # where sources are
-DEB_SRCDIR = $(CURDIR)/src
+DEB_SRCDIR = src
 
 # in which directory to build
 DEB_BUILDDIR = $(DEB_SRCDIR)/build
