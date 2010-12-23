@@ -31,6 +31,10 @@ endif
 deb_cflags += $(DEB_OPT_FLAG)
 deb_cxxflags += $(DEB_OPT_FLAG)
 
+# This variable was deprecated after cdbs 0.4.89
+_cdbs_deprecated_vars += DEB_OPT_FLAG
+_cdbs_deprecated_DEB_OPT_FLAG_default := $(DEB_OPT_FLAG)
+
 # Add our defaults unconditionally for CFLAGS and CXXFLAGS
 # (not ideal but needed to not upset existing users - see bug#523642)
 # FIXME: Restructure to allow early override
