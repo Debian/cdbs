@@ -21,6 +21,13 @@ ifndef _cdbs_class_langcore
 _cdbs_class_langcore = 1
 
 # Resolve our defaults
+ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
+deb_cflags := $(shell dpkg-buildflags --get CFLAGS)
+deb_cppflags := $(shell dpkg-buildflags --get CPPFLAGS)
+deb_cxxflags := $(shell dpkg-buildflags --get CXXFLAGS)
+deb_ldflags := $(shell dpkg-buildflags --get LDFLAGS)
+else
+# TODO: Use above unconditionally when oldstable has dpkg >= 1.15.7
 deb_cflags = -g -Wall
 deb_cxxflags = -g -Wall
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
@@ -30,6 +37,7 @@ DEB_OPT_FLAG ?= -O2
 endif
 deb_cflags += $(DEB_OPT_FLAG)
 deb_cxxflags += $(DEB_OPT_FLAG)
+endif
 
 # This variable was deprecated after cdbs 0.4.89
 _cdbs_deprecated_vars += DEB_OPT_FLAG
