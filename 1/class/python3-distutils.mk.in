@@ -57,12 +57,12 @@ $(patsubst %,debian/python3-module-stampdir/%,$(cdbs_python3_arch_packages)) :: 
 # install stage
 $(patsubst %,install/%,$(cdbs_python3_indep_packages)) :: install/%:
 	cd $(DEB_SRCDIR) && \
-	python$(cdbs_python3_nondefault_version) $(DEB_PYTHON3_SETUP_CMD) install --root=$(cdbs_python3_destdir) $(DEB_PYTHON3_INSTALL_ARGS_ALL)
+	python$(cdbs_python3_nondefault_version) $(DEB_PYTHON3_SETUP_CMD) install --root="$(cdbs_python3_destdir)" $(DEB_PYTHON3_INSTALL_ARGS_ALL)
 
 $(patsubst %,install/%,$(cdbs_python3_arch_packages)) :: install/%:
 	set -e; for buildver in $(cdbs_python3_build_versions); do \
 		cd $(CURDIR) && cd $(DEB_SRCDIR) && \
-		python$$buildver $(DEB_PYTHON3_SETUP_CMD) install --root=$(cdbs_python3_destdir) $(DEB_PYTHON3_INSTALL_ARGS_ALL) $(DEB_PYTHON3_INSTALL_ARGS); \
+		python$$buildver $(DEB_PYTHON3_SETUP_CMD) install --root="$(cdbs_python3_destdir)" $(DEB_PYTHON3_INSTALL_ARGS_ALL) $(DEB_PYTHON3_INSTALL_ARGS); \
 	done
 
 # clean stage
