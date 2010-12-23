@@ -53,7 +53,7 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) mkinstalldirs \
-	$(dist_man_MANS)
+	mkinstalldirs $(dist_man_MANS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -216,9 +216,6 @@ all_mk_files = 1/rules/buildvars.mk		\
 		1/class/python-module.mk	\
 		1/class/python-distutils.mk	\
 		1/class/python-sugar.mk		\
-		1/class/python3-module.mk	\
-		1/class/python3-vars.mk		\
-		1/class/python3-distutils.mk	\
 		1/class/qmake.mk		\
 		1/class/scons-vars.mk		\
 		1/class/scons.mk		\
