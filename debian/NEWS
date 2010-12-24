@@ -5,7 +5,15 @@ cdbs (0.4.90) unstable; urgency=low
     into same destdir, but flavors enabled in different ways now install
     in per-flavor subdirs of the old destdir by default.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 03:55:50 +0100
+  * Python packaging system "python2" is now supported and used by
+    default, i.e. when DEB_PYTHON_SYSTEM is not set.
+    All likely packages are then used by default, overridden by new
+    variable DEB_PYTHON2_PACKAGES.
+
+    Python packaging systems "pycentral" and "pysupport" are unchanged:
+    Only first package used, unless overridden by DEB_PYTHON_PACKAGES.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 17:12:28 +0100
 
 cdbs (0.4.85) unstable; urgency=low
 
