@@ -40,6 +40,9 @@ DEB_COPYRIGHT_CHECK_SCRIPT ?= licensecheck
 DEB_COPYRIGHT_CHECK_ARGS ?= -c '$(DEB_COPYRIGHT_CHECK_REGEX)' -r --copyright -i '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' -l '$(DEB_COPYRIGHT_CHECK_PARSELINES)' *
 DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHECK_ARGS)
 
+# spacing between multiline file and copyright items
+DEB_COPYRIGHT_CHECK_DELIMITER ?= $(CDBS_BUILD_DEPENDS_DELIMITER)
+
 DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts (>= 2.10.7~)
@@ -81,6 +84,7 @@ debian/stamp-copyright-check:
 		echo; \
 		echo "$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints"; \
 		export LC_ALL=C; \
+		export delimiter="`perl -e 'print "$(DEB_COPYRIGHT_CHECK_DELIMITER)"'`"; \
 		$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints; \
 		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
 		newstrings=`diff -a -u debian/copyright_hints debian/copyright_newhints | sed '1,2d' | egrep -a '^\+' - | sed 's/^\+//'`; \
