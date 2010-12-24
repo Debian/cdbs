@@ -1,62 +1,61 @@
-Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=135
-Name: CDBS
-Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
+Format: http://bzr.debian.org/scm/loggerhead/dep/dep5/trunk/annotate/132/dep5.mdwn
+Upstream-Name: CDBS
+Upstream-Contact: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Source: http://packages.debian.org/src:cdbs
-	http://packages.qa.debian.org/c/cdbs.html
-	svn://svn.debian.org/build-common/
-
+ http://packages.qa.debian.org/c/cdbs.html
+ svn://svn.debian.org/build-common/
 Copyright: 2002-2003, Colin Walters <walters@debian.org>
-	2003, Christopher L Cheney <ccheney@debian.org>
-	2003, Jeff Bailey <jbailey@debian.org>
-	2003, Stefan Gybas <sgybas@debian.org>
-	2003,2006-2010, Jonas Smedegaard <dr@jones.dk>
-	2004, David B Harris <dbharris@eelf.ddts.net>
-	2006, Fathi Boudra <fboudra@free.fr>
-	2006,2009, Marc Dequènes (Duck) <Duck@DuckCorp.org>
-	2006-2009, Peter Eisentraut <petere@debian.org>
-	2006, Peter Rockai <me@mornfall.net>
+ 2003, Christopher L Cheney <ccheney@debian.org>
+ 2003, Jeff Bailey <jbailey@debian.org>
+ 2003, Stefan Gybas <sgybas@debian.org>
+ 2003,2006-2010, Jonas Smedegaard <dr@jones.dk>
+ 2004, David B Harris <dbharris@eelf.ddts.net>
+ 2006, Fathi Boudra <fboudra@free.fr>
+ 2006,2009, Marc Dequènes (Duck) <Duck@DuckCorp.org>
+ 2006-2009, Peter Eisentraut <petere@debian.org>
+ 2006, Peter Rockai <me@mornfall.net>
 License: GPL-2+
 
-Files: ./scripts/cdbs-edit-patch
+Files: scripts/cdbs-edit-patch
 Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
 
-Files: ./scripts/list-packages
+Files: scripts/list-packages
 Copyright: 1997-2000, Joey hess
 License: GPL-2+
 
-Files: aclocal.m4
+Files: */aclocal.m4
 Copyright: 1996-2009, Free Software Foundation, Inc.
 License: other-GAP
 
-Files: config.guess, config.sub, missing
+Files: */config.guess */config.sub */missing
 Copyright: 1992-2009, Free Software Foundation, Inc.
 License: GPL-2+ or other-Autoconf
 
-Files: configure
+Files: */configure
 Copyright: 1992-1996,1998-2009, Free Software Foundation, Inc
 License: other-GAP-configure and other-GAP-config.status
 
-Files: depcomp
+Files: */depcomp
 Copyright: 1999-2000,2003-2007,2009, Free Software Foundation, Inc
 License: GPL-2+
 
-Files: install-sh
+Files: */install-sh
 Copyright: 1994, X Consortium
 License: Expat and other-X
 
-Files: Makefile.in
+Files: */Makefile.in
 Copyright: 1994-2009, Free Software Foundation, Inc.
 License: other-GAP-Makefile.in
 
-Files: ./Makefile.in
+Files: Makefile.in
 Copyright: 1994-2009, Free Software Foundation, Inc.
-	2002-2003, Colin Walters <walters@debian.org>
+ 2002-2003, Colin Walters <walters@debian.org>
 License: other-GAP-Makefile.in and GPL-2+
 
-Files: ./test/autotools/Makefile.in
+Files: test/autotools/Makefile.in
 Copyright: 1994-2009, Free Software Foundation, Inc.
-	2003, Jeff Bailey <jbailey@debian.org>
+ 2003, Jeff Bailey <jbailey@debian.org>
 License: other-GAP-Makefile.in and GPL-2+
 
 License: GPL-2+
@@ -69,7 +68,7 @@ License: GPL-2+
  WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  General Public License for more details.
- .
+Comment:
  On Debian systems, the complete text of version 2 of the GNU General
  Public License (GPL) can be found in the file
  /usr/share/common-licenses/GPL-2 .
@@ -81,7 +80,7 @@ License: GPL-2
  This script is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 2 as
  published by the Free Software Foundation.
- .
+Comment:
  On Debian systems, the complete text of version 2 of the GNU General
  Public License (GPL) can be found in the file
  /usr/share/common-licenses/GPL-2 .
@@ -142,7 +141,7 @@ License: Expat
  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- .
+Comment:
  Some files differ from above by replacing "The authors or copyright
  holders" with more specific term.
 
