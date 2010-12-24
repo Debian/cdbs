@@ -47,9 +47,9 @@ cdbs (0.4.90) UNRELEASED; urgency=low
 
   [ Piotr Ożarowski ]
   * No longer creates debian/pycompat files in clean rule.
-    Closes: bug#424898.
-  * DEB_PYTHON_SYSTEM now accepts "python2" keyword which will invoke
-    dh_python2. Add corresponding distutils-9.sh regression test.
+    Closes: bug#424898. Thanks to Bernd Zeimetz and others.
+  * Extend python snippets to support dh_python2 packaging system.
+    Add corresponding distutils-9.sh regression test.
     Closes: bug#604718.
   * Ignore python3 packages in python-vars.mk.
 
