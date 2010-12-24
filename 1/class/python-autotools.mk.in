@@ -23,7 +23,7 @@ _cdbs_class_python_autotools = 1
 include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 # Flavors are used if more than a single Python build is needed
-# sed in implicit rules, so must be set before including makefile
+# Used in implicit rules, so must be set before including makefile
 DEB_MAKE_FLAVORS ?= $(if $(word 2,$(cdbs_python_build_versions)),$(cdbs_python_build_versions))
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
