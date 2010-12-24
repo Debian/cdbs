@@ -273,6 +273,7 @@ $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-predeb-IMPL/%:
 	dh_perl -p$(cdbs_curpkg) $(DEB_DH_PERL_ARGS)
 # TODO: Use DEB_DH_SHLIBDEPS_ARGS as package-default (not global override)
 	dh_shlibdeps -p$(cdbs_curpkg) $(DEB_DH_SHLIBDEPS_ARGS)
+	$(if $(wildcard /usr/bin/dh_girepository),dh_girepository -p$(cdbs_curpkg) $(call cdbs_expand_curvar,$(DEB_DH_GIREPOSITORY_ARGS)))
 
 # This rule is called to create a package.  Generally it's not going to be
 # useful to hook things onto this rule.

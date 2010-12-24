@@ -58,6 +58,8 @@ cdbs (0.4.90) UNRELEASED; urgency=low
     Closes: bug#439717.
   * Fix permissions of new python2 regression test.
   * Fix variable substitution in DEB_CONFIGURE_FLAGS_$flavor expansion.
+  * debhelper.mk: Invoke dh_girepository if available.
+    Closes: bug#606703.
 
  -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 06:41:19 +0100
 
