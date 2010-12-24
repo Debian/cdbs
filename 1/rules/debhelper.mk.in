@@ -222,7 +222,7 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_installchangelogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCHANGELOGS_ARGS) $(call cdbs_expand_curvar,DEB_INSTALL_CHANGELOGS)
 	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLUDEV_ARGS))
 	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_LINTIAN_ARGS))
-	$(if $(wildcard /usr/bin/dh_bugfiles),dh_bugfiles -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUGFILES_ARGS)
+	$(if $(wildcard /usr/bin/dh_bugfiles),dh_bugfiles -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUGFILES_ARGS))
 	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(call cdbs_expand_curvar,DEB_DH_INSTALL_ARGS)
 # TODO: Use DEB_DH_LINK_ARGS as package-default var (not global addon)
 	dh_link -p$(cdbs_curpkg) $(DEB_DH_LINK_ARGS) $(DEB_DH_LINK_$(cdbs_curpkg))
