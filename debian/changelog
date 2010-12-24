@@ -1,3 +1,66 @@
+cdbs (0.4.90) UNRELEASED; urgency=low
+
+  [ Jonas Smedegaard ]
+  * Tighten resolved build-dependency on cdbs when using debhelper
+    compat level 7, to ensure use of dh_prep (see bug#586616).
+  * Fix add support for DEB_CONFIGURE_FLAGS_$flavor variables.
+  * Introduce new variable DEB_UPSTREAM_WGET_OPTS to upstream-
+    tarball.mk.
+  * Sync copyright-check with recent draft of DEP5 (Bazaar rev. 132).
+  * Have debhelper.mk invoke dh_bugfiles if available.
+    Closes: bug#604548. Thanks to Laurent Bigonville.
+  * Reorganize autotools-vars.mk variables for clarity.
+  * Have autotools add --enable-debug when DEB_BUILD_OPTIONS contains
+    debug.
+    Closes: bug#599218. Thanks to Emilio Pozuelo Monfort.
+  * Have python-distutils.mk quote --root path to work when parent of
+    builddir contains spaces.
+    Closes: bug#598410. Thanks to Michael Terry.
+  * Fix documentation to use relative DEB_SRCDIR in autotools.mk
+    example.
+    Closes: bug#594042. Thanks to IOhannes m zmoelnig.
+  * Reorganize langcore.mk variables in preparation for improvements.
+  * Deprecate DEB_OPT_FLAG (if ever used it ought to be done differently
+    anyway).
+  * Have langcore.mk resolve compile flags using dpkg-buildflags when
+    possible.
+    Closes: bug#583559. Thanks to Raphaël Hertzog.
+  * Fix cdbs_expand_nondefaultvar function, and extend to also avoid
+    undefined (not only default) and support fallback.
+  * Introduce new variable CDBS_FIX_COMPILE_FLAGS (uset by default).
+    Closes: bug#523642 (as best possible). Thanks to Robert Millan.
+  * Add note in langcore.mk that CDBS_FIX_COMPILE_FLAGS override needs
+    to be done _before_ including the snippet.
+  * Fix respect DEB_MAKE_DESTDIRSKEL when flavors are used in
+    makefile.mk. Keep install flavors in same destdir for python-
+    autotools. Add NEWS item about the change.
+  * Support per-flavor DEB_MAKE_BUILDDIRSKEL and DEB_MAKE_DESTDIRSKEL.
+  * Use newline+space delimiter in copyright-hints by default,
+    configurable through DEB_COPYRIGHT_CHECK_DELIMITER.
+  * Improve cleanup rules in python-distutils.mk: also clean python3
+    __pycache__ dirs (even if currently unused).
+  * Use new python-2 system by default (i.e. when DEB_PYTHON_SYSTEM not
+    set).
+  * Tighten resolved build-dependency on python when using default
+    python-2 system.
+  * Rewrite copyright file using Bazaar rev.132 draft of DEP5 format.
+
+  [ Piotr Ożarowski ]
+  * No longer creates debian/pycompat files in clean rule.
+    Closes: bug#424898.
+  * DEB_PYTHON_SYSTEM now accepts "python2" keyword which will invoke
+    dh_python2. Add corresponding distutils-9.sh regression test.
+    Closes: bug#604718.
+  * Ignore python3 packages in python-vars.mk.
+
+  [ Emilio Pozuelo Monfort ]
+  * dh_desktop is deprecated, don't call it anymore.
+    Closes: bug#439717.
+  * Fix permissions of new python2 regression test.
+  * Fix variable substitution in DEB_CONFIGURE_FLAGS_$flavor expansion.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 06:41:19 +0100
+
 cdbs (0.4.89) unstable; urgency=low
 
   * Stop conflicting against ancient/bogus build-common.
