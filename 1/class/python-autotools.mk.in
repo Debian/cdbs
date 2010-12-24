@@ -38,4 +38,7 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 # FIXME: Restructure to allow early override
 DEB_CONFIGURE_SCRIPT_ENV += PYTHON="$(if $(cdbs_python_nondefault_version),python$(cdbs_python_nondefault_versions),$(call cdbs_python_binary,python$(if $(cdbs_make_flavors),$(cdbs_make_curflavor))))"
 
+# Install all flavors on top of each other by default
+DEB_MAKE_DESTDIRSKEL ?= $(cdbs_curdestdir)
+
 endif

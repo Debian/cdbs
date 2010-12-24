@@ -1,3 +1,12 @@
+cdbs (0.4.90) unstable; urgency=low
+
+  * DEB_MAKE_DESTDIRSKEL is now respected when flavors are used in
+    makefile.mk.  python-autotools.mk continue to install all flavors
+    into same destdir, but flavors enabled in different ways now install
+    in per-flavor subdirs of the old destdir by default.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 03:55:50 +0100
+
 cdbs (0.4.85) unstable; urgency=low
 
   * Per-package variables in buildcore.mk and debhelper.mk now generally

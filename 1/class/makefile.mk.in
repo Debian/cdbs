@@ -32,7 +32,7 @@ cdbs_make_check_stamps = $(if $(cdbs_make_flavors),$(cdbs_make_builddir_check)$(
 cdbs_make_clean_nonstamps = $(if $(cdbs_make_flavors),$(patsubst %,makefile-clean/%,$(cdbs_make_flavors)),makefile-clean)
 cdbs_make_curflavor = $(filter-out %/,$(subst /,/ ,$@))
 cdbs_make_curbuilddir = $(if $(cdbs_make_flavors),$(subst @FLAVOR@,$(cdbs_make_curflavor),$(DEB_MAKE_BUILDDIRSKEL)),$(cdbs_curbuilddir))
-cdbs_make_curdestdir = $(cdbs_curdestdir)
+cdbs_make_curdestdir = $(if $(cdbs_make_flavors),$(subst @FLAVOR@,$(cdbs_make_curflavor),$(DEB_MAKE_DESTDIRSKEL)),$(cdbs_curdestdir))
 
 DEB_PHONY_RULES += makefile-clean $(cdbs_make_clean_nonstamps)
 
