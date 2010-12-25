@@ -32,9 +32,7 @@
 # DEB_WAF_ENV
 #   Environment variables to be passed to the WAF invocation (for every command)
 #
-#
-# TODO : docbook edition
-#
+
 
 
 #PATH_RULES#
