@@ -1,0 +1,88 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2010 Rémi Thebault <remi.thebault@gmail.com>
+# Description: A class to configure and build Waf based packages
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+####
+#
+# Here is how to use this class in debian/rules:
+#   include /usr/share/cdbs/1/rules/debhelper.mk
+#   include /usr/share/cdbs/1/class/waf.mk
+#
+#
+# General variables implemented by this class file:
+#
+# DEB_WAF_OPTIONS
+#   Options that will be appended directly to the WAF configuration command
+#
+# DEB_WAF_ENV
+#   Environment variables to be passed to the WAF invocation (for every command)
+#
+#
+# TODO : docbook edition
+#
+
+
+#PATH_RULES#
+
+
+ifndef _cdbs_class_waf
+_cdbs_class_waf = 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/waf-vars.mk$(_cdbs_makefile_suffix)
+
+
+
+define checkwaf
+	test -f ./waf -a -x ./waf
+endef
+
+
+DEB_PHONY_RULES += waf-clean
+
+
+
+common-configure-arch common-configure-indep:: debian/stamp-waf-configure
+debian/stamp-waf-configure:
+	$(checkwaf)
+	$(DEB_WAF_CONFIGURE_ENV) $(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(DEB_WAF_OPTIONS)
+	touch debian/stamp-waf-configure
+
+
+common-build-arch common-build-indep:: debian/stamp-waf-build
+debian/stamp-waf-build:
+	$(checkwaf)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_BUILD_TARGET)
+	touch debian/stamp-waf-build
+
+
+clean:: waf-clean
+waf-clean::
+	$(checkwaf)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET)
+	rm -rf debian/stamp-waf-configure debian/stamp-waf-build
+
+
+common-install-arch common-install-indep:: common-install-impl
+common-install-impl::
+	$(checkwaf)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir)
+
+
+endif
+

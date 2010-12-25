@@ -1,0 +1,38 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2010 Rémi Thebault <remi.thebault@gmail.com>
+# Description: Defines useful variables for Waf based packages
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#PATH_RULES#
+
+ifndef _cdbs_class_waf_vars
+_cdbs_class_waf_vars = 1
+
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
+
+
+
+DEB_WAF_PREFIX ?= /usr
+DEB_WAF_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),--jobs $(DEB_PARALLEL_JOBS))
+DEB_WAF_INVOKE ?= $(DEB_WAF_ENV) ./waf $(DEB_WAF_PARALLEL)
+DEB_WAF_CONFIGURE_ENV ?= $(call cdbs_set_nondefaultvars,CC CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LINKFLAGS="$(LDFLAGS)"
+DEB_WAF_CONFIGURE_TARGET ?= configure
+DEB_WAF_CLEAN_TARGET ?= distclean
+DEB_WAF_BUILD_TARGET ?= build
+DEB_WAF_INSTALL_TARGET ?= install
+
+
+
+endif
