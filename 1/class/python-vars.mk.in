@@ -78,7 +78,9 @@ cdbs_python_primary_version = $(or $(cdbs_python_nondefault_version),$(cdbs_pyth
 cdbs_python_build_versions = $(or $(if $(cdbs_python_arch_packages),$(cdbs_python_supported_versions)),$(cdbs_python_primary_version))
 
 # Python-related dependencies according to Python policy, appendix A
-cdbs_python_builddeps = $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev))
+cdbs_python_builddeps_legacy = $(if $(DEB_PYTHON_SYSTEM),$(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev)))
+cdbs_python2_builddeps = $(if $(cdbs_python2),$(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev)))
+cdbs_python_builddeps = $(cdbs_python_builddeps_legacy)$(cdbs_python2_builddeps)
 
 # check if build is possible
 $(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pysupport),$(error invalid setting in debian/pyversions)))
