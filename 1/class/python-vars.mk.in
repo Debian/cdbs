@@ -44,7 +44,7 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 cdbs_python_potential_packages = $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))
 cdbs_python_legacy_packages = $(or $(DEB_PYTHON_MODULE_PACKAGES),$(firstword $(cdbs_python_potential_packages)))
-cdbs_python2_packages = $(or $(DEB_PYTHON2_MODULE_PACKAGES),$(filter-out python3%,$(cdbs_python_potential_packages)))
+cdbs_python2_packages = $(or $(DEB_PYTHON2_MODULE_PACKAGES),$(filter python-%,$(cdbs_python_potential_packages))
 cdbs_python_packages = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_packages),$(cdbs_python2_packages))
 cdbs_python_arch_packages = $(filter $(cdbs_python_packages),$(DEB_ARCH_PACKAGES))
 cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
