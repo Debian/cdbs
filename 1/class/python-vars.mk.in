@@ -83,7 +83,8 @@ cdbs_python2_builddeps = $(if $(cdbs_python2),$(if $(cdbs_python_arch_packages),
 cdbs_python_builddeps = $(cdbs_python_builddeps_legacy)$(cdbs_python2_builddeps)
 
 # check if build is possible
-$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pysupport),$(error invalid setting in debian/pyversions)))
-$(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pycentral),$(error invalid setting for XS-Python-Version)))
+$(if $(cdbs_python_pysupport),$(if $(cdbs_python_build_versions),,$(error invalid setting in debian/pyversions)))
+$(if $(cdbs_python_pycentral),$(if $(cdbs_python_build_versions),,$(error invalid setting for XS-Python-Version)))
+$(if $(cdbs_python2),$(if $(cdbs_python_build_versions),,$(error invalid setting for X-Python-Version)))
 
 endif
