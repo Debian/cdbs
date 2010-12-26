@@ -62,7 +62,7 @@ cdbs_python2 = $(if $(strip $(DEB_PYTHON_SYSTEM)),,python2)
 cdbs_python_pysupport = $(filter pysupport,$(DEB_PYTHON_SYSTEM))
 cdbs_python_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
 cdbs_python_legacy_system = $(or $(cdbs_python_pysupport),$(cdbs_python_pycentral),$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral, or leave empty for default python2)))
-cdbs_curpythonsystems = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_system),python2)
+cdbs_curpythonsystems = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_system),$(if $(filter $(cdbs_curpkg),$(cdbs_python2_packages)),python2))
 
 # warning pysupport compatibility mode
 $(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
