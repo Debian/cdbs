@@ -48,7 +48,7 @@ CDBS_BUILD_DEPENDS_class_python-sugar ?= cdbs (>= 0.4.67~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-sugar)
 
 # Python-related dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS_class_python-sugar_python ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS_class_python-sugar_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-sugar_python)
 
 # warn about wrong number of resolved packages

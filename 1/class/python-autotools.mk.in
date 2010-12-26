@@ -32,7 +32,7 @@ CDBS_BUILD_DEPENDS_class_python-autotools ?= cdbs (>= 0.4.75~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools)
 
 # Python-related dependencies according to Python policy, appendix A
-CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev))
+CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
 # FIXME: Restructure to allow early override

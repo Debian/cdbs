@@ -77,6 +77,9 @@ cdbs_python_primary_version = $(or $(cdbs_python_nondefault_version),$(cdbs_pyth
 # arch(+indep): all; indep: current if supported, else first supported
 cdbs_python_build_versions = $(or $(if $(cdbs_python_arch_packages),$(cdbs_python_supported_versions)),$(cdbs_python_primary_version))
 
+# Python-related dependencies according to Python policy, appendix A
+cdbs_python_builddeps = $(if $(cdbs_python_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev))
+
 # check if build is possible
 $(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pysupport),$(error invalid setting in debian/pyversions)))
 $(if $(cdbs_python_build_versions),,$(if $(cdbs_python_pycentral),$(error invalid setting for XS-Python-Version)))
