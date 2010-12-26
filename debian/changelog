@@ -63,7 +63,7 @@ cdbs (0.4.90) UNRELEASED; urgency=low
 
   [ Rémi Thebault ]
   * introduced waf class
-  
+
  -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 06:41:19 +0100
 
 cdbs (0.4.89) unstable; urgency=low

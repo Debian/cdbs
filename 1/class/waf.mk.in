@@ -27,12 +27,15 @@
 # General variables implemented by this class file:
 #
 # DEB_WAF_OPTIONS
-#   Options that will be appended directly to the WAF configuration command
+#   Options that will be appended to every WAF call
+#
+# DEB_WAF_CONFIGURE_OPTIONS
+#   Options that will be appended to the WAF configure target
+#	TODO: update docbook
 #
 # DEB_WAF_ENV
-#   Environment variables to be passed to the WAF invocation (for every command)
+#   Environment variables to be passed to every WAF invocation
 #
-
 
 
 #PATH_RULES#
@@ -42,45 +45,58 @@ ifndef _cdbs_class_waf
 _cdbs_class_waf = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
-include $(_cdbs_class_path)/waf-vars.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 
-
-define checkwaf
-	test -f ./waf -a -x ./waf
-endef
+#cdbs_waf_options = $(call cdbs_expand_curvar,DEB_WAF_OPTIONS)
+#cdbs_waf_configure_options = $(call cdbs_expand_curvar,DEB_WAF_CONFIGURE_OPTIONS)
 
 
-DEB_PHONY_RULES += waf-clean
+DEB_WAF_PREFIX ?= /usr
+DEB_WAF_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),--jobs $(DEB_PARALLEL_JOBS))
+DEB_WAF_INVOKE ?= cd $(DEB_SRCDIR) && $(DEB_WAF_CONFIGURE_ENV) $(DEB_WAF_ENV) ./waf $(DEB_WAF_PARALLEL)
+DEB_WAF_CONFIGURE_ENV ?= $(call cdbs_set_nondefaultvars,CC CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LINKFLAGS="$(LDFLAGS)"
+DEB_WAF_CONFIGURE_TARGET ?= configure
+DEB_WAF_CLEAN_TARGET ?= distclean
+DEB_WAF_BUILD_TARGET ?= build
+DEB_WAF_INSTALL_TARGET ?= install
 
 
-
-common-configure-arch common-configure-indep:: debian/stamp-waf-configure
-debian/stamp-waf-configure:
-	$(checkwaf)
-	$(DEB_WAF_CONFIGURE_ENV) $(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(DEB_WAF_OPTIONS)
-	touch debian/stamp-waf-configure
+# ensure waf is executable
+cdbs-waf-sanity-check:
+	test -f $(DEB_BUILDDIR)/waf
+	test -x $(DEB_BUILDDIR)/waf
 
 
-common-build-arch common-build-indep:: debian/stamp-waf-build
+common-configure-arch common-configure-indep:: common-configure-impl
+common-configure-impl:: debian/stamp-waf-configure
+debian/stamp-waf-configure: cdbs-waf-sanity-check
+	$(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(DEB_WAF_OPTIONS) $(DEB_WAF_CONFIGURE_OPTIONS)
+	touch $@
+
+
+common-build-arch common-build-indep:: common-build-impl
+common-build-impl:: debian/stamp-waf-build
 debian/stamp-waf-build:
-	$(checkwaf)
-	$(DEB_WAF_INVOKE) $(DEB_WAF_BUILD_TARGET)
-	touch debian/stamp-waf-build
+	$(DEB_WAF_INVOKE) $(DEB_WAF_BUILD_TARGET) $(DEB_WAF_OPTIONS)
+	touch $@
 
 
-clean:: waf-clean
-waf-clean::
-	$(checkwaf)
-	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET)
-	rm -rf debian/stamp-waf-configure debian/stamp-waf-build
+clean:: cdbs-waf-clean
+cdbs-waf-clean: cdbs-waf-sanity-check
+	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET) $(DEB_WAF_OPTIONS)
+	rm -rf debian/stamp-waf-*
 
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	$(checkwaf)
-	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir) $(DEB_WAF_OPTIONS)
 
+
+CDBS_BUILD_DEPENDS_class_waf ?= python, cdbs (>= 0.4.90)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_waf)
+
+DEB_PHONY_RULES += cdbs-waf-clean
 
 endif
 
