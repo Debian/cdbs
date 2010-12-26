@@ -63,7 +63,6 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/qmake.mk		\
 		1/class/scons-vars.mk		\
 		1/class/scons.mk		\
-		1/class/waf-vars.mk		\
 		1/class/waf.mk		\
 		1/class/hbuild.mk
 

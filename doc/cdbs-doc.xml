@@ -1731,9 +1731,9 @@ include /usr/share/cdbs/1/class/hbuild.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/waf.mk
 </programlisting>
-        This is enough to get your package configured and built with default configuration.
+        This is enough to get the binary package built with default configuration.
       </para>
-      
+
       <para>If you need a more advanced control upon build configuration,
       you can pass options to the configure step using the built-in variable
       <literal>DEB_WAF_OPTIONS</literal>.
@@ -1748,9 +1748,6 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/waf.mk
 </programlisting>
       </para>
-
-      <para>Since WAF is based on python, you need to add <literal>python</literal> to build dependances in
-      the <filename>debian/control</filename> file along with <literal>cdbs (>=0.4.90)</literal>.</para>
 
       <para>
         You can find more information about WAF in a general way on the <ulink
