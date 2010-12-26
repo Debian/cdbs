@@ -135,6 +135,5 @@ clean::
 	find "$(CURDIR)" -name __pycache__ -type d -empty -delete
 	find "$(CURDIR)" -prune -name '*.egg-info' -exec rm -rf '{}' ';'
 
-.PHONY: $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 .PHONY: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 endif
