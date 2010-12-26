@@ -80,26 +80,36 @@ common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_p
 $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : debian/python-module-stampdir/%
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
-	cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) build $(cdbs_python_build_args)
+	cd $(DEB_SRCDIR) && \
+		python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) build \
+		$(cdbs_python_build_args)
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
 	set -e; for buildver in $(cdbs_python_build_versions); do \
-		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) build $(cdbs_python_build_args); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && \
+			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) build \
+			$(cdbs_python_build_args); \
 	done
 	touch $@
 
 
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
-	cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) install --root="$(cdbs_python_destdir)" \
-		--install-purelib=/usr/lib/python$(cdbs_python_primary_version)/site-packages/ $(cdbs_python_install_args)
+	cd $(DEB_SRCDIR) && \
+		python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) install \
+		--root="$(cdbs_python_destdir)" \
+		--install-purelib=/usr/lib/python$(cdbs_python_primary_version)/site-packages/ \
+		$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	set -e; for buildver in $(cdbs_python_build_versions); do \
-		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) install \
-		--root="$(cdbs_python_destdir)" --install-purelib=/usr/lib/python$$buildver/site-packages/ \
-		--install-platlib=/usr/lib/python$$buildver/site-packages/ $(cdbs_python_install_args); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && \
+			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) install \
+			--root="$(cdbs_python_destdir)" \
+			--install-purelib=/usr/lib/python$$buildver/site-packages/ \
+			--install-platlib=/usr/lib/python$$buildver/site-packages/ \
+			$(cdbs_python_install_args); \
 	done
 
 # Deprecated targets.  You should use above targets instead.
@@ -111,11 +121,15 @@ python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
 clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
-	-cd $(DEB_SRCDIR) && python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) clean $(cdbs_python_clean_args)
+	-cd $(DEB_SRCDIR) && \
+		python$(cdbs_python_nondefault_version) $(cdbs_python_setup_cmd) clean \
+		$(cdbs_python_clean_args)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-for buildver in $(cdbs_python_build_versions); do \
-		cd $(CURDIR) && cd $(DEB_SRCDIR) && $(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) clean $(cdbs_python_clean_args); \
+		cd $(CURDIR) && cd $(DEB_SRCDIR) && \
+			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) clean \
+			$(cdbs_python_clean_args); \
 	done
 
 # Deprecated targets.  You should use above targets instead.
