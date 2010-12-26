@@ -34,7 +34,7 @@ CDBS_BUILD_DEPENDS += $(if $(cdbs_python_pycentral),$(comma) $(CDBS_BUILD_DEPEND
 
 # dh_python2 comes from python package
 CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python (>= 2.6.5)
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python_2),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
+CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
 
 # Optionally use debhelper (if not then these rules are simply ignored)
 $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python/%
