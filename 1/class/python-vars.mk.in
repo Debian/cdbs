@@ -65,9 +65,12 @@ cdbs_python3 = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),python3)
 cdbs_python_pysupport = $(filter pysupport,$(DEB_PYTHON_SYSTEM))
 cdbs_python_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
 cdbs_python_legacy_system = $(or $(cdbs_python_pysupport),$(cdbs_python_pycentral),$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral, or leave empty for default python2/python3)))
+cdbs_python_systems = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_system),$(if $(cdbs_python2_packages),python2) $(if $(cdbs_python3_packages),python3))
 cdbs_curpythonsystems = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_system),$(strip $(if $(filter $(cdbs_curpkg),$(cdbs_python2_packages)),python2) $(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),python3)))
 
-cdbs_curpythonstem = $(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),3)
+cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),3))
+cdbs_python_stem += $(if $(word 2,$(cdbs_python_systems)),$(error use of both "python2" and "python3" packaging systems is unsupported here - either change target binary package names, explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
+cdbs_curpythonstem = $(if $(cdbs_python_single_system),$(cdbs_python_stem),$(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),3))
 
 cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_python2),$(shell pyversions -d))
 cdbs_python3_current_binary := $(if $(cdbs_python3),$(shell py3versions -d))
