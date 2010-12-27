@@ -54,13 +54,7 @@ cdbs_python2_arch_packages = $(filter $(cdbs_python2_packages),$(DEB_ARCH_PACKAG
 cdbs_python3_arch_packages = $(filter $(cdbs_python3_packages),$(DEB_ARCH_PACKAGES))
 cdbs_python_indep_packages = $(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES))
 
-cdbs_curpythonstem = $(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),3)
-
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
-
-cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_python2),$(shell pyversions -d))
-cdbs_python3_current_binary := $(if $(cdbs_python3),$(shell py3versions -d))
-cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python$(cdbs_curpythonstem)_current_binary),$(1)),python$(cdbs_curpythonstem),$(1))
 
 # check python system
 cdbs_python_use_xs_field := $(if $(DEB_PYTHON_SYSTEM),$(shell grep -q "^XS-Python-Version:" debian/control && echo yes))
@@ -73,8 +67,11 @@ cdbs_python_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
 cdbs_python_legacy_system = $(or $(cdbs_python_pysupport),$(cdbs_python_pycentral),$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) (select either pysupport or pycentral, or leave empty for default python2/python3)))
 cdbs_curpythonsystems = $(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_legacy_system),$(strip $(if $(filter $(cdbs_curpkg),$(cdbs_python2_packages)),python2) $(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),python3)))
 
-# warning pysupport compatibility mode
-$(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
+cdbs_curpythonstem = $(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),3)
+
+cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_python2),$(shell pyversions -d))
+cdbs_python3_current_binary := $(if $(cdbs_python3),$(shell py3versions -d))
+cdbs_python_binary = $(if $(call cdbs_streq,$(cdbs_python$(cdbs_curpythonstem)_current_binary),$(1)),python$(cdbs_curpythonstem),$(1))
 
 # Calculate cdbs_python_build_versions
 cdbs_python_current_version := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_python2),$(shell pyversions -vd))
@@ -104,6 +101,9 @@ cdbs_python_builddeps_legacy = $(if $(DEB_PYTHON_SYSTEM),$(if $(cdbs_python_arch
 cdbs_python2_builddeps = $(if $(cdbs_python2),$(if $(cdbs_python2_arch_packages),python-all-dev,python-dev (>= 2.3.5-7)$(cdbs_python_nondefault_version:%=, python%-dev)))
 cdbs_python3_builddeps = $(if $(cdbs_python3),$(if $(cdbs_python3_arch_packages),python3-all-dev (>= 3.1),python3-dev$(cdbs_python3_nondefault_version:%=, python%-dev)))
 cdbs_python_builddeps = $(cdbs_python_builddeps_legacy), $(cdbs_python2_builddeps), $(cdbs_python3_builddeps)
+
+# warning pysupport compatibility mode
+$(if $(cdbs_python_pysupport),$(if $(cdbs_python_use_xs_field),$(warning WARNING:  Use of XS-Python-Version and XB-Python-Version fields in debian/control is deprecated with pysupport method; use debian/pyversions if you need to specify specific versions.)))
 
 # check if build is possible
 $(if $(cdbs_python_pysupport),$(if $(cdbs_python_build_versions),,$(error invalid setting in debian/pyversions)))
