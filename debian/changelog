@@ -1,4 +1,4 @@
-cdbs (0.4.90) UNRELEASED; urgency=low
+cdbs (0.4.90) experimental; urgency=low
 
   [ Jonas Smedegaard ]
   * Tighten resolved build-dependency on cdbs when using debhelper
@@ -20,8 +20,7 @@ cdbs (0.4.90) UNRELEASED; urgency=low
     example.
     Closes: bug#594042. Thanks to IOhannes m zmoelnig.
   * Reorganize langcore.mk variables in preparation for improvements.
-  * Deprecate DEB_OPT_FLAG (if ever used it ought to be done differently
-    anyway).
+  * Deprecate DEB_OPT_FLAG (if ever used it should be done differently).
   * Have langcore.mk resolve compile flags using dpkg-buildflags when
     possible.
     Closes: bug#583559. Thanks to Raphaël Hertzog.
@@ -29,8 +28,6 @@ cdbs (0.4.90) UNRELEASED; urgency=low
     undefined (not only default) and support fallback.
   * Introduce new variable CDBS_FIX_COMPILE_FLAGS (uset by default).
     Closes: bug#523642 (as best possible). Thanks to Robert Millan.
-  * Add note in langcore.mk that CDBS_FIX_COMPILE_FLAGS override needs
-    to be done _before_ including the snippet.
   * Fix respect DEB_MAKE_DESTDIRSKEL when flavors are used in
     makefile.mk. Keep install flavors in same destdir for python-
     autotools. Add NEWS item about the change.
@@ -44,12 +41,24 @@ cdbs (0.4.90) UNRELEASED; urgency=low
   * Tighten resolved build-dependency on python when using default
     python-2 system.
   * Rewrite copyright file using Bazaar rev.132 draft of DEP5 format.
+  * Simplify python-vars.mk to expand recursively (drop colon): no
+    longer used for rules expansion (and apparently never were).
+  * Revert filter out python3 modules by default: May cause regressions,
+    and is handled better for python2/python3 system anyway.
+  * Fix avoid marking stampfile targets as PHONY in python-distutils.mk.
+  * Fix invoke python debhelper only for relevant packages.
+    Really closes: bug#377965, but since that bug is 4+ years old we fix
+    only for new python2/python3 and keep broken behavior for legacy
+    systems to avoid surprises.
+  * Extend python classes to support dh_python3 packaging system.
+  * Add new copyright holder to debian/copyright (no new licensing).
 
   [ Piotr Ożarowski ]
   * No longer creates debian/pycompat files in clean rule.
     Closes: bug#424898. Thanks to Bernd Zeimetz and others.
-  * Extend python snippets to support dh_python2 packaging system.
-    Add corresponding distutils-9.sh regression test.
+  * Extend python classes to support dh_python2 packaging system.
+    Add corresponding distutils-9 distutils-10 and distutils-11
+    regression test.
     Closes: bug#604718.
   * Ignore python3 packages in python-vars.mk.
 
@@ -62,9 +71,9 @@ cdbs (0.4.90) UNRELEASED; urgency=low
     Closes: bug#606703.
 
   [ Rémi Thebault ]
-  * introduced waf class
+  * Add waf class.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 24 Dec 2010 06:41:19 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 27 Dec 2010 04:30:08 +0100
 
 cdbs (0.4.89) unstable; urgency=low
 
