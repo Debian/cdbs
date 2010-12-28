@@ -1,0 +1,125 @@
+#!/usr/bin/python
+# -*- mode: python; coding: utf-8 -*-
+#
+# Most of this code was stolen from Waf which is:
+# Thomas Nagy, 2005-2010
+# Adapted for CDBS purposes by Rémi Thebault <remi.thebault@gmail.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+usage = '''
+
+  python cdbs-waf-unpack.py --waf=WAF_FILE --dest=DEST_FOLDER
+  
+      Unpacks the WAF_FILE structure into DEST_FOLDER destination'''
+
+
+import sys, os
+from optparse import OptionParser
+
+
+C1='#*'
+C2='#&'
+cwd = os.getcwd()
+join = os.path.join
+
+WAF='waf'
+def b(x):
+	return x
+
+if sys.hexversion>0x300000f:
+	WAF='waf3'
+	def b(x):
+		return x.encode()
+
+def err(m):
+	print(('\033[91mError: %s\033[0m' % m))
+	sys.exit(1)
+
+
+
+def unpack_waf (waf, dest):
+	f = open(waf,'rb')
+	c = "corrupted waf (%d)"
+	while 1:
+		line = f.readline()
+		if not line: err("run waf-light from a folder containing wafadmin")
+		if line == b('#==>\n'):
+			txt = f.readline()
+			if not txt: err(c % 1)
+			if f.readline()!=b('#<==\n'): err(c % 2)
+			break
+	if not txt: err(c % 3)
+	txt = txt[1:-1].replace(b(C1), b('\n')).replace(b(C2), b('\r'))
+
+	import shutil, tarfile
+	try: shutil.rmtree(dest)
+	except OSError: pass
+	try:
+		for x in ['Tools', '3rdparty']:
+			os.makedirs(join(dest, 'wafadmin', x))
+	except OSError:
+		err("Cannot unpack waf lib into %s\nMove waf into a writeable directory" % dir)
+
+	os.chdir(dest)
+	tmp = 't.bz2'
+	t = open(tmp,'wb')
+	t.write(txt)
+	t.close()
+
+	t = None
+	try:
+		t = tarfile.open(tmp)
+	except:
+		try:
+			os.system('bunzip2 t.bz2')
+			t = tarfile.open('t')
+		except:
+			os.chdir(cwd)
+			try: shutil.rmtree(dest)
+			except OSError: pass
+			err("Waf cannot be unpacked, check that bzip2 support is present")
+
+	for x in t: t.extract(x)
+	t.close()
+
+	for x in ['Tools', '3rdparty']:
+		os.chmod(join('wafadmin',x), 493)
+
+	if sys.hexversion>0x300000f:
+		sys.path = [join(dest, 'wafadmin')] + sys.path
+		import py3kfixes
+		py3kfixes.fixdir(dest)
+
+	os.chdir(cwd)
+
+
+if __name__ == '__main__':
+	parser = OptionParser(usage)
+	#parser.add_option('-h', '--help', action='store_true', dest='help', default=False, help='Print this help and exits')
+	parser.add_option('-w', '--waf', action='store', dest='waf', help='The Waf file structure', metavar='WAF_FILE')
+	parser.add_option('-d', '--dest', action='store', dest='dest', help='The destination folder. Created if needed', metavar='DEST_FOLDER')
+	
+	(options, args) = parser.parse_args()
+
+	if not options.waf and not options.dest:
+		print '--waf and --dest options are mandatory'
+		parser.print_help()
+		sys.exit(1) 
+
+	print 'Unpacking ' + options.waf + ' to ' + options.dest + ' ...'
+	unpack_waf(options.waf, options.dest)
+	print 'Done'
+
+

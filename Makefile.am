@@ -63,7 +63,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/qmake.mk		\
 		1/class/scons-vars.mk		\
 		1/class/scons.mk		\
-		1/class/waf.mk		\
+		1/class/waf.mk			\
 		1/class/hbuild.mk
 
 all-local: $(all_mk_files) $(scripts_SCRIPTS)
@@ -76,7 +76,7 @@ classdir = $(pkgdatadir)/1/class
 rules_DATA = $(wildcard 1/rules/*.mk)
 rulesdir = $(pkgdatadir)/1/rules
 
-bin_SCRIPTS = scripts/cdbs-edit-patch
+bin_SCRIPTS = scripts/cdbs-edit-patch scripts/cdbs-waf-unpack.py
 dist_man_MANS = scripts/cdbs-edit-patch.1
 
 scripts_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5
