@@ -23,9 +23,7 @@ _cdbs_class_ant = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/ant-vars.mk$(_cdbs_makefile_suffix)
 
-DEB_PHONY_RULES += ant-sanity-check
-
-ant-sanity-check:
+testsanity::
 	@if ! test -x "$(firstword $(JAVACMD))"; then \
 		echo "You must specify a valid JAVA_HOME or JAVACMD!"; \
 		exit 1; \
@@ -35,13 +33,12 @@ ant-sanity-check:
 		exit 1; \
 	fi
 
-
-common-build-arch common-build-indep:: debian/stamp-ant-build ant-sanity-check
+common-build-arch common-build-indep:: debian/stamp-ant-build
 debian/stamp-ant-build:
 	$(DEB_ANT_INVOKE) $(DEB_ANT_BUILD_TARGET)
 	touch debian/stamp-ant-build
 
-clean:: ant-sanity-check
+clean::
 	-$(DEB_ANT_INVOKE) $(DEB_ANT_CLEAN_TARGET)
 	rm -f debian/stamp-ant-build
 

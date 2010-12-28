@@ -29,6 +29,11 @@ testdir: debian/control
 testroot:
 	$(if $(_cdbs_rules_debhelper),dh_testroot,test "`id -u`" = 0)
 
+# These targets are triggered by pre-build and clean targets allowing
+# for non-intrusive sanity checks of the build environment
+$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
+testsanity:: $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES))
+
 $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% : 
 	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
 
@@ -98,7 +103,7 @@ CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),$(comma) $(CDBS_BU
 # to do stuff like unpack extra source tarballs, apply patches, and stuff.  In
 # the future it will be a good place to generate debian/control, but right
 # now we don't support that very well.
-pre-build:: testdir makebuilddir
+pre-build:: testdir testsanity makebuilddir
 	$(foreach x,$(_cdbs_deprecated_vars),$(if $(shell test "$($x)" != "$(_cdbs_deprecated_$(x)_default)" && echo W),$(warning WARNING:  $x is a deprecated variable)))
 
 # This target is called after patches are applied.  Used by the patch system.
@@ -175,7 +180,7 @@ build-indep: $(patsubst %,build/%,$(DEB_INDEP_PACKAGES))
 # Typically you will invoke upstream's "make clean" rule here, although you
 # can also hook in other stuff here.  Many of the included rules and classes
 # add stuff to this rule.
-clean:: testdir testroot cleanbuilddir reverse-config
+clean:: testdir testroot cleanbuilddir reverse-config testsanity
 reverse-config::
 ifneq (::, $(config_guess):$(config_sub):$(config_rpath))
 	for i in $(config_guess) $(config_sub) $(config_rpath) ; do \
@@ -333,7 +338,7 @@ common-install-prehook:: common-install-prehook-arch common-install-prehook-inde
 common-install:: common-install-arch common-install-indep
 common-binary:: common-binary-arch common-binary-indep
 
-.PHONY: pre-build apply-patches post-patches common-configure-arch common-configure-indep $(patsubst %,configure/%,$(DEB_ALL_PACKAGES)) build common-build-arch common-build-indep $(patsubst %,build/%,$(DEB_ALL_PACKAGES)) build-arch build-indep clean common-install-arch common-install-indep install-arch install-indep $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) common-binary-arch common-binary-indep $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) binary-indep binary-arch binary $(DEB_PHONY_RULES)
+.PHONY: pre-build testsanity $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) apply-patches post-patches common-configure-arch common-configure-indep $(patsubst %,configure/%,$(DEB_ALL_PACKAGES)) build common-build-arch common-build-indep $(patsubst %,build/%,$(DEB_ALL_PACKAGES)) build-arch build-indep clean common-install-arch common-install-indep install-arch install-indep $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) common-binary-arch common-binary-indep $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) binary-indep binary-arch binary $(DEB_PHONY_RULES)
 
 # Parallel execution of the cdbs makefile fragments will fail, but
 # this way you can call dpkg-buildpackage with MAKEFLAGS=-j in the

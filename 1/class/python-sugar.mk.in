@@ -65,7 +65,7 @@ CDBS_BUILD_DEPENDS_class_python-sugar_sugar ?= $(call cdbs_sugar_anybranchdeps,p
 CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-sugar_sugar)
 
 # warn early about late changes to DEB_PYTHON_SUGAR_PACKAGES
-pre-build clean::
+testsanity::
 	$(cdbs_python_sugar_pkgresolve_check)
 
 pre-build::
