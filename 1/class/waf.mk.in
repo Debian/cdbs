@@ -20,7 +20,6 @@
 ####
 #
 # Here is how to use this class in debian/rules:
-#   include /usr/share/cdbs/1/rules/debhelper.mk
 #   include /usr/share/cdbs/1/class/waf.mk
 #
 #

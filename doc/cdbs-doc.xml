@@ -1721,31 +1721,32 @@ include /usr/share/cdbs/1/class/hbuild.mk
       <title>The Waf Class</title>
 
       <para>Waf is a generic and flexible build system based on python. CDBS takes care of calling
-      the configure, build and installing steps with correct <literal>PREFIX</literal>
-      and <literal>DESTDIR</literal> .</para>
+      the configure, build and install steps with correct <literal>PREFIX</literal>
+      and <literal>DESTDIR</literal>.</para>
 
       <para>
-        To use this class, the minimum is to put those lines to your
-        <filename>debian/rules</filename> file:
+        To use this class, you must include this line to your <filename>debian/rules</filename> file:
 <programlisting>
-include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/waf.mk
 </programlisting>
-        This is enough to get the binary package built with default configuration.
       </para>
-
+      <!-- TODO: make the following para a listing rather than a literal text -->
       <para>If you need a more advanced control upon build configuration,
       you can pass options to the configure step using the built-in variable
-      <literal>DEB_WAF_OPTIONS</literal>.
-      You can as well append variables to the environment waf will run in with the
+      <literal>DEB_WAF_CONFIGURE_OPTIONS</literal>. You can pass options to each
+      WAF invocation using the <literal>DEB_WAF_OPTIONS</literal> variable.
+      You can as well append variables to the environment WAF will run in with the
       <literal>DEB_WAF_ENV</literal> variable.
       Full <filename>debian/rules</filename> usage example:
 <programlisting>
-DEB_WAF_OPTIONS = --enable-this-option --disable-this-one
-DEB_WAF_ENV = ENVVAR=value
+#!/usr/bin/make -f
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/waf.mk
+
+DEB_WAF_CONFIGURE_OPTIONS_DEFAULT = --enable-this-option --disable-this-one
+DEB_WAF_OPTIONS_DEFAULT = --verbose
+DEB_WAF_ENV_DEFAULT = ENVVAR=value
 </programlisting>
       </para>
 
