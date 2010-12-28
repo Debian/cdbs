@@ -39,12 +39,14 @@ CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_p
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
 CDBS_BUILD_DEPENDS += $(if $(cdbs_python3),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
 
+$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
+	$(if $(word 2,$(cdbs_curpythonsystems)),$(error binary package $(cdbs_curpkg) use both "python2" and "python3" packaging systems - either explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
+
 # Optionally use debhelper (if not then these rules are simply ignored)
 # Affect only relevant packages for python2 and python3, but keep old
 # broken behavior for legacy systems (see bug#377965)
 $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python/%
 $(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%: binary-install/%
-	$(if $(word 2,$(cdbs_curpythonsystems)),$(error binary package $(cdbs_curpkg) use both "python2" and "python3" packaging systems - either explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
 	$(if $(DEB_PYTHON_SYSTEM)$(cdbs_curpythonsystems),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg)))
 
 endif

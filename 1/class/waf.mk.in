@@ -63,14 +63,14 @@ DEB_WAF_INSTALL_TARGET ?= install
 
 
 # ensure waf is executable
-cdbs-waf-sanity-check:
+testsanity::
 	test -f $(DEB_BUILDDIR)/waf
 	test -x $(DEB_BUILDDIR)/waf
 
 
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: debian/stamp-waf-configure
-debian/stamp-waf-configure: cdbs-waf-sanity-check
+debian/stamp-waf-configure:
 	$(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(cdbs_waf_options) $(cdbs_waf_configure_options)
 	touch $@
 
@@ -83,7 +83,7 @@ debian/stamp-waf-build:
 
 
 clean:: cdbs-waf-clean
-cdbs-waf-clean: cdbs-waf-sanity-check
+cdbs-waf-clean:
 	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET) $(cdbs_waf_options)
 	rm -rf debian/stamp-waf-*
 

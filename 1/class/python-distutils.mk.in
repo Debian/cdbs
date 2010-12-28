@@ -68,7 +68,7 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
 CDBS_BUILD_DEPENDS += $(cdbs_python_pkg_check)
 
 # warn early about late changes to DEB_PYTHON_MODULES_PACKAGES
-pre-build clean::
+testsanity::
 	$(cdbs_python_pkgresolve_check)
 
 pre-build::
