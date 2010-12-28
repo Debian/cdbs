@@ -65,10 +65,14 @@ cdbs_waf_build_target := build
 cdbs_waf_install_target := install
 
 
-# ensure waf is executable
+# ensure waf is executable and wscript is present
+# and that waf fit the checksum in debian/waf.sha1sum
 testsanity::
 	test -f $(DEB_SRCDIR)/waf
 	test -x $(DEB_SRCDIR)/waf
+	test -f $(DEB_SRCDIR)/wscript
+	grep waf debian/waf.sha1sum
+	sha1sum --check debian/waf.sha1sum
 
 
 common-configure-arch common-configure-indep:: common-configure-impl
