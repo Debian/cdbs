@@ -27,7 +27,7 @@ cat <<EOF >$WORKDIR/debian/rules
 #!/usr/bin/make -f
 include debian/testsuite.mk
 include \$(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
-include \$(_cdbs_package_root_dir)/1/class/python3-distutils.mk.in
+include \$(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
 EOF
 chmod +x $WORKDIR/debian/rules
 

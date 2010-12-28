@@ -20,19 +20,25 @@
 ifndef _cdbs_class_python_sugar
 _cdbs_class_python_sugar = 1
 
-include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
-include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
-
 # Space-delimited list of supported branches, lowest listed first
 # (comment out if all current branches are supported)
 # NB! This variable must be declared *above* inclusion of this snippet
 #DEB_SUGAR_BRANCHES = 0.84 0.86
 
+# include both simple and versioned activity packages by default
+# NB! This variable must be declared *above* inclusion of this snippet
+DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES), , ), $(DEB_PACKAGES))
+
+DEB_PYTHON_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),$(DEB_PYTHON_SUGAR_PACKAGES))
+DEB_PYTHON2_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),,$(DEB_PYTHON_SUGAR_PACKAGES))
+# FIXME: support multiple Python packaging systems in same binary package
+#DEB_PYTHON3_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),,$(DEB_PYTHON_SUGAR_PACKAGES))
+
+include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
+
 # Convenience variable for e.g. conflicts/provides/replaces
 DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
-
-# include both simple and versioned activity packages by default
-DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES), , ), $(DEB_PACKAGES))
 
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
@@ -68,7 +74,7 @@ pre-build::
 $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST ] || [ -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || mv $(cdbs_cursrcdir)/MANIFEST $(cdbs_cursrcdir)/MANIFEST.upstream
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' $(cdbs_cursrcdir)/MANIFEST.upstream > $(cdbs_cursrcdir)/MANIFEST
-	set -e; for buildver in $(cdbs_python_build_versions); do \
+	set -e; for buildver in $(cdbs_curpythonbuildversions); do \
 		$(call cdbs_python_binary,python$$buildver) $(cdbs_cursrcdir)/setup.py build; \
 	done
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
@@ -77,7 +83,7 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
-	set -e; for buildver in $(cdbs_python_build_versions); do \
+	set -e; for buildver in $(cdbs_curpythonbuildversions); do \
 		LANG=C $(call cdbs_python_binary,python$$buildver) $(cdbs_cursrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
 	done
 

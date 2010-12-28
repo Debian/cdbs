@@ -93,7 +93,7 @@ common-install-impl::
 	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir) $(cdbs_waf_options)
 
 
-CDBS_BUILD_DEPENDS_class_waf ?= python, cdbs (>= 0.4.90)
+CDBS_BUILD_DEPENDS_class_waf ?= python, cdbs (>= 0.4.90~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_waf)
 
 DEB_PHONY_RULES += cdbs-waf-clean

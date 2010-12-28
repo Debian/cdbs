@@ -9,6 +9,7 @@ Build-Depends-Indep: debhelper (>= 6),
  fakeroot,
  python-dev,
  python-all-dev,
+ python3-all-dev,
  python-central,
  python-support,
  libxml2-utils,
@@ -23,7 +24,10 @@ Build-Depends-Indep: debhelper (>= 6),
  texlive-font-utils | texlive-extra-utils (<< 2009),
  lzma,
  devscripts (>= 2.10.7)
-Uploaders: Jonas Smedegaard <dr@jones.dk>, Marc Dequènes (Duck) <Duck@DuckCorp.org>, Peter Eisentraut <petere@debian.org>
+Uploaders: Jonas Smedegaard <dr@jones.dk>,
+ Marc Dequènes (Duck) <Duck@DuckCorp.org>,
+ Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
+ Peter Eisentraut <petere@debian.org>
 Standards-Version: 3.9.1
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
