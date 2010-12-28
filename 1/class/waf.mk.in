@@ -48,8 +48,8 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 
-#cdbs_waf_options = $(call cdbs_expand_curvar,DEB_WAF_OPTIONS)
-#cdbs_waf_configure_options = $(call cdbs_expand_curvar,DEB_WAF_CONFIGURE_OPTIONS)
+cdbs_waf_options = $(call cdbs_expand_curvar,DEB_WAF_OPTIONS)
+cdbs_waf_configure_options = $(call cdbs_expand_curvar,DEB_WAF_CONFIGURE_OPTIONS)
 
 
 DEB_WAF_PREFIX ?= /usr
@@ -71,26 +71,26 @@ cdbs-waf-sanity-check:
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: debian/stamp-waf-configure
 debian/stamp-waf-configure: cdbs-waf-sanity-check
-	$(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(DEB_WAF_OPTIONS) $(DEB_WAF_CONFIGURE_OPTIONS)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_CONFIGURE_TARGET) --prefix=$(DEB_WAF_PREFIX) $(cdbs_waf_options) $(cdbs_waf_configure_options)
 	touch $@
 
 
 common-build-arch common-build-indep:: common-build-impl
 common-build-impl:: debian/stamp-waf-build
 debian/stamp-waf-build:
-	$(DEB_WAF_INVOKE) $(DEB_WAF_BUILD_TARGET) $(DEB_WAF_OPTIONS)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_BUILD_TARGET) $(cdbs_waf_options)
 	touch $@
 
 
 clean:: cdbs-waf-clean
 cdbs-waf-clean: cdbs-waf-sanity-check
-	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET) $(DEB_WAF_OPTIONS)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_CLEAN_TARGET) $(cdbs_waf_options)
 	rm -rf debian/stamp-waf-*
 
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir) $(DEB_WAF_OPTIONS)
+	$(DEB_WAF_INVOKE) $(DEB_WAF_INSTALL_TARGET) --destdir=$(cdbs_curdestdir) $(cdbs_waf_options)
 
 
 CDBS_BUILD_DEPENDS_class_waf ?= python, cdbs (>= 0.4.90)
