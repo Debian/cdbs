@@ -66,11 +66,14 @@ cdbs_waf_install_target := install
 
 
 # ensure waf is executable and wscript is present
-# and that waf fit the checksum in debian/waf.sha1sum
 testsanity::
 	test -f $(DEB_SRCDIR)/waf
 	test -x $(DEB_SRCDIR)/waf
 	test -f $(DEB_SRCDIR)/wscript
+	
+
+# and that waf fit the checksum in debian/waf.sha1sum
+cdbs-waf-checksum:
 	grep waf debian/waf.sha1sum
 	sha1sum --check debian/waf.sha1sum
 
