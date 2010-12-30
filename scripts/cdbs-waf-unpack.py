@@ -21,7 +21,7 @@
 usage = '''
 
   python cdbs-waf-unpack.py --waf=WAF_FILE --dest=DEST_FOLDER
-  
+
       Unpacks the WAF_FILE structure into DEST_FOLDER destination'''
 
 
@@ -70,7 +70,7 @@ def unpack_waf (waf, dest):
 		for x in ['Tools', '3rdparty']:
 			os.makedirs(join(dest, 'wafadmin', x))
 	except OSError:
-		err("Cannot unpack waf lib into %s\nMove waf into a writeable directory" % dir)
+		err("Cannot unpack waf lib into %s\nMove waf into a writeable directory" % dest)
 
 	os.chdir(dest)
 	tmp = 't.bz2'
@@ -110,7 +110,7 @@ if __name__ == '__main__':
 	#parser.add_option('-h', '--help', action='store_true', dest='help', default=False, help='Print this help and exits')
 	parser.add_option('-w', '--waf', action='store', dest='waf', help='The Waf file structure', metavar='WAF_FILE')
 	parser.add_option('-d', '--dest', action='store', dest='dest', help='The destination folder. Created if needed', metavar='DEST_FOLDER')
-	
+
 	(options, args) = parser.parse_args()
 
 	if not options.waf and not options.dest:
@@ -121,5 +121,4 @@ if __name__ == '__main__':
 	print 'Unpacking ' + options.waf + ' to ' + options.dest + ' ...'
 	unpack_waf(options.waf, options.dest)
 	print 'Done'
-
 
