@@ -1736,7 +1736,9 @@ include /usr/share/cdbs/1/class/waf.mk
       <literal>DEB_WAF_CONFIGURE_OPTIONS</literal>. You can pass options to each
       WAF invocation using the <literal>DEB_WAF_OPTIONS</literal> variable.
       You can as well append variables to the environment WAF will run in with the
-      <literal>DEB_WAF_ENV</literal> variable.
+      <literal>DEB_WAF_ENV</literal> variable. Note : those three vars supports 
+      global, default and per-package scope. This means you must add the scope suffix
+      to use them.
       Full <filename>debian/rules</filename> usage example:
 <programlisting>
 #!/usr/bin/make -f
