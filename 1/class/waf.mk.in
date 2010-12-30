@@ -65,12 +65,6 @@ cdbs_waf_build_target := build
 cdbs_waf_install_target := install
 
 
-cdbs_waf_checksum_failed = cd $(DEB_SRCDIR) && cdbs-waf-unpack.py --waf ./waf --dest debian/waf-unpacked && \
-	echo "ERROR: waf checksum doesn't fit debian/waf.sha1sum. Inspect unpacked waf in debian/waf-unpacked, \
-		and if ok store above calculated checksum as debian/waf.sha1sum \
-		and delete debian/waf-unpacked" >&2 && return 1
-
-
 # ensure waf is executable and wscript is present
 testsanity::
 	test -f $(DEB_SRCDIR)/waf
@@ -80,13 +74,22 @@ testsanity::
 
 # and that waf fit the checksum in debian/waf.sha1sum
 cdbs-waf-checksum:
-ifndef DEB_WAF_SKIP_CHECKSUM
-	$(info waf file checksum is $(shell cd $(DEB_SRCDIR) && sha1sum waf) Will now compare with debian/waf.sha1sum)
-	if sha1sum --check debian/waf.sha1sum; then echo waf checksum OK; else $(cdbs_waf_checksum_failed); fi
-else
-	$(warning WARNING: waf file is executed without prior inspection!
-	This might be unsafe - you have been warned...!)
-endif
+	$(if $(and $(DEB_WAF_SKIP_CHECKSUM), $(shell if test $(DEB_WAF_SKIP_CHECKSUM) -ne 0; then echo something; fi)), \
+		$(warning WARNING: waf file is executed without prior inspection! \
+		This might be unsafe - you have been warned...!) \
+		, \
+		$(info Will now checksum the waf file with debian/waf.sha1sum) \
+		$(if $(shell if test -f debian/waf.sha1sum; then echo something; fi), , $(error ERROR: debian/waf.sha1sum is absent)) \
+		$(if $(shell if sha1sum --check debian/waf.sha1sum > /dev/null 2>&1; then echo something; fi), \
+			$(info waf checksum is OK) \
+			, \
+			$(warning waf calculated checksum is $(firstword $(shell sha1sum ./waf))) \
+			$(info $(shell cdbs-waf-unpack.py --waf ./waf --dest debian/waf-unpacked)) \
+			$(error ERROR: waf checksum doesn't fit debian/waf.sha1sum. Inspect unpacked waf in debian/waf-unpacked, \
+					and if ok store above calculated checksum as debian/waf.sha1sum \
+					and delete debian/waf-unpacked) \
+			) \
+	)
 
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: debian/stamp-waf-configure
