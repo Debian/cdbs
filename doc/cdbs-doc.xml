@@ -1751,9 +1751,27 @@ DEB_WAF_OPTIONS_DEFAULT = --verbose
 DEB_WAF_ENV_DEFAULT = ENVVAR=value
 </programlisting>
       </para>
-
+      <warning>
+        <para>
+          Waf design is based on a self-extracting executable within the source tree.
+          Since waf is executed blindly during build process, it implies potential security
+          risk if malware is inserted inside waf.
+          To reduce this risk, CDBS includes a SHA1 checksum of the waf file before the build
+          process. This is done with checking the file <filename>debian/waf.sha1sum</filename>.
+          The packager has charge to create and maintain this file along the package evolution.
+          <filename>debian/waf.sha1sum</filename> can be created with following command:
+<programlisting>
+sha1sum ./waf > debian/waf.sha1sum
+</programlisting>
+          However, if the packager trusts the waf file, this checksum can be skipped by assigning
+          a non-zero value to <literal>DEB_WAF_SKIP_CHECKSUM</literal>.
+<programlisting>
+DEB_WAF_SKIP_CHECKSUM = 1
+</programlisting>
+        </para>
+      </warning>
       <para>
-        You can find more information about WAF in a general way on the <ulink
+        More information can be found about WAF in a general way on the <ulink
         url="http://code.google.com/p/waf/">project page</ulink>.
       </para>
     </sect1>
