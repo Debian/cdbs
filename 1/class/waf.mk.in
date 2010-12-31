@@ -80,7 +80,7 @@ cdbs-waf-checksum:
 		, \
 		$(info Will now checksum the waf file with debian/waf.sha1sum) \
 		$(if $(shell if test -f debian/waf.sha1sum; then echo something; fi), , $(error ERROR: debian/waf.sha1sum is absent)) \
-		$(if $(shell if sha1sum --check debian/waf.sha1sum > /dev/null 2>&1; then echo something; fi), \
+		$(if $(shell if sha1sum --check --status debian/waf.sha1sum; then echo something; fi), \
 			$(info waf checksum is OK) \
 			, \
 			$(warning waf calculated checksum is $(firstword $(shell sha1sum ./waf))) \
