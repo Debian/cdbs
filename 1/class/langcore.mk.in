@@ -64,4 +64,8 @@ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	DEB_PARALLEL_JOBS ?= $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 endif
 
+# Tighten to versions handling compile flags fix when enabled
+CDBS_BUILD_DEPENDS_class_langcore_fix ?= cdbs (>= 0.4.90~)
+CDBS_BUILD_DEPENDS += $(if $(CDBS_FIX_COMPILE_FLAGS),$(comma) $(CDBS_BUILD_DEPENDS_class_langcore_fix))
+
 endif
