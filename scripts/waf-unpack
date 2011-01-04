@@ -20,7 +20,7 @@
 #
 usage = '''
 
-  python cdbs-waf-unpack.py --waf=WAF_FILE --dest=DEST_FOLDER
+  python waf-unpack --waf=WAF_FILE --dest=DEST_FOLDER
 
       Unpacks the WAF_FILE structure into DEST_FOLDER destination'''
 

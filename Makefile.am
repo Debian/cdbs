@@ -76,8 +76,8 @@ classdir = $(pkgdatadir)/1/class
 rules_DATA = $(wildcard 1/rules/*.mk)
 rulesdir = $(pkgdatadir)/1/rules
 
-bin_SCRIPTS = scripts/cdbs-edit-patch scripts/cdbs-waf-unpack.py
+bin_SCRIPTS = scripts/cdbs-edit-patch
 dist_man_MANS = scripts/cdbs-edit-patch.1
 
-scripts_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5
+scripts_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5 scripts/waf-unpack
 scriptsdir = $(libexecdir)

@@ -85,7 +85,7 @@ cdbs-waf-checksum:
 			$(info waf checksum is OK) \
 			, \
 			$(warning waf calculated checksum is $(firstword $(shell sha1sum ./waf))) \
-			$(info $(shell cdbs-waf-unpack.py --waf ./waf --dest debian/waf-unpacked)) \
+			$(info $(shell $(_cdbs_scripts_path)/waf-unpack --waf ./waf --dest debian/waf-unpacked)) \
 			$(error ERROR: waf checksum doesn't fit debian/waf.sha1sum. Inspect unpacked waf in debian/waf-unpacked, \
 					and if ok store above calculated checksum as debian/waf.sha1sum \
 					and delete debian/waf-unpacked) \
