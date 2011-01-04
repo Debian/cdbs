@@ -63,7 +63,7 @@ testsanity::
 
 # and that waf fit the checksum in debian/waf.sha1sum
 cdbs-waf-checksum:
-	$(if $(and $(DEB_WAF_SKIP_CHECKSUM), $(shell if test $(DEB_WAF_SKIP_CHECKSUM) -ne 0; then echo something; fi)), \
+	$(if $(DEB_WAF_SKIP_CHECKSUM), \
 		$(warning WARNING: waf file is executed without prior inspection! \
 		This might be unsafe - you have been warned...!) \
 		, \
