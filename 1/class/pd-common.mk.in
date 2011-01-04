@@ -14,11 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ifndef _cdbs_bootstrap
-_cdbs_scripts_path ?= /usr/lib/cdbs
-_cdbs_rules_path ?= /usr/share/cdbs/1/rules
-_cdbs_class_path ?= /usr/share/cdbs/1/class
-endif
+#PATH_RULES#
 
 ifndef _cdbs_class_pd_common
 _cdbs_class_pd_common := 1

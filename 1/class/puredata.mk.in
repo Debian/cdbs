@@ -14,17 +14,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ifndef _cdbs_class_pd
-_cdbs_class_pd := 1
+#PATH_RULES#
 
-PD_PKG_TOOLS_DEP_class_pd ?= pd
+ifndef _cdbs_class_puredata
+_cdbs_class_puredata := 1
 
-CDBS_BUILD_DEPENDS_class_pd ?= $(PD_PKG_TOOLS_DEP_class_pd)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
+PD_PKG_TOOLS_DEP_class_puredata ?= puredata
 
-PD_DEPENDS_class_pd ?= $(PD_PKG_TOOLS_DEP_class_pd)
-PD_DEPENDS += , $(PD_DEPENDS_class_pd)
+CDBS_BUILD_DEPENDS_class_puredata ?= $(PD_PKG_TOOLS_DEP_class_puredata)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_puredata)
 
-include /usr/share/pd-pkg-tools/1/class/pd-common.mk
+PD_DEPENDS_class_puredata ?= $(PD_PKG_TOOLS_DEP_class_puredata)
+PD_DEPENDS += , $(PD_DEPENDS_class_puredata)
+
+include $(_cdbs_class_path)/pd-common.mk$(_cdbs_makefile_suffix)
 endif
 
