@@ -15,13 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 ####
 #
 # Here is how to use this class in debian/rules:
 #   include /usr/share/cdbs/1/class/waf.mk
-#
 #
 # General variables implemented by this class file:
 #
@@ -33,11 +30,8 @@
 #
 # DEB_WAF_ENV
 #   Environment variables to be passed to every WAF invocation
-#
-
 
 #PATH_RULES#
-
 
 ifndef _cdbs_class_waf
 _cdbs_class_waf = 1
@@ -45,9 +39,7 @@ _cdbs_class_waf = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
-
 DEB_WAF_PREFIX ?= /usr
-
 
 cdbs_waf_options = $(call cdbs_expand_curvar,DEB_WAF_OPTIONS)
 cdbs_waf_configure_options = $(call cdbs_expand_curvar,DEB_WAF_CONFIGURE_OPTIONS)
@@ -58,19 +50,16 @@ cdbs_waf_invoke = cd $(DEB_SRCDIR) && $(cdbs_waf_env) ./waf $(cdbs_waf_parallel)
 cdbs_waf_configure_env = $(call cdbs_set_nondefaultvars,CC CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LINKFLAGS="$(LDFLAGS)"
 cdbs_waf_configure_invoke = cd $(DEB_SRCDIR) && $(cdbs_waf_configure_env) $(cdbs_waf_env) ./waf $(cdbs_waf_parallel)
 
-
 cdbs_waf_configure_target := configure
 cdbs_waf_clean_target := distclean
 cdbs_waf_build_target := build
 cdbs_waf_install_target := install
-
 
 # ensure waf is executable and wscript is present
 testsanity::
 	test -f $(DEB_SRCDIR)/waf
 	test -x $(DEB_SRCDIR)/waf
 	test -f $(DEB_SRCDIR)/wscript
-
 
 # and that waf fit the checksum in debian/waf.sha1sum
 cdbs-waf-checksum:
@@ -98,24 +87,20 @@ debian/stamp-waf-configure:
 	$(cdbs_waf_configure_invoke) $(cdbs_waf_configure_target) --prefix=$(DEB_WAF_PREFIX) $(cdbs_waf_options) $(cdbs_waf_configure_options)
 	touch $@
 
-
 common-build-arch common-build-indep:: common-build-impl
 common-build-impl:: debian/stamp-waf-build
 debian/stamp-waf-build:
 	$(cdbs_waf_invoke) $(cdbs_waf_build_target) $(cdbs_waf_options)
 	touch $@
 
-
 clean:: cdbs-waf-clean
 cdbs-waf-clean:
 	$(cdbs_waf_invoke) $(cdbs_waf_clean_target) $(cdbs_waf_options)
 	rm -rf debian/stamp-waf-*
 
-
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
 	$(cdbs_waf_invoke) $(cdbs_waf_install_target) --destdir=$(cdbs_curdestdir) $(cdbs_waf_options)
-
 
 CDBS_BUILD_DEPENDS_class_waf ?= python, cdbs (>= 0.4.90~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_waf)
@@ -123,4 +108,3 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_waf)
 DEB_PHONY_RULES += cdbs-waf-clean
 
 endif
-
