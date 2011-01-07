@@ -18,7 +18,7 @@
 
 my $delimiter = $ENV{'delimiter'} || "\n ";
 
-print "Format: http://bzr.debian.org/scm/loggerhead/dep/dep5/trunk/annotate/137/dep5.mdwn\n";
+print "Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=153\n";
 print "Upstream-Name: FIXME\n";
 print "Upstream-Contact: FIXME\n";
 print "Source: FIXME\n";
