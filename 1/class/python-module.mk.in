@@ -37,7 +37,7 @@ CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python (>= 2.6.5)
 CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
 
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python3),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
+CDBS_BUILD_DEPENDS += $(if $(cdbs_python3),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python3))
 
 $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
 	$(if $(word 2,$(cdbs_curpythonsystems)),$(error binary package $(cdbs_curpkg) use both "python2" and "python3" packaging systems - either explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
