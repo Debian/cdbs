@@ -39,7 +39,6 @@ clean::
 
 # debhelper.mk targets, so silently ignored if debhelper.mk not included
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
-	dh_scrollkeeper -p$(cdbs_curpkg) $(DEB_DH_SCROLLKEEPER_ARGS)
 	$(if $(wildcard /usr/bin/dh_gconf),dh_gconf -p$(cdbs_curpkg) $(DEB_DH_GCONF_ARGS))
 	$(if $(wildcard /usr/bin/dh_icons),dh_icons -p$(cdbs_curpkg) $(DEB_DH_ICONS_ARGS))
 
