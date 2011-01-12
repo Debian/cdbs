@@ -14,6 +14,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+####
+#
+# this snippet is to ease the creation of packages for puredata
+#
+# Here is how to use this class in debian/rules:
+#   include /usr/share/cdbs/1/class/pd.mk
+#
+# 
+# this snippet will take care of properly handling the uncommon suffix of
+# pd-externals (.pd_linux for dlopen()ed plugins), which otherwise are not
+# handled by shlibdeps/strip
+#
+# TODO
+#   automatic handling of LICENSE.txt
+#   ...
+
+
+
+
+
 #PATH_RULES#
 
 ifndef _cdbs_class_pd
