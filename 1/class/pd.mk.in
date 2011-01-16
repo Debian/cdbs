@@ -41,7 +41,7 @@ endif
 # pd externals have the uncommon extension .pd_linux, which prevents them from
 # being properly detected by dh_shlibdeps, so we do it manually
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
-	dpkg-shlibdeps $(shell find $(cdbs_curdestdir) -name "*.pd_linux") -Tdebian/$(cdbs_curpkg).substvars
+	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 	$(if $(cdbs_pd_nostrip_package),,strip --remove-section=.comment --remove-section=.note --strip-unneeded $(shell find $(cdbs_curdestdir) -name "*.pd_linux"))
 
