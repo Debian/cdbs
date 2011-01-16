@@ -30,7 +30,6 @@
 ifndef _cdbs_class_pd
 _cdbs_class_pd := 1
 
-include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
 # Tighten to versions of cdbs providing this snippet
