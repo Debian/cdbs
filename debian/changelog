@@ -1,3 +1,34 @@
+cdbs (0.4.91) experimental; urgency=low
+
+  [ Rémi Thebault ]
+  * Adjust waf class to use global, default and per-package variables.
+  * Update waf class documentation.
+  * Check sha1sum of waf file and unpack on failure, to ease inspection
+    of potentially malicious waf file.
+
+  [ Jonas Smedegaard ]
+  * Add new targets checksanity and testsanity/$(pkg).
+  * Fix avoid comma in default DEB_COPYRIGHT_CHECK_DELIMITER.
+  * Bump copyright format to Subversion candidate draft 162 of DEP5.
+    Add License hint.
+  * Extend a few copyright years.
+  * Improve build-dependency resolving.
+  * Fix expand DEB_DH_GIREPOSITORY_ARGS_* variables.
+    Closes: bug#610187. Thanks to Laurent Bigonville.
+  * Introduce DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL variable, to ease
+    installing Python module as a private one.
+  * Tidy pd class, and add build-dependency hint.
+  * Suppress lintian error about waf script requiring dependency on
+    Python.
+
+  [ Emilio Pozuelo Monfort ]
+  * Stop invoking deprecated dh_scrollkeeper in gnome.mk.
+
+  [ IOhannes m zmölnig ]
+  * Add pd.mk class for PureData extensions.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 16 Jan 2011 16:07:55 +0100
+
 cdbs (0.4.90) experimental; urgency=low
 
   [ Jonas Smedegaard ]
