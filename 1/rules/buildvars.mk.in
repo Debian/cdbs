@@ -96,6 +96,8 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_buildvars)
 # Can we change this to cdbs_curpkg = $(notdir $@) ?
 cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
 
+is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
+
 cdbs_cursrcdir = $(or $(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_SRCDIR))
 cdbs_curbuilddir = $(or $(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_BUILDDIR))
 cdbs_curdestdir = $(or $(DEB_DESTDIR_$(cdbs_curpkg)),$(DEB_DESTDIR))

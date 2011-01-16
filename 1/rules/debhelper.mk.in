@@ -107,8 +107,6 @@ ifeq ($(DEB_VERBOSE_ALL), yes)
 DH_VERBOSE = 1
 endif
 
-is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
-
 DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -ge 7 ]; then echo "dh_prep"; else echo "dh_clean -k"; fi)
 
 #DEB_INSTALL_DIRS_ALL =
