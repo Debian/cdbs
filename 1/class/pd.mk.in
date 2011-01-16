@@ -38,10 +38,10 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
 
 # pd externals have the uncommon extension .pd_linux, which prevents them from
 # being properly detected by dh_shlibdeps, so we do it manually
-$(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
-	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 	$(if $(filter nostrip,$(DEB_BUILD_OPTIONS)),,strip --remove-section=.comment --remove-section=.note --strip-unneeded $(shell find $(cdbs_curdestdir) -name "*.pd_linux"))
+$(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
+	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
 
 #endif _cdbs_class_pd
 endif
