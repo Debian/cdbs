@@ -28,6 +28,7 @@ DEB_PYTHON_SETUP_CMD ?= setup.py
 DEB_PYTHON_BUILD_ARGS ?= --build-base="$(CURDIR)/$(cdbs_curbuilddir)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL ?= --prefix=/usr --no-compile -O0
 DEB_PYTHON_CLEAN_ARGS ?= -a
+#DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONBINARY@/site-packages/
 
 # This variable was deprecated after cdbs 0.4.89
 _cdbs_deprecated_vars += DEB_PYTHON_SETUP_CMD
@@ -53,6 +54,7 @@ cdbs_python_setup_cmd = $(call cdbs_expand_curvar,DEB_PYTHON_SETUP_CMD)
 cdbs_python_build_args = $(call cdbs_expand_curvar,DEB_PYTHON_BUILD_ARGS)
 cdbs_python_install_args = $(call cdbs_expand_curvar,DEB_PYTHON_INSTALL_ARGS)
 cdbs_python_clean_args = $(call cdbs_expand_curvar,DEB_PYTHON_CLEAN_ARGS)
+cdbs_expand_python_distutils_installdir = $(subst @PYTHONBINARY@,$1,$(or $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),/usr/lib/@PYTHONBINARY@/site-packages/))
 
 # prepare sanity checks
 cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
@@ -62,6 +64,9 @@ cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_pac
 
 CDBS_BUILD_DEPENDS_class_python-distutils ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
+
+CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir ?= cdbs (>= 0.4.91~)
+CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir))
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-distutils_python ?= $(cdbs_python_builddeps)
@@ -102,7 +107,7 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 	cd $(DEB_SRCDIR) && \
 		$(cdbs_curpythonindepbinary) $(cdbs_python_setup_cmd) install \
 		--root="$(cdbs_python_destdir)" \
-		--install-purelib=/usr/lib/$(cdbs_curpythonpribinary)/site-packages/ \
+		--install-purelib=$(call cdbs_expand_python_distutils_installdir,$(cdbs_curpythonpribinary)) \
 		$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
@@ -110,8 +115,8 @@ $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix p
 		cd $(CURDIR) && cd $(DEB_SRCDIR) && \
 			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) install \
 			--root="$(cdbs_python_destdir)" \
-			--install-purelib=/usr/lib/python$$buildver/site-packages/ \
-			--install-platlib=/usr/lib/python$$buildver/site-packages/ \
+			--install-purelib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
+			--install-platlib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
 			$(cdbs_python_install_args); \
 	done
 
