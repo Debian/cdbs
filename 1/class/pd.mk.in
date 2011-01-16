@@ -14,19 +14,49 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+####
+#
+# this snippet is to ease the creation of packages for puredata
+#
+# Here is how to use this class in debian/rules:
+#   include /usr/share/cdbs/1/class/pd.mk
+#
+# 
+# this snippet will take care of properly handling the uncommon suffix of
+# pd-externals (.pd_linux for dlopen()ed plugins), which otherwise are not
+# handled by shlibdeps/strip
+#
+# TODO
+#   automatic handling of LICENSE.txt
+#   ...
+
+
+
+
+
 #PATH_RULES#
 
 ifndef _cdbs_class_pd
 _cdbs_class_pd := 1
 
-PD_PKG_TOOLS_DEP_class_pd ?= pd
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-CDBS_BUILD_DEPENDS_class_pd ?= $(PD_PKG_TOOLS_DEP_class_pd)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
-
-PD_DEPENDS_class_pd ?= $(PD_PKG_TOOLS_DEP_class_pd)
-PD_DEPENDS += , $(PD_DEPENDS_class_pd)
-
-include $(_cdbs_class_path)/pd-common.mk$(_cdbs_makefile_suffix)
+cdbs_pd_nostrip_package = 
+ifneq (,$(filter nostrip,$(DEB_BUILD_OPTIONS)))
+ cdbs_pd_nostrip_package = yes
 endif
 
+# pd externals have the uncommon extension .pd_linux, which prevents them from
+# being properly detected by dh_shlibdeps, so we do it manually
+$(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
+	dpkg-shlibdeps $(shell find $(cdbs_curdestdir) -name "*.pd_linux") -Tdebian/$(cdbs_curpkg).substvars
+
+# pd externals have the uncommon extension .pd_linux, which prevents them from
+# being properly detected by dh_strip, so we do it manually
+$(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: 
+	$(if $(cdbs_pd_nostrip_package),,strip --remove-section=.comment --remove-section=.note --strip-unneeded $(shell find $(cdbs_curdestdir) -name "*.pd_linux") )
+
+#endif _cdbs_class_pd
+endif
