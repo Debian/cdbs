@@ -48,6 +48,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/langcore.mk		\
 		1/class/makefile-vars.mk	\
 		1/class/makefile.mk		\
+		1/class/pd.mk			\
 		1/class/perl-vars.mk		\
 		1/class/perl-build-vars.mk	\
 		1/class/perl-build.mk		\
