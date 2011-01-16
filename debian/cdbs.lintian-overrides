@@ -1,0 +1,2 @@
+# script used by waf.mk class which declare Python dependency itself.
+cdbs: python-script-but-no-python-dep ./usr/lib/cdbs/waf-unpack
