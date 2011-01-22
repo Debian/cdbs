@@ -42,6 +42,6 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 DEB_CONFIGURE_SCRIPT_ENV += PYTHON="$(or $(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%),$(call cdbs_python_binary,python$(if $(cdbs_make_flavors),$(cdbs_make_curflavor))))"
 
 # Install all flavors on top of each other by default
-DEB_MAKE_DESTDIRSKEL ?= $(cdbs_curdestdir)
+DEB_MAKE_DESTDIRSKEL = $(cdbs_curdestdir)
 
 endif
