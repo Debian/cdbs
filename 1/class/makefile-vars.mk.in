@@ -33,7 +33,7 @@ DEB_MAKE_EXTRA_ARGS ?= CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXXFLAG
 
 DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) $(if $(DEB_MAKE_MAKEFILE), -f $(DEB_MAKE_MAKEFILE),) -C $(or $(cdbs_make_curbuilddir),$(cdbs_curbuilddir)) $(DEB_MAKE_EXTRA_ARGS)
 
-DEB_MAKE_BUILD_TARGET ?= $(DEB_BUILD_MAKE_TARGET)
+#DEB_MAKE_BUILD_TARGET =
 
 # If your Makefile provides an "install" target, you need to give the requisite commands
 # here to install it into the staging directory.  For automake-using programs, this
