@@ -1,0 +1,77 @@
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2011 IOhannes m zmölnig <zmoelnig@iem.at>
+# Description: packaging routines for building DKMS-packages
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+####
+# this snippet will take care of properly building kernel-module-packages using
+# DKMS (Dynamic Kernel Module Support Framework)
+# 
+# installation target: /usr/src/<pkgname>-<version>/
+#
+# TODO:
+# dkms.conf support:
+# the first existing file of 
+#   $(CDBS_DKMS_CONF_$(pkgname)) $(CDBS_DKMS_CONF_ALL) 
+#   debian/<pkgname>.dkms.conf.in, debian/<pkgname>.dkms.conf,
+#   debian/dkms.conf.in, debian/dkms.conf
+# is used to generate the dkms.conf file, by doing the following substutions:
+#   @VERSION@ -> $(DEB_UPSTREAM_VERSION)
+#
+####
+
+# TODO: for now i hard-code the cdbs_paths (easier development)
+## IF BUILD-CDBS
+#PATH_RULES#
+## ELSE
+_cdbs_scripts_path ?= /usr/lib/cdbs
+_cdbs_rules_path ?= /usr/share/cdbs/1/rules
+_cdbs_class_path ?= /usr/share/cdbs/1/class
+## ENDIF BUILD-CDBS
+
+
+ifndef _cdbs_class_dkms
+_cdbs_class_dkms := 1
+
+include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
+
+# Tighten to versions of cdbs providing this snippet
+CDBS_BUILD_DEPENDS_class_dkms ?= cdbs (>= 0.4.91~)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_dkms)
+
+## FIXME: shouldwe use DEB_ALL_PACKAGES or ARCH+INDEP?
+CDBS_DKMS_PACKAGES ?= $(filter-out %-dkms, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
+
+
+cdbs_dkms_conffile = $(call cdbs_expand_curvar,DEB_DKMS_CONFFILE)
+
+## generate debian/*.install files for DKMS-packages if there are .in files
+$(patsubst %,debian/%.install,$(CDBS_DKMS_PACKAGES)) ::
+	test -e "$@.in" && sed \
+						-e "s/@VERSION@/$(DEB_UPSTREAM_VERSION)/g" \
+						-e "s/@DEB_SOURCE_PACKAGE@/$(DEB_SOURCE_PACKAGE)/g" \
+						"$@.in" > $@ || true
+# make install/foo-dkms depend on debian/foo-dkms.install so we generate the install files just in time
+#  if this is too late for the "install" target, try some pre-install hook
+$(patsubst %,install/%,$(CDBS_DKMS_PACKAGES)) :: $(patsubst %,debian/%.install,$(CDBS_DKMS_PACKAGES)) 
+
+
+$(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
+	$(if $(is_debug_package)$(filter nostrip,$(DEB_BUILD_OPTIONS)),,find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec strip --remove-section=.comment --remove-section=.note --strip-unneeded {} +)
+$(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
+	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
+
+#endif _cdbs_class_dkms
+endif
