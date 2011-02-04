@@ -32,15 +32,7 @@
 #
 ####
 
-# TODO: for now i hard-code the cdbs_paths (easier development)
-## IF BUILD-CDBS
 #PATH_RULES#
-## ELSE
-_cdbs_scripts_path ?= /usr/lib/cdbs
-_cdbs_rules_path ?= /usr/share/cdbs/1/rules
-_cdbs_class_path ?= /usr/share/cdbs/1/class
-## ENDIF BUILD-CDBS
-
 
 ifndef _cdbs_class_dkms
 _cdbs_class_dkms := 1
