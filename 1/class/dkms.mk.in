@@ -18,13 +18,13 @@
 ####
 # this snippet will take care of properly building kernel-module-packages using
 # DKMS (Dynamic Kernel Module Support Framework)
-# 
+#
 # installation target: /usr/src/<pkgname>-<version>/
 #
 # TODO:
 # dkms.conf support:
-# the first existing file of 
-#   $(CDBS_DKMS_CONF_$(pkgname)) $(CDBS_DKMS_CONF_ALL) 
+# the first existing file of
+#   $(CDBS_DKMS_CONF_$(pkgname)) $(CDBS_DKMS_CONF_ALL)
 #   debian/<pkgname>.dkms.conf.in, debian/<pkgname>.dkms.conf,
 #   debian/dkms.conf.in, debian/dkms.conf
 # is used to generate the dkms.conf file, by doing the following substutions:
@@ -65,7 +65,7 @@ $(patsubst %,debian/%.install,$(CDBS_DKMS_PACKAGES)) ::
 						"$@.in" > $@ || true
 # make install/foo-dkms depend on debian/foo-dkms.install so we generate the install files just in time
 #  if this is too late for the "install" target, try some pre-install hook
-$(patsubst %,install/%,$(CDBS_DKMS_PACKAGES)) :: $(patsubst %,debian/%.install,$(CDBS_DKMS_PACKAGES)) 
+$(patsubst %,install/%,$(CDBS_DKMS_PACKAGES)) :: $(patsubst %,debian/%.install,$(CDBS_DKMS_PACKAGES))
 
 
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
