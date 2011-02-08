@@ -1,3 +1,27 @@
+cdbs (0.4.92) unstable; urgency=low
+
+  [ Jonas Smedegaard ]
+  * Fix add missing leading quote to DEB_CONFIGURE_SCRIPT_ENV in
+    python-autotools.mk.
+    Thanks to Stefano Rivera.
+  * Fix resolve DEB_MAKE_DESTDIRSKEL early in python-autotools.mk:
+    Flavors are used in build targets also resolved early.
+    Closes: bug#610624. Thanks to Stefano Rivera.
+  * Drop use of obsolete DEB_BUILD_MAKE_TARGET.
+  * Adjust copyright-check hint file:
+    + Bump referenced DEP5 to candidate draft Subversion rev166.
+    + Drop misleading copyright+license paragraphs in header section.
+  * Claim ownership of recent changes.
+  * Update copyright file:
+    + Extend copyright year.
+    + Duplicate header copyright+license as initial Files: wildcard
+      section.
+
+  [ IOhannes m zmölnig ]
+  * Add draft snippet for DKMS support (not included in binary package).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 08 Feb 2011 12:47:37 +0100
+
 cdbs (0.4.91) experimental; urgency=low
 
   [ Rémi Thebault ]
