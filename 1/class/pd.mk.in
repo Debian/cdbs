@@ -1,5 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2010 IOhannes m zmölnig <zmoelnig@iem.at>
+# Copyright © 2011 Jonas Smedegaard <dr@jones.dk>
 # Description: packaging routines for puredata
 #
 # This program is free software; you can redistribute it and/or
