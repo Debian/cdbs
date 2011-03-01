@@ -59,7 +59,7 @@ CFLAGS += $(deb_cflags)
 CXXFLAGS += $(deb_cxxflags)
 else
 # Set (not add) our defaults for CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS if
-# undefined or defined implicitly by make (i.e. not if set or set empty)
+# undefined or defined implicitly by make (i.e. if not set or set empty)
 CFLAGS ?= $(call cdbs_expand_nondefaultvar,CFLAGS,$(deb_cflags))
 CPPLAGS ?= $(call cdbs_expand_nondefaultvar,CPPFLAGS,$(deb_cppflags))
 CXXFLAGS ?= $(call cdbs_expand_nondefaultvar,CXXFLAGS,$(deb_cxxflags))
