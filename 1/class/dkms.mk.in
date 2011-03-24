@@ -50,7 +50,7 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 CDBS_BUILD_DEPENDS_class_dkms ?= cdbs (>= 0.4.91~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_dkms)
 
-## FIXME: shouldwe use DEB_ALL_PACKAGES or ARCH+INDEP?
+## FIXME: should we use DEB_ALL_PACKAGES or ARCH+INDEP?
 CDBS_DKMS_PACKAGES ?= $(filter %-dkms, $(DEB_ARCH_PACKAGES) $(DEB_INDEP_PACKAGES))
 
 
