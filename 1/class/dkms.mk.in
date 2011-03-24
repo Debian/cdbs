@@ -30,6 +30,13 @@
 # is used to generate the dkms.conf file, by doing the following substutions:
 #   @VERSION@ -> $(DEB_UPSTREAM_VERSION)
 #
+# TODO
+#  postinst/preinst/prerm
+# 
+# probably easiest would be to use the existing templates in /etc/dkms/template-dkms-mkdeb/
+#  or rather let the user install these templates as debian/<package>.postinst.in 
+#  and then generate the real scripts using the dkms.conf expansion
+#
 ####
 
 #PATH_RULES#
