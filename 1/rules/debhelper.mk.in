@@ -217,6 +217,7 @@ $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
 	dh_installpam -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLPAM_ARGS)
 	dh_installlogrotate -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGROTATE_ARGS)
 	dh_installlogcheck -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGCHECK_ARGS)
+	$(if $(wildcard /usr/bin/dh_installgsettings),dh_installgsettings -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLGSETTINGS_ARGS))
 	dh_installchangelogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCHANGELOGS_ARGS) $(call cdbs_expand_curvar,DEB_INSTALL_CHANGELOGS)
 	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLUDEV_ARGS))
 	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_LINTIAN_ARGS))
