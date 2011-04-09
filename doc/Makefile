@@ -1,25 +1,26 @@
 all: html pdf
 
+papers = cdbs-doc
 graphics = buildcore depgraph
 
 xmllint-stamp-%: %.xml
 	xmllint --nonet --xinclude --postvalid --noblanks --noout $<
 	touch $@
 
-html: cdbs-doc.html
-%.html: %.xml xmllint-stamp-% cdbs-doc-xhtml.xsl $(graphics:%=%.png)
+html: $(papers:%=%.html)
+$(papers:%=%.html): %.html: %.xml xmllint-stamp-% cdbs-doc-xhtml.xsl $(graphics:%=%.png)
 	xsltproc --nonet --xinclude -o $@ cdbs-doc-xhtml.xsl $<
 
-pdf: cdbs-doc.pdf
-%.pdf: %.xml xmllint-stamp-% $(graphics:%=%.pdf)
+pdf: $(papers:%=%.pdf)
+$(papers:%=%.pdf): %.pdf: %.xml xmllint-stamp-% $(graphics:%=%.pdf)
 	dblatex -b pdftex -T db2latex $<
 
-ps: cdbs-doc.ps
-%.ps: %.xml xmllint-stamp-% $(graphics:%=%.eps)
+ps: $(papers:%=%.ps)
+$(papers:%=%.ps): %.ps: %.xml xmllint-stamp-% $(graphics:%=%.eps)
 	dblatex -T db2latex -t ps -f eps $<
 
-txt: cdbs-doc.txt
-%.txt: %.html
+txt: $(papers:%=%.txt)
+$(papers:%=%.txt): %.txt: %.html
 	elinks -dump -no-numbering -no-references $< >$@
 
 %.png: %.dot
