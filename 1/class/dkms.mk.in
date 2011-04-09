@@ -32,9 +32,9 @@
 #
 # TODO
 #  postinst/preinst/prerm
-# 
+#
 # probably easiest would be to use the existing templates in /etc/dkms/template-dkms-mkdeb/
-#  or rather let the user install these templates as debian/<package>.postinst.in 
+#  or rather let the user install these templates as debian/<package>.postinst.in
 #  and then generate the real scripts using the dkms.conf expansion
 #
 ####
