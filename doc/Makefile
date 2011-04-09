@@ -13,7 +13,7 @@ $(papers:%=%.html): %.html: %.xml xmllint-stamp-% cdbs-doc-xhtml.xsl $(graphics:
 
 pdf: $(papers:%=%.pdf)
 $(papers:%=%.pdf): %.pdf: %.xml xmllint-stamp-% $(graphics:%=%.pdf)
-	dblatex -b pdftex -T db2latex $<
+	dblatex -b xetex -T db2latex $<
 
 ps: $(papers:%=%.ps)
 $(papers:%=%.ps): %.ps: %.xml xmllint-stamp-% $(graphics:%=%.eps)
