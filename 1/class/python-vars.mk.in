@@ -88,7 +88,7 @@ cdbs_python3_first_supported_version = $(firstword $(strip $(sort $(cdbs_python3
 # arch(+indep): none; indep: none if current is supported, else first supported
 cdbs_python_nondefault_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),,$(cdbs_python_first_supported_version)))
 cdbs_python3_nondefault_version = $(if $(cdbs_python_arch_packages),,$(if $(filter $(cdbs_python3_current_version),$(cdbs_python3_supported_versions)),,$(cdbs_python3_first_supported_version)))
-cdbs_curpythonindepbinary = python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version)
+cdbs_curpythonindepbinary = python$(or $(cdbs_python$(cdbs_curpythonstem)_nondefault_version),$(cdbs_curpythonstem))
 
 cdbs_python_primary_version = $(or $(cdbs_python_nondefault_version),$(cdbs_python_current_version))
 cdbs_python3_primary_version = $(or $(cdbs_python3_nondefault_version),$(cdbs_python3_current_version))
