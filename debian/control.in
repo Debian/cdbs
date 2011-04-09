@@ -19,8 +19,6 @@ Build-Depends-Indep: @cdbs@,
  ant,
  default-jdk,
  sharutils,
- gs-common,
- texlive-font-utils | texlive-extra-utils (<< 2009),
  lzma,
  devscripts (>= 2.10.7)
 Uploaders: Jonas Smedegaard <dr@jones.dk>,

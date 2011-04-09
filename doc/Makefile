@@ -28,8 +28,8 @@ txt: cdbs-doc.txt
 %.eps: %.dot
 	dot -Tps2 -o $@ $^ -Gsize='6,10'
 
-%.pdf: %.eps
-	epstopdf --outfile=$@ $<
+%.pdf: %.dot
+	dot -Tpdf -o $@ $^ -Gsize='6,10'
 
 all_mk_files := $(wildcard ../1/*/*.mk)
 
