@@ -27,7 +27,7 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
  Peter Eisentraut <petere@debian.org>
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
@@ -37,8 +37,8 @@ Depends: debhelper (>= 5.0.30)
 Recommends: autotools-dev
 Suggests: devscripts, doc-base
 Description: common build system for Debian packages
- This package contains the Common Debian Build System, an abstract
- build system based on Makefile inheritance which is completely
- extensible and overridable.  In other words, CDBS provides a sane set
- of default rules upon which packages can build; any or all rules may
- be overridden as needed.
+ This package contains the Common Debian Build System, an abstract build
+ system based on Makefile inheritance which is completely extensible and
+ overridable.  In other words, CDBS provides a sane set of default rules
+ upon which packages can build; any or all rules may be overridden as
+ needed.
