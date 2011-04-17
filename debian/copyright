@@ -3,7 +3,7 @@ Upstream-Name: CDBS
 Upstream-Contact: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Source: http://packages.debian.org/src:cdbs
  http://packages.qa.debian.org/c/cdbs.html
- svn://svn.debian.org/build-common/
+ git://git.debian.org/git/collab-maint/cdbs.git
 Copyright: 2002-2003, Colin Walters <walters@debian.org>
  2003, Christopher L Cheney <ccheney@debian.org>
  2003, Jeff Bailey <jbailey@debian.org>
