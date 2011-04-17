@@ -3,7 +3,6 @@ Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Build-Depends-Indep: @cdbs@,
- graphviz,
  realpath,
  fakeroot,
  python-dev,
@@ -11,13 +10,6 @@ Build-Depends-Indep: @cdbs@,
  python3-all-dev,
  python-central,
  python-support,
- libxml2-utils,
- xsltproc,
- docbook-xml,
- docbook-xsl,
- dblatex,
- texlive-xetex,
- lmodern,
  ant,
  default-jdk,
  sharutils,
@@ -35,7 +27,7 @@ Package: cdbs
 Architecture: all
 Depends: debhelper (>= 5.0.30)
 Recommends: autotools-dev
-Suggests: devscripts, doc-base
+Suggests: devscripts
 Description: common build system for Debian packages
  This package contains the Common Debian Build System, an abstract build
  system based on Makefile inheritance which is completely extensible and

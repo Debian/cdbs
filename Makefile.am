@@ -17,7 +17,7 @@
 
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
 
-SUBDIRS = . doc test
+SUBDIRS = . test
 
 BUILT_SOURCES =
 
