@@ -1,4 +1,4 @@
-Format: http://bzr.debian.org/scm/loggerhead/dep/dep5/trunk/annotate/132/dep5.mdwn
+Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174
 Upstream-Name: CDBS
 Upstream-Contact: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Source: http://packages.debian.org/src:cdbs
