@@ -4,7 +4,6 @@ Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Build-Depends-Indep: debhelper (>= 6),
  dh-buildinfo,
- graphviz,
  realpath,
  fakeroot,
  python-dev,
@@ -12,23 +11,16 @@ Build-Depends-Indep: debhelper (>= 6),
  python3-all-dev,
  python-central,
  python-support,
- libxml2-utils,
- xsltproc,
- docbook-xml,
- docbook-xsl,
- dblatex,
  ant,
  default-jdk,
  sharutils,
- gs-common,
- texlive-font-utils | texlive-extra-utils (<< 2009),
  lzma,
  devscripts (>= 2.10.7)
 Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
  Peter Eisentraut <petere@debian.org>
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
@@ -36,10 +28,10 @@ Package: cdbs
 Architecture: all
 Depends: debhelper (>= 5.0.30)
 Recommends: autotools-dev
-Suggests: devscripts, doc-base
+Suggests: devscripts
 Description: common build system for Debian packages
- This package contains the Common Debian Build System, an abstract
- build system based on Makefile inheritance which is completely
- extensible and overridable.  In other words, CDBS provides a sane set
- of default rules upon which packages can build; any or all rules may
- be overridden as needed.
+ This package contains the Common Debian Build System, an abstract build
+ system based on Makefile inheritance which is completely extensible and
+ overridable.  In other words, CDBS provides a sane set of default rules
+ upon which packages can build; any or all rules may be overridden as
+ needed.

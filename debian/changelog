@@ -1,3 +1,41 @@
+cdbs (0.4.93) unstable; urgency=low
+
+  [ Jonas Smedegaard ]
+  * Fix readd default compile flag -Wall, accidentally dropped in cdbs
+    0.4.90. Introduce new variable $DEB_WARNING_FLAGS to ease overriding
+    while still rely on dpkg-buildflags.
+  * Fix comment in langcore.mk.
+  * Fix support arch-independent python3 modules: Resolve
+    $cdbs_curpythonindepbinary properly, used for the Python binary to
+    invoke for default builds.
+    Closes: bug#621749. Thanks to Tanguy Ortolo and Jakub Wilk.
+  * Add variables $cdbs_python2_indep_packages and
+    $cdbs_python3_indep_packages to python-vars.mk, and when used
+    tighten build-dependency on cdbs to versions properly supporting
+    arch-independent Python3 builds.
+  * Extend long ugly build-dependency cleanup routine to include cdbs
+    0.4.93~.
+  * Resolve $DEB_HOST_MULTIARCH from dpkg-architecture.
+    Closes: bug#617841. Thanks to Steve Langasek.
+  * Bump DEP5 format to rev. 174.
+  * Stop compiling or installing documentation, to avoid circular
+    build-dependency.  Documentation will reappear as separate package.
+    Stop build-depending on documentation-related tools, which also
+    closes: bug#614536. Thanks to Lucas Nussbaum and Loïc Minier.
+  * Bump copyright file format to draft 174 of DEP-5.
+  * Fix refer to git source (not old svn source) in copyright file.
+
+  [ IOhannes m zmölnig ]
+  * Fix automatic DEB_PACKAGES->DKMS_PACKAGES detection in dkms.mk, and
+    tidy some cruft.
+  * Fix set permissions in pd.mk.
+
+  [ Emilio Pozuelo Monfort ]
+  * Call dh_installgsettings in debhelper.mk if available.
+    Closes: #621328.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 17 Apr 2011 05:44:16 +0200
+
 cdbs (0.4.92) unstable; urgency=low
 
   [ Jonas Smedegaard ]

@@ -1,4 +1,4 @@
-Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=166
+Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174
 Upstream-Name: FIXME
 Upstream-Contact: FIXME
 Source: FIXME
@@ -11,8 +11,6 @@ Files: TODO
  debian/compat
  debian/control
  debian/control.in
- debian/doc-base
- debian/docs
  debian/gbp.conf
  debian/source/format
  doc/Makefile
@@ -165,7 +163,6 @@ Copyright: 1992-1996, 1998-2001
  2003-2006, Free Software Foundation, Inc
  2004-2005, Free Software Foundation, Inc
  2006, 2008 Free Software Foundation, Inc
- 2009, Free Software Foundation, Inc
  2010, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
@@ -222,9 +219,9 @@ License: MIT/X11 (BSD like)
  FIXME
 
 Files: Makefile.in
-Copyright: 1994-2002,
+Copyright: 1994-2002
  2002-2003, Colin Walters <walters@debian.org>
- 2009-2010, Jonas Smedegaard <dr@jones.dk>
+ 2009-2011, Jonas Smedegaard <dr@jones.dk>
 License: GPL
  FIXME
 
