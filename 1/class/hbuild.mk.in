@@ -27,10 +27,12 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 cdbs_hugs_packages = $(filter %-hugs,$(DEB_PACKAGES))
 cdbs_ghc_packages = $(filter %-ghc,$(DEB_PACKAGES))
 
-DEB_HBUILD_INVOKE ?= $(DEB_SRCDIR)/Setup.lhs --noreg --runfrom="" --prefix=debian/$(cdbs_curpkg) 
+DEB_HBUILD_SETUPFILE ?= $(firstword $(wildcard $(DEB_SRCDIR)/Setup.lhs $(DEB_SRCDIR)/Setup.hs))
+
+DEB_HBUILD_INVOKE ?= $(DEB_HBUILD_SETUPFILE) --noreg --runfrom="" --prefix=debian/$(cdbs_curpkg) 
 
 clean::
-	$(DEB_SRCDIR)/Setup.lhs allclean
+	$(DEB_HBUILD_SETUPFILE) allclean
 
 $(patsubst %,install/%,$(cdbs_hugs_packages)) :: install/% :
 	$(DEB_HBUILD_INVOKE) install-hugs
