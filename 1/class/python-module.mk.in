@@ -39,6 +39,9 @@ CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_p
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
 CDBS_BUILD_DEPENDS += $(if $(cdbs_python3),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python3))
 
+CDBS_BUILD_DEPENDS_class_python-module_args ?= cdbs (>= 0.4.95~)
+CDBS_BUILD_DEPENDS += $(if $(call cdbs_expand_allvars,DEB_DH_PYTHONHELPER_ARGS),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_args))
+
 $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
 	$(if $(word 2,$(cdbs_curpythonsystems)),$(error binary package $(cdbs_curpkg) use both "python2" and "python3" packaging systems - either explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
 
