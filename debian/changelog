@@ -1,3 +1,13 @@
+cdbs (0.4.95) unstable; urgency=low
+
+  * Introduce new variables DEB_DH_PYTHONHELPER_ARGS_{DEFAULT,ALL,pkg}.
+  * Tighten build-dependency on cdbs when used.
+    Closes: bug#633820. Thanks to Felipe Sateler.
+  * Fix tighten build-dependency on cdbs when binary package relation
+    variables is used.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 14 Jul 2011 12:52:52 +0200
+
 cdbs (0.4.94) unstable; urgency=low
 
   * Update lintian override.
