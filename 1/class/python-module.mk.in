@@ -47,6 +47,6 @@ $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% :
 # broken behavior for legacy systems (see bug#377965)
 $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python/%
 $(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%: binary-install/%
-	$(if $(DEB_PYTHON_SYSTEM)$(cdbs_curpythonsystems),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg)))
+	$(if $(DEB_PYTHON_SYSTEM)$(cdbs_curpythonsystems),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS) $(DEB_PYTHON_PRIVATE_MODULES_DIRS_$(cdbs_curpkg)))
 
 endif
