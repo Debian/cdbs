@@ -209,11 +209,11 @@ cdbs_re_squash_trailing_commas_and_spaces = s/[\s,]*$$//
 cdbs_re_wrap_after_commas = s/, */$(or $(CDBS_BUILD_DEPENDS_DELIMITER),$(comma)$(space))/g
 
 cdbs_pkgrel_varnames = $(patsubst %,CDBS_%,DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES CONFLICTS ENHANCES)
-cdbs_pkgrel_allvars = $(foreach rel,$(cdbs_pkgrel_varnames),$($(rel)_ALL)$($(rel))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(rel)_$(pkg))))
+cdbs_pkgrel_allvars = $(call cdbs_expand_allvars,$(cdbs_pkgrel_varnames))
 
 # require recent cdbs if binary relations are actually used
 CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel ?= cdbs (>= 0.4.72~)
-CDBS_BUILD_DEPENDS += $(if $(cdbs_pkgrel_allvar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel))
+CDBS_BUILD_DEPENDS += $(if $(cdbs_pkgrel_allvars),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel))
 
 
 ifneq (,$(wildcard debian/control.in))
