@@ -1,3 +1,11 @@
+cdbs (0.4.96) unstable; urgency=low
+
+  * Fix cdbs_expand_curvar expansion to use VAR_pkg (not VAR_DEFAULT)
+    when VAR_pkg is explicitly set to empty string.
+    Closes: bug#629156. Thanks to Michael Biebl.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 20 Jul 2011 15:25:49 +0200
+
 cdbs (0.4.95) unstable; urgency=low
 
   * Introduce new variables DEB_DH_PYTHONHELPER_ARGS_{DEFAULT,ALL,pkg}.
