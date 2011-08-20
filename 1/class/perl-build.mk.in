@@ -61,7 +61,7 @@ debian/stamp-perl-build:
 
 common-build-arch common-build-indep:: debian/stamp-perl-check
 debian/stamp-perl-check: debian/stamp-perl-build
-	$(if $(findstring nocheck,$(DEB_BUILD_OPTIONS)),,$(if $(DEB_PERL_CHECK_TARGET),cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_CHECK_TARGET) $(DEB_PERL_CHECK_ARGS) $(DEB_PERL_CHECK_FLAGS)))
+	$(if $(filter nocheck,$(DEB_BUILD_OPTIONS)),,$(if $(DEB_PERL_CHECK_TARGET),cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_CHECK_TARGET) $(DEB_PERL_CHECK_ARGS) $(DEB_PERL_CHECK_FLAGS)))
 	touch $@
 
 # Drop packlist files after install, to respect Debian Perl Policy § 4.1
