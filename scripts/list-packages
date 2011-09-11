@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use Dpkg::Arch qw(debarch_is);
+
 sub error {
   my $err = shift;
   print STDERR $err;
@@ -63,7 +65,7 @@ sub GetPackages {
 			if ($package &&
 			    (($type eq 'indep' && $arch eq 'all') ||
 			     ($type eq 'arch' && $arch ne 'all') ||
-			     ($type eq 'same' && ($arch eq 'any' || $arch =~ /\b$buildarch\b/)) ||
+			     ($type eq 'same' && (debarch_is($buildarch, $arch))) ||
 			     ! $type)) {
 				push @list, $package;
 				$package="";
