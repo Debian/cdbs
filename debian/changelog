@@ -1,3 +1,29 @@
+cdbs (0.4.97) unstable; urgency=low
+
+  * Fix treat DEB_BUILD_OPTIONS as whole word (use filter not
+    findstring) in perl-build.mk.
+  * Fix support for *-any and any-* archs in list-packages script.
+    Closes: Bug#616501, 637282. Thanks to Emilio Pozuelo Monfort,
+    Nobuhiro Iwamatsu and José Manuel Santamaría Lema for helping out,
+    and to Aurelien Jarno for an elegant fix.
+  * Improve dependency autoresolving for debhelper.mk:
+    + Build-depend unversioned when satisfied even in unstable.
+    + Tie build-dependency directly to debian/compat and DH_COMPAT, to
+      support debhelper 8 and newer.
+    Closes: bug#641253. Thanks to Geoffrey Thomas.
+  * Introduce DEB_PYTHON_DISTUTILS_SRCDIR to allow mixing
+    python-distutils.mk with e.g. autotools.mk using different source
+    roots.
+    Closes: bug#504346. Thanks to Sune Vuorela.
+  * Fix invoke python packaging helper twice(!) as documented, when
+    using new dh_python2/dh_python2 and private modules.
+  * Deprecate DEB_PYTHON_PRIVATE_MODULES_DIRS. Use *_DEFAULT, *_ALL or
+    *_<package> variants instead.
+  * Tighten autoresolved build-dependency on cdbs when using either
+    DEB_PYTHON_PRIVATE_MODULES_DIRS* or DEB_DH_PYTHONHELPER_ARGS*.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Sep 2011 12:21:53 +0200
+
 cdbs (0.4.96) unstable; urgency=low
 
   * Fix cdbs_expand_curvar expansion to use VAR_pkg (not VAR_DEFAULT)
