@@ -7,6 +7,10 @@ cdbs (0.4.97) unstable; urgency=low
 
       CDBS_BUILD_DEPENDS_rules_debhelper_v9 = debhelper (>= 8.1.3~)
 
+  * Support variables DEB_PYTHON_PRIVATE_MODULES_DIRS_DEFAULT, *_ALL and
+    *_<package>.
+    Use of DEB_PYTHON_PRIVATE_MODULES_DIRS is now deprecated.
+
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Sep 2011 09:59:20 +0200
 
 cdbs (0.4.90) unstable; urgency=low
