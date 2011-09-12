@@ -87,18 +87,17 @@ ifeq (,$(DH_COMPAT))
 DH_COMPAT = 5
 endif
 
+# build-depend unversioned when satisfied even in oldstable
 CDBS_BUILD_DEPENDS_rules_debhelper_v4 ?= debhelper
-CDBS_BUILD_DEPENDS += $(if $(filter 4,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v4))
-
 CDBS_BUILD_DEPENDS_rules_debhelper_v5 ?= debhelper
-CDBS_BUILD_DEPENDS += $(if $(filter 5,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v5))
+CDBS_BUILD_DEPENDS_rules_debhelper_v6 ?= debhelper
 
-CDBS_BUILD_DEPENDS_rules_debhelper_v6 ?= debhelper (>= 6)
-CDBS_BUILD_DEPENDS += $(if $(filter 6,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v6))
+CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= debhelper
 
-# compat level 7 added at 0.4.53, but dh_prep fix applied at 0.4.85
-CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= cdbs (>= 0.4.85~), debhelper (>= 7.0.1)
-CDBS_BUILD_DEPENDS += $(if $(filter 7,$(DH_COMPAT)),$(comma) $(CDBS_BUILD_DEPENDS_rules_debhelper_v7))
+# by default build-depend on version matching compat level
+# * recent cdbs needed for dh_prep fix
+CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT) ?= cdbs (>= 0.4.85~), debhelper (>= $(DH_COMPAT)~)
+CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT))
 
 CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo ?= dh-buildinfo
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo)
