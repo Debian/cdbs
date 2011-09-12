@@ -42,6 +42,7 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 #DEB_PYTHON_PRIVATE_MODULES_DIRS =
 
+#DEB_PYTHON_SRCDIR = $(DEB_DESTDIR)
 #DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
 
 cdbs_python_potential_packages = $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))
