@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # -*- mode: cperl; coding: utf-8 -*-
-# Most of this code was stolen from Debhelper 4.1. which is:
-# Joey Hess, GPL copyright 1997-2000.
+# Most of this code was stolen from Debhelper 7.3.16+. which is:
+# Joey Hess, GPL copyright 1997-2009.
 # Adapted for CDBS purposes by Colin Walters <walters@debian.org>
 #
 # This program is free software; you can redistribute it and/or
@@ -17,26 +17,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use Dpkg::Arch qw(debarch_is);
-
 sub error {
   my $err = shift;
   print STDERR $err;
   exit 1;
 }
 
-# stolen from debhelper
+sub samearch {
+	my $arch=shift;
+	my @archlist=split(/\s+/,shift);
+
+	foreach my $a (@archlist) {
+		system("dpkg-architecture", "-a$arch", "-i$a") == 0 && return 1;
+	}
+
+	return 0;
+}
+
+sub buildarch {
+	my $value=`dpkg-architecture -qDEB_HOST_ARCH` || error("dpkg-architecture failed: $!");
+	chomp $value;
+	return $value;
+}
+
 sub GetPackages {
 	my $type=shift;
 
 	$type="" if ! defined $type;
-
-	# Look up the build arch if we need to.
-	my $buildarch='';
-	if ($type eq 'same') {
-		$buildarch=`dpkg-architecture -qDEB_HOST_ARCH 2>/dev/null` || die "dpkg-architecture failed: $!";
-		chomp $buildarch;
-	}
 
 	my $package="";
 	my $arch="";
@@ -63,9 +70,14 @@ sub GetPackages {
 	
 		if (!$_ or eof) { # end of stanza.
 			if ($package &&
+#			    (($type eq 'indep' && $arch eq 'all') ||
+#			     ($type eq 'arch' && $arch ne 'all') ||
+#			     ($type eq 'same' && (samearch(buildarch(), $arch))) ||
 			    (($type eq 'indep' && $arch eq 'all') ||
 			     ($type eq 'arch' && $arch ne 'all') ||
-			     ($type eq 'same' && (debarch_is($buildarch, $arch))) ||
+			     ($type eq 'same' && ($arch eq 'any' ||
+					     ($arch ne 'all' &&
+			                      samearch(buildarch(), $arch)))) ||
 			     ! $type)) {
 				push @list, $package;
 				$package="";

@@ -25,8 +25,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
 Package: cdbs
 Architecture: all
-Depends: debhelper (>= 5.0.30),
- libdpkg-perl
+Depends: debhelper (>= 5.0.30)
 Recommends: autotools-dev
 Suggests: devscripts
 Description: common build system for Debian packages
