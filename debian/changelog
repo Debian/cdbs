@@ -1,3 +1,23 @@
+cdbs (0.4.98) unstable; urgency=low
+
+  * Fix (properly this time) support for *-any and any-* archs in
+    list-packages script:
+    + Sync with debhelper 7.3.16+.
+    + Stop depending on libdpkg-perl.
+    Closes: bug#641658, #641678.
+  * Stop depending on debhelper (needed only to avoid older versions
+    than 5.0.30, which is satisfied even in oldstable).
+    See bug#405413.
+  * Update copyright file:
+    + Extend copyright for scripts/list-packages.
+    + Fix include verbatim Expat(-like) license.
+    + Fix use exceptions (not separate licenses).
+    + Rename some license shortnames to better indicate being derived.
+    + Shorten license comments.
+    + Wrap licenses at 72 chars.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 16 Sep 2011 21:01:50 +0200
+
 cdbs (0.4.97) unstable; urgency=low
 
   * Fix treat DEB_BUILD_OPTIONS as whole word (use filter not
