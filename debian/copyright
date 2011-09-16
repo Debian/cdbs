@@ -38,7 +38,7 @@ Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
 
 Files: scripts/list-packages
-Copyright: 1997-2000, Joey hess
+Copyright: 1997-2009, Joey hess
 License: GPL-2+
 
 Files: */aclocal.m4
