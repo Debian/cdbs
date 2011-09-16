@@ -1,3 +1,17 @@
+cdbs (0.4.99) unstable; urgency=low
+
+  * Fix suppress accidental build-dependency on ourself.
+  * Relax autoresolving for utils.mk to build-depend unversioned on
+    devscripts: Needed version 2.10.7 satisfied even in oldstable.
+  * Stop suppressing copyright-check. Build-depend on devscripts.
+  * Update copyright file:
+    + Fix typo in license shortname.
+  * Add lintian override for build-dependency on python-dev (needed for
+    regression tests).
+  * Bump debhelper compatibility level to 7.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 16 Sep 2011 21:51:56 +0200
+
 cdbs (0.4.98) unstable; urgency=low
 
   * Fix (properly this time) support for *-any and any-* archs in

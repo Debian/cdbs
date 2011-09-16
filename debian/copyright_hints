@@ -12,6 +12,7 @@ Files: TODO
  debian/control
  debian/control.in
  debian/gbp.conf
+ debian/source.lintian-overrides
  debian/source/format
  doc/Makefile
  doc/buildcore.dot

@@ -2,7 +2,7 @@ Source: cdbs
 Section: devel
 Priority: optional
 Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
-Build-Depends-Indep: cdbs (>= 0.4.72~),
+Build-Depends-Indep: devscripts,
  debhelper,
  dh-buildinfo,
  realpath,
