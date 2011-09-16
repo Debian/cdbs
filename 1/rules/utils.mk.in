@@ -45,7 +45,7 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 
 DEB_PHONY_RULES += list-missing
 
-CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts (>= 2.10.7~)
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 list-missing:
