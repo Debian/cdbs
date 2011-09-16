@@ -1,0 +1,2 @@
+# python-dev is needed for regression tests
+source: build-depends-on-python-dev-with-no-arch-any
