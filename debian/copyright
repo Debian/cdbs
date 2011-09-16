@@ -55,7 +55,7 @@ License: GPL-2+ with Autoconf exception
 
 Files: */configure
 Copyright: 1992-1996,1998-2009, Free Software Foundation, Inc
-License: GAP| configure and GAP~config.status
+License: GAP~configure and GAP~config.status
 
 Files: */depcomp
 Copyright: 1999-2000,2003-2007,2009, Free Software Foundation, Inc
