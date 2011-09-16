@@ -28,6 +28,7 @@ include 1/class/autotools.mk.in
 
 # Suppress build-dependency on ourselves
 CDBS_BUILD_DEPENDS_rules_buildvars =
+CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel =
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check =
 
 DEB_MAKE_CHECK_TARGET = check
