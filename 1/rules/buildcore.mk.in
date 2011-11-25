@@ -209,7 +209,7 @@ cdbs_re_squash_trailing_commas_and_spaces = s/[\s,]*$$//
 cdbs_re_wrap_after_commas = s/, */$(or $(CDBS_BUILD_DEPENDS_DELIMITER),$(comma)$(space))/g
 
 cdbs_pkgrel_varnames = $(patsubst %,CDBS_%,DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES CONFLICTS ENHANCES)
-cdbs_pkgrel_allvars = $(call cdbs_expand_allvars,$(cdbs_pkgrel_varnames))
+cdbs_pkgrel_allvars = $(strip $(call cdbs_expand_allvars,$(cdbs_pkgrel_varnames)))
 
 # require recent cdbs if binary relations are actually used
 CDBS_BUILD_DEPENDS_rules_buildcore_pkgrel ?= cdbs (>= 0.4.72~)
