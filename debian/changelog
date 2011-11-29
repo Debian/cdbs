@@ -1,3 +1,11 @@
+cdbs (0.4.100) UNRELEASED; urgency=low
+
+  * Fix strip whitespace to avoid resolving unnecessary tight build-
+    dependency on cdbs.
+    Closes: bug#649982. Thanks to Anders Kaseorg.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 29 Nov 2011 19:03:53 +0700
+
 cdbs (0.4.99) unstable; urgency=low
 
   * Fix suppress accidental build-dependency on ourself.
