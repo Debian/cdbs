@@ -139,7 +139,7 @@ get-orig-source:
 		if [ "$(DEB_UPSTREAM_TARBALL_SRCDIR)" != "$(cdbs_upstream_local_srcdir)" ]; then \
 			mv -T "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(DEB_UPSTREAM_TARBALL_SRCDIR)" "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)/$(cdbs_upstream_local_srcdir)"; \
 		fi && \
-		GZIP=-9 tar -b1 -czf "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_local_basename).orig.tar.gz" -C "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)" "$(cdbs_upstream_local_srcdir)" && \
+		GZIP="--best --no-name" tar -b1 --owner=root --group=root --mode=a+rX -czf "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_local_basename).orig.tar.gz" -C "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)" "$(cdbs_upstream_local_srcdir)" && \
 		echo "Cleaning up" && \
 		rm -rf "$(DEB_UPSTREAM_WORKDIR)/$(DEB_UPSTREAM_REPACKAGE_TAG)"; \
 	elif [ -n "$$uncompress" ]; then \
