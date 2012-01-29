@@ -73,7 +73,7 @@ Copyright: 2002-2003, Colin Walters <walters@debian.org>
  2009-2011, Jonas Smedegaard <dr@jones.dk>
  2010, Jonas Smedegaard <dr@jones.dk>
  2011, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: 1/rules/tarball.mk.in
@@ -90,7 +90,7 @@ Files: 1/rules/tarball.mk.in
  test/hdparm/debian/rules
  test/testsuite_functions
 Copyright: 2003, Jeff Bailey <jbailey@debian.org>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: test/ant-1.sh
@@ -118,7 +118,7 @@ Files: 1/class/docbookxml.mk.in
 Copyright: 2002, Colin Walters <walters@debian.org>
  2002-2003, Colin Walters <walters@debian.org>
  2003, Colin Walters <walters@debian.org>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: test/distutils-10.sh
@@ -130,7 +130,19 @@ Files: test/distutils-10.sh
  test/distutils-9.sh
 Copyright: 2006, Peter Eisentraut <petere@debian.org>
  2009, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
+ FIXME
+
+Files: missing
+ scripts/list-packages
+ test/autotools/config.guess
+ test/autotools/config.sub
+ test/autotools/missing
+Copyright: 1992-1999,
+ 1992-2001
+ 1996-1997, 1999-2000, 2002-2006
+ 1997-2009
+License: GPL-2+
  FIXME
 
 Files: test/Makefile.am
@@ -140,7 +152,7 @@ Files: test/Makefile.am
  test/distutils-6.sh
 Copyright: 2003, Jeff Bailey <jbailey@debian.org>
  2009, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: aclocal.m4
@@ -168,21 +180,13 @@ Copyright: 1992-1996, 1998-2001
 License: UNKNOWN
  FIXME
 
-Files: missing
- scripts/list-packages
- test/autotools/missing
-Copyright: 1996-1997, 1999-2000, 2002-2006
- 1997-2009
-License: GPL
- FIXME
-
 Files: 1/class/python-distutils.mk.in
  1/class/python-module.mk.in
  1/class/python-vars.mk.in
 Copyright: 2003, Colin Walters <walters@debian.org>
  2003,2006-2011, Jonas Smedegaard <dr@jones.dk>
  2006, Marc Dequènes (Duck) <Duck@DuckCorp.org>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: 1/class/python-autotools.mk.in
@@ -190,26 +194,19 @@ Files: 1/class/python-autotools.mk.in
  1/rules/upstream-tarball.mk.in
 Copyright: 2007-2010, Jonas Smedegaard <dr@jones.dk>
  2008-2011, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: 1/class/scons-vars.mk.in
  1/class/scons.mk.in
 Copyright: 2005, Matthew A. Nicholson <matt@matt-land.com>
  2008,2010, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: 1/class/ant-vars.mk.in
  1/class/ant.mk.in
 Copyright: 2003, Stefan Gybas <sgybas@debian.org>
-License: GPL
- FIXME
-
-Files: test/autotools/config.guess
- test/autotools/config.sub
-Copyright: 1992-1999,
- 1992-2001
 License: GPL-2+
  FIXME
 
@@ -219,95 +216,34 @@ Copyright: 1994, X Consortium
 License: MIT/X11 (BSD like)
  FIXME
 
+Files: scripts/cdbs-edit-patch
+Copyright: 2005, Martin Pitt <mpitt@debian.org>
+License: GPL-2
+ FIXME
+
 Files: Makefile.in
 Copyright: 1994-2002
  2002-2003, Colin Walters <walters@debian.org>
  2009-2011, Jonas Smedegaard <dr@jones.dk>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: test/autotools/Makefile.in
 Copyright: 1994-2002,
  2003, Jeff Bailey <jbailey@debian.org>
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: scripts/licensecheck2dep5
 Copyright: ", join($delimiter, @ownerlines_unique), "\n";
  2005-2011, Jonas Smedegaard <dr@jones.dk>
  format
-License: GPL
+License: GPL-2+
  FIXME
 
 Files: scripts/waf-unpack
 Copyright: *No copyright*
-License: GPL
- FIXME
-
-Files: 1/class/kde.mk.in
-Copyright: 2003, Christopher L Cheney <ccheney@debian.org>
-License: GPL
- FIXME
-
-Files: 1/rules/dpatch.mk.in
-Copyright: 2002-2003, Colin Walters <walters@debian.org>
- 2004, David B Harris <dbharris@eelf.ddts.net>
-License: GPL
- FIXME
-
-Files: 1/rules/utils.mk.in
-Copyright: -i '$(DEB__CHECK_IGNORE_REGEX)' -l '$(DEB__CHECK_PARSELINES)' *
- 2003, Colin Walters <walters@debian.org>
- 2005-2011, Jonas Smedegaard <dr@jones.dk>
- as needed"; \
- items
- notices found - assuming no news is good news...'; \
- notices...'; \
-License: GPL
- FIXME
-
-Files: 1/class/cmake.mk.in
-Copyright: 2006, Fathi Boudra <fboudra@free.fr>
- 2006, Peter Rockai <me@mornfall.net>
- 2007, Peter Eisentraut <petere@debian.org>
-License: GPL
- FIXME
-
-Files: test/autotools/depcomp
-Copyright: 1999-2000, 2003-2007, 2009 Free
-License: GPL
- FIXME
-
-Files: 1/class/dkms.mk.in
-Copyright: 2011, IOhannes m zmölnig <zmoelnig@iem.at>
-License: GPL
- FIXME
-
-Files: 1/class/pd.mk.in
-Copyright: 2010, IOhannes m zmölnig <zmoelnig@iem.at>
- 2011, Jonas Smedegaard <dr@jones.dk>
-License: GPL
- FIXME
-
-Files: 1/class/waf.mk.in
-Copyright: 2010, R�mi Thebault <remi.thebault@gmail.com>
- 2011, Jonas Smedegaard <dr@jones.dk>
-License: GPL
- FIXME
-
-Files: 1/class/qmake.mk.in
-Copyright: 2006, Peter Eisentraut <petere@debian.org>
-License: GPL
- FIXME
-
-Files: 1/class/autotools-files.mk.in
-Copyright: 2005, Robert Millan
-License: GPL
- FIXME
-
-Files: scripts/cdbs-edit-patch
-Copyright: 2005, Martin Pitt <mpitt@debian.org>
-License: GPL-2
+License: GPL-2+
  FIXME
 
 Files: COPYING
@@ -322,6 +258,67 @@ Copyright: 1989, 1991 Free Software Foundation, Inc.
  law:
  the software, and
  year name of author
+License: GPL-2+
+ FIXME
+
+Files: 1/class/kde.mk.in
+Copyright: 2003, Christopher L Cheney <ccheney@debian.org>
+License: GPL-2+
+ FIXME
+
+Files: 1/rules/dpatch.mk.in
+Copyright: 2002-2003, Colin Walters <walters@debian.org>
+ 2004, David B Harris <dbharris@eelf.ddts.net>
+License: GPL-2+
+ FIXME
+
+Files: 1/rules/utils.mk.in
+Copyright: -i '$(DEB__CHECK_IGNORE_REGEX)' -l '$(DEB__CHECK_PARSELINES)' *
+ 2003, Colin Walters <walters@debian.org>
+ 2005-2011, Jonas Smedegaard <dr@jones.dk>
+ as needed"; \
+ items
+ notices found - assuming no news is good news...'; \
+ notices...'; \
+License: GPL-2+
+ FIXME
+
+Files: 1/class/cmake.mk.in
+Copyright: 2006, Fathi Boudra <fboudra@free.fr>
+ 2006, Peter Rockai <me@mornfall.net>
+ 2007, Peter Eisentraut <petere@debian.org>
+License: GPL-2+
+ FIXME
+
+Files: test/autotools/depcomp
+Copyright: 1999-2000, 2003-2007, 2009 Free
+License: GPL-2+
+ FIXME
+
+Files: 1/class/dkms.mk.in
+Copyright: 2011, IOhannes m zmölnig <zmoelnig@iem.at>
+License: GPL-2+
+ FIXME
+
+Files: 1/class/pd.mk.in
+Copyright: 2010, IOhannes m zmölnig <zmoelnig@iem.at>
+ 2011, Jonas Smedegaard <dr@jones.dk>
+License: GPL-2+
+ FIXME
+
+Files: 1/class/waf.mk.in
+Copyright: 2010, R�mi Thebault <remi.thebault@gmail.com>
+ 2011, Jonas Smedegaard <dr@jones.dk>
+License: GPL-2+
+ FIXME
+
+Files: 1/class/qmake.mk.in
+Copyright: 2006, Peter Eisentraut <petere@debian.org>
+License: GPL-2+
+ FIXME
+
+Files: 1/class/autotools-files.mk.in
+Copyright: 2005, Robert Millan
 License: GPL-2+
  FIXME
 

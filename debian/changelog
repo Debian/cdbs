@@ -1,3 +1,13 @@
+cdbs (0.4.101) unstable; urgency=low
+
+  * Improve upstream-tarball.mk repackaging: Use gzip options --best
+    --no-name and tar options --owner=root --group=root --mode=a+rX.
+    Thanks to Andreas Tille.
+  * Introduce DEB_UPSTREAM_CRUFT_MOVE and DEB_UPSTREAM_CRUFT_COPY in
+    utils.mk to put aside upstream cruft during build.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 29 Jan 2012 21:01:47 +0100
+
 cdbs (0.4.100) unstable; urgency=low
 
   * Fix strip whitespace to avoid resolving unnecessary tight build-
