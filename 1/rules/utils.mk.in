@@ -43,10 +43,23 @@ DEB_COPYRIGHT_CHECK_INVOKE ?= $(DEB_COPYRIGHT_CHECK_SCRIPT) $(DEB_COPYRIGHT_CHEC
 # spacing between multiline file and copyright items
 DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITER))
 
+# Space-delimited lists of directories and files to move or copy aside
+# DEB_UPSTREAM_CRUFT_MOVE =
+# DEB_UPSTREAM_CRUFT_COPY =
+
+# Suffix (or basedir) for backup of upstream files and directories
+#  * Add trailing slash to treat as basedir, e.g. debian/upstream-cruft/
+DEB_UPSTREAM_CRUFT_DIVERSION ?= .upstream
+
 DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
+
+CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.101~)
+CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
+
+cdbs_upstream_cruft_itempath = $(if $(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),$(DEB_UPSTREAM_CRUFT_DIVERSION)$$item,$$item$(DEB_UPSTREAM_CRUFT_DIVERSION))
 
 list-missing:
 	@if test -d debian/tmp; then \
@@ -110,5 +123,37 @@ debian/stamp-copyright-check:
 
 clean::
 	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check
+
+# put aside upstream cruft during build but after copyright-check
+pre-build:: debian/stamp-upstream-cruft
+debian/stamp-upstream-cruft: debian/stamp-copyright-check
+	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),mkdir -p "$(DEB_UPSTREAM_CRUFT_DIVERSION)")
+	@for item in $(DEB_UPSTREAM_CRUFT_MOVE); do \
+		[ ! -e "$$item" ] || [ -e "$(cdbs_upstream_cruft_itempath)" ] || { \
+			echo mv "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+			mv "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+		}; \
+	done
+	@for item in $(DEB_UPSTREAM_CRUFT_COPY); do \
+		[ ! -e "$$item" ] || [ -e "$(cdbs_upstream_cruft_itempath)" ] || { \
+			echo "cp -a" "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+			cp -a "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+		}; \
+	done
+	touch $@
+clean::
+	@for item in $(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY); do \
+		if [ -e "$(cdbs_upstream_cruft_itempath)" ]; then \
+			if [ -e "$$item" ]; then \
+				echo "rm -rf" "$$item"; \
+				rm -rf "$$item"; \
+			fi; \
+			echo mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
+			mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
+			rmdir -p --ignore-fail-on-non-empty $(dirname "$(cdbs_upstream_cruft_itempath)"); \
+		fi; \
+	done
+	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),rmdir -p --ignore-fail-on-non-empty $(dirname "$(DEB_UPSTREAM_CRUFT_DIVERSION)"))
+	rm -f debian/stamp-upstream-cruft
 
 endif
