@@ -47,9 +47,8 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 # DEB_UPSTREAM_CRUFT_MOVE =
 # DEB_UPSTREAM_CRUFT_COPY =
 
-# Suffix (or basedir) for backup of upstream files and directories
-#  * Add trailing slash to treat as basedir, e.g. debian/upstream-cruft/
-DEB_UPSTREAM_CRUFT_DIVERSION ?= .upstream
+# location for backup of upstream files and directories
+DEB_UPSTREAM_CRUFT_BACKUPDIR ?= debian/upstream-cruft
 
 DEB_PHONY_RULES += list-missing
 
@@ -58,8 +57,6 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.102~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
-
-cdbs_upstream_cruft_itempath = $(if $(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),$(DEB_UPSTREAM_CRUFT_DIVERSION)$$item,$$item$(DEB_UPSTREAM_CRUFT_DIVERSION))
 
 list-missing:
 	@if test -d debian/tmp; then \
@@ -127,34 +124,35 @@ clean::
 # put aside upstream cruft during build but after copyright-check
 pre-build:: debian/stamp-upstream-cruft
 debian/stamp-upstream-cruft: debian/stamp-copyright-check
-	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),mkdir -p "$(DEB_UPSTREAM_CRUFT_DIVERSION)")
-	@for item in $(DEB_UPSTREAM_CRUFT_MOVE); do \
-		[ ! -e "$$item" ] || [ -e "$(cdbs_upstream_cruft_itempath)" ] || { \
-			echo mv "$$item" "$(cdbs_upstream_cruft_itempath)"; \
-			mv "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),mkdir -p "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)")
+	@for orig in $(DEB_UPSTREAM_CRUFT_MOVE); do \
+		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
+		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
+			echo mv "$$orig" "$$backup"; \
+			mv "$$orig" "$$backup"; \
 		}; \
 	done
-	@for item in $(DEB_UPSTREAM_CRUFT_COPY); do \
-		[ ! -e "$$item" ] || [ -e "$(cdbs_upstream_cruft_itempath)" ] || { \
-			echo "cp -a" "$$item" "$(cdbs_upstream_cruft_itempath)"; \
-			cp -a "$$item" "$(cdbs_upstream_cruft_itempath)"; \
+	@for orig in $(DEB_UPSTREAM_CRUFT_COPY); do \
+		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
+		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
+			echo "cp -a" "$$orig" "$$backup"; \
+			cp -a "$$orig" "$$backup"; \
 		}; \
 	done
 	touch $@
 clean::
-	@for item in $(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY); do \
-		if [ -e "$(cdbs_upstream_cruft_itempath)" ]; then \
-			if [ -e "$$item" ]; then \
-				echo "rm -rf" "$$item"; \
-				rm -rf "$$item"; \
+	@for orig in $(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY); do \
+		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
+		if [ -e "$$backup" ]; then \
+			if [ -e "$$orig" ]; then \
+				echo "rm -rf" "$$orig"; \
+				rm -rf "$$orig"; \
 			fi; \
-			echo mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
-			mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
-			if [ -n "$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION))" ]; then \
-				rmdir -p --ignore-fail-on-non-empty "$$(dirname "$(cdbs_upstream_cruft_itempath)")"; \
-			fi; \
+			echo mv "$$backup" "$$orig"; \
+			mv "$$backup" "$$orig"; \
 		fi; \
 	done
-	rm -f debian/stamp-upstream-cruft $(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION))
+	rm -rf "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)"
+	rm -f debian/stamp-upstream-cruft
 
 endif
