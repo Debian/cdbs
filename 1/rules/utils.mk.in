@@ -56,7 +56,7 @@ DEB_PHONY_RULES += list-missing
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
-CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.101~)
+CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.102~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
 cdbs_upstream_cruft_itempath = $(if $(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),$(DEB_UPSTREAM_CRUFT_DIVERSION)$$item,$$item$(DEB_UPSTREAM_CRUFT_DIVERSION))
@@ -150,10 +150,11 @@ clean::
 			fi; \
 			echo mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
 			mv "$(cdbs_upstream_cruft_itempath)" "$$item"; \
-			rmdir -p --ignore-fail-on-non-empty $(dirname "$(cdbs_upstream_cruft_itempath)"); \
+			if [ -n "$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION))" ]; then \
+				rmdir -p --ignore-fail-on-non-empty "$$(dirname "$(cdbs_upstream_cruft_itempath)")"; \
+			fi; \
 		fi; \
 	done
-	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION)),rmdir -p --ignore-fail-on-non-empty $(dirname "$(DEB_UPSTREAM_CRUFT_DIVERSION)"))
-	rm -f debian/stamp-upstream-cruft
+	rm -f debian/stamp-upstream-cruft $(filter %/,$(DEB_UPSTREAM_CRUFT_DIVERSION))
 
 endif
