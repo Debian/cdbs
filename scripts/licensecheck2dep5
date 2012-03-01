@@ -16,7 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-my $delimiter = $ENV{'delimiter'} || "\n ";
+my $whitespace_list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
+my $rfc822_list_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
 
 print "Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174\n";
 print "Upstream-Name: FIXME\n";
@@ -69,7 +70,7 @@ foreach $pattern ( sort {
 		} keys %patternfiles ) {
 	my $prev;
 	@ownerlines_unique = grep((!defined $prev || $_ ne $prev) && (($prev) = $_), sort @{ $patternownerlines{$pattern} });
-	print "Files: ", join($delimiter, sort @{ $patternfiles{$pattern} }), "\n";
-	print "Copyright: ", join($delimiter, @ownerlines_unique), "\n";
+	print "Files: ", join($whitespace_list_delimiter, sort @{ $patternfiles{$pattern} }), "\n";
+	print "Copyright: ", join($rfc822_list_delimiter, @ownerlines_unique), "\n";
 	print "License: $patternlicense{$pattern}\n FIXME\n\n";
 };
