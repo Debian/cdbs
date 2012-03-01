@@ -1,3 +1,14 @@
+cdbs (0.4.103) unstable; urgency=low
+
+  * Compiler flags are now handled differently:
+  
+    + CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS are handled (not only CFLAGS
+      and CXXFLAGS).
+    + Flags are set only when not locally set or explicitly unset (not
+      always, extending any local flags).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 01 Mar 2012 23:11:39 +0100
+
 cdbs (0.4.97) unstable; urgency=low
 
   * Build-dependency autoresolving for debhelper now rely directly on

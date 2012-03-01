@@ -49,22 +49,16 @@ deb_cxxflags += $(DEB_WARNING_FLAGS)
 _cdbs_deprecated_vars += DEB_OPT_FLAG
 _cdbs_deprecated_DEB_OPT_FLAG_default := $(DEB_OPT_FLAG)
 
-# Set this to drop legacy compile flag handling (see bug#523642)
-# NB! override needs to be done _before_ including this file!
-#CDBS_FIX_COMPILE_FLAGS = yes
-
-ifeq (,$(CDBS_FIX_COMPILE_FLAGS))
-# Add our defaults unconditionally for CFLAGS and CXXFLAGS
-CFLAGS += $(deb_cflags)
-CXXFLAGS += $(deb_cxxflags)
-else
 # Set (not add) our defaults for CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS if
 # undefined or defined implicitly by make (i.e. if not set or set empty)
-CFLAGS ?= $(call cdbs_expand_nondefaultvar,CFLAGS,$(deb_cflags))
-CPPLAGS ?= $(call cdbs_expand_nondefaultvar,CPPFLAGS,$(deb_cppflags))
-CXXFLAGS ?= $(call cdbs_expand_nondefaultvar,CXXFLAGS,$(deb_cxxflags))
-LDFLAGS ?= $(call cdbs_expand_nondefaultvar,LDFLAGS,$(deb_ldflags))
-endif
+deb_cflags := $(call cdbs_expand_nondefaultvar,CFLAGS,$(deb_cflags))
+deb_cppflags := $(call cdbs_expand_nondefaultvar,CPPFLAGS,$(deb_cppflags))
+deb_cxxflag := $(call cdbs_expand_nondefaultvar,CXXFLAGS,$(deb_cxxflags))
+deb_ldflags := $(call cdbs_expand_nondefaultvar,LDFLAGS,$(deb_ldflags))
+CFLAGS ?= $(deb_cflags)
+CPPLAGS ?= $(deb_cppflags)
+CXXFLAGS ?= $(deb_cxxflags)
+LDFLAGS ?= $(deb_ldflags)
 
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	DEB_PARALLEL_JOBS ?= $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
