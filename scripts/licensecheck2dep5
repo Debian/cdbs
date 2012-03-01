@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # -*- mode: cperl; coding: utf-8 -*-
 # Copyright © 2005-2011 Jonas Smedegaard <dr@jones.dk>
-# Description: Reformat licencecheck output to DEP5 copyright format
+# Description: Reformat licencecheck output to copyright file format
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,7 +19,7 @@
 my $whitespace_list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
 my $rfc822_list_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
 
-print "Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?rev=174\n";
+print "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n";
 print "Upstream-Name: FIXME\n";
 print "Upstream-Contact: FIXME\n";
 print "Source: FIXME\n";
