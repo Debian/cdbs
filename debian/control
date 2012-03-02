@@ -21,12 +21,13 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
  Peter Eisentraut <petere@debian.org>
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
 Package: cdbs
 Architecture: all
+Multi-Arch: foreign
 Recommends: autotools-dev
 Suggests: devscripts
 Description: common build system for Debian packages

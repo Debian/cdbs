@@ -1,3 +1,27 @@
+cdbs (0.4.103) unstable; urgency=low
+
+  * Fix use "formatted text" (i.e. double-space-indent) for Copyright
+    fields in copyright_hints.
+  * Bump copyright file format to final version 1.0 in copyright_hints.
+  * Always set (not extend) compiler flags.
+    Closes: bug#523642, #651964. Thanks to Simon Ruderich and Moritz
+    Muehlenhoff.
+    Add NEWS entry.
+  * Add Multi-Arch: foreign field to binary cdbs package.
+    Closes: bug#658973. Thanks to Riku Voipio.
+  * Fix export magic option to turn off auto-install of dependent Perl
+    modules.
+    Closes: bug#652274. Thanks to gregor herrmann.
+  * Fix remove copyright_newhints in clean target (not immediately after
+    copyright check).
+    Closes: bug#625448. Thanks to Olivier Aubert.
+  * Fix use scons --directory="$(DEB_SRCDIR)" (not DEB_BUILDDIR).
+    Closes: bug#624663. Thanks to Jérémy Lal.
+  * Bump standards-version to 3.9.3.
+  * Bump copyright file format to 1.0.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 02 Mar 2012 06:51:17 +0100
+
 cdbs (0.4.102) unstable; urgency=low
 
   * Fix invoke rmdir only when relevant in utils.mk upstream-cruft rule.
