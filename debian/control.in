@@ -25,6 +25,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
 
 Package: cdbs
 Architecture: all
+Multi-Arch: foreign
 Recommends: autotools-dev
 Suggests: devscripts
 Description: common build system for Debian packages
