@@ -1,3 +1,14 @@
+cdbs (0.4.104) unstable; urgency=low
+
+  [ Peter Eisentraut ]
+  * Remove myself from Uploaders.
+
+  [ Jonas Smedegaard ]
+  * Remove copyright_newhints both in clean target and after succesful
+    copyright check.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 02 Mar 2012 08:44:47 +0100
+
 cdbs (0.4.103) unstable; urgency=low
 
   * Fix use "formatted text" (i.e. double-space-indent) for Copyright
