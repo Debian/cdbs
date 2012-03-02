@@ -44,4 +44,7 @@ DEB_MAKE_CLEAN_TARGET = distclean
 DEB_MAKE_CHECK_TARGET = test
 DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(if $(DEB_MAKEMAKER_PACKAGE),$(CURDIR)/debian/$(DEB_MAKEMAKER_PACKAGE),$(DEB_DESTDIR))
 
+# Avoid auto-building dependencies
+export PERL_AUTOINSTALL='--skipdeps'
+
 endif

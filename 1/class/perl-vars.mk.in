@@ -40,4 +40,7 @@ DEB_PERL_DESTDIR ?= $(if $(filter 1,$(words $(DEB_PERL_PACKAGES))),$(CURDIR)/deb
 CDBS_BUILD_DEPENDS_class_perl-vars ?= cdbs (>= 0.4.73~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-vars)
 
+# Avoid auto-building dependencies
+export PERL_AUTOINSTALL='--skipdeps'
+
 endif
