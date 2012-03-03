@@ -1,3 +1,10 @@
+cdbs (0.4.105) unstable; urgency=low
+
+  * Fix resolve buildflags in langcore.mk (cdbs_expand_nondefaultvar
+    expansion never used fallback value).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 03 Mar 2012 01:45:43 +0100
+
 cdbs (0.4.104) unstable; urgency=low
 
   [ Peter Eisentraut ]
