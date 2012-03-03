@@ -49,7 +49,7 @@ DEB_CONFIGURE_MANDIR ?= "\$${prefix}/share/man"
 DEB_CONFIGURE_INFODIR ?= "\$${prefix}/share/info"
 DEB_CONFIGURE_SYSCONFDIR ?= /etc
 DEB_CONFIGURE_LOCALSTATEDIR ?= /var
-DEB_CONFIGURE_LIBEXECDIR ?= "\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
+DEB_CONFIGURE_LIBEXECDIR ?= "\$${prefix}/lib"
 # --srcdir=. is required because otherwise configure wants to analyse
 # $0 to see whether a VPATH build is needed.  This tells it with
 # absolute certainly that this is NOT a VPATH build.
