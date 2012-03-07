@@ -56,7 +56,7 @@ deb_cppflags := $(call cdbs_expand_nondefaultvar,CPPFLAGS,$(deb_cppflags))
 deb_cxxflag := $(call cdbs_expand_nondefaultvar,CXXFLAGS,$(deb_cxxflags))
 deb_ldflags := $(call cdbs_expand_nondefaultvar,LDFLAGS,$(deb_ldflags))
 CFLAGS ?= $(deb_cflags)
-CPPLAGS ?= $(deb_cppflags)
+CPPFLAGS ?= $(deb_cppflags)
 CXXFLAGS ?= $(deb_cxxflags)
 LDFLAGS ?= $(deb_ldflags)
 
