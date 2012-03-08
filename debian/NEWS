@@ -1,13 +1,7 @@
 cdbs (0.4.106) unstable; urgency=low
 
-  * autotools-vars.mk now properly sets libexecdir to /usr/lib.
-
-    Previously CDBS set libexecdir to /usr/lib/$pkg, which was wrong and
-    now starts causing trouble for recent autotools.  You need to adjust
-    your packaging if you relied on the older broken behaviour.
-
   * Compiler flags are now handled differently in langcore.mk:
-  
+
     + CFLAGS CPPFLAGS CXXFLAGS LDFLAGS and FFLAGS are handled
       (previously only CFLAGS and CXXFLAGS handled).
     + Flags are set only if not locally set or explicitly unset
