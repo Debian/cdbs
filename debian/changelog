@@ -1,3 +1,35 @@
+cdbs (0.4.106) unstable; urgency=low
+
+  * Fix set libexecdir to /usr/lib (not /usr/lib/$pkg) in
+    autotools-vars.mk.
+    Closes: bug#661983. Thanks to Rémi Denis-Courmont.
+  * Fix strip PD libraries below per-package install dirs (only for
+    single-binary-package below debian/tmp).
+    Closes: Bug#661983. Thanks to Felipe Sateler.
+  * Fix set CPPFLAGS (not bogus CPPLAGS) in langcore.mk.
+    Closes: bug#651964. Thanks (again) to Simon Ruderich and Moritz
+    Muehlenhoff.
+  * Fix create cruft subdirs before using them in utils.mk. Bump
+    resolved build-dependency on cdbs as cruft handling was completely
+    broken previously.
+  * Handle FFLAGS in langcore.mk.
+  * Re-issue news about changes to compiler flags:
+    + LDFLAGS was broken when previously announced (in 0.4.103).
+    + FFLAGS in also handled now.
+    + Advertise use of /usr/share/dpkg/buildflags.mk, now supported
+      but explicitly required as it clashes with flags explicitly set or
+      unset locally in rules files.
+      Closes: bug#651966, #642950. Thanks to Simon Ruderich and Raphael
+      Hertzog.
+  * Fix Makefile.am to use pkglibexec_SCRIPTS and avoid libexecdir.
+  * Update autotools (with autoreconf -f -i).
+  * Update copyright file:
+    + Fix double-indent copyright lines.
+    + Extend copyright years for automade files.
+    + Add copyright holders for Makefile.in files.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 08 Mar 2012 04:06:35 +0100
+
 cdbs (0.4.105) unstable; urgency=low
 
   * Fix resolve buildflags in langcore.mk (cdbs_expand_nondefaultvar
