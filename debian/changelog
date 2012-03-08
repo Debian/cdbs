@@ -1,3 +1,10 @@
+cdbs (0.4.107) unstable; urgency=low
+
+  * Revert to set libexecdir to /usr/lib/$pkg (causes massive FTBFS).
+    Closes: bug#663082. Reopens: bug#661983. Thanks to Michael Biebl.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 08 Mar 2012 13:50:28 +0100
+
 cdbs (0.4.106) unstable; urgency=low
 
   * Fix set libexecdir to /usr/lib (not /usr/lib/$pkg) in
