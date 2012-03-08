@@ -55,7 +55,7 @@ DEB_PHONY_RULES += list-missing
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
-CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.102~)
+CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
 list-missing:
@@ -129,6 +129,7 @@ debian/stamp-upstream-cruft: debian/stamp-copyright-check
 	@for orig in $(DEB_UPSTREAM_CRUFT_MOVE); do \
 		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
 		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
+			mkdir -p "$$(dirname "$$backup")"; \
 			echo mv "$$orig" "$$backup"; \
 			mv "$$orig" "$$backup"; \
 		}; \
@@ -136,6 +137,7 @@ debian/stamp-upstream-cruft: debian/stamp-copyright-check
 	@for orig in $(DEB_UPSTREAM_CRUFT_COPY); do \
 		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
 		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
+			mkdir -p "$$(dirname "$$backup")"; \
 			echo "cp -a" "$$orig" "$$backup"; \
 			cp -a "$$orig" "$$backup"; \
 		}; \
