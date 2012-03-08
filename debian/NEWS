@@ -6,18 +6,17 @@ cdbs (0.4.106) unstable; urgency=low
     now starts causing trouble for recent autotools.  You need to adjust
     your packaging if you relied on the older broken behaviour.
 
- -- Jonas Smedegaard <dr@jones.dk>  Sat, 03 Mar 2012 14:45:41 +0100
-
-cdbs (0.4.103) unstable; urgency=low
-
-  * Compiler flags are now handled differently:
+  * Compiler flags are now handled differently in langcore.mk:
   
-    + CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS are handled (not only CFLAGS
-      and CXXFLAGS).
-    + Flags are set only when not locally set or explicitly unset (not
-      always, extending any local flags).
+    + CFLAGS CPPFLAGS CXXFLAGS LDFLAGS and FFLAGS are handled
+      (previously only CFLAGS and CXXFLAGS handled).
+    + Flags are set only if not locally set or explicitly unset
+      (previously always set, extending any local flags).
 
- -- Jonas Smedegaard <dr@jones.dk>  Thu, 01 Mar 2012 23:11:39 +0100
+    To support DEB_*FLAGS_MAINT_* and DEB_BUILD_MAINT_OPTIONS instead of
+    locally set or unset flags, include /usr/share/dpkg/buildflags.mk.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 03 Mar 2012 14:45:41 +0100
 
 cdbs (0.4.97) unstable; urgency=low
 
