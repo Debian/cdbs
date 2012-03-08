@@ -21,7 +21,7 @@ SUBDIRS = . test
 
 BUILT_SOURCES =
 
-edit = perl -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdbs_scripts_path ?= $(libexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
+edit = perl -pe 's,\@PACKAGE_VERSION\@,$(PACKAGE_VERSION),;s,\#PATH_RULES\#,_cdbs_scripts_path ?= $(pkglibexecdir)\n_cdbs_rules_path ?= $(pkgdatadir)/1/rules\n_cdbs_class_path ?= $(pkgdatadir)/1/class,g; s,\@libexecdir\@,$(libexecdir),g; s,\@datadir\@,$(pkgdatadir),g; s,\@prefix\@,$(prefix),g;'
 
 %.mk: %.mk.in
 	rm -f $@ $@.tmp
