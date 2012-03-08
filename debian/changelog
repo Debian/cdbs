@@ -1,3 +1,10 @@
+cdbs (0.4.109) unstable; urgency=low
+
+  * Fix use pkglibexecdir (not libexecdir) inside makefile snippets.
+  * Update autotools (with autoreconf -f -i).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 08 Mar 2012 20:30:52 +0100
+
 cdbs (0.4.108) unstable; urgency=low
 
   * Fix override DEB_CONFIGURE_LIBEXECDIR during our own build (after
