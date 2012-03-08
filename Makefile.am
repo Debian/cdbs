@@ -80,5 +80,4 @@ rulesdir = $(pkgdatadir)/1/rules
 bin_SCRIPTS = scripts/cdbs-edit-patch
 dist_man_MANS = scripts/cdbs-edit-patch.1
 
-scripts_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5 scripts/waf-unpack
-scriptsdir = $(libexecdir)
+pkglibexec_SCRIPTS = scripts/list-packages scripts/licensecheck2dep5 scripts/waf-unpack
