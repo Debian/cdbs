@@ -1,3 +1,12 @@
+cdbs (0.4.108) unstable; urgency=low
+
+  * Fix override DEB_CONFIGURE_LIBEXECDIR during our own build (after
+    rolling back libexecdir change our now modernized autotools is
+    affected).
+    Thanks to Jérémy Lal.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 08 Mar 2012 18:35:06 +0100
+
 cdbs (0.4.107) unstable; urgency=low
 
   * Revert to set libexecdir to /usr/lib/$pkg (causes massive FTBFS).
