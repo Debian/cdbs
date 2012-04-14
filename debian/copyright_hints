@@ -59,7 +59,6 @@ Files: 1/class/autotools-vars.mk.in
  1/rules/buildvars.mk.in
  1/rules/debhelper.mk.in
  Makefile.am
- debian/rules
 Copyright: 2002-2003, Colin Walters <walters@debian.org>
   2003, Colin Walters <walters@debian.org>
   2003,2008, Jonas Smedegaard <dr@jones.dk>
@@ -71,7 +70,6 @@ Copyright: 2002-2003, Colin Walters <walters@debian.org>
   2008-2010, Jonas Smedegaard <dr@jones.dk>
   2008-2011, Jonas Smedegaard <dr@jones.dk>
   2009-2011, Jonas Smedegaard <dr@jones.dk>
-  2010, Jonas Smedegaard <dr@jones.dk>
   2011, Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  FIXME
@@ -137,11 +135,13 @@ Files: missing
  scripts/list-packages
  test/autotools/config.guess
  test/autotools/config.sub
+ test/autotools/depcomp
  test/autotools/missing
 Copyright: 1992-1999,
   1992-2001
   1996-1997, 1999-2000, 2002-2006
   1997-2009
+  1999-2000, 2003-2007, 2009-2010
 License: GPL-2+
  FIXME
 
@@ -172,29 +172,6 @@ Copyright: 2007-2010, Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  FIXME
 
-Files: configure
- test/autotools/aclocal.m4
- test/autotools/configure
-Copyright: 1992-1996, 1998-2001
-  1996-1997, 2000-2001, 2003, 2005, 2008
-  1996-2004,
-  1997, 1999-2001, 2003-2005, 2008
-  1997, 2000-2001, 2003-2006, 2008
-  1999-2005, 2008
-  1999-2006, 2009
-  2001, 2003, 2005, 2008 Free Software Foundation, Inc
-  2001, 2003, 2005, Free Software Foundation, Inc
-  2001-2003, 2005, 2008, Free Software Foundation, Inc
-  2001-2003, 2005, 2009, Free Software Foundation, Inc
-  2002-2003, 2005-2008, Free Software Foundation, Inc
-  2003, 2005 Free Software Foundation, Inc
-  2003-2006, Free Software Foundation, Inc
-  2004-2005, Free Software Foundation, Inc
-  2006, 2008 Free Software Foundation, Inc
-  2010, Free Software Foundation, Inc
-License: UNKNOWN
- FIXME
-
 Files: 1/class/scons-vars.mk.in
  1/class/scons.mk.in
 Copyright: 2005, Matthew A. Nicholson <matt@matt-land.com>
@@ -212,6 +189,34 @@ Files: install-sh
  test/autotools/install-sh
 Copyright: 1994, X Consortium
 License: MIT/X11 (BSD like)
+ FIXME
+
+Files: aclocal.m4
+ test/autotools/aclocal.m4
+Copyright: 1996, 1998, 2000-2005, 2008
+  1996-1997, 2000-2001, 2003, 2005, 2008
+  1996-2004,
+  1997, 1999-2001, 2003-2005, 2008
+  1997, 2000-2001, 2003-2006, 2008
+  1999-2005, 2008
+  1999-2006, 2009
+  2001, 2003, 2005, 2008, 2011, Free Software Foundation
+  2001, 2003, 2005, 2011 Free Software Foundation, Inc
+  2001-2003, 2005, 2008, 2010 Free Software
+  2001-2003, 2005, 2009, Free Software Foundation, Inc
+  2002-2003, 2005-2008, 2011 Free Software
+  2003, 2005 Free Software Foundation, Inc
+  2003-2006, 2011 Free Software Foundation
+  2004-2005, 2012 Free Software Foundation, Inc
+  2006, 2008, 2010, Free Software Foundation, Inc
+License: UNKNOWN
+ FIXME
+
+Files: configure
+ test/autotools/configure
+Copyright: 1992-1996, 1998-2001
+  2010, Free Software Foundation, Inc
+License: UNKNOWN
  FIXME
 
 Files: scripts/cdbs-edit-patch
@@ -270,6 +275,12 @@ Copyright: 2002-2003, Colin Walters <walters@debian.org>
 License: GPL-2+
  FIXME
 
+Files: debian/rules
+Copyright: 2002-2003, Colin Walters <walters@debian.org>
+  2003, 2008-2012, Jonas Smedegaard
+License: GPL-2+
+ FIXME
+
 Files: 1/rules/utils.mk.in
 Copyright: -i '$(DEB__CHECK_IGNORE_REGEX)' -l '$(DEB__CHECK_PARSELINES)' *
   2003, Colin Walters <walters@debian.org>
@@ -285,11 +296,6 @@ Files: 1/class/cmake.mk.in
 Copyright: 2006, Fathi Boudra <fboudra@free.fr>
   2006, Peter Rockai <me@mornfall.net>
   2007, Peter Eisentraut <petere@debian.org>
-License: GPL-2+
- FIXME
-
-Files: test/autotools/depcomp
-Copyright: 1999-2000, 2003-2007, 2009 Free
 License: GPL-2+
  FIXME
 
@@ -322,23 +328,6 @@ License: GPL-2+
 
 Files: test/Makefile.in
 Copyright: 1994-2002
-License: UNKNOWN
- FIXME
-
-Files: aclocal.m4
-Copyright: 1996, 1998, 2000-2005, 2008
-  1996-1997, 2000-2001, 2003, 2005, 2008
-  1996-2004,
-  1997, 1999-2001, 2003-2005, 2008
-  1997, 2000-2001, 2003-2006, 2008
-  2001, 2003, 2005, 2008, 2011, Free Software Foundation
-  2001, 2003, 2005, 2011 Free Software Foundation, Inc
-  2001-2003, 2005, 2008, 2010 Free Software
-  2002-2003, 2005-2008, 2011 Free Software
-  2003, 2005 Free Software Foundation, Inc
-  2003-2006, 2011 Free Software Foundation
-  2004-2005, 2012 Free Software Foundation, Inc
-  2006, 2008, 2010, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
 

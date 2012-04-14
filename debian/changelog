@@ -1,3 +1,12 @@
+cdbs (0.4.110) unstable; urgency=low
+
+  * Have cmake.mk by default include CPPFLAGS in CFLAGS and CXXFLAGS.
+    Closes: bug#668820. Thanks to Simon Ruderich.
+  * Use anonscm.debian.org for Vcs-Browser field.
+  * Extend my copyright for Debian packaging.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 14 Apr 2012 13:40:38 -0400
+
 cdbs (0.4.109) unstable; urgency=low
 
   * Fix use pkglibexecdir (not libexecdir) inside makefile snippets.

@@ -22,7 +22,7 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/cdbs.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/cdbs.git;a=summary
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/cdbs.git
 
 Package: cdbs
 Architecture: all
