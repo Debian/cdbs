@@ -45,8 +45,8 @@ testsanity::
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 	$(if $(is_debug_package)$(filter nostrip,$(DEB_BUILD_OPTIONS)),,find "$(CURDIR)/debian/$(cdbs_curpkg)" -name "*.pd_linux" -exec strip --remove-section=.comment --remove-section=.note --strip-unneeded {} +)
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
-	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
-	find "$(cdbs_curdestdir)" -name "*.pd_linux" -exec chmod 0644 {} +
+	find "$(CURDIR)/debian/$(cdbs_curpkg)" -name "*.pd_linux" -exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
+	find "$(CURDIR)/debian/$(cdbs_curpkg)" -name "*.pd_linux" -exec chmod 0644 {} +
 
 #endif _cdbs_class_pd
 endif
