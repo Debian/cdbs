@@ -1,3 +1,11 @@
+cdbs (0.4.111) unstable; urgency=low
+
+  * Fix invoke dpkg-shlibdeps (not only strip) in per-package dir in
+    pd.mk.
+    Closes: bug#661962. Thanks (again) to Felipe Sateler.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 18 Apr 2012 23:35:03 -0400
+
 cdbs (0.4.110) unstable; urgency=low
 
   * Have cmake.mk by default include CPPFLAGS in CFLAGS and CXXFLAGS.
