@@ -42,7 +42,7 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 
 # Convenience variable for e.g. conflicts/provides/replaces
-DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
+DEB_SUGAR_SOURCE_PKGBASE = $(and $(DEB_SOURCE_PACKAGE),$(firstword $(subst -0.,$(space),$(DEB_SOURCE_PACKAGE))))
 
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
