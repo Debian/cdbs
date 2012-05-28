@@ -1,3 +1,10 @@
+cdbs (0.4.113) unstable; urgency=low
+
+  * Ignore whitespace when comparing license file against system copy of
+    GPL-2.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 May 2012 17:42:59 +0200
+
 cdbs (0.4.112) unstable; urgency=low
 
   * Introduce DEB_UPSTREAM_TARBALL_DELIMITER and
