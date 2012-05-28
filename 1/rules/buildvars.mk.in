@@ -120,7 +120,8 @@ cdbs_expand_curvar = $($(1)_ALL)$(if $($(1)_ALL),$(or $2,$(space)))$(if $(filter
 cdbs_expand_allvars = $(foreach stem,$(1),$($(stem)_ALL)$($(stem))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(stem)_$(pkg))))
 
 # List "packages multiplied with branches", or just packages if no branches
-cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(call cdbs_delimit,$(if $2,$(foreach pkg,$1,$(call cdbs_delimit,$(foreach branch,$2,$(pkg)$(branch:%=-%)),BRANCHDELIMITER)),$1),WORDDELIMITER)))
+# Syntax: PACKAGES BRANCHES WORDDELIMITER BRANCHDELIMITER [FALLBACK-MAIN-BRANCH]
+cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(call cdbs_delimit,$(if $2,$(foreach pkg,$1,$(call cdbs_delimit,$(foreach branch,$2,$(pkg)$(branch:%=-%)),BRANCHDELIMITER)),$(if $5,$(foreach pkg,$1,$(pkg)-$(5)BRANCHDELIMITER$(pkg)),$1)),WORDDELIMITER)))
 
 cdbs_findargs-path-or-name = $(if $(findstring /,$(firstword $(1))),-path './$(patsubst ./%,%,$(firstword $(1)))',-name '$(firstword $(1))') $(foreach obj,$(wordlist 2,$(words $(1)),$(1)),-or $(if $(findstring /,$(obj)),-path './$(obj:./%=%)',-name '$(obj)'))
 
