@@ -1,3 +1,19 @@
+cdbs (0.4.112) unstable; urgency=low
+
+  * Introduce DEB_UPSTREAM_TARBALL_DELIMITER and
+    DEB_UPSTREAM_RECEIVED_EXTENSION for when upstream tarball is oddly
+    named, e.g. to silence delimiter and add tar.gz for github.org.
+  * Fix avoid resetting resolved compiler flag variables, for including
+    defaults when setting flags explicitly. Example:
+      CFLAGS = $(deb_cflags) -DSSL_EXPERIMENTAL
+  * Extend cdbs_expand_branches with optional fallback main branch as
+    5th argument.
+  * Introduce DEB_SUGAR_PRIMARY_BRANCH in python-sugar.mk, to append a
+    non-virtual primary branch to Sugar package lists when
+    DEB_SUGAR_BRANCHES is unset.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 May 2012 15:26:08 +0200
+
 cdbs (0.4.111) unstable; urgency=low
 
   * Fix invoke dpkg-shlibdeps (not only strip) in per-package dir in
