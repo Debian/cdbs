@@ -1,3 +1,11 @@
+cdbs (0.4.115) unstable; urgency=high
+
+  * Fix resolve default CXXFLAGS.
+  * Set urgency=high as above one-line fix affects ability of other
+    packages to reach release goal of enabling security hardening.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 22 Jun 2012 17:21:02 +0200
+
 cdbs (0.4.114) unstable; urgency=low
 
   * Fix resolve default DEB_SUGAR_SOURCE_PKGBASE when DEB_SUGAR_BRANCHES

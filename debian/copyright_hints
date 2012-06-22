@@ -249,21 +249,6 @@ Copyright: *No copyright*
 License: GPL-2+
  FIXME
 
-Files: COPYING
-Copyright: 1989, 1991 Free Software Foundation, Inc.
-  <year> <name of author>
-  HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
-  HOLDERS AND/OR OTHER PARTIES
-  disclaimer" for the program, if
-  holder saying it may be distributed
-  holder who places the Program under this License
-  interest in the program
-  law:
-  the software, and
-  year name of author
-License: GPL-2+
- FIXME
-
 Files: 1/class/kde.mk.in
 Copyright: 2003, Christopher L Cheney <ccheney@debian.org>
 License: GPL-2+
@@ -324,6 +309,21 @@ License: GPL-2+
 Files: 1/class/autotools-files.mk.in
 Copyright: 2005, Robert Millan
 License: GPL-2+
+ FIXME
+
+Files: COPYING
+Copyright: 1989, 1991 Free Software Foundation, Inc.
+  <year> <name of author>
+  HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+  HOLDERS AND/OR OTHER PARTIES
+  disclaimer" for the program, if
+  holder saying it may be distributed
+  holder who places the Program under this License
+  interest in the program
+  law:
+  the software, and
+  year name of author
+License: GPL-ever
  FIXME
 
 Files: test/Makefile.in
