@@ -1,3 +1,14 @@
+cdbs (0.4.116) unstable; urgency=low
+
+  * Simplify auto-resolved build-dependencies to be unversioned when
+    satisfied in stable (Wheezy): Oldstable (Lenny) is no longer
+    supported.  Versioning will now be dropped for cdbs << 0.4.89,
+    python << 2.6.6, perl << 5.10.1 and debhelper << 8.
+    Thanks to Paul Wise and Dominique Dumont.
+  * Bump debhelper compatibility level to 8.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 07 Jul 2012 14:45:56 +0200
+
 cdbs (0.4.115) unstable; urgency=high
 
   * Fix resolve default CXXFLAGS.
