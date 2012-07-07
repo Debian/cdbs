@@ -23,7 +23,7 @@
 ifndef _cdbs_class_perl_makemaker
 _cdbs_class_perl_makemaker = 1
 
-# Make sure that CDBS_BUILD_DEPENDS is initialised
+# Initialize CDBS_BUILD_DEPENDS and shared DEB_MAKE_*
 include $(_cdbs_class_path)/perl-makemaker-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 

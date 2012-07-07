@@ -23,7 +23,7 @@
 ifndef _cdbs_class_perlmodule
 _cdbs_class_perlmodule = 1
 
-# Make sure that CDBS_BUILD_DEPENDS is initialised
+# Initialize CDBS_BUILD_DEPENDS
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
 $(warning WARNING:  perlmodule.mk is deprecated - please use perl-makemaker.mk instead)
