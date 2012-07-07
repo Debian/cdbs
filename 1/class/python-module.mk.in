@@ -38,7 +38,7 @@ CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
 CDBS_BUILD_DEPENDS += $(if $(cdbs_python_pycentral),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral))
 
 # dh_python2 comes from python package
-CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python (>= 2.6.5)
+CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python
 CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
 
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
