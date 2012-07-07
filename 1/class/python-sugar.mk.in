@@ -54,7 +54,7 @@ cdbs_python_sugar_pkg_check = $(if $(DEB_PYTHON_SUGAR_PACKAGES),,$(warning WARNI
 cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) ,$(comma) ,$(DEB_SUGAR_PRIMARY_BRANCH))
 cdbs_sugar_anybranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) , | ,$(DEB_SUGAR_PRIMARY_BRANCH))
 
-CDBS_BUILD_DEPENDS_class_python-sugar ?= $(cdbs_python_builddeps_cdbs), cdbs (>= 0.4.67~)
+CDBS_BUILD_DEPENDS_class_python-sugar ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-sugar)
 
 # Python-related dependencies according to Python policy, appendix A

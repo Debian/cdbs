@@ -34,10 +34,6 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_perl)
 CDBS_BUILD_DEPENDS_class_perl-build_module ?= perl-modules (>= 5.10.0) | libmodule-build-perl (>= 0.2808)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_module)
 
-# Tighten to versions of cdbs providing working version of this snippet
-CDBS_BUILD_DEPENDS_class_perl-build ?= cdbs (>= 0.4.78~)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build)
-
 # Sanity check: DEB_PERL_SRCDIR must be declared early
 cdbs_perl_srcdir_early := $(DEB_PERL_SRCDIR)
 cdbs_perl_srcdir_check = $(if $(call cdbs_streq,$(cdbs_perl_srcdir_early),$(DEB_PERL_SRCDIR)),,$(error DEB_PERL_SRCDIR must be set before including perl-build.mk, not after))

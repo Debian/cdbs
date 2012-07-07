@@ -52,7 +52,7 @@ DEB_UPSTREAM_CRUFT_BACKUPDIR ?= debian/upstream-cruft
 
 DEB_PHONY_RULES += list-missing
 
-CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= cdbs (>= 0.4.69~), devscripts
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)

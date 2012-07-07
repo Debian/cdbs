@@ -36,10 +36,6 @@ cdbs_make_curdestdir = $(if $(cdbs_make_flavors),$(subst @FLAVOR@,$(cdbs_make_cu
 
 DEB_PHONY_RULES += makefile-clean $(cdbs_make_clean_nonstamps)
 
-# Tighten to versions supporting multiflavors if feature actually used
-CDBS_BUILD_DEPENDS_class_autotools_flavors ?= cdbs (>= 0.4.72~)
-CDBS_BUILD_DEPENDS += $(if $(cdbs_make_flavors),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools_flavors))
-
 pre-build::
 	$(if $(cdbs_make_flavors),mkdir -p debian/stamp-makefile-build debian/stamp-makefile-install)
 	$(and $(cdbs_make_flavors),$(DEB_MAKE_CHECK_TARGET),mkdir -p debian/stamp-makefile-check)

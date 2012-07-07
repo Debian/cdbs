@@ -87,16 +87,14 @@ ifeq (,$(DH_COMPAT))
 DH_COMPAT = 5
 endif
 
-# build-depend unversioned when satisfied even in oldstable
+# build-depend unversioned when satisfied in all supported distributions
 CDBS_BUILD_DEPENDS_rules_debhelper_v4 ?= debhelper
 CDBS_BUILD_DEPENDS_rules_debhelper_v5 ?= debhelper
 CDBS_BUILD_DEPENDS_rules_debhelper_v6 ?= debhelper
-
 CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= debhelper
 
 # by default build-depend on version matching compat level
-# * recent cdbs needed for dh_prep fix
-CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT) ?= cdbs (>= 0.4.85~), debhelper (>= $(DH_COMPAT)~)
+CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT) ?= debhelper (>= $(DH_COMPAT)~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT))
 
 CDBS_BUILD_DEPENDS_rules_debhelper_buildinfo ?= dh-buildinfo
