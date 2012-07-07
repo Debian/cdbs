@@ -29,11 +29,6 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 CDBS_BUILD_DEPENDS_class_perl-build_perl ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_perl)
 
-# Depend on Module::Build
-# (older releases choke on --ccflags and treat destdir differently)
-CDBS_BUILD_DEPENDS_class_perl-build_module ?= perl-modules (>= 5.10.0) | libmodule-build-perl (>= 0.2808)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_module)
-
 # Sanity check: DEB_PERL_SRCDIR must be declared early
 cdbs_perl_srcdir_early := $(DEB_PERL_SRCDIR)
 cdbs_perl_srcdir_check = $(if $(call cdbs_streq,$(cdbs_perl_srcdir_early),$(DEB_PERL_SRCDIR)),,$(error DEB_PERL_SRCDIR must be set before including perl-build.mk, not after))
