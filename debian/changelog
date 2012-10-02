@@ -1,3 +1,10 @@
+cdbs (0.4.118) unstable; urgency=low
+
+  * Set XDG_DATA_HOME during install in python-sugar.mk.
+    Closes: bug#689407, #665023, #676040. Thanks to Lucas Nussbaum.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 02 Oct 2012 13:16:42 +0200
+
 cdbs (0.4.117) unstable; urgency=low
 
   * Have gnome.mk use xz compression by default.
