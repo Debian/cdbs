@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # -*- mode: cperl; coding: utf-8 -*-
-# Copyright © 2005-2011 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2005-2012 Jonas Smedegaard <dr@jones.dk>
 # Description: Reformat licencecheck output to copyright file format
 #
 # This program is free software; you can redistribute it and/or
@@ -18,6 +18,7 @@
 
 my $whitespace_list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
 my $rfc822_list_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
+my $merge_same_license = $ENV{'merge_same_license'} || "";
 
 print "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n";
 print "Upstream-Name: FIXME\n";
@@ -50,14 +51,17 @@ foreach $file (@files) {
 	my @ownerlines = grep {/\w\w/} split /\s\/\s/, $file->{copyright};
 	my @ownerlines_clean = ();
 	my %owneryears = ();
+	my $owneryears_seem_correct = 1;
 	for $ownerline ( @ownerlines ) {
 		my ($owneryear, $owner) = $ownerline =~ /^([\d\-,\s]*)\s*+(.*)/;
+		$owneryears_seem_correct = 0 unless ($owneryear);
 		$owner =~ s/^by\s+//;
 		$owner =~ s/,?\s+All Rights Reserved\.?//gi;
 		push @ownerlines_clean, "$owneryear$owner";
 		push @{ $owneryears{"$owner"} }, $owneryear;
 	};
 	my @owners = sort keys %owneryears;
+	@owners = () if ($merge_same_license and $owneryears_seem_correct);
 	my $pattern = join ("\n", $file->{license}, @owners);
 	push @{ $patternfiles{"$pattern"} }, $file->{name};
 	push @{ $patternownerlines{"$pattern"} }, @ownerlines_clean;
