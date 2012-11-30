@@ -44,6 +44,9 @@ foreach $file (@files) {
 	$file->{license} =~ s/\s*(\*No copyright\*)\s*// and $file->{copyright} = $1;
 	$file->{license} =~ s/^\s*(GENERATED FILE)/UNKNOWN/;
 	$file->{license} =~ s/\s+(GENERATED FILE)//;
+	$file->{license} =~ s/^\s*zlib\/libpng$/Zlib/;
+	$file->{license} =~ s/^\s*MIT\/X11 \(BSD like\)$/Expat/;
+	$file->{license} =~ s/^\s*BSD \((\d) clause\)$/BSD-$1-clause/;
 	$file->{copyright} =~ s/^&copy;\s*//;
 	$file->{copyright} =~ s/(?<=(\b\d{4}))(?{$y=$^N})\s*[,-]\s*((??{$y+1}))\b/-$2/g;
 	$file->{copyright} =~ s/(?<=\b\d{4})\s*-\s*\d{4}(?=\s*-\s*(\d{4})\b)//g;
