@@ -1,3 +1,13 @@
+cdbs (0.4.119) unstable; urgency=low
+
+  * Introduce DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE in utils.mk, to use
+    one Files section per license (not license + copyright holders
+    combo). Thanks to Fabian Greffrath for the suggestion.
+  * Tidy some license shortnames in utils.mk.
+    Closes: bug#633794. Thanks to Julian Taylor.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 30 Nov 2012 14:02:58 +0100
+
 cdbs (0.4.118) unstable; urgency=low
 
   * Set XDG_DATA_HOME during install in python-sugar.mk.
