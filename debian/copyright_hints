@@ -172,6 +172,12 @@ Copyright: 2007-2010, Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  FIXME
 
+Files: install-sh
+ test/autotools/install-sh
+Copyright: 1994, X Consortium
+License: Expat
+ FIXME
+
 Files: 1/class/scons-vars.mk.in
  1/class/scons.mk.in
 Copyright: 2005, Matthew A. Nicholson <matt@matt-land.com>
@@ -183,12 +189,6 @@ Files: 1/class/ant-vars.mk.in
  1/class/ant.mk.in
 Copyright: 2003, Stefan Gybas <sgybas@debian.org>
 License: GPL-2+
- FIXME
-
-Files: install-sh
- test/autotools/install-sh
-Copyright: 1994, X Consortium
-License: MIT/X11 (BSD like)
  FIXME
 
 Files: aclocal.m4
@@ -239,7 +239,7 @@ License: GPL-2+
 
 Files: scripts/licensecheck2dep5
 Copyright: ", join($rfc822_list_delimiter, @ownerlines_unique), "\n";
-  2005-2011, Jonas Smedegaard <dr@jones.dk>
+  2005-2012, Jonas Smedegaard <dr@jones.dk>
   file format
 License: GPL-2+
  FIXME
@@ -269,7 +269,7 @@ License: GPL-2+
 Files: 1/rules/utils.mk.in
 Copyright: -i '$(DEB__CHECK_IGNORE_REGEX)' -l '$(DEB__CHECK_PARSELINES)' *
   2003, Colin Walters <walters@debian.org>
-  2005-2011, Jonas Smedegaard <dr@jones.dk>
+  2005-2012, Jonas Smedegaard <dr@jones.dk>
   as needed"; \
   items
   notices found - assuming no news is good news...'; \
