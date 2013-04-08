@@ -94,7 +94,9 @@ License: GPL-2+
  WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  General Public License for more details.
-Comment:
+ .
+ Comment:
+ .
  On Debian systems the 'GNU General Public License' version 2 is located
  in '/usr/share/common-licenses/GPL-2'.
  .
