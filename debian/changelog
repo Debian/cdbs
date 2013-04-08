@@ -1,3 +1,15 @@
+cdbs (0.4.121) unstable; urgency=low
+
+  * Fix avoid bogus quotes when setting PERL_AUTOINSTALL for perl
+    snippets.
+    Really closes: bug#652274 (as intended in 0.4.103).
+  * Bump standards-version to 3.9.4.
+  * Update copyright file:
+    + Fix use pseudo-comment to obey silly restrictions of copyright
+      format 1.0.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 08 Apr 2013 21:48:55 +0200
+
 cdbs (0.4.120) unstable; urgency=low
 
   * Fix set LDFLAGS in qmake.mk.
