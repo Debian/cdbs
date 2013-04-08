@@ -37,6 +37,6 @@ DEB_PERL_SRCDIR ?= $(DEB_SRCDIR)
 DEB_PERL_DESTDIR ?= $(if $(filter 1,$(words $(DEB_PERL_PACKAGES))),$(CURDIR)/debian/$(DEB_PERL_PACKAGES),$(cdbs_curdestdir))
 
 # Avoid auto-building dependencies
-export PERL_AUTOINSTALL='--skipdeps'
+export PERL_AUTOINSTALL = --skipdeps
 
 endif
