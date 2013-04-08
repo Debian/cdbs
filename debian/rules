@@ -35,7 +35,8 @@ DEB_CONFIGURE_LIBEXECDIR = /usr/lib
 
 DEB_MAKE_CHECK_TARGET = check
 
-# Unset these variables so config.guess/config.sub in the test suite are not 
-# replaced (because the test suite is supposed to test the replacing later).
+# Unset these variables so config.guess/config.sub in the test suite are
+# not replaced (because the test suite is supposed to test the replacing
+# later).
 config_guess =
 config_sub =
