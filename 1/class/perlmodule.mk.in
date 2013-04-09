@@ -28,7 +28,7 @@ include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
 $(warning WARNING:  perlmodule.mk is deprecated - please use perl-makemaker.mk instead)
 
-# Dependency according to Perl policy 4.3
+# Dependency according to Perl Policy 3.9.4 § 5.2
 CDBS_BUILD_DEPENDS_class_perlmodule ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perlmodule)
 

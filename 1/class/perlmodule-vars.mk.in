@@ -27,7 +27,7 @@ include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
 $(warning WARNING:  perlmodule-vars.mk is deprecated - please use perl-makemaker-vars.mk instead)
 
-# Override optimizations to follow Perl Policy 3.3
+# Override optimizations to follow Perl Policy 3.9.4 § 4.3
 # FIXME: Restructure to allow early override
 DEB_MAKE_EXTRA_ARGS = OPTIMIZE="$(CFLAGS)" $(DEB_MAKE_PARALLEL)
 

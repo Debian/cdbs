@@ -26,7 +26,7 @@ _cdbs_class_perl_makemaker_vars = 1
 include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
-# Override optimizations to follow Perl Policy § 3.3
+# Override optimizations to follow Perl Policy 3.9.4 § 4.3
 DEB_MAKE_EXTRA_ARGS ?= OPTIMIZE="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" $(DEB_MAKE_PARALLEL)
 
 DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor

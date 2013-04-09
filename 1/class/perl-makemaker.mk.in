@@ -27,7 +27,7 @@ _cdbs_class_perl_makemaker = 1
 include $(_cdbs_class_path)/perl-makemaker-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 
-# Dependency according to Perl policy § 4.3
+# Dependency according to Perl Policy 3.9.4 § 5.2
 CDBS_BUILD_DEPENDS_class_perl-makemaker_perl ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-makemaker_perl)
 

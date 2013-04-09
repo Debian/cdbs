@@ -25,7 +25,7 @@ _cdbs_class_perl_build = 1
 include $(_cdbs_class_path)/perl-build-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-# Dependency according to Perl policy § 4.3
+# Dependency according to Perl Policy 3.9.4 § 5.2
 CDBS_BUILD_DEPENDS_class_perl-build_perl ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_perl)
 
@@ -55,7 +55,7 @@ debian/stamp-perl-check: debian/stamp-perl-build
 	$(if $(filter nocheck,$(DEB_BUILD_OPTIONS)),,$(if $(DEB_PERL_CHECK_TARGET),cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_CHECK_TARGET) $(DEB_PERL_CHECK_ARGS) $(DEB_PERL_CHECK_FLAGS)))
 	touch $@
 
-# Drop packlist files after install, to respect Debian Perl Policy § 4.1
+# Drop packlist files after install, to respect Perl Policy 3.9.4 § 4.1
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
 	cd $(cdbs_perl_curbuilddir) && ./Build $(DEB_PERL_INSTALL_TARGET) $(DEB_PERL_INSTALL_ARGS) $(DEB_PERL_INSTALL_FLAGS)
