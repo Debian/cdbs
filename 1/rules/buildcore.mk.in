@@ -233,10 +233,10 @@ ifneq ($(DEB_AUTO_UPDATE_DEBIAN_CONTROL),)
 	@bdep='$(strip $(CDBS_BUILD_DEPENDS))' perl -n \
 		-e 'my $$bd = $$ENV{"bdep"};' \
 		-e '$$bd =~ $(cdbs_re_squash_extended_space);' \
-		-e '$$bd =~ /\bcdbs \(>= 0\.4\.106~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.90~|0\.4\.91~|0\.4\.93~|0\.4\.97~)\)/, /g;' \
-		-e '$$bd =~ /\bcdbs \(>= 0\.4\.97~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.90~|0\.4\.91~|0\.4\.93~)\)/, /g;' \
-		-e '$$bd =~ /\bcdbs \(>= 0\.4\.93~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.90~|0\.4\.91~)\)/, /g;' \
-		-e '$$bd =~ /\bcdbs \(>= 0\.4\.91~\)/ && $$bd =~ s/\bcdbs *\(>= (0\.4\.90~)\)/, /g;' \
+		-e 'my @matches = $$bd =~ /\bcdbs \(>= 0\.4\.(\d+~?)\)/g;' \
+		-e 'my $$max = (sort { $$b <=> $$a } @matches)[0];' \
+		-e '$$bd =~ s/\bcdbs \(>= [0-9.~]+\)//g;' \
+		-e '$$bd =~ s/^/cdbs (>= 0.4.$$max), /;' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_unversioned_before_maybeversioned);' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_versioned_before_sameversioned);' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_unversioned_after_versioned);' \
