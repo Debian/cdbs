@@ -180,7 +180,7 @@ build-indep: $(patsubst %,build/%,$(DEB_INDEP_PACKAGES))
 # Typically you will invoke upstream's "make clean" rule here, although you
 # can also hook in other stuff here.  Many of the included rules and classes
 # add stuff to this rule.
-clean:: testdir testroot cleanbuilddir reverse-config testsanity
+clean:: testdir cleanbuilddir reverse-config testsanity
 reverse-config::
 ifneq (::, $(config_guess):$(config_sub):$(config_rpath))
 	for i in $(config_guess) $(config_sub) $(config_rpath) ; do \
