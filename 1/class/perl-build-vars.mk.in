@@ -26,13 +26,13 @@ include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 #DEB_PERL_CONFIGURE_TARGET =
 DEB_PERL_CONFIGURE_ARGS ?= --installdirs vendor --config ccflags="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" --config cxxflags="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" --config cppflags="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" --config ldflags="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))"
 
-DEB_PERL_CONFIGURE_FLAGS ?= destdir=$(cdbs_perl_curdestdir)
+DEB_PERL_CONFIGURE_FLAGS ?= --destdir $(cdbs_perl_curdestdir)
 
 DEB_PERL_BUILD_TARGET ?= build
 
 # Run tests by default, and loudly
 DEB_PERL_CHECK_TARGET ?= test
-DEB_PERL_CHECK_FLAGS ?= verbose=1
+DEB_PERL_CHECK_FLAGS ?= --verbose 1
 
 DEB_PERL_INSTALL_TARGET ?= install
 
