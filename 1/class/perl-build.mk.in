@@ -29,6 +29,11 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 CDBS_BUILD_DEPENDS_class_perl-build_perl ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_perl)
 
+# Added dependencies when using Module::Build::Tiny
+cdbs_perl_module-build-tiny_check := $(shell grep -slP '^use\s+Module::Build::Tiny' $(DEB_PERL_SRCDIR)/Build.PL)
+CDBS_BUILD_DEPENDS_class_perl-build_module-build-tiny ?= libmodule-build-tiny-perl, cdbs (>= 0.4.122~)
+CDBS_BUILD_DEPENDS += $(if $(cdbs_perl_module-build-tiny_check),$(comma) $(CDBS_BUILD_DEPENDS_class_perl-build_module-build-tiny))
+
 # Sanity check: DEB_PERL_SRCDIR must be declared early
 cdbs_perl_srcdir_early := $(DEB_PERL_SRCDIR)
 cdbs_perl_srcdir_check = $(if $(call cdbs_streq,$(cdbs_perl_srcdir_early),$(DEB_PERL_SRCDIR)),,$(error DEB_PERL_SRCDIR must be set before including perl-build.mk, not after))
