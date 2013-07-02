@@ -16,6 +16,7 @@
 AC_INIT([autotools-test], [0.1], [jbailey@nisa.net], [autotools-test])
 
 AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
