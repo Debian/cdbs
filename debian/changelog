@@ -1,3 +1,37 @@
+cdbs (0.4.122) unstable; urgency=low
+
+  * Update and improve references in comments to Perl Policy.
+  * Export PERL_MM_USE_DEFAULT=1 in perl-makemaker.mk and perlmodule.mk
+    to always be non-interactive.
+  * Extend Perl snippets to also pass CPPFLAGS and LDFLAGS.
+  * Use "--" long-options in perl-build snippet, to support
+    Module::Build::Tiny.
+    Closes: bug#714542. Thanks to Gregor Herrmann and Leon Timmermans.
+  * Have perl-build.mk resolve build-dependency on
+    libmodule-build-tiny-perl and recent cdbs when Module::Build::Tiny
+    is used.
+  * Have cmake.mk include LDFLAGS.
+    Closes: bug#680959. Thanks to Felipe Sateler.
+  * Relax clean rule to not require root.
+    Closes: bug#568611. Thanks to Jonathan Nieder and Julien Cristau.
+  * Improve cdbs version handling to sort and reduce all instances of
+    cdbs instead of only hardcoded ones.
+    Closes: 670262. Thanks to Felipe Sateler.
+  * Drop obsolete support for Cpu: and System: hints in control.in:
+    type-handling is no longer in Debian.
+  * Have debhelper.mk call dh_systemd_enable and dh_systemd_start if
+    available.
+    Closes: bug#714195. Thanks to Laurent Bigonville.
+  * Drop dependency on python-central or python-support for CDBS
+    testsuite - i.e. only CDBS packaging itself, still supported in
+    Python snippets.
+    Closes: bug#616775. Thanks to Matthias Klose and Andrea Colangelo.
+  * Include support for maintainer-mode in test/autotools.
+  * Update autotools (with autoreconf -f -i).
+  * Extend copyright coverage for autotools to include recent years.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 02 Jul 2013 10:49:53 +0200
+
 cdbs (0.4.121) unstable; urgency=low
 
   * Fix avoid bogus quotes when setting PERL_AUTOINSTALL for perl
