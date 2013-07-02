@@ -220,8 +220,9 @@ debian/control::
 		-e '$$bd =~ $(cdbs_re_squash_extended_space);' \
 		-e 'my @matches = $$bd =~ /\bcdbs \(>= 0\.4\.(\d+~?)\)/g;' \
 		-e 'my $$max = (sort { $$b <=> $$a } @matches)[0];' \
+		-e 'my $$cdbs = $$max ? "cdbs (>= 0.4.$$max)" : @matches ? "cdbs" : "";' \
 		-e '$$bd =~ s/\bcdbs \(>= [0-9.~]+\)//g;' \
-		-e '$$bd =~ s/^/cdbs (>= 0.4.$$max), /;' \
+		-e '$$bd =~ s/^/$$cdbs, /;' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_unversioned_before_maybeversioned);' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_versioned_before_sameversioned);' \
 		-e '$$bd =~ $(cdbs_re_pkg_strip_unversioned_after_versioned);' \
