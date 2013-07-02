@@ -38,14 +38,6 @@ TESTS = autotools-1.sh \
 	debhelper-7.sh \
 	patchsys-1.sh \
 	list-missing-1.sh \
-	distutils-1.sh \
-	distutils-2.sh \
-	distutils-3.sh \
-	distutils-4.sh \
-	distutils-5.sh \
-	distutils-6.sh \
-	distutils-7.sh \
-	distutils-8.sh \
 	distutils-9.sh \
 	distutils-10.sh \
 	distutils-11.sh \
