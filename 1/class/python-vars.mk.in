@@ -34,6 +34,7 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 # NB! override needs to be done _before_ including this file!
 #DEB_PYTHON2_MODULE_PACKAGES =
 #DEB_PYTHON3_MODULE_PACKAGES =
+#DEB_PYPY_MODULE_PACKAGES =
 
 # Legacy systems "pysupport" and "pycentral" use first likely package in
 # debian/control by default.
@@ -46,7 +47,7 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 #DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
 
 # implementations of Python itself
-_CDBS_PYTHONS = python2 python3
+_CDBS_PYTHONS = python2 python3 pypy
 #  * uppercase implementation names
 $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
 
@@ -228,6 +229,7 @@ cdbs_python_builddeps_python3 = $(if $(_cdbs_python3_arch_packages),\
 	python3-all-dev (>= 3.1),\
 	python3-dev\
 		$(_cdbs_python3_altflavor:%=, %-dev))
+cdbs_python_builddeps_pypy = pypy-dev
 cdbs_python_builddeps = \
 	$(foreach s,$(cdbs_python_systems),\
 		$(comma) $(cdbs_python_builddeps_$s))
@@ -235,7 +237,9 @@ cdbs_python_builddeps_cdbs = $(strip \
 	$(if $(_cdbs_python3_indep_packages),\
 		$(comma) cdbs (>= 0.4.93~),\
 		$(if $(cdbs_pythonsystem_python2)$(cdbs_pythonsystem_python3),\
-			$(comma) cdbs (>= 0.4.90~))))
+			$(comma) cdbs (>= 0.4.90~)))\
+	$(if $(cdbs_pypy_packages),\
+		$(comma) cdbs (>= 0.5~)))
 
 # check if build is possible
 $(if $(cdbs_pythonsystem_pysupport),\

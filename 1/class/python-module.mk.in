@@ -34,6 +34,7 @@ CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
 # dh_python2 comes from python package
 CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
+CDBS_BUILD_DEPENDS_class_python-module_pypy ?= pypy, dh-python
 CDBS_BUILD_DEPENDS += $(strip \
 	$(foreach s,$(cdbs_python_systems),\
 		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_$s)))
