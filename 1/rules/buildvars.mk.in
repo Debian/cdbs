@@ -117,7 +117,7 @@ cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(wo
 #  * VAR_pkg applies to current package
 #  * VAR_DEFAULT applies to current package if not overridden by VAR_pkg
 cdbs_expand_curvar = $($(1)_ALL)$(if $($(1)_ALL),$(or $2,$(space)))$(if $(filter-out $(origin $(1)_$(cdbs_curpkg)),undefined),$($(1)_$(cdbs_curpkg)),$($(1)_DEFAULT))
-cdbs_expand_allvars = $(foreach stem,$(1),$($(stem)_ALL)$($(stem))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(stem)_$(pkg))))
+cdbs_expand_allvars = $(strip $(foreach stem,$(1),$($(stem)_ALL)$($(stem))$(foreach pkg,$(DEB_ALL_PACKAGES),$($(stem)_$(pkg)))))
 
 # List "packages multiplied with branches", or just packages if no branches
 # Syntax: PACKAGES BRANCHES WORDDELIMITER BRANCHDELIMITER [FALLBACK-MAIN-BRANCH]
