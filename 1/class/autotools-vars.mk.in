@@ -107,4 +107,7 @@ CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader ?= \
 	$(if $(findstring $(comma),$(DEB_AUTO_UPDATE_AUTOHEADER)),$(call cdbs_autotools_dependencies,$(DEB_AUTO_UPDATE_AUTOHEADER),autoconf,autoconf),autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOHEADER)))
 CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader))
 
+CDBS_BUILD_DEPENDS_class_autotools_vars_comma ?= cdbs (>= 0.4.123~)
+CDBS_BUILD_DEPENDS += $(if $(findstring $(comma),$(foreach suffix,LIBTOOL AUTOMAKE ACLOCAL AUTOCONF AUTOHEADER,$(DEB_AUTO_UPDATE_$(suffix)))),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools_vars_comma))
+
 endif
