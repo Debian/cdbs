@@ -1,3 +1,19 @@
+cdbs (0.4.123) UNRELEASED; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * Fix tighten cdbs version handling to merge unversioned only with
+    plainly versioned (not if including arch hints or fallbacks).
+  * Fix always strip $(cdbs_expand_allvars): caused bogusly resolving
+    versioned build-dependency on cdbs with python_module.mk included.
+
+  [ IOhannes m zmölnig ]
+  * Extend autotools version hints to support range (e.g. ",1.13" for
+    versions up until 1.13) and unversioned (","): The latter needed for
+    recent autotools packages provided only unversioned.
+    Closes: bug#725950.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 15 Jan 2014 15:23:51 +0100
+
 cdbs (0.4.122) unstable; urgency=low
 
   * Update and improve references in comments to Perl Policy.
