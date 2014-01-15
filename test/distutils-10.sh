@@ -55,7 +55,7 @@ touch $WORKDIR/foo.c
 build_package
 
 dpkg -c $WORKDIR/../python-cdbs-testsuite_0.1_*.deb \
-	| grep -q '/usr/share/pyshared/testing/foo.py' \
+	| grep -q '/usr/lib/python.*/dist-packages/testing/foo.py' \
 	|| return_fail
 
 dpkg -c $WORKDIR/../python3-cdbs-testsuite_0.1_*.deb \
