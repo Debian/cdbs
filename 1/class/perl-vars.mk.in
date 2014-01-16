@@ -39,4 +39,7 @@ DEB_PERL_DESTDIR ?= $(if $(filter 1,$(words $(DEB_PERL_PACKAGES))),$(CURDIR)/deb
 # Avoid auto-building dependencies
 export PERL_AUTOINSTALL = --skipdeps
 
+# environment flag recommended by Lancaster consensus
+DEB_PERL_AUTOMATED_TESTING =? 1
+
 endif

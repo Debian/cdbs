@@ -35,6 +35,7 @@ cdbs_makemaker_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRC
 
 # always be non-interactive
 export PERL_MM_USE_DEFAULT = 1
+export AUTOMATED_TESTING = $(DEB_PERL_AUTOMATED_TESTING)
 
 common-configure-arch common-configure-indep:: Makefile
 Makefile:

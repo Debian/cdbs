@@ -45,6 +45,9 @@ cdbs_perl_builddir_check = $(if $(call cdbs_streq,$(DEB_PERL_SRCDIR),$(DEB_BUILD
 cdbs_perl_curbuilddir = $(cdbs_perl_builddir_check)$(cdbs_curbuilddir)
 cdbs_perl_curdestdir = $(cdbs_perl_builddir_check)$(or $(DEB_PERL_DESTDIR_$(cdbs_curpkg)),$(DEB_PERL_DESTDIR))
 
+# always be non-interactive
+export AUTOMATED_TESTING = $(DEB_PERL_AUTOMATED_TESTING)
+
 common-configure-arch common-configure-indep:: $(DEB_PERL_SRCDIR)/Build
 $(DEB_PERL_SRCDIR)/Build:
 	$(cdbs_perl_srcdir_check)
