@@ -5,6 +5,10 @@ cdbs (0.4.123) UNRELEASED; urgency=medium
     plainly versioned (not if including arch hints or fallbacks).
   * Fix always strip $(cdbs_expand_allvars): caused bogusly resolving
     versioned build-dependency on cdbs with python_module.mk included.
+  * Resolve tightened build-dependency on cdbs when autotools hints
+    include comma (see below for details).
+  * Export AUTOMATED_TESTING=1 to build environment in Perl snippets, as
+    recommended by Lancaster consensus.
 
   [ IOhannes m zmölnig ]
   * Extend autotools version hints to support range (e.g. ",1.13" for
