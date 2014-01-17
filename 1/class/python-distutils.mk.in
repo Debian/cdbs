@@ -50,8 +50,8 @@ DEB_PYTHON_CLEAN_ARGS_DEFAULT ?= $(DEB_PYTHON_CLEAN_ARGS)
 # DEB_PYTHON_MODULE_PACKAGE is deprecated.
 # use DEB_PYTHON_MODULE_PACKAGES instead (since CDBS 0.4.54)
 # (warn even when used as-is: plural form breaks use in build targets)
-DEB_PYTHON_MODULE_PACKAGE = $(strip \
-	$(warning Use of DEB_PYTHON_MODULE_PACKAGE is deprecated, please use DEB_PYTHON_MODULE_PACKAGES instead)\
+DEB_PYTHON_MODULE_PACKAGE = $(strip $(call cdbs_warn_deprecated,\
+	DEB_PYTHON_MODULE_PACKAGE,0.4.54,DEB_PYTHON_MODULE_PACKAGES)\
 	$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
 
 cdbs_python_distutils_srcdir = $(or $(DEB_PYTHON_DISTUTILS_SRCDIR),$(DEB_SRCDIR))
@@ -68,7 +68,7 @@ cdbs_python_pkgresolve_check = $(strip $(if \
 		$(cdbs_python_arch_packages)$(cdbs_python_indep_packages)),$(strip \
 		$(cdbs_python_packages_pre))),\
 	,\
-	$(warning WARNING: \
+	$(call cdbs_warn,\
 		Redefining DEB_PYTHON_MODULE_PACKAGES late is \
 		currently unsupported: set DEB_PYTHON_MODULE_PACKAGES \
 		before including python-distutils.mk)))
@@ -76,7 +76,7 @@ cdbs_python_pkgresolve_check = $(strip $(if \
 cdbs_python_pkg_check = $(strip $(if \
 	$(cdbs_python_arch_packages)$(cdbs_python_indep_packages),\
 	,\
-	$(warning WARNING: \
+	$(call cdbs_warn,\
 		No Python packages found or declared - either rename \
 		binary packages or set DEB_PYTHON_MODULE_PACKAGES \
 		before including python-distutils.mk)))

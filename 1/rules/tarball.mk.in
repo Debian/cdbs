@@ -28,7 +28,8 @@ _cdbs_rules_tarball = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-$(warning WARNING:  tarball.mk is deprecated - please use source format 3.0 instead)
+$(call cdbs_warn_deprecated,\
+	tarball.mk,0.4.85,source format 3.0)
 
 # The user developper may override this variable to choose which tarballs
 # to unpack.

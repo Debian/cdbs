@@ -51,7 +51,7 @@ cdbs_python_sugar_pkgresolve_check = $(strip $(if \
 		$(DEB_PYTHON_SUGAR_PACKAGES)),$(strip \
 		$(cdbs_python_sugar_packages_pre))),\
 	,\
-	$(warning WARNING: \
+	$(call cdbs_warn,\
 		Redefining DEB_PYTHON_SUGAR_PACKAGES late is \
 		currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES \
 		before including python-sugar.mk))
@@ -59,7 +59,7 @@ cdbs_python_sugar_pkgresolve_check = $(strip $(if \
 cdbs_python_sugar_pkg_check = $(strip $(if \
 	$(DEB_PYTHON_SUGAR_PACKAGES),\
 	,\
-	$(warning WARNING: \
+	$(call cdbs_warn,\
 		No Python-based Sugar packages found or declared \
 		- either rename binary packages or set \
 		DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk)))

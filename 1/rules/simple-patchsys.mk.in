@@ -26,7 +26,8 @@ _cdbs_rules_patchsys = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
-$(warning WARNING:  simple-patchsys.mk is deprecated - please use source format 3.0 (quilt) instead)
+$(call cdbs_warn_deprecated,\
+	simple-patchsys.mk,0.4.85,source format 3.0 (quilt))
 
 ifeq ($(_cdbs_included_patchsys),)
 _cdbs_included_patchsys = 1
@@ -58,7 +59,7 @@ if lsdiff=`which lsdiff` ; then \
   | egrep "/config\.(guess|sub|rpath)$$" | tr "\n" " " ; \
 fi)
 ifneq (, $(evil_patches_that_do_nasty_things))
-$(warning WARNING: \
+$(call cdbs_warn,\
 	The following patches are modifying auto-updated files. \
 	Please exclude the following files from your patch: \
 	$(evil_patches_that_do_nasty_things))

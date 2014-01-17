@@ -65,10 +65,10 @@ testsanity::
 # and that waf fit the checksum in debian/waf.sha1sum
 cdbs-waf-checksum:
 	$(if $(DEB_WAF_SKIP_CHECKSUM),\
-		$(warning WARNING: \
+		$(call cdbs_warn,\
 			waf file is executed without prior inspection! \
 			This might be unsafe - you have been warned...!),\
-		$(info \
+		$(call cdbs_info,\
 			Will now checksum the waf file with debian/waf.sha1sum)\
 			$(if $(shell if test -f debian/waf.sha1sum; then echo something; fi),\
 				,\
@@ -80,9 +80,9 @@ cdbs-waf-checksum:
 					debian/waf.sha1sum is present \
 					but doesn't actually test waf))\
 			$(if $(shell if sha1sum --check --status debian/waf.sha1sum; then echo something; fi),\
-				$(info \
+				$(call cdbs_info,\
 					waf checksum is OK),\
-				$(warning \
+				$(call cdbs_warn,\
 					waf calculated checksum is \
 					$(firstword $(shell sha1sum ./waf)))\
 					$(info $(shell $(_cdbs_scripts_path)/waf-unpack --waf ./waf --dest debian/waf-unpacked)) \

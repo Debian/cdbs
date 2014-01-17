@@ -40,7 +40,7 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
 testsanity::
 	$(if $(_cdbs_rules_debhelper),\
 		,\
-		$(warning WARNING: \
+		$(call cdbs_warn,\
 			debhelper rule not used. \
 			Make sure to then manually include pd targets!))
 
