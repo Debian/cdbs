@@ -94,6 +94,16 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_buildvars)
 
 # Internal useful variables/expansions
 
+cdbs_info = $(info CDBS: $1)
+cdbs_warn = $(warning CDBS WARNING:  $1)
+
+# emit warning on use of deprecated variable
+#  * $1: variable name
+#  * $2: optional last version before deprecation
+#  * $3: optional alternative variable to use instead
+cdbs_warn_deprecated = $(call cdbs_warn,\
+	$1 is deprecated$(if $2, since $2)$(if $3, - please use $3 instead))
+
 # Can we change this to cdbs_curpkg = $(notdir $@) ?
 cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
 
