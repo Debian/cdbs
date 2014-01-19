@@ -100,8 +100,8 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 			$(cdbs_cursrcdir)/MANIFEST.upstream \
 			> $(cdbs_cursrcdir)/MANIFEST)
 	$(strip set -e; \
-		$(foreach buildver,$(cdbs_curpythonbuildversions),\
-			$(call cdbs_python_binary,python$(buildver)) \
+		$(foreach flavor,$(cdbs_curpythonflavors),\
+			$(call cdbs_python_binary,$(flavor)) \
 				$(cdbs_cursrcdir)/setup.py build; ))
 	$(strip [ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
 		|| IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" \
@@ -115,9 +115,9 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	$(strip set -e; \
-		$(foreach buildver,$(cdbs_curpythonbuildversions),\
+		$(foreach flavor,$(cdbs_curpythonflavors),\
 			LANG=C XDG_DATA_HOME="$(DEB_DESTDIR)/usr/share" \
-				$(call cdbs_python_binary,python$(buildver)) \
+				$(call cdbs_python_binary,$(flavor)) \
 				$(cdbs_cursrcdir)/setup.py install \
 				--prefix="$(DEB_DESTDIR)/usr"; ))
 

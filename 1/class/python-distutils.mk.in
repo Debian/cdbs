@@ -116,8 +116,8 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)):: de
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
 	$(strip set -e; \
 		cd $(cdbs_python_distutils_srcdir) && \
-		$(foreach buildver,$(cdbs_curpythonbuildversions),\
-			$(call cdbs_python_binary,python$(buildver)) \
+		$(foreach flavor,$(cdbs_curpythonflavors),\
+			$(call cdbs_python_binary,$(flavor)) \
 				$(cdbs_python_setup_cmd) build \
 				$(cdbs_python_build_args); ))
 	touch $@
@@ -137,13 +137,13 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%:
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%:
 	$(strip set -e; \
 		cd $(cdbs_python_distutils_srcdir) && \
-		$(foreach buildver,$(cdbs_curpythonbuildversions),\
-			$(call cdbs_python_binary,python$(buildver)) \
+		$(foreach flavor,$(cdbs_curpythonflavors),\
+			$(call cdbs_python_binary,$(flavor)) \
 				$(cdbs_python_setup_cmd) install \
 				--root="$(cdbs_python_destdir)" \
 				--install-layout=deb \
 				$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
-					--install-lib=$(call _cdbs_expand_python_distutils_skeldir,python$(buildver))) \
+					--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(flavor))) \
 				$(cdbs_python_install_args); ))
 
 
@@ -158,8 +158,8 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-modu
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-$(strip cd $(cdbs_python_distutils_srcdir) && \
-		$(foreach buildver,$(cdbs_curpythonbuildversions),\
-			$(call cdbs_python_binary,python$(buildver)) \
+		$(foreach flavor,$(cdbs_curpythonflavors),\
+			$(call cdbs_python_binary,$(flavor)) \
 				$(cdbs_python_setup_cmd) clean \
 				$(cdbs_python_clean_args); ))
 
