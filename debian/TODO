@@ -9,6 +9,7 @@ Ideas for 2nd epoch (i.e. /usr/share/cdbs/2/* files):
     + leading deb_ for package-specific, cdbs_ for global
     + allow early override (or register as special case)
     + always resolve *_ALL and *_$(pkg) for deb_* vars
+    + preserve leading "python" of flavors in python-autotools.mk
   * Use only early resolved ifeq constructs when deliberate
   * enable regression tests by default
   * enable parallel build by default

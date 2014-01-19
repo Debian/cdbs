@@ -47,7 +47,6 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 # implementations of Python itself
 _CDBS_PYTHONS = python2 python3
-_CDBS_PYTHONS_badly_named = python python3
 #  * uppercase implementation names
 $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
 
@@ -55,6 +54,13 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
 # default package prefix (if different from implementation name)
 # (i.e. if not overridden by DEB_*_MODULE_PACKAGES)
 _cdbs_python2_pkgprefix = python
+
+# flavors of each implementation
+# resolve all/default flavor (if differing from implementation name)
+_cdbs_expand_python2_allflavors = $(shell pyversions -r)
+_cdbs_expand_python3_allflavors = $(shell py3versions -r)
+_cdbs_expand_python2_defaultflavor = $(shell pyversions -d)
+_cdbs_expand_python3_defaultflavor = $(shell py3versions -d)
 
 # binary packages in use
 cdbs_python_potential_packages = $(strip \
@@ -122,42 +128,43 @@ _cdbs_python_singlesystem = $(strip \
 	or suppress the binary packages to operate on using either \
 	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
-# Calculate cdbs_python_build_versions
-cdbs_python_current_version := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -vd))
-cdbs_python3_current_version := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -vd))
-cdbs_python_supported_versions := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -vr))
-cdbs_python3_supported_versions := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -vr))
-cdbs_python_first_supported_version = $(firstword $(strip $(sort $(cdbs_python_supported_versions))))
-cdbs_python3_first_supported_version = $(firstword $(strip $(sort $(cdbs_python3_supported_versions))))
+# all/default flavors to use
+# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor
+#  1. resolved from _cdbs_expand_$p_*
+#  2. name of python implementation
+$(foreach p,$(_CDBS_PYTHONS),$(if $(cdbs_$p_packages),\
+	$(foreach v,allflavors defaultflavor,\
+		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
 
-# versions to use
-# variables cdbs_$python_nondefault_version
+# flavors to use
+# variables _cdbs_$python_altflavor
 #  * arch-indep w/ default unsupported: first alternative available
-$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_nondefault_version = $(strip \
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_altflavor = $(strip \
 	$(if $(cdbs_python_arch_packages),\
 		,\
-		$(if $(filter $(cdbs_$p_current_version),$(cdbs_$p_supported_versions)),\
+		$(if $(filter $(_cdbs_$p_defaultflavor),$(_cdbs_$p_allflavors)),\
 			,\
-			$(cdbs_$p_first_supported_version))))))
-# variables cdbs_$python_primary_version
-$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_primary_version = $(or $(strip \
-	$(cdbs_$p_nondefault_version)),$(strip \
-	$(cdbs_$p_current_version)))))
-# variables cdbs_$python_build_versions
+			$(firstword $(strip $(sort $(_cdbs_$p_allflavors)))))))))
+# variables cdbs_$python_mainflavor
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_mainflavor = $(or $(strip \
+	$(_cdbs_$p_altflavor)),$(strip \
+	$(_cdbs_$p_defaultflavor)))))
+# variables _cdbs_$python_flavors
 #  * arch(+indep): all; indep: current if supported, else first supported
-$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_build_versions = $(or $(strip \
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_flavors = $(or $(strip \
 	$(if $(cdbs_python_arch_packages),\
-		$(cdbs_$p_supported_versions))),$(strip \
-	$(cdbs_$p_primary_version)))))
+		$(_cdbs_$p_allflavors))),$(strip \
+	$(cdbs_$p_mainflavor)))))
+cdbs_python_flavors = $(strip \
+	$(foreach p,$(_CDBS_PYTHONS),\
+		$(_cdbs_$p_flavors)))
 
 # runtime to use
-cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -d))
-cdbs_python3_current_binary := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -d))
 # resolve from binary package and optional flavor
 cdbs_python_binary = $(strip \
-	$(if $(call cdbs_streq,$(cdbs_python$(cdbs_curpythonstem)_current_binary),$(1)),\
-		python$(cdbs_curpythonstem),\
-		$(1)))
+	$(if $(call cdbs_streq,$(cdbs_$(cdbs_curpython)_defaultflavor),$1),\
+		$(cdbs_curpython),\
+		$1))
 
 # resolve (implicitly) from binary package
 cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
@@ -167,16 +174,17 @@ cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
 			python2) \
 		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
 			python3))))
-cdbs_curpythonstem = $(strip \
+cdbs_curpython = $(strip \
 	$(if $(cdbs_python_single_system),\
-		$(patsubst python%,%,$(_cdbs_python_singlesystem)),\
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
-			3)))
-cdbs_curpythonindepbinary = python$(or $(strip \
-	$(cdbs_python$(cdbs_curpythonstem)_nondefault_version)),$(strip \
-	$(cdbs_curpythonstem)))
-cdbs_curpythonpribinary = python$(cdbs_python$(cdbs_curpythonstem)_primary_version)
-cdbs_curpythonbuildversions = $(cdbs_python$(cdbs_curpythonstem)_build_versions)
+		$(_cdbs_python_singlesystem),\
+		$(foreach p,$(_CDBS_PYTHONS),\
+			$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
+				$p))))
+cdbs_curpythonindepbinary = $(or $(strip \
+	$(_cdbs_$(cdbs_curpython)_altflavor)),$(strip \
+	$(cdbs_curpython)))
+cdbs_curpythonpribinary = $(cdbs_$(cdbs_curpython)_mainflavor)
+cdbs_curpythonflavors = $(_cdbs_$(cdbs_curpython)_flavors)
 
 # package relations
 # Python-related dependencies according to Python policy, appendix A
@@ -190,12 +198,12 @@ cdbs_python2_builddeps = $(if $(cdbs_pythonsystem_python2),\
 	$(if $(_cdbs_python2_arch_packages),\
 		python-all-dev,\
 		python-dev (>= 2.3.5-7)\
-			$(cdbs_python_nondefault_version:%=, python%-dev)))
+			$(_cdbs_python2_altflavor:%=, %-dev)))
 cdbs_python3_builddeps = $(if $(cdbs_pythonsystem_python3),\
 	$(if $(_cdbs_python3_arch_packages),\
 		python3-all-dev (>= 3.1),\
 		python3-dev\
-			$(cdbs_python3_nondefault_version:%=, python%-dev)))
+			$(_cdbs_python3_altflavor:%=, %-dev)))
 cdbs_python_builddeps = \
 	$(cdbs_python_builddeps_legacy), \
 	$(cdbs_python2_builddeps), \
@@ -208,19 +216,19 @@ cdbs_python_builddeps_cdbs = $(strip \
 
 # check if build is possible
 $(if $(cdbs_pythonsystem_pysupport),\
-	$(if $(cdbs_python_build_versions),\
+	$(if $(_cdbs_python2_flavors),\
 		,\
 		$(error invalid setting in debian/pyversions)))
 $(if $(cdbs_pythonsystem_pycentral),\
-	$(if $(cdbs_python_build_versions),\
+	$(if $(_cdbs_python2_flavors),\
 		,\
 		$(error invalid setting for XS-Python-Version)))
 $(if $(cdbs_pythonsystem_python2),\
-	$(if $(cdbs_python_build_versions),\
+	$(if $(_cdbs_python2_flavors),\
 		,\
 		$(error invalid setting for X-Python-Version)))
 $(if $(cdbs_pythonsystem_python3),\
-	$(if $(cdbs_python3_build_versions),\
+	$(if $(_cdbs_python3_flavors),\
 		,\
 		$(error invalid setting for X-Python3-Version)))
 
@@ -231,5 +239,29 @@ cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
 		$(shell if [ -e debian/pyversions ]; then \
 			cat debian/pyversions; \
 		fi)))
+cdbs_curpythonstem = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_curpythonstem,0.5,cdbs_curpython)\
+	$(filter 3,$(cdbs_curpython:python%=%)))
+cdbs_python_current_binary = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_current_binary,0.5)\
+	$(_cdbs_python2_defaultflavor))
+cdbs_python3_current_binary = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python3_current_binary,0.5)\
+	$(_cdbs_python3_defaultflavor))
+cdbs_python_current_version = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_current_version,0.5)\
+	$(_cdbs_python2_defaultflavor:python%=%))
+cdbs_python3_current_version = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python3_current_version,0.5)\
+	$(_cdbs_python3_defaultflavor:python%=%))
+cdbs_python_supported_versions = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_supported_versions,0.5)\
+	$(_cdbs_python2_allflavors:python%=%))
+cdbs_python3_supported_versions = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python3_supported_versions,0.5)\
+	$(_cdbs_python3_allflavors:python%=%))
+cdbs_python_build_versions = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_build_versions,0.5,cdbs_python_flavors)\
+	$(_cdbs_python2_flavors))
 
 endif

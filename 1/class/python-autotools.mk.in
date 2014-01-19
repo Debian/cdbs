@@ -24,9 +24,10 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 # Flavors are used if more than a single Python build is needed
 # Used in implicit rules, so must be set before including makefile
+# (leading "python" stripped to stay compatible with CDBS << 0.5)
 DEB_MAKE_FLAVORS ?= $(strip \
-	$(if $(word 2,$(cdbs_python_build_versions)),\
-		$(cdbs_python_build_versions)))
+	$(if $(word 2,$(cdbs_python_flavors)),\
+		$(strip python%,%,$(cdbs_python_flavors))))
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 
@@ -40,9 +41,13 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools)
 CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
+# (prepend "python" to digit flavors to stay compatible with CDBS << 0.5)
 cdbs_make_curpythonruntime = $(or $(strip \
-	$(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%)),$(strip \
-	$(call cdbs_python_binary,python$(cdbs_make_curflavor))))
+	$(_cdbs_$(cdbs_curpython)_altflavor)),$(strip \
+	$(call cdbs_python_binary,$(strip \
+		$(patsubst 2%,python2%,\
+			$(patsubst 3%,python3%,\
+				$(cdbs_make_curflavor)))))))
 
 DEB_CONFIGURE_SCRIPT_ENV_PYTHON ?= PYTHON="$(cdbs_make_curpythonruntime)"
 cdbs_autotools_configure_env += $(DEB_CONFIGURE_SCRIPT_ENV_PYTHON)
