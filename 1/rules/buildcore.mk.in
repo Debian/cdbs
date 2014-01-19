@@ -263,9 +263,9 @@ install-indep: $(patsubst %,install/%,$(DEB_INDEP_PACKAGES))
 $(patsubst %,install/%,$(DEB_ARCH_PACKAGES)) :: install/% : testdir testroot common-install-arch build/%
 $(patsubst %,install/%,$(DEB_INDEP_PACKAGES)) :: install/% : testdir testroot common-install-indep build/%
 
-# These variables are deprecated.
-_cdbs_deprecated_vars += CDBS_DEPENDS CDBS_PREDEPENDS CDBS_RECOMMENDS CDBS_SUGGESTS CDBS_BREAKS CDBS_PROVIDES CDBS_REPLACES CDBS_CONFLICTS CDBS_ENHANCES
-# New in 0.4.85.
+_cdbs_deprecated_vars += $(patsubst %,CDBS_%$(comma)0.4.85,\
+	DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES \
+	CONFLICTS ENHANCES)
 CDBS_DEPENDS_DEFAULT ?= $(CDBS_DEPENDS)
 CDBS_PREDEPENDS_DEFAULT ?= $(CDBS_PREDEPENDS)
 CDBS_RECOMMENDS_DEFAULT ?= $(CDBS_RECOMMENDS)

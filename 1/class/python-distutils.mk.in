@@ -32,23 +32,18 @@ DEB_PYTHON_INSTALL_ARGS_ALL ?= --prefix=/usr --no-compile -O0
 DEB_PYTHON_CLEAN_ARGS ?= -a
 #DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONBINARY@/site-packages/
 
-# This variable was deprecated after cdbs 0.4.89
-_cdbs_deprecated_vars += DEB_PYTHON_SETUP_CMD
+_cdbs_deprecated_vars += DEB_PYTHON_SETUP_CMD,0.4.89
 _cdbs_deprecated_DEB_PYTHON_SETUP_CMD_default := $(DEB_PYTHON_SETUP_CMD)
 DEB_PYTHON_SETUP_CMD_DEFAULT ?= $(DEB_PYTHON_SETUP_CMD)
 
-# This variable was deprecated after cdbs 0.4.89
-_cdbs_deprecated_vars += DEB_PYTHON_BUILD_ARGS
+_cdbs_deprecated_vars += DEB_PYTHON_BUILD_ARGS,0.4.89
 _cdbs_deprecated_DEB_PYTHON_BUILD_ARGS_default := $(DEB_PYTHON_BUILD_ARGS)
 DEB_PYTHON_BUILD_ARGS_DEFAULT ?= $(DEB_PYTHON_BUILD_ARGS)
 
-# This variable was deprecated after cdbs 0.4.89
-_cdbs_deprecated_vars += DEB_PYTHON_CLEAN_ARGS
+_cdbs_deprecated_vars += DEB_PYTHON_CLEAN_ARGS,0.4.89
 _cdbs_deprecated_DEB_PYTHON_CLEAN_ARGS_default := $(DEB_PYTHON_CLEAN_ARGS)
 DEB_PYTHON_CLEAN_ARGS_DEFAULT ?= $(DEB_PYTHON_CLEAN_ARGS)
 
-# DEB_PYTHON_MODULE_PACKAGE is deprecated.
-# use DEB_PYTHON_MODULE_PACKAGES instead (since CDBS 0.4.54)
 # (warn even when used as-is: plural form breaks use in build targets)
 DEB_PYTHON_MODULE_PACKAGE = $(strip $(call cdbs_warn_deprecated,\
 	DEB_PYTHON_MODULE_PACKAGE,0.4.54,DEB_PYTHON_MODULE_PACKAGES)\

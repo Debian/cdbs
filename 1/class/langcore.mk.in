@@ -46,8 +46,7 @@ DEB_WARNING_FLAGS ?= -Wall
 deb_cflags += $(DEB_WARNING_FLAGS)
 deb_cxxflags += $(DEB_WARNING_FLAGS)
 
-# This variable was deprecated after cdbs 0.4.89
-_cdbs_deprecated_vars += DEB_OPT_FLAG
+_cdbs_deprecated_vars += DEB_OPT_FLAG,0.4.89
 _cdbs_deprecated_DEB_OPT_FLAG_default := $(DEB_OPT_FLAG)
 
 # Set (not add) our defaults for CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS if

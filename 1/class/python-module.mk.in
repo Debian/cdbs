@@ -25,9 +25,7 @@ _cdbs_class_python_module = 1
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
 
-# This variable is deprecated.
-_cdbs_deprecated_vars += DEB_PYTHON_PRIVATE_MODULES_DIRS
-# New in 0.4.97.
+_cdbs_deprecated_vars += DEB_PYTHON_PRIVATE_MODULES_DIRS,0.4.97
 DEB_PYTHON_PRIVATE_MODULES_DIRS_ALL ?= $(DEB_PYTHON_PRIVATE_MODULES_DIRS)
 
 # pysupport/pycentral dependencies according to Python policy, appendix A
