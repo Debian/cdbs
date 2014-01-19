@@ -28,9 +28,9 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 DEB_PYTHON_SETUP_CMD ?= setup.py
 DEB_PYTHON_BUILD_ARGS ?= --build-base="$(CURDIR)/$(cdbs_curbuilddir)/build"
-DEB_PYTHON_INSTALL_ARGS_ALL ?= --prefix=/usr --no-compile -O0
+DEB_PYTHON_INSTALL_ARGS_ALL ?= --no-compile -O0
 DEB_PYTHON_CLEAN_ARGS ?= -a
-#DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONBINARY@/site-packages/
+#DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONBINARY@/dist-packages/
 
 _cdbs_deprecated_vars += DEB_PYTHON_SETUP_CMD,0.4.89
 _cdbs_deprecated_DEB_PYTHON_SETUP_CMD_default := $(DEB_PYTHON_SETUP_CMD)
@@ -56,10 +56,9 @@ cdbs_python_setup_cmd = $(call cdbs_expand_curvar,DEB_PYTHON_SETUP_CMD)
 cdbs_python_build_args = $(call cdbs_expand_curvar,DEB_PYTHON_BUILD_ARGS)
 cdbs_python_install_args = $(call cdbs_expand_curvar,DEB_PYTHON_INSTALL_ARGS)
 cdbs_python_clean_args = $(call cdbs_expand_curvar,DEB_PYTHON_CLEAN_ARGS)
-cdbs_expand_python_distutils_installdir = $(strip \
-	$(subst @PYTHONBINARY@,$1,$(or $(strip \
-		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
-		/usr/lib/@PYTHONBINARY@/site-packages/))))
+_cdbs_expand_python_distutils_skeldir = $(strip \
+	$(subst @PYTHONBINARY@,$1,\
+		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)))
 
 # prepare sanity checks
 cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
@@ -134,7 +133,9 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 		$(cdbs_curpythonindepbinary) \
 			$(cdbs_python_setup_cmd) install \
 			--root="$(cdbs_python_destdir)" \
-			--install-purelib=$(call cdbs_expand_python_distutils_installdir,$(cdbs_curpythonpribinary)) \
+			--install-layout=deb \
+			$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
+				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonpribinary))) \
 			$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
@@ -144,8 +145,9 @@ $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix p
 			$(call cdbs_python_binary,python$(buildver)) \
 				$(cdbs_python_setup_cmd) install \
 				--root="$(cdbs_python_destdir)" \
-				--install-purelib=$(call cdbs_expand_python_distutils_installdir,python$(buildver)) \
-				--install-platlib=$(call cdbs_expand_python_distutils_installdir,python$(buildver)) \
+				--install-layout=deb \
+				$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
+					--install-lib=$(call _cdbs_expand_python_distutils_skeldir,python$(buildver))) \
 				$(cdbs_python_install_args); )
 
 # Deprecated targets.  You should use above targets instead.
@@ -187,4 +189,12 @@ clean::
 	find "$(CURDIR)" -prune -name '*.egg-info' -exec rm -rf '{}' ';'
 
 .PHONY: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
+
+# deprecated variables
+cdbs_expand_python_distutils_installdir = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_expand_python_distutils_installdir,0.5)\
+	$(subst @PYTHONBINARY@,$1,$(or $(strip \
+		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
+		/usr/lib/@PYTHONBINARY@/dist-packages/))))
+
 endif
