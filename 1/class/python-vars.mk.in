@@ -61,7 +61,6 @@ cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
 # check python system
 cdbs_python_use_xs_field := $(if $(DEB_PYTHON_SYSTEM),$(shell grep -q "^XS-Python-Version:" debian/control && echo yes))
-cdbs_python_selected_pyversions := $(if $(DEB_PYTHON_SYSTEM),$(shell if [ -e debian/pyversions ]; then cat debian/pyversions; fi))
 
 cdbs_python2 = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python2_packages),python2))
 cdbs_python3 = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),python3))
@@ -118,5 +117,13 @@ $(if $(cdbs_python_pysupport),$(if $(cdbs_python_build_versions),,$(error invali
 $(if $(cdbs_python_pycentral),$(if $(cdbs_python_build_versions),,$(error invalid setting for XS-Python-Version)))
 $(if $(cdbs_python2),$(if $(cdbs_python_build_versions),,$(error invalid setting for X-Python-Version)))
 $(if $(cdbs_python3),$(if $(cdbs_python3_build_versions),,$(error invalid setting for X-Python3-Version)))
+
+# deprecated variables
+cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_selected_pyversions,0.4.90)\
+	$(if $(DEB_PYTHON_SYSTEM),\
+		$(shell if [ -e debian/pyversions ]; then \
+			cat debian/pyversions; \
+		fi)))
 
 endif
