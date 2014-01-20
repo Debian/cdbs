@@ -55,6 +55,13 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
 # (i.e. if not overridden by DEB_*_MODULE_PACKAGES)
 _cdbs_python2_pkgprefix = python
 
+# packaging systems
+_CDBS_PYTHONSYSTEMS_legacy = pycentral pysupport
+_CDBS_PYTHONSYSTEMS = $(_CDBS_PYTHONSYSTEMS_legacy) $(_CDBS_PYTHONS)
+# implementations supported (if different from system name)
+_cdbs_pythonsystempythons_pysupport = python2
+_cdbs_pythonsystempythons_pycentral = python2
+
 # flavors of each implementation
 # resolve all/default flavor (if differing from implementation name)
 _cdbs_expand_python2_allflavors = $(shell pyversions -r)
@@ -95,30 +102,15 @@ cdbs_python_indep_packages = $(strip \
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
 # packaging systems to use
-cdbs_pythonsystem_pysupport = $(filter pysupport,$(DEB_PYTHON_SYSTEM))
-cdbs_pythonsystem_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
-cdbs_python_legacy_system = $(or $(strip \
-	$(cdbs_pythonsystem_pysupport)),$(strip \
-	$(cdbs_pythonsystem_pycentral)),\
-	$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) \
-		(select either pysupport or pycentral, or leave empty \
-		for default $(subst $(space),/,$(strip $(_CDBS_PYTHONS)))))))
-cdbs_pythonsystem_python2 = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		,\
-		$(if $(_cdbs_python2_packages),\
-			python2)))
-cdbs_pythonsystem_python3 = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		,\
-		$(if $(_cdbs_python3_packages),\
-			python3)))
 cdbs_python_systems = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		$(cdbs_python_legacy_system),\
-		$(foreach p,$(_CDBS_PYTHONS),\
-			$(if $(_cdbs_$p_packages),\
-				$p))))
+	$(foreach s,$(_CDBS_PYTHONSYSTEMS),\
+		$(if $(filter $s,$(DEB_PYTHON_SYSTEM)),\
+			$(filter-out $(_CDBS_PYTHONSYSTEMS_legacy),$s),\
+			$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
+				$(if $(_cdbs_$p_packages),\
+					$s)))))
+$(foreach s,$(_CDBS_PYTHONSYSTEMS),$(eval cdbs_pythonsystem_$s = $(strip \
+	$(filter $s,$(cdbs_python_systems)))))
 # some build systems can handle only a single packaging system
 _cdbs_python_singlesystem = $(strip \
 	$(cdbs_python_systems) \
@@ -167,13 +159,10 @@ cdbs_python_binary = $(strip \
 		$1))
 
 # resolve (implicitly) from binary package
-cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
-	$(cdbs_python_legacy_system),\
-	$(strip \
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_python2_packages)),\
-			python2) \
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
-			python3))))
+cdbs_curpythonsystems = $(strip $(foreach s,$(cdbs_python_systems),\
+	$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
+		$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
+			$s))))
 cdbs_curpython = $(strip \
 	$(if $(cdbs_python_single_system),\
 		$(_cdbs_python_singlesystem),\
@@ -193,14 +182,15 @@ cdbs_python_builddeps_python2 = $(if $(_cdbs_python2_arch_packages),\
 	python-all-dev,\
 	python-dev (>= 2.3.5-7)\
 		$(_cdbs_python2_altflavor:%=, %-dev))
+cdbs_python_builddeps_pycentral = $(cdbs_python_builddeps_python2)
+cdbs_python_builddeps_pysupport = $(cdbs_python_builddeps_python2)
 cdbs_python_builddeps_python3 = $(if $(_cdbs_python3_arch_packages),\
 	python3-all-dev (>= 3.1),\
 	python3-dev\
 		$(_cdbs_python3_altflavor:%=, %-dev))
 cdbs_python_builddeps = \
-	$(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_builddeps_python2)), \
-	$(if $(cdbs_pythonsystem_python2),$(cdbs_python_builddeps_python2)), \
-	$(if $(cdbs_pythonsystem_python3),$(cdbs_python_builddeps_python3))
+	$(foreach s,$(cdbs_python_systems),\
+		$(comma) $(cdbs_python_builddeps_$s))
 cdbs_python_builddeps_cdbs = $(strip \
 	$(if $(_cdbs_python3_indep_packages),\
 		$(comma) cdbs (>= 0.4.93~),\

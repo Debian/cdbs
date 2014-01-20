@@ -35,18 +35,8 @@ CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
 CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
 CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_pythonsystem_pysupport),\
-		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pysupport)))
-CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_pythonsystem_pycentral),\
-		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral)))
-CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_pythonsystem_python2),\
-		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2)))
-CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_python3),\
-	$(if $(cdbs_pythonsystem_python3),\
-		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python3)))
+	$(foreach s,$(cdbs_python_systems),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_$s)))
 
 CDBS_BUILD_DEPENDS_class_python-module_args ?= cdbs (>= 0.4.97~)
 CDBS_BUILD_DEPENDS += $(strip \
