@@ -302,7 +302,7 @@ CDBS_REPLACES_DEFAULT ?= $(CDBS_REPLACES)
 CDBS_CONFLICTS_DEFAULT ?= $(CDBS_CONFLICTS)
 CDBS_ENHANCES_DEFAULT ?= $(CDBS_ENHANCES)
 
-# Apply CDBS-declared dependencies to binary packages
+# Resolve CDBS-declared binary package relations and apply to substvars files
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
 	@echo 'Adding cdbs dependencies to debian/$(cdbs_curpkg).substvars'
 	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )' \

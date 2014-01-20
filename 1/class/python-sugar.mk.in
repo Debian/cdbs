@@ -64,7 +64,7 @@ cdbs_python_sugar_pkg_check = $(strip $(if \
 		- either rename binary packages or set \
 		DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk)))
 
-# convenience wrappers to expand Sugar branches for package dependencies
+# convenience wrappers to resolve package dependencies for all Sugar branches
 cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) ,$(comma) ,$(DEB_SUGAR_PRIMARY_BRANCH))
 cdbs_sugar_anybranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) , | ,$(DEB_SUGAR_PRIMARY_BRANCH))
 
