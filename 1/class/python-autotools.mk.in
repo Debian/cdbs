@@ -42,12 +42,11 @@ CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
 # (prepend "python" to digit flavors to stay compatible with CDBS << 0.5)
-cdbs_make_curpythonruntime = $(or $(strip \
-	$(_cdbs_$(cdbs_curpython)_altflavor)),$(strip \
-	$(call cdbs_python_binary,$(strip \
+cdbs_make_curpythonruntime = $(strip \
+	$(call cdbs_expand_pythonruntime,$(cdbs_curpkg),$(strip \
 		$(patsubst 2%,python2%,\
 			$(patsubst 3%,python3%,\
-				$(cdbs_make_curflavor)))))))
+				$(cdbs_make_curflavor))))))
 
 DEB_CONFIGURE_SCRIPT_ENV_PYTHON ?= PYTHON="$(cdbs_make_curpythonruntime)"
 cdbs_autotools_configure_env += $(DEB_CONFIGURE_SCRIPT_ENV_PYTHON)

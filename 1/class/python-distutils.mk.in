@@ -30,7 +30,7 @@ DEB_PYTHON_SETUP_CMD ?= setup.py
 DEB_PYTHON_BUILD_ARGS ?= --build-base="$(CURDIR)/$(cdbs_curbuilddir)/build"
 DEB_PYTHON_INSTALL_ARGS_ALL ?= --no-compile -O0
 DEB_PYTHON_CLEAN_ARGS ?= -a
-#DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONBINARY@/dist-packages/
+#DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL = /usr/lib/@PYTHONFLAVOR@/dist-packages/
 
 _cdbs_deprecated_vars += DEB_PYTHON_SETUP_CMD,0.4.89
 _cdbs_deprecated_DEB_PYTHON_SETUP_CMD_default := $(DEB_PYTHON_SETUP_CMD)
@@ -57,8 +57,12 @@ cdbs_python_build_args = $(call cdbs_expand_curvar,DEB_PYTHON_BUILD_ARGS)
 cdbs_python_install_args = $(call cdbs_expand_curvar,DEB_PYTHON_INSTALL_ARGS)
 cdbs_python_clean_args = $(call cdbs_expand_curvar,DEB_PYTHON_CLEAN_ARGS)
 _cdbs_expand_python_distutils_skeldir = $(strip \
-	$(subst @PYTHONBINARY@,$1,\
-		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)))
+	$(subst @PYTHONBINARY@,$(strip \
+		$1 \
+		$(call cdbs_warn_deprecated,\
+			@PYTHONBINARY@,0.5,@PYTHONFLAVOR@)),\
+		$(subst @PYTHONFLAVOR@,$1,\
+			$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL))))
 
 # prepare sanity checks
 cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
@@ -110,7 +114,7 @@ $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
 	cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) \
+		$(cdbs_curpythonruntime) \
 			$(cdbs_python_setup_cmd) build \
 			$(cdbs_python_build_args)
 	touch $@
@@ -119,7 +123,7 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 	set -e; \
 	cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach flavor,$(cdbs_curpythonflavors),\
-			$(call cdbs_python_binary,$(flavor)) \
+			$(call cdbs_expand_pythonruntime,$(cdbs_curpkg),$(flavor)) \
 				$(cdbs_python_setup_cmd) build \
 				$(cdbs_python_build_args); )
 	touch $@
@@ -128,19 +132,19 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%:
 	cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) \
+		$(cdbs_curpythonruntime) \
 			$(cdbs_python_setup_cmd) install \
 			--root="$(cdbs_python_destdir)" \
 			--install-layout=deb \
 			$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
-				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonpribinary))) \
+				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonflavor))) \
 			$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%:
 	set -e; \
 	cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach flavor,$(cdbs_curpythonflavors),\
-			$(call cdbs_python_binary,$(flavor)) \
+			$(call cdbs_expand_pythonruntime,$(cdbs_curpkg),$(flavor)) \
 				$(cdbs_python_setup_cmd) install \
 				--root="$(cdbs_python_destdir)" \
 				--install-layout=deb \
@@ -154,14 +158,14 @@ clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
 	-cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) \
+		$(cdbs_curpythonruntime) \
 			$(cdbs_python_setup_cmd) clean \
 			$(cdbs_python_clean_args)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach flavor,$(cdbs_curpythonflavors),\
-			$(call cdbs_python_binary,$(flavor)) \
+			$(call cdbs_expand_pythonruntime,$(cdbs_curpkg),$(flavor)) \
 				$(cdbs_python_setup_cmd) clean \
 				$(cdbs_python_clean_args); )
 
@@ -184,8 +188,9 @@ clean::
 # deprecated variables
 cdbs_expand_python_distutils_installdir = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_expand_python_distutils_installdir,0.5)\
-	$(subst @PYTHONBINARY@,$1,$(or $(strip \
-		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
-		/usr/lib/@PYTHONBINARY@/dist-packages/))))
+	$(subst @PYTHONBINARY@,$1,$(strip \
+		$(subst @PYTHONFLAVOR@,$1,$(or $(strip \
+			$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
+			/usr/lib/@PYTHONFLAVOR@/dist-packages/))))))
 
 endif
