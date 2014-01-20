@@ -122,6 +122,10 @@ open_parenthesis = (
 close_parenthesis = )
 cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
 
+# workaround for lack of uppercase/lowercase functions in make
+cdbs_uc = $(shell echo '$1' | tr '[:lower:]' '[:upper:]')
+cdbs_lc = $(shell echo '$1' | tr '[:upper:]' '[:lower:]')
+
 # Resolve VAR_ALL and either VAR_pkg or VAR_DEFAULT, space- or custom-delimited
 #  * VAR_ALL applies to all packages
 #  * VAR_pkg applies to current package
