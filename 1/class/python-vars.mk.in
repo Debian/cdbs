@@ -106,9 +106,10 @@ cdbs_python_systems = $(strip \
 cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),3))
 cdbs_python_stem += $(strip \
 	$(if $(word 2,$(cdbs_python_systems)),$(error \
-	use of both "python2" and "python3" packaging systems is unsupported here - \
-	either change target binary package names, explicitly set \
-	DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM)))
+	use of multiple python implementations is unsupported here - \
+	either change target binary package names, or explicitly set \
+	or suppress the binary packages to operate on using either \
+	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
 # Calculate cdbs_python_build_versions
 cdbs_python_current_version := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_python2),$(shell pyversions -vd))
