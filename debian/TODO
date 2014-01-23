@@ -1,3 +1,25 @@
+FIXME
+  * Avoid introducing cdbs_$p_mainflavor by putting it as first value of
+    cdbs_python_flavors.
+  * doublecheck all deprecated vars - especially how they resolve!
+  * Verify that all deprecations are fixable with only public variables.
+
+Misc ideas...
+  * avoid confusing variables _cdbs_expand_$p_allflavors and
+    _cdbs_expand_$p_defaultflavor.
+  * Simplify build-dependencies separately from splitting systems from implementations.
+  * add ruby.mk, based on ruby-sass rules file.
+  * Add nodejs.mk, based on ??? rules file.
+  * Drop unused dkms.mk snippet?
+  * Unconvolute shell checks in waf.mk.
+
+  * strip tabs in middle of lines
+
+  * && at start of line
+
+  * avoid shell calls in ant.mk
+  * avoid shell tests (use wildcard) in autotools-files.mk.in.
+
   * avoid copyright check on arch-only builds.
     Thanks to Matthias Klose (see bug#717827).
 
