@@ -64,7 +64,7 @@
 # DEB_DH_MAKESHLIBS_ARGS_<package>
 #   Arguments passed directly to dh_makeshlibs, for a particular package <package>
 # DEB_DH_MAKESHLIBS_ARGS
-#   Completely override argument passing to dh_makeshlibs. 
+#   Completely override argument passing to dh_makeshlibs.
 # DEB_DH_SHLIBDEPS_ARGS_ALL
 #   Arguments passed directly to dh_shlibdeps, for all packages
 # DEB_DH_SHLIBDEPS_ARGS_<package>
@@ -192,7 +192,8 @@ common-install-prehook-impl::
 	dh_installdirs -A $(DEB_INSTALL_DIRS_ALL)
 
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
-	dh_installdirs -p$(cdbs_curpkg) $(or $(DEB_INSTALL_DIRS),$(DEB_INSTALL_DIRS_$(cdbs_curpkg)))
+	dh_installdirs -p$(cdbs_curpkg) \
+		$(or $(DEB_INSTALL_DIRS),$(DEB_INSTALL_DIRS_$(cdbs_curpkg)))
 
 # Create .debs or .udebs as we see fit
 $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) :: binary/% : binary-makedeb/%
@@ -206,31 +207,72 @@ $(patsubst %,binary/%,$(DEB_ALL_PACKAGES)) :: binary/% : binary-makedeb/%
 # dh_install to split the source from debian/tmp, as well as installing
 # ChangeLogs and the like.
 $(patsubst %,binary-install/%,$(DEB_ALL_PACKAGES)) :: binary-install/%:
-	dh_installdocs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_DOCS)
-	dh_installexamples -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_EXAMPLES)
-	dh_installman -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_MANPAGES) 
-	dh_installinfo -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_INSTALL_INFO) 
-	dh_installmenu -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALL_MENU_ARGS)
-	dh_installcron -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALL_CRON_ARGS)
-	dh_installinit -p$(cdbs_curpkg) $(if $(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS),--update-rcd-params="$(call cdbs_strip_quotes,$(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS))") $(call cdbs_expand_curvar,DEB_DH_INSTALLINIT_ARGS)
-	dh_installdebconf -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLDEBCONF_ARGS)
-	dh_installemacsen -p$(cdbs_curpkg) $(if $(DEB_EMACS_PRIORITY),--priority=$(DEB_EMACS_PRIORITY)) $(if $(DEB_EMACS_FLAVOR),--flavor=$(DEB_EMACS_FLAVOR)) $(call cdbs_expand_curvar,DEB_DH_INSTALLEMACSEN_ARGS)
-	dh_installcatalogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCATALOGS_ARGS)
-	dh_installpam -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLPAM_ARGS)
-	dh_installlogrotate -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGROTATE_ARGS)
-	dh_installlogcheck -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLLOGCHECK_ARGS)
-	dh_installchangelogs -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLCHANGELOGS_ARGS) $(call cdbs_expand_curvar,DEB_INSTALL_CHANGELOGS)
-	$(if $(wildcard /usr/bin/dh_installudev),dh_installudev -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLUDEV_ARGS))
-	$(if $(wildcard /usr/bin/dh_lintian),dh_lintian -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_LINTIAN_ARGS))
-	$(if $(wildcard /usr/bin/dh_bugfiles),dh_bugfiles -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUGFILES_ARGS))
-	dh_install -p$(cdbs_curpkg) $(if $(DEB_DH_INSTALL_SOURCEDIR),--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) $(call cdbs_expand_curvar,DEB_DH_INSTALL_ARGS)
-	$(if $(wildcard /usr/bin/dh_systemd_enable),dh_systemd_enable -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_SYSTEMD_ENABLE_ARGS))
-	$(if $(wildcard /usr/bin/dh_systemd_start),dh_systemd_start -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_SYSTEMD_START_ARGS))
+	dh_installdocs -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_INSTALL_DOCS)
+	dh_installexamples -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_INSTALL_EXAMPLES)
+	dh_installman -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_INSTALL_MANPAGES)
+	dh_installinfo -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_INSTALL_INFO)
+	dh_installmenu -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALL_MENU_ARGS)
+	dh_installcron -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALL_CRON_ARGS)
+	dh_installinit -p$(cdbs_curpkg) \
+		$(if $(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS),\
+			--update-rcd-params="$(call cdbs_strip_quotes,$(call cdbs_expand_curvar,DEB_UPDATE_RCD_PARAMS))") \
+			$(call cdbs_expand_curvar,DEB_DH_INSTALLINIT_ARGS)
+	dh_installdebconf -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLDEBCONF_ARGS)
+	dh_installemacsen -p$(cdbs_curpkg) \
+		$(if $(DEB_EMACS_PRIORITY),\
+			--priority=$(DEB_EMACS_PRIORITY)) \
+		$(if $(DEB_EMACS_FLAVOR),\
+			--flavor=$(DEB_EMACS_FLAVOR)) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLEMACSEN_ARGS)
+	dh_installcatalogs -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLCATALOGS_ARGS)
+	dh_installpam -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLPAM_ARGS)
+	dh_installlogrotate -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLLOGROTATE_ARGS)
+	dh_installlogcheck -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLLOGCHECK_ARGS)
+	dh_installchangelogs -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLCHANGELOGS_ARGS) \
+		$(call cdbs_expand_curvar,DEB_INSTALL_CHANGELOGS)
+	$(if $(wildcard /usr/bin/dh_installudev),\
+		dh_installudev -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_INSTALLUDEV_ARGS))
+	$(if $(wildcard /usr/bin/dh_lintian),\
+		dh_lintian -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_LINTIAN_ARGS))
+	$(if $(wildcard /usr/bin/dh_bugfiles),\
+		dh_bugfiles -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_BUGFILES_ARGS))
+	dh_install -p$(cdbs_curpkg) \
+		$(if $(DEB_DH_INSTALL_SOURCEDIR),\
+			--sourcedir=$(DEB_DH_INSTALL_SOURCEDIR)) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALL_ARGS)
+	$(if $(wildcard /usr/bin/dh_systemd_enable),\
+		dh_systemd_enable -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_SYSTEMD_ENABLE_ARGS))
+	$(if $(wildcard /usr/bin/dh_systemd_start),\
+		dh_systemd_start -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_SYSTEMD_START_ARGS))
 # TODO: Use DEB_DH_LINK_ARGS as package-default var (not global addon)
-	dh_link -p$(cdbs_curpkg) $(DEB_DH_LINK_ARGS) $(DEB_DH_LINK_$(cdbs_curpkg))
-	$(if $(wildcard /usr/bin/dh_buildinfo),dh_buildinfo -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUILDINFO_ARGS))
-	dh_installmime -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLMIME_ARGS)
-	$(if $(wildcard /usr/bin/dh_installgsettings),dh_installgsettings -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLGSETTINGS_ARGS))
+	dh_link -p$(cdbs_curpkg) \
+		$(DEB_DH_LINK_ARGS) \
+		$(DEB_DH_LINK_$(cdbs_curpkg))
+	$(if $(wildcard /usr/bin/dh_buildinfo),\
+		dh_buildinfo -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_BUILDINFO_ARGS))
+	dh_installmime -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLMIME_ARGS)
+	$(if $(wildcard /usr/bin/dh_installgsettings),\
+		dh_installgsettings -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_INSTALLGSETTINGS_ARGS))
 
 # This rule is called after all packages have been installed, and their
 # post-install hooks have been run.
@@ -245,8 +287,12 @@ $(patsubst %,binary-post-install/%,$(DEB_ALL_PACKAGES)) :: binary-post-install/%
 # to strip files.
 $(patsubst %,binary-strip/%,$(DEB_ARCH_PACKAGES)) :: binary-strip/%: common-binary-post-install-arch binary-strip-IMPL/%
 $(patsubst %,binary-strip/%,$(DEB_INDEP_PACKAGES)) :: binary-strip/%: common-binary-post-install-indep binary-strip-IMPL/%
-$(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%: 
-	$(if $(is_debug_package),,dh_strip -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_STRIP_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_STRIP_ARGS))
+$(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%:
+	$(if $(is_debug_package),\
+		,\
+		dh_strip -p$(cdbs_curpkg) \
+			$(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_STRIP_EXCLUDE)) \
+			$(call cdbs_expand_curvar,DEB_DH_STRIP_ARGS))
 
 # This rule is called right before generating debs {post,pre}{inst,rm} and controls, deps, are calculated
 # for each package, but after the binary-fixup hooks have been run.
@@ -257,10 +303,17 @@ common-binary-fixup-indep:: $(patsubst %,binary-fixup/%,$(DEB_INDEP_PACKAGES))
 # This rule is called after stripping; it compresses, fixes permissions,
 # and sets up shared library information.
 $(patsubst %,binary-fixup/%,$(DEB_ALL_PACKAGES)) :: binary-fixup/%: binary-strip/%
-	dh_compress -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_COMPRESS_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_COMPRESS_ARGS)
-	dh_fixperms -p$(cdbs_curpkg) $(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_FIXPERMS_EXCLUDE)) $(call cdbs_expand_curvar,DEB_DH_FIXPERMS_ARGS)
+	dh_compress -p$(cdbs_curpkg) \
+		$(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_COMPRESS_EXCLUDE)) \
+		$(call cdbs_expand_curvar,DEB_DH_COMPRESS_ARGS)
+	dh_fixperms -p$(cdbs_curpkg) \
+		$(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_FIXPERMS_EXCLUDE)) \
+		$(call cdbs_expand_curvar,DEB_DH_FIXPERMS_ARGS)
 # TODO: Use DEB_DH_MAKESHLIBS_ARGS as package-default (not global override)
-	$(if $(is_debug_package),,dh_makeshlibs -p$(cdbs_curpkg) $(DEB_DH_MAKESHLIBS_ARGS))
+	$(if $(is_debug_package),\
+		,\
+		dh_makeshlibs -p$(cdbs_curpkg) \
+			$(DEB_DH_MAKESHLIBS_ARGS))
 
 # This rule is called right before building the binary .deb packages
 # for each package, but after the binary-predeb hooks have been run.
@@ -268,25 +321,33 @@ common-binary-predeb-arch:: $(patsubst %,binary-predeb/%,$(DEB_ARCH_PACKAGES))
 common-binary-predeb-indep:: $(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES))
 
 # This rule is called right before a packages' .deb file is made.
-# It is a good place to make programs setuid, change the scripts in DEBIAN/, etc. 
+# It is a good place to make programs setuid, change the scripts in DEBIAN/, etc.
 $(patsubst %,binary-predeb/%,$(DEB_ARCH_PACKAGES)) :: binary-predeb/%: common-binary-fixup-arch binary-predeb-IMPL/%
 $(patsubst %,binary-predeb/%,$(DEB_INDEP_PACKAGES)) :: binary-predeb/%: common-binary-fixup-indep binary-predeb-IMPL/%
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-predeb-IMPL/%:
-	dh_installdeb -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_INSTALLDEB_ARGS)
-	dh_perl -p$(cdbs_curpkg) $(DEB_DH_PERL_ARGS)
+	dh_installdeb -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_INSTALLDEB_ARGS)
+	dh_perl -p$(cdbs_curpkg) \
+		$(DEB_DH_PERL_ARGS)
 # TODO: Use DEB_DH_SHLIBDEPS_ARGS as package-default (not global override)
-	dh_shlibdeps -p$(cdbs_curpkg) $(DEB_DH_SHLIBDEPS_ARGS)
-	$(if $(wildcard /usr/bin/dh_girepository),dh_girepository -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_GIREPOSITORY_ARGS))
+	dh_shlibdeps -p$(cdbs_curpkg) \
+		$(DEB_DH_SHLIBDEPS_ARGS)
+	$(if $(wildcard /usr/bin/dh_girepository),\
+		dh_girepository -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_GIREPOSITORY_ARGS))
 
 # This rule is called to create a package.  Generally it's not going to be
 # useful to hook things onto this rule.
 $(patsubst %,binary-makedeb/%,$(DEB_ARCH_PACKAGES)) :: binary-makedeb/% : common-binary-predeb-arch binary-makedeb-IMPL/%
 $(patsubst %,binary-makedeb/%,$(DEB_INDEP_PACKAGES)) :: binary-makedeb/% : common-binary-predeb-indep binary-makedeb-IMPL/%
-$(patsubst %,binary-makedeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-makedeb-IMPL/% : 
+$(patsubst %,binary-makedeb-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-makedeb-IMPL/% :
 # TODO: Use DEB_DH_GENCONTROL_ARGS as package-default (not global override)
-	dh_gencontrol -p$(cdbs_curpkg) $(DEB_DH_GENCONTROL_ARGS)
-	dh_md5sums -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_MD5SUMS_ARGS)
-	$(DEB_DH_BUILDDEB_ENV) dh_builddeb -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_BUILDDEB_ARGS)
+	dh_gencontrol -p$(cdbs_curpkg) \
+		$(DEB_DH_GENCONTROL_ARGS)
+	dh_md5sums -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_MD5SUMS_ARGS)
+	$(DEB_DH_BUILDDEB_ENV) dh_builddeb -p$(cdbs_curpkg) \
+		$(call cdbs_expand_curvar,DEB_DH_BUILDDEB_ARGS)
 
 ## Deprecated
 common-binary-post-install:: common-binary-post-install-arch common-binary-post-install-indep

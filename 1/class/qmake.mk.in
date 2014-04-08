@@ -39,9 +39,20 @@ endif
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(DEB_BUILDDIR)/Makefile
 $(DEB_BUILDDIR)/Makefile:
-	cd $(DEB_BUILDDIR) && $(QMAKE) $(DEB_QMAKE_ARGS) $(if $(DEB_QMAKE_CONFIG_VAL),'CONFIG += $(DEB_QMAKE_CONFIG_VAL)') 'QMAKE_CC = $(CC)' 'QMAKE_CXX = $(CXX)' 'QMAKE_CFLAGS_RELEASE = $(CPPFLAGS) $(CFLAGS)' 'QMAKE_CXXFLAGS_RELEASE = $(CPPFLAGS) $(CXXFLAGS)' 'QMAKE_LFLAGS_RELEASE = $(LDFLAGS)'
+	cd $(DEB_BUILDDIR) \
+		&& $(QMAKE) \
+			$(DEB_QMAKE_ARGS) \
+			$(if $(DEB_QMAKE_CONFIG_VAL),\
+				'CONFIG += $(DEB_QMAKE_CONFIG_VAL)') \
+			'QMAKE_CC = $(CC)' \
+			'QMAKE_CXX = $(CXX)' \
+			'QMAKE_CFLAGS_RELEASE = $(CPPFLAGS) $(CFLAGS)' \
+			'QMAKE_CXXFLAGS_RELEASE = $(CPPFLAGS) $(CXXFLAGS)' \
+			'QMAKE_LFLAGS_RELEASE = $(LDFLAGS)'
 
 clean::
-	rm -f $(DEB_BUILDDIR)/Makefile $(DEB_BUILDDIR)/.qmake.internal.cache
+	rm -f \
+		$(DEB_BUILDDIR)/Makefile \
+		$(DEB_BUILDDIR)/.qmake.internal.cache
 
 endif

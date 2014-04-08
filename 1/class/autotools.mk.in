@@ -23,8 +23,11 @@ _cdbs_class_autotools = 1
 
 include $(_cdbs_class_path)/autotools-files.mk$(_cdbs_makefile_suffix)
 
-cdbs_autotools_configure_stamps = $(if $(cdbs_make_flavors),$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-autotools/%,$(cdbs_make_flavors)),debian/stamp-autotools)
-cdbs_configure_flags += $(if $(cdbs_make_flavors),$(DEB_CONFIGURE_FLAGS_$(cdbs_make_curflavor)),)
+cdbs_autotools_configure_stamps = $(if $(cdbs_make_flavors),\
+	$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-autotools/%,$(cdbs_make_flavors)),\
+	debian/stamp-autotools)
+cdbs_configure_flags += $(if $(cdbs_make_flavors),\
+	$(DEB_CONFIGURE_FLAGS_$(cdbs_make_curflavor)))
 
 # Overriden from makefile-vars.mk.  We pass CFLAGS and friends to
 # ./configure, so no need to pass them to make.
@@ -38,15 +41,30 @@ common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(cdbs_autotools_configure_stamps)
 $(cdbs_autotools_configure_stamps):
 	chmod a+x $(DEB_CONFIGURE_SCRIPT)
-	$(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_BUILDDIR_$(cdbs_curpkg))),,mkdir -p $(cdbs_make_curbuilddir))
-	$(DEB_CONFIGURE_INVOKE) $(cdbs_configure_flags) $(DEB_CONFIGURE_EXTRA_FLAGS) $(DEB_CONFIGURE_USER_FLAGS)
-	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),if [ -e $(cdbs_make_curbuilddir)/libtool ]; then cp -f /usr/bin/libtool $(cdbs_make_curbuilddir)/libtool; fi)
+	$(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_BUILDDIR_$(cdbs_curpkg))),\
+		,\
+		mkdir -p $(cdbs_make_curbuilddir))
+	$(DEB_CONFIGURE_INVOKE) \
+		$(cdbs_configure_flags) \
+		$(DEB_CONFIGURE_EXTRA_FLAGS) \
+		$(DEB_CONFIGURE_USER_FLAGS)
+	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),\
+		if [ -e $(cdbs_make_curbuilddir)/libtool ]; then \
+			cp -f /usr/bin/libtool $(cdbs_make_curbuilddir)/libtool; \
+		fi)
 	touch $@
 
 makefile-clean::
-	$(if $(cdbs_make_flavors),-rmdir --ignore-fail-on-non-empty debian/stamp-autotools,rm -f debian/stamp-autotools)
+	$(if $(cdbs_make_flavors),\
+		-rmdir --ignore-fail-on-non-empty \
+			debian/stamp-autotools,\
+		rm -f debian/stamp-autotools)
 
 $(cdbs_make_clean_nonstamps)::
-	$(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_BUILDDIR_$(cdbs_curpkg))),,-rmdir --ignore-fail-on-non-empty $(cdbs_make_curbuilddir))
-	$(if $(cdbs_make_flavors),rm -f $(@:makefile-clean%=debian/stamp-autotools%))
+	$(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_BUILDDIR_$(cdbs_curpkg))),\
+		,\
+		-rmdir --ignore-fail-on-non-empty \
+			$(cdbs_make_curbuilddir))
+	$(if $(cdbs_make_flavors),\
+		rm -f $(@:makefile-clean%=debian/stamp-autotools%))
 endif

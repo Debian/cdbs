@@ -31,20 +31,26 @@ testroot:
 
 # These targets are triggered by pre-build and clean targets allowing
 # for non-intrusive sanity checks of the build environment
-$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
+$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% :
 testsanity:: $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES))
 
-$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% : 
-	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
+$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% :
+	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),\
+		mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
 
 makebuilddir:: $(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES))
 	mkdir -p "$(DEB_BUILDDIR)"
 
 cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES))
-	-$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,rmdir $(DEB_BUILDDIR))
+	-$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),\
+		,\
+		rmdir $(DEB_BUILDDIR))
 
-$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% : 
-	-$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),$(if $(call cdbs_streq,$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_SRCDIR)),,rmdir "$(DEB_BUILDDIR_$(cdbs_curpkg))"))
+$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% :
+	-$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),\
+		$(if $(call cdbs_streq,$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_SRCDIR)),\
+			,\
+			rmdir "$(DEB_BUILDDIR_$(cdbs_curpkg))"))
 
 
 # This variable is used by tarball.mk, but we want it here in order to check
@@ -60,17 +66,34 @@ CDBS_BUILD_DEPENDS += $(if $(findstring .zip,$(DEB_TARBALL)),$(comma) $(CDBS_BUI
 ifneq (, $(DEB_TARBALL))
 $(call cdbs_info,\
 	parsing $(DEB_TARBALL) ...)
-config_all_tar		:= $(shell \
+config_all_tar := $(shell \
 for i in $(DEB_TARBALL) ; do \
 	if ! test -e $$i.cdbs-config_list ; then \
 		echo Parsing $$i... >&2 ; \
 		case $$i in \
-			*.tar$(close_parenthesis) tar -tf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
-			*.tgz|*.tar.gz$(close_parenthesis) tar -tzf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
-			*.tar.bz|*.tar.bz2$(close_parenthesis) tar -tjf $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
-			*.tar.lzma$(close_parenthesis) tar -t --lzma -f $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
-			*.zip$(close_parenthesis) unzip -l $$i | grep "/config\.[^/]*$$" > $$i.cdbs-config_list ;; \
-			*$(close_parenthesis) echo Warning: tarball $$i with unknown format >&2 ;; \
+		  *.tar$(close_parenthesis) \
+			tar -tf $$i \
+				| grep "/config\.[^/]*$$" \
+				> $$i.cdbs-config_list ;; \
+		  *.tgz|*.tar.gz$(close_parenthesis) \
+			tar -tzf $$i \
+				| grep "/config\.[^/]*$$" \
+				> $$i.cdbs-config_list ;; \
+		  *.tar.bz|*.tar.bz2$(close_parenthesis) \
+			tar -tjf $$i \
+				| grep "/config\.[^/]*$$" \
+				> $$i.cdbs-config_list ;; \
+		  *.tar.lzma$(close_parenthesis) \
+			tar -t --lzma -f $$i \
+				| grep "/config\.[^/]*$$" \
+				> $$i.cdbs-config_list ;; \
+		  *.zip$(close_parenthesis) \
+			unzip -l $$i \
+				| grep "/config\.[^/]*$$" \
+				> $$i.cdbs-config_list ;; \
+		  *$(close_parenthesis) \
+			echo Warning: tarball $$i \
+				with unknown format >&2 ;; \
 		esac ; \
 	fi ; \
 	cat $$i.cdbs-config_list ; \
@@ -79,18 +102,18 @@ endif
 
 # Avoid recursive braindamage if we're building autotools-dev
 ifeq (, $(shell grep -xi 'Package: autotools-dev' debian/control))
-config_guess		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.guess)
-config_sub		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.sub)
+config_guess := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.guess)
+config_sub := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.sub)
 ifneq (, $(config_all_tar))
-config_guess_tar	:= $(filter %/config.guess, $(config_all_tar))
-config_sub_tar		:= $(filter %/config.sub, $(config_all_tar))
+config_guess_tar := $(filter %/config.guess, $(config_all_tar))
+config_sub_tar := $(filter %/config.sub, $(config_all_tar))
 endif
 endif
 # Ditto for gnulib
 ifeq (, $(shell grep -xi 'Package: gnulib' debian/control))
-config_rpath		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.rpath)
+config_rpath := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.rpath)
 ifneq (, $(config_all_tar))
-config_rpath_tar	:= $(filter %/config.rpath, $(config_all_tar))
+config_rpath_tar := $(filter %/config.rpath, $(config_all_tar))
 endif
 endif
 
@@ -121,7 +144,8 @@ ifneq (, $(config_guess))
 		for i in $(config_guess) ; do \
 			if ! test -e $$i.cdbs-orig ; then \
 				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination /usr/share/misc/config.guess $$i ; \
+				cp --remove-destination \
+					/usr/share/misc/config.guess $$i ; \
 			fi ; \
 		done ; \
 	fi
@@ -131,7 +155,8 @@ ifneq (, $(config_sub))
 		for i in $(config_sub) ; do \
 			if ! test -e $$i.cdbs-orig ; then \
 				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination /usr/share/misc/config.sub $$i ; \
+				cp --remove-destination \
+					/usr/share/misc/config.sub $$i ; \
 			fi ; \
 		done ; \
 	fi
@@ -141,7 +166,8 @@ ifneq (, $(config_rpath))
 		for i in $(config_rpath) ; do \
 			if ! test -e $$i.cdbs-orig ; then \
 				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination /usr/share/gnulib/build-aux/config.rpath $$i ; \
+				cp --remove-destination \
+					/usr/share/gnulib/build-aux/config.rpath $$i ; \
 			fi ; \
 		done ; \
 	fi
@@ -176,8 +202,8 @@ $(patsubst %,build/%,$(DEB_INDEP_PACKAGES)) :: build/% : common-build-indep conf
 # This rule is for stuff to run after the build process.  Note that this
 # may run under fakeroot or sudo, so it's inappropriate for things that
 # should be run under the build target.
-common-post-build-arch:: common-build-arch $(patsubst %,build/%,$(DEB_ARCH_PACKAGES)) 
-common-post-build-indep:: common-build-indep $(patsubst %,build/%,$(DEB_INDEP_PACKAGES)) 
+common-post-build-arch:: common-build-arch $(patsubst %,build/%,$(DEB_ARCH_PACKAGES))
+common-post-build-indep:: common-build-indep $(patsubst %,build/%,$(DEB_INDEP_PACKAGES))
 
 # Required Debian targets.
 build-arch: $(patsubst %,build/%,$(DEB_ARCH_PACKAGES))
@@ -279,15 +305,60 @@ CDBS_ENHANCES_DEFAULT ?= $(CDBS_ENHANCES)
 # Apply CDBS-declared dependencies to binary packages
 $(patsubst %,install/%,$(DEB_ALL_PACKAGES)) :: install/%:
 	@echo 'Adding cdbs dependencies to debian/$(cdbs_curpkg).substvars'
-	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )'    | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Depends=$$_\n"'     >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_PREDEPENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Pre-Depends=$$_\n"' >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_RECOMMENDS,$(comma) )' | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Recommends=$$_\n"'  >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_SUGGESTS,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Suggests=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_BREAKS,$(comma) )'     | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Breaks=$$_\n"'      >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_PROVIDES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Provides=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_REPLACES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Replaces=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_CONFLICTS,$(comma) )'  | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Conflicts=$$_\n"'   >> debian/$(cdbs_curpkg).substvars
-	@echo '$(call cdbs_expand_curvar,CDBS_ENHANCES,$(comma) )'   | perl -0 -ne '$(cdbs_re_squash_extended_space); $(re_squash_commas_and_spaces); /\w/ and print "cdbs:Enhances=$$_\n"'    >> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_DEPENDS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Depends=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_PREDEPENDS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Pre-Depends=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_RECOMMENDS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Recommends=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_SUGGESTS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Suggests=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_BREAKS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Breaks=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_PROVIDES,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Provides=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_REPLACES,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Replaces=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_CONFLICTS,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Conflicts=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
+	@echo '$(call cdbs_expand_curvar,CDBS_ENHANCES,$(comma) )' \
+		| perl -0 -n \
+			-e '$(cdbs_re_squash_extended_space);' \
+			-e '$(re_squash_commas_and_spaces);' \
+			-e '/\w/ and print "cdbs:Enhances=$$_\n"' \
+			>> debian/$(cdbs_curpkg).substvars
 
 # This rule is called after all packages are installed.
 common-binary-arch:: testdir testroot $(patsubst %,install/%,$(DEB_ARCH_PACKAGES))
@@ -299,8 +370,8 @@ binary-arch: $(patsubst %,binary/%,$(DEB_ARCH_PACKAGES))
 
 # These rules should do all the work of actually creating a .deb from the staging
 # directory.
-$(patsubst %,binary/%,$(DEB_ARCH_PACKAGES)) :: binary/% : testdir testroot common-binary-arch install/% 
-$(patsubst %,binary/%,$(DEB_INDEP_PACKAGES)) :: binary/% : testdir testroot common-binary-indep install/% 
+$(patsubst %,binary/%,$(DEB_ARCH_PACKAGES)) :: binary/% : testdir testroot common-binary-arch install/%
+$(patsubst %,binary/%,$(DEB_INDEP_PACKAGES)) :: binary/% : testdir testroot common-binary-indep install/%
 
 # Required Debian target
 binary: binary-indep binary-arch
@@ -308,7 +379,7 @@ binary: binary-indep binary-arch
 ##
 # Deprecated targets.  You should use the -arch and -indep targets instead.
 ##
-common-configure:: common-configure-arch common-configure-indep 
+common-configure:: common-configure-arch common-configure-indep
 common-build:: common-build-arch common-build-indep
 common-post-build:: common-post-build-arch common-post-build-indep
 common-install-prehook:: common-install-prehook-arch common-install-prehook-indep

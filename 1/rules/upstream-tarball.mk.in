@@ -23,7 +23,7 @@ _cdbs_rules_upstream_tarball = 1
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
 # Prefix for upstream location of all upstream tarballs (mandatory!)
-#DEB_UPSTREAM_URL = 
+#DEB_UPSTREAM_URL =
 
 DEB_UPSTREAM_PACKAGE ?= $(DEB_SOURCE_PACKAGE)
 DEB_UPSTREAM_TARBALL_VERSION ?= $(if $(strip $(DEB_UPSTREAM_REPACKAGE_EXCLUDES)),$(DEB_UPSTREAM_VERSION:$(DEB_UPSTREAM_REPACKAGE_DELIMITER)$(DEB_UPSTREAM_REPACKAGE_TAG)=),$(DEB_UPSTREAM_VERSION))
@@ -32,7 +32,7 @@ DEB_UPSTREAM_TARBALL_EXTENSION ?= tar.gz
 
 # Checksum to ensure integrity of downloadeds using get-orig-source (optional)
 # TODO: somehow support (auto-downloadable?) file containing checksums
-#DEB_UPSTREAM_TARBALL_MD5 = 
+#DEB_UPSTREAM_TARBALL_MD5 =
 
 DEB_UPSTREAM_WORKDIR ?= ../tarballs
 

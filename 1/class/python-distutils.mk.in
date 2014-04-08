@@ -49,12 +49,17 @@ DEB_PYTHON_MODULE_PACKAGE = $(strip $(call cdbs_warn_deprecated,\
 	DEB_PYTHON_MODULE_PACKAGE,0.4.54,DEB_PYTHON_MODULE_PACKAGES)\
 	$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
 
-cdbs_python_distutils_srcdir = $(or $(DEB_PYTHON_DISTUTILS_SRCDIR),$(DEB_SRCDIR))
+cdbs_python_distutils_srcdir = $(or $(strip \
+	$(DEB_PYTHON_DISTUTILS_SRCDIR)),$(strip\
+	$(DEB_SRCDIR)))
 cdbs_python_setup_cmd = $(call cdbs_expand_curvar,DEB_PYTHON_SETUP_CMD)
 cdbs_python_build_args = $(call cdbs_expand_curvar,DEB_PYTHON_BUILD_ARGS)
 cdbs_python_install_args = $(call cdbs_expand_curvar,DEB_PYTHON_INSTALL_ARGS)
 cdbs_python_clean_args = $(call cdbs_expand_curvar,DEB_PYTHON_CLEAN_ARGS)
-cdbs_expand_python_distutils_installdir = $(subst @PYTHONBINARY@,$1,$(or $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),/usr/lib/@PYTHONBINARY@/site-packages/))
+cdbs_expand_python_distutils_installdir = $(strip \
+	$(subst @PYTHONBINARY@,$1,$(or $(strip \
+		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
+		/usr/lib/@PYTHONBINARY@/site-packages/))))
 
 # prepare sanity checks
 cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
@@ -80,10 +85,12 @@ CDBS_BUILD_DEPENDS_class_python-distutils ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
 
 CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir ?= cdbs (>= 0.4.97~)
-CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_SRCDIR),$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir))
+CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_SRCDIR),\
+	$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir))
 
 CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir ?= cdbs (>= 0.4.91~)
-CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir))
+CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
+	$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir))
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-distutils_python ?= $(cdbs_python_builddeps)
@@ -106,8 +113,9 @@ $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
 	cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) $(cdbs_python_setup_cmd) build \
-		$(cdbs_python_build_args)
+		$(cdbs_curpythonindepbinary) \
+			$(cdbs_python_setup_cmd) build \
+			$(cdbs_python_build_args)
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
@@ -123,10 +131,11 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
 	cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) $(cdbs_python_setup_cmd) install \
-		--root="$(cdbs_python_destdir)" \
-		--install-purelib=$(call cdbs_expand_python_distutils_installdir,$(cdbs_curpythonpribinary)) \
-		$(cdbs_python_install_args)
+		$(cdbs_curpythonindepbinary) \
+			$(cdbs_python_setup_cmd) install \
+			--root="$(cdbs_python_destdir)" \
+			--install-purelib=$(call cdbs_expand_python_distutils_installdir,$(cdbs_curpythonpribinary)) \
+			$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
 	set -e; \
@@ -149,8 +158,9 @@ clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
 	-cd $(cdbs_python_distutils_srcdir) && \
-		$(cdbs_curpythonindepbinary) $(cdbs_python_setup_cmd) clean \
-		$(cdbs_python_clean_args)
+		$(cdbs_curpythonindepbinary) \
+			$(cdbs_python_setup_cmd) clean \
+			$(cdbs_python_clean_args)
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-cd $(cdbs_python_distutils_srcdir) && \

@@ -81,7 +81,7 @@ cdbs_update_stamp = if [ "$@" = "debian/stamp-patched" ]; then touch $(1); elif 
 
 cdbs_patch_stamp_file = debian/stamp-patch-$$(echo $$patch | tr '/' '=')
 
-# The patch subsystem 
+# The patch subsystem
 apply-patches: pre-build debian/stamp-patched
 debian/stamp-patched: $(DEB_PATCHES)
 debian/stamp-patched reverse-patches:
@@ -92,7 +92,7 @@ debian/stamp-patched reverse-patches:
 	@echo "patches: $(DEB_PATCHES)"
 	@set -e ; reverse=""; patches="$(DEB_PATCHES)"; \
 	if [ "$@" = "reverse-patches" ]; then \
-	  reverse="-R";	\
+	  reverse="-R"; \
 	  for patch in $$patches; do reversepatches="$$patch $$reversepatches"; done; \
 	  patches="$$reversepatches"; \
 	fi; \

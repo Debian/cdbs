@@ -57,11 +57,36 @@ cdbs_autotools_invoke=$(if $(findstring $(comma),$(1)),$(3),$(2)$(1))
 
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:
-	$(if $(filter pre,$(DEB_AUTO_UPDATE_LIBTOOL)),cd $(DEB_SRCDIR) && libtoolize -c -f)
-	$(if $(DEB_AUTO_UPDATE_ACLOCAL),cd $(DEB_SRCDIR) && $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) $(DEB_ACLOCAL_ARGS))
-	$(if $(DEB_AUTO_UPDATE_AUTOCONF),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) || which autoconf`; fi)
-	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then cd $(DEB_SRCDIR) && `which  $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) || which autoheader` ; fi)
-	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),if [ -e $(DEB_SRCDIR)/Makefile.am ]; then cd $(DEB_SRCDIR) &&  $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) $(DEB_AUTOMAKE_ARGS) ; fi)
+	$(if $(filter pre,$(DEB_AUTO_UPDATE_LIBTOOL)),\
+		set -e; \
+			cd $(DEB_SRCDIR); \
+			libtoolize -c -f)
+	$(if $(DEB_AUTO_UPDATE_ACLOCAL),\
+		set -e; \
+			cd $(DEB_SRCDIR); \
+			$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
+				$(DEB_ACLOCAL_ARGS))
+	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
+		set -e; \
+			if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then \
+				cd $(DEB_SRCDIR); \
+				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
+					|| which autoconf`; \
+			fi)
+	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
+		set -e; \
+			if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then \
+				cd $(DEB_SRCDIR); \
+				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
+					|| which autoheader`; \
+			fi)
+	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
+		set -e; \
+			if [ -e $(DEB_SRCDIR)/Makefile.am ]; then \
+				cd $(DEB_SRCDIR); \
+				$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
+					$(DEB_AUTOMAKE_ARGS); \
+			fi)
 	touch debian/stamp-autotools-files
 
 clean::

@@ -52,7 +52,12 @@ ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
 	cdbs_kde_enable_debug = --enable-debug=full
 endif
 
-cdbs_configure_flags += --with-qt-dir=/usr/share/qt3 --disable-rpath --with-xinerama $(cdbs_kde_enable_final) $(cdbs_kde_enable_debug)
+cdbs_configure_flags += \
+	--with-qt-dir=/usr/share/qt3 \
+	--disable-rpath \
+	--with-xinerama \
+	$(cdbs_kde_enable_final) \
+	$(cdbs_kde_enable_debug)
 
 # FIXME: Restructure to allow early override
 DEB_AC_AUX_DIR = $(DEB_SRCDIR)/admin
@@ -60,16 +65,21 @@ DEB_CONFIGURE_INCLUDEDIR = "\$${prefix}/include/kde"
 DEB_COMPRESS_EXCLUDE = .dcl .docbook -license .tag .sty .el
 
 cleanbuilddir::
-	-$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,rm -rf $(DEB_BUILDDIR))
+	$(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),\
+		,\
+		-rm -rf $(DEB_BUILDDIR))
 
 common-build-arch common-build-indep:: debian/stamp-kde-apidox
 debian/stamp-kde-apidox:
-	$(if $(DEB_KDE_APIDOX),+$(DEB_MAKE_INVOKE) apidox)
+	$(if $(DEB_KDE_APIDOX),\
+		+$(DEB_MAKE_INVOKE) apidox)
 	touch $@
 
 common-install-arch common-install-indep:: common-install-kde-apidox
 common-install-kde-apidox::
-	$(if $(DEB_KDE_APIDOX),+$(DEB_MAKE_INVOKE) install-apidox DESTDIR=$(DEB_DESTDIR))
+	$(if $(DEB_KDE_APIDOX),\
+		+$(DEB_MAKE_INVOKE) install-apidox \
+			DESTDIR=$(DEB_DESTDIR))
 
 clean::
 	rm -f debian/stamp-kde-apidox

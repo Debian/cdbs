@@ -34,24 +34,53 @@ CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
 # dh_python2 comes from python package
 CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python_pysupport),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pysupport))
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python_pycentral),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral))
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python2),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2))
-CDBS_BUILD_DEPENDS += $(if $(cdbs_python3),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python3))
+CDBS_BUILD_DEPENDS += $(strip \
+	$(if $(cdbs_python_pysupport),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pysupport)))
+CDBS_BUILD_DEPENDS += $(strip \
+	$(if $(cdbs_python_pycentral),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral)))
+CDBS_BUILD_DEPENDS += $(strip \
+	$(if $(cdbs_python2),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2)))
+CDBS_BUILD_DEPENDS += $(strip \
+	$(if $(cdbs_python3),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python3)))
 
 CDBS_BUILD_DEPENDS_class_python-module_args ?= cdbs (>= 0.4.97~)
-CDBS_BUILD_DEPENDS += $(if $(call cdbs_expand_allvars,DEB_DH_PYTHONHELPER_ARGS DEB_PYTHON_PRIVATE_MODULES_DIRS),$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_args))
+CDBS_BUILD_DEPENDS += $(strip \
+	$(if $(call cdbs_expand_allvars,DEB_DH_PYTHONHELPER_ARGS DEB_PYTHON_PRIVATE_MODULES_DIRS),\
+		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_args)))
 
-$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% : 
-	$(if $(word 2,$(cdbs_curpythonsystems)),$(error binary package $(cdbs_curpkg) use both "python2" and "python3" packaging systems - either explicitly set DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES or set an alternative DEB_PYTHON_SYSTEM))
+$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% :
+	$(if $(word 2,$(cdbs_curpythonsystems)),$(error \
+		binary package $(cdbs_curpkg) use both "python2" and \
+		"python3" packaging systems - either explicitly set \
+		DEB_PYTHON2_PACKAGES and/or DEB_PYTHON3_PACKAGES \
+		or set an alternative DEB_PYTHON_SYSTEM))
 
 # Optionally use debhelper (if not then these rules are simply ignored)
 # * invoke for all binary packages with legacy helpers (see bug#377965)
 # * invoke public and private modules separately with default helpers
 $(patsubst %,binary-post-install/%,$(DEB_PACKAGES)) :: binary-post-install/%: binary-install-python/%
 $(patsubst %,binary-install-python/%,$(DEB_PACKAGES)) :: binary-install-python/%: binary-install/%
-	$(if $(DEB_PYTHON_SYSTEM),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS) $(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS))
-	$(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_curpythonsystems),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS)))
-	$(if $(DEB_PYTHON_SYSTEM),,$(and $(cdbs_curpythonsystems),$(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS),dh_$(cdbs_curpythonsystems) -p$(cdbs_curpkg) $(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS) $(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS)))
+	$(if $(DEB_PYTHON_SYSTEM),\
+		dh_$(cdbs_curpythonsystems) \
+			-p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS) \
+			$(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS))
+	$(if $(DEB_PYTHON_SYSTEM),\
+		,\
+		$(if $(cdbs_curpythonsystems),\
+			dh_$(cdbs_curpythonsystems) \
+				-p$(cdbs_curpkg) \
+				$(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS)))
+	$(if $(DEB_PYTHON_SYSTEM),\
+		,\
+		$(and $(cdbs_curpythonsystems),$(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS),\
+			dh_$(cdbs_curpythonsystems) \
+				-p$(cdbs_curpkg) \
+				$(call cdbs_expand_curvar,DEB_DH_PYTHONHELPER_ARGS) \
+				$(call cdbs_expand_curvar,DEB_PYTHON_PRIVATE_MODULES_DIRS)))
 
 endif

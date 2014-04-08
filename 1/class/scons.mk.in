@@ -31,12 +31,17 @@ DEB_PHONY_RULES += scons-clean
 
 common-build-arch common-build-indep:: debian/stamp-scons-build
 debian/stamp-scons-build:
-	$(DEB_SCONS_INVOKE) $(DEB_SCONS_BUILD_TARGET) $(DEB_SCONS_OPTIONS) $(DEB_SCONS_BUILD_OPTIONS)
+	$(DEB_SCONS_INVOKE) $(DEB_SCONS_BUILD_TARGET) \
+		$(DEB_SCONS_OPTIONS) \
+		$(DEB_SCONS_BUILD_OPTIONS)
 	touch debian/stamp-scons-build
 
 clean:: scons-clean
 scons-clean::
-	$(DEB_SCONS_INVOKE) $(DEB_SCONS_CLEAN_TARGET) $(DEB_SCONS_OPTIONS) --keep-going --clean || true
+	$(DEB_SCONS_INVOKE) $(DEB_SCONS_CLEAN_TARGET) \
+		$(DEB_SCONS_OPTIONS) \
+		--keep-going --clean \
+		|| true
 	rm -f debian/stamp-scons-build
 	rm -rf .sconf_temp/
 	rm -f .sconsign.dblite config.log
@@ -44,20 +49,26 @@ scons-clean::
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
 	@if test -n "$(DEB_SCONS_INSTALL_TARGET)"; then \
-	  echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) $(DEB_SCONS_OPTIONS) $(DEB_SCONS_INSTALL_OPTIONS); \
-	  $(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) $(DEB_SCONS_OPTIONS) $(DEB_SCONS_INSTALL_OPTIONS); \
+		echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) \
+			$(DEB_SCONS_OPTIONS) \
+			$(DEB_SCONS_INSTALL_OPTIONS); \
+		$(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) \
+			$(DEB_SCONS_OPTIONS) \
+			$(DEB_SCONS_INSTALL_OPTIONS); \
 	else \
-	  echo "DEB_SCONS_INSTALL_TARGET unset, skipping default scons.mk common-install target"; \
+		echo "DEB_SCONS_INSTALL_TARGET unset, \
+			skipping default scons.mk common-install target"; \
 	fi
 
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
 	@if test -n "$(DEB_SCONS_CHECK_TARGET)"; then \
-	  echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET); \
-	  $(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET) $(DEB_SCONS_OPTIONS); \
+		echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET); \
+		$(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET) \
+			$(DEB_SCONS_OPTIONS); \
 	else \
-	   echo "DEB_SCONS_CHECK_TARGET unset, not running checks"; \
+		echo "DEB_SCONS_CHECK_TARGET unset, not running checks"; \
 	fi
 endif
 

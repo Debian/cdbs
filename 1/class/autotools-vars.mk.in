@@ -34,7 +34,12 @@ DEB_AC_AUX_DIR ?= $(DEB_SRCDIR)
 # Declare CC and CXX only if explicitly set in environment or makefile
 # (i.e. skip if builtin make default would have been used)
 # This is needed for proper cross-compilation - see bug#450483)
-DEB_CONFIGURE_SCRIPT_ENV ?= $(call cdbs_set_nondefaultvars,CC CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
+DEB_CONFIGURE_SCRIPT_ENV ?= \
+	$(call cdbs_set_nondefaultvars,CC CXX) \
+	CFLAGS="$(CFLAGS)" \
+	CXXFLAGS="$(CXXFLAGS)" \
+	CPPFLAGS="$(CPPFLAGS)" \
+	LDFLAGS="$(LDFLAGS)"
 
 DEB_CONFIGURE_SCRIPT ?= $(CURDIR)/$(DEB_SRCDIR)/configure
 
@@ -42,7 +47,9 @@ DEB_CONFIGURE_SCRIPT ?= $(CURDIR)/$(DEB_SRCDIR)/configure
 # compiling with autotools 2.52+ without slowing down normal builds.
 # Cross-compiling with autotools 2.13 is unsupported, as it needs
 # other tweaks (more info at autotools-dev README.Debian)
-DEB_CONFIGURE_CROSSBUILD_ARGS ?= --build=$(DEB_BUILD_GNU_TYPE) $(if $(cdbs_crossbuild),--host=$(DEB_HOST_GNU_TYPE))
+DEB_CONFIGURE_CROSSBUILD_ARGS ?= \
+	--build=$(DEB_BUILD_GNU_TYPE) \
+	$(if $(cdbs_crossbuild),--host=$(DEB_HOST_GNU_TYPE))
 
 DEB_CONFIGURE_PREFIX ?=/usr
 DEB_CONFIGURE_INCLUDEDIR ?= "\$${prefix}/include"
@@ -54,60 +61,105 @@ DEB_CONFIGURE_LIBEXECDIR ?= "\$${prefix}/lib/$(DEB_SOURCE_PACKAGE)"
 # --srcdir=. is required because otherwise configure wants to analyse
 # $0 to see whether a VPATH build is needed.  This tells it with
 # absolute certainly that this is NOT a VPATH build.
-DEB_CONFIGURE_PATH_ARGS ?= --prefix=$(DEB_CONFIGURE_PREFIX) --includedir=$(DEB_CONFIGURE_INCLUDEDIR) --mandir=$(DEB_CONFIGURE_MANDIR) --infodir=$(DEB_CONFIGURE_INFODIR) --sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) --localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) --libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) $(if $(subst $(DEB_SRCDIR),,$(cdbs_make_curbuilddir)),,--srcdir=.)
+DEB_CONFIGURE_PATH_ARGS ?= \
+	--prefix=$(DEB_CONFIGURE_PREFIX) \
+	--includedir=$(DEB_CONFIGURE_INCLUDEDIR) \
+	--mandir=$(DEB_CONFIGURE_MANDIR) \
+	--infodir=$(DEB_CONFIGURE_INFODIR) \
+	--sysconfdir=$(DEB_CONFIGURE_SYSCONFDIR) \
+	--localstatedir=$(DEB_CONFIGURE_LOCALSTATEDIR) \
+	--libexecdir=$(DEB_CONFIGURE_LIBEXECDIR) \
+	$(if $(subst $(DEB_SRCDIR),,$(cdbs_make_curbuilddir)),,--srcdir=.)
 
-DEB_CONFIGURE_NORMAL_ARGS ?= $(DEB_CONFIGURE_CROSSBUILD_ARGS) $(DEB_CONFIGURE_PATH_ARGS) --disable-maintainer-mode --disable-dependency-tracking --disable-silent-rules
+DEB_CONFIGURE_NORMAL_ARGS ?= \
+	$(DEB_CONFIGURE_CROSSBUILD_ARGS) \
+	$(DEB_CONFIGURE_PATH_ARGS) \
+	--disable-maintainer-mode \
+	--disable-dependency-tracking \
+	--disable-silent-rules
 
 ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
 DEB_CONFIGURE_DEBUG_ARGS ?= --enable-debug
 endif
 
-DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && $(DEB_CONFIGURE_SCRIPT_ENV) $(DEB_CONFIGURE_SCRIPT) $(DEB_CONFIGURE_NORMAL_ARGS) $(DEB_CONFIGURE_DEBUG_ARGS)
+DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && \
+	$(DEB_CONFIGURE_SCRIPT_ENV) \
+	$(DEB_CONFIGURE_SCRIPT) \
+	$(DEB_CONFIGURE_NORMAL_ARGS) \
+	$(DEB_CONFIGURE_DEBUG_ARGS)
 
 #DEB_CONFIGURE_EXTRA_FLAGS =
 
 ## calculate dependencies for an autotools package
-# call as: $(call cdbs_autotools_dependencies,$(VERSION),$(VERSIONEDPACKAGE),$(PACKAGE))
+# call as: $(call cdbs_autotools_dependencies,$(VERSION),$(VERSIONEDPKG),$(PKG))
 # if VERSION is a single value,
-#   it returns $(VERSIONEDPACKAGE)$(VERSION)
+#   it returns $(VERSIONEDPKG)$(VERSION)
 # if VERSION is a comma-separated pair,
-#   it returns "$(PACKAGE) (>=$(VERSION[0])),$(PACKAGE) (<=$(VERSION[1]))"
+#   it returns "$(PKG) (>=$(VERSION[0])),$(PKG) (<=$(VERSION[1]))"
 # one value of the pair can be omitted to not specify a min/max version
-# if both values of the pair are omitted (',') an unversioned dependency on PACKAGE is created
+# if both values of the pair are omitted (',') an unversioned dependency
+# on PKG is created
 #
-# example, with PACKAGE=foo, VERSIONEDPACKAGE=foob- and VERSION=...
+# example, with PKG=foo, VERSIONEDPKG=foob- and VERSION=...
 # 3         : foob-3
 # 4,7       : foo (>=4), foo (<=7)
 # 1.10,     : foo (>=1.10)
 # ,3.14     : foo (<=3.14)
 # ,         : foo
 
-cdbs_autotools_dependencies=$(if $(findstring $(comma),$(1)), \
-	$(or \
-	 $(and $(filter $(1),$(comma)),$(3)),\
-	 $(and $(filter-out $(1),$(patsubst %$(comma),%,$(1))),$(3) (>=$(patsubst %$(comma),%,$(1)))),\
-	 $(and $(filter-out $(1),$(patsubst $(comma)%,%,$(1))),$(3) (<=$(patsubst $(comma)%,%,$(1)))),\
-	 $(3) (>=$(firstword $(subst $(comma), ,$(1))))$(comma) $(3) (<=$(lastword $(subst $(comma), ,$(1))))),\
+cdbs_autotools_dependencies = $(if $(findstring $(comma),$(1)),\
+	$(or $(strip \
+		$(and $(filter $(1),$(comma)),\
+			$(3))),$(strip \
+		$(and $(filter-out $(1),$(patsubst %$(comma),%,$(1))),\
+			$(3) (>=$(patsubst %$(comma),%,$(1))))),$(strip \
+		$(and $(filter-out $(1),$(patsubst $(comma)%,%,$(1))),\
+			$(3) (<=$(patsubst $(comma)%,%,$(1))))),$(strip \
+		$(3) (>=$(firstword $(subst $(comma), ,$(1))))$(comma) \
+			$(3) (<=$(lastword $(subst $(comma), ,$(1)))))),\
 	$(2)$(1))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_libtool ?= libtool
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_LIBTOOL),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_libtool))
 
-CDBS_BUILD_DEPENDS_class_autotools-vars_automake ?= $(call cdbs_autotools_dependencies,$(DEB_AUTO_UPDATE_AUTOMAKE),automake,automake)
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOMAKE),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_automake))
+CDBS_BUILD_DEPENDS_class_autotools-vars_automake ?= \
+	$(call cdbs_autotools_dependencies,\
+		$(DEB_AUTO_UPDATE_AUTOMAKE),automake,automake)
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_automake))
 
-CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal ?= $(call cdbs_autotools_dependencies,$(DEB_AUTO_UPDATE_ACLOCAL),automake,automake)
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_ACLOCAL),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal))
+CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal ?= \
+	$(call cdbs_autotools_dependencies,\
+		$(DEB_AUTO_UPDATE_ACLOCAL),automake,automake)
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_ACLOCAL),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_aclocal))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf ?= \
-	$(if $(findstring $(comma),$(DEB_AUTO_UPDATE_AUTOCONF)),$(call cdbs_autotools_dependencies,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf),autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOCONF)))
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOCONF),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf))
+	$(if $(findstring $(comma),$(DEB_AUTO_UPDATE_AUTOCONF)),\
+		$(call cdbs_autotools_dependencies,\
+			$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf),\
+		autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOCONF)))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOCONF),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoconf))
 
 CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader ?= \
-	$(if $(findstring $(comma),$(DEB_AUTO_UPDATE_AUTOHEADER)),$(call cdbs_autotools_dependencies,$(DEB_AUTO_UPDATE_AUTOHEADER),autoconf,autoconf),autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOHEADER)))
-CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader))
+	$(if $(findstring $(comma),$(DEB_AUTO_UPDATE_AUTOHEADER)),\
+		$(call cdbs_autotools_dependencies,\
+			$(DEB_AUTO_UPDATE_AUTOHEADER),autoconf,autoconf),\
+		autoconf$(filter 2.13,$(DEB_AUTO_UPDATE_AUTOHEADER)))
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader))
 
 CDBS_BUILD_DEPENDS_class_autotools_vars_comma ?= cdbs (>= 0.4.123~)
-CDBS_BUILD_DEPENDS += $(if $(findstring $(comma),$(foreach suffix,LIBTOOL AUTOMAKE ACLOCAL AUTOCONF AUTOHEADER,$(DEB_AUTO_UPDATE_$(suffix)))),$(comma) $(CDBS_BUILD_DEPENDS_class_autotools_vars_comma))
+CDBS_BUILD_DEPENDS += $(if \
+	$(findstring $(comma),$(foreach suffix,\
+		LIBTOOL \
+		AUTOMAKE \
+		ACLOCAL \
+		AUTOCONF \
+		AUTOHEADER,\
+		$(DEB_AUTO_UPDATE_$(suffix)))),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools_vars_comma))
 
 endif

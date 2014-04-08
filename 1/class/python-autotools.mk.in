@@ -24,7 +24,9 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 # Flavors are used if more than a single Python build is needed
 # Used in implicit rules, so must be set before including makefile
-DEB_MAKE_FLAVORS ?= $(if $(word 2,$(cdbs_python_build_versions)),$(cdbs_python_build_versions))
+DEB_MAKE_FLAVORS ?= $(strip \
+	$(if $(word 2,$(cdbs_python_build_versions)),\
+		$(cdbs_python_build_versions)))
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 
@@ -39,7 +41,9 @@ CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
 # FIXME: Restructure to allow early override
-DEB_CONFIGURE_SCRIPT_ENV += PYTHON="$(or $(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%),$(call cdbs_python_binary,python$(if $(cdbs_make_flavors),$(cdbs_make_curflavor))))"
+DEB_CONFIGURE_SCRIPT_ENV += PYTHON="$(or $(strip \
+	$(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%)),$(strip \
+	$(call cdbs_python_binary,python$(if $(cdbs_make_flavors),$(cdbs_make_curflavor)))))"
 
 # Install all flavors on top of each other by default
 DEB_MAKE_DESTDIRSKEL = $(cdbs_curdestdir)
