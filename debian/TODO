@@ -1,3 +1,6 @@
+  * avoid copyright check on arch-only builds.
+    Thanks to Matthias Klose (see bug#717827).
+
 Ideas for 2nd epoch (i.e. /usr/share/cdbs/2/* files):
 
   * Support parallel build of self (i.e. avoid .NOTPARALLEL)
