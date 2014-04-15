@@ -45,7 +45,18 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 #DEB_PYTHON_SRCDIR = $(DEB_DESTDIR)
 #DEB_PYTHON_DESTDIR = $(DEB_DESTDIR)
 
+# implementations of Python itself
+_CDBS_PYTHONS = python2 python3
+_CDBS_PYTHONS_badly_named = python python3
+#  * uppercase implementation names
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
+
 # binary packages
+# default package prefix (if different from implementation name)
+# (i.e. if not overridden by DEB_*_MODULE_PACKAGES)
+_cdbs_python2_pkgprefix = python
+
+# binary packages in use
 cdbs_python_potential_packages = $(strip \
 	$(filter-out %-doc %-dev %-common,$(DEB_PACKAGES)))
 cdbs_python_legacy_packages = $(or $(strip \
@@ -55,28 +66,23 @@ cdbs_python_legacy_packages = $(or $(strip \
 #  * variables cdbs_$python_packages:
 #    1. any DEB_*_MODULE_PACKAGES is non-empty: DEB_$P_MODULE_PACKAGES
 #    2. $p-* (or $pkgprefix-*) in control file except *-doc *-dev *-common
-cdbs_python2_packages = $(strip \
-	$(if $(DEB_PYTHON2_MODULE_PACKAGES)$(DEB_PYTHON3_MODULE_PACKAGES),\
-		$(DEB_PYTHON2_MODULE_PACKAGES),\
-		$(filter python-%,$(cdbs_python_potential_packages))))
-cdbs_python3_packages = $(strip \
-	$(if $(DEB_PYTHON2_MODULE_PACKAGES)$(DEB_PYTHON3_MODULE_PACKAGES),\
-		$(DEB_PYTHON3_MODULE_PACKAGES),\
-		$(filter python3-%,$(cdbs_python_potential_packages))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_packages = $(strip \
+	$(if $(strip \
+		$(foreach P,$(_CDBS_PYTHONS),\
+			$(DEB_$(_cdbs_$P_uc)_MODULE_PACKAGES))),\
+		$(DEB_$(_cdbs_$p_uc)_MODULE_PACKAGES),\
+		$(filter $(or $(_cdbs_$p_pkgprefix),$p)-%,\
+			$(cdbs_python_potential_packages))))))
 cdbs_python_packages = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		$(cdbs_python_legacy_packages),\
-		$(cdbs_python2_packages) $(cdbs_python3_packages)))
-cdbs_python2_arch_packages = $(strip \
-	$(filter $(cdbs_python2_packages),$(DEB_ARCH_PACKAGES)))
-cdbs_python3_arch_packages = $(strip \
-	$(filter $(cdbs_python3_packages),$(DEB_ARCH_PACKAGES)))
+		$(foreach p,$(_CDBS_PYTHONS),$(space)$(cdbs_$p_packages))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_arch_packages = $(strip \
+	$(filter $(cdbs_$p_packages),$(DEB_ARCH_PACKAGES)))))
 cdbs_python_arch_packages = $(strip \
 	$(filter $(cdbs_python_packages),$(DEB_ARCH_PACKAGES)))
-cdbs_python2_indep_packages = $(strip \
-	$(filter $(cdbs_python2_packages),$(DEB_INDEP_PACKAGES)))
-cdbs_python3_indep_packages = $(strip \
-	$(filter $(cdbs_python3_packages),$(DEB_INDEP_PACKAGES)))
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_indep_packages = $(strip \
+	$(filter $(cdbs_$p_packages),$(DEB_INDEP_PACKAGES)))))
 cdbs_python_indep_packages = $(strip \
 	$(filter $(cdbs_python_packages),$(DEB_INDEP_PACKAGES)))
 
@@ -90,7 +96,7 @@ cdbs_python_legacy_system = $(or $(strip \
 	$(cdbs_pythonsystem_pycentral)),\
 	$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) \
 		(select either pysupport or pycentral, or leave empty \
-		for default python2/python3))))
+		for default $(subst $(space),/,$(strip $(_CDBS_PYTHONS)))))))
 cdbs_pythonsystem_python2 = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		,\
@@ -104,10 +110,9 @@ cdbs_pythonsystem_python3 = $(strip \
 cdbs_python_systems = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		$(cdbs_python_legacy_system),\
-		$(if $(cdbs_python2_packages),\
-			python2) \
-		$(if $(cdbs_python3_packages),\
-			python3)))
+		$(foreach p,$(_CDBS_PYTHONS),\
+			$(if $(cdbs_$p_packages),\
+				$p))))
 cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),3))
 # some build systems can handle only a single packaging system
 cdbs_python_stem += $(strip \
@@ -128,35 +133,22 @@ cdbs_python3_first_supported_version = $(firstword $(strip $(sort $(cdbs_python3
 # versions to use
 # variables cdbs_$python_nondefault_version
 #  * arch-indep w/ default unsupported: first alternative available
-cdbs_python_nondefault_version = $(strip \
+$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_nondefault_version = $(strip \
 	$(if $(cdbs_python_arch_packages),\
 		,\
-		$(if $(filter $(cdbs_python_current_version),$(cdbs_python_supported_versions)),\
+		$(if $(filter $(cdbs_$p_current_version),$(cdbs_$p_supported_versions)),\
 			,\
-			$(cdbs_python_first_supported_version))))
-cdbs_python3_nondefault_version = $(strip \
-	$(if $(cdbs_python_arch_packages),\
-		,\
-		$(if $(filter $(cdbs_python3_current_version),$(cdbs_python3_supported_versions)),\
-			,\
-			$(cdbs_python3_first_supported_version))))
+			$(cdbs_$p_first_supported_version))))))
 # variables cdbs_$python_primary_version
-cdbs_python_primary_version = $(or $(strip \
-	$(cdbs_python_nondefault_version)),$(strip \
-	$(cdbs_python_current_version)))
-cdbs_python3_primary_version = $(or $(strip \
-	$(cdbs_python3_nondefault_version)),$(strip \
-	$(cdbs_python3_current_version)))
+$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_primary_version = $(or $(strip \
+	$(cdbs_$p_nondefault_version)),$(strip \
+	$(cdbs_$p_current_version)))))
 # variables cdbs_$python_build_versions
 #  * arch(+indep): all; indep: current if supported, else first supported
-cdbs_python_build_versions = $(or $(strip \
+$(foreach p,$(_CDBS_PYTHONS_badly_named),$(eval cdbs_$p_build_versions = $(or $(strip \
 	$(if $(cdbs_python_arch_packages),\
-		$(cdbs_python_supported_versions))),$(strip \
-	$(cdbs_python_primary_version)))
-cdbs_python3_build_versions = $(or $(strip \
-	$(if $(cdbs_python_arch_packages),\
-		$(cdbs_python3_supported_versions))),$(strip \
-	$(cdbs_python3_primary_version)))
+		$(cdbs_$p_supported_versions))),$(strip \
+	$(cdbs_$p_primary_version)))))
 
 # runtime to use
 cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -d))
