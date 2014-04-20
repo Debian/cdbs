@@ -82,8 +82,12 @@ ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
 DEB_CONFIGURE_DEBUG_ARGS ?= --enable-debug
 endif
 
+# all environment settings for autotools configure execution
+# (potentially extended by other snippets)
+cdbs_autotools_configure_env = $(DEB_CONFIGURE_SCRIPT_ENV)
+
 DEB_CONFIGURE_INVOKE ?= cd $(cdbs_make_curbuilddir) && \
-	$(DEB_CONFIGURE_SCRIPT_ENV) \
+	$(cdbs_autotools_configure_env) \
 	$(DEB_CONFIGURE_SCRIPT) \
 	$(DEB_CONFIGURE_NORMAL_ARGS) \
 	$(DEB_CONFIGURE_DEBUG_ARGS)

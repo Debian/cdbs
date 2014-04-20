@@ -40,10 +40,12 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools)
 CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
-# FIXME: Restructure to allow early override
-DEB_CONFIGURE_SCRIPT_ENV += PYTHON="$(or $(strip \
+cdbs_make_curpythonruntime = $(or $(strip \
 	$(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%)),$(strip \
-	$(call cdbs_python_binary,python$(cdbs_make_curflavor))))"
+	$(call cdbs_python_binary,python$(cdbs_make_curflavor))))
+
+DEB_CONFIGURE_SCRIPT_ENV_PYTHON ?= PYTHON="$(cdbs_make_curpythonruntime)"
+cdbs_autotools_configure_env += $(DEB_CONFIGURE_SCRIPT_ENV_PYTHON)
 
 # Install all flavors on top of each other by default
 DEB_MAKE_DESTDIRSKEL = $(cdbs_curdestdir)
