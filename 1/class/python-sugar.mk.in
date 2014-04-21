@@ -93,10 +93,9 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST ] || [ -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || mv $(cdbs_cursrcdir)/MANIFEST $(cdbs_cursrcdir)/MANIFEST.upstream
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' $(cdbs_cursrcdir)/MANIFEST.upstream > $(cdbs_cursrcdir)/MANIFEST
 	set -e; \
-	for buildver in $(cdbs_curpythonbuildversions); do \
-		$(call cdbs_python_binary,python$$buildver) \
-			$(cdbs_cursrcdir)/setup.py build; \
-	done
+	$(foreach buildver,$(cdbs_curpythonbuildversions),\
+		$(call cdbs_python_binary,python$(buildver)) \
+			$(cdbs_cursrcdir)/setup.py build; )
 	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] || IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
 		echo "$$path" | sed 's!^$(cdbs_cursrcdir)/!!' >> $(cdbs_cursrcdir)/MANIFEST; \
 	done
@@ -104,12 +103,11 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	set -e; \
-	for buildver in $(cdbs_curpythonbuildversions); do \
+	$(foreach buildver,$(cdbs_curpythonbuildversions),\
 		LANG=C XDG_DATA_HOME="$(DEB_DESTDIR)/usr/share" \
-			$(call cdbs_python_binary,python$$buildver) \
+			$(call cdbs_python_binary,python$(buildver)) \
 			$(cdbs_cursrcdir)/setup.py install \
-			--prefix="$(DEB_DESTDIR)/usr"; \
-	done
+			--prefix="$(DEB_DESTDIR)/usr"; )
 
 # Replace superfluous COPYING files with symlinks
 $(patsubst %,binary-post-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-post-install/%:
