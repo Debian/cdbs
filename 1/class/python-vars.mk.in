@@ -84,10 +84,10 @@ cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
 # packaging systems to use
 cdbs_pythonsystem_pysupport = $(filter pysupport,$(DEB_PYTHON_SYSTEM))
-cdbs_python_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
+cdbs_pythonsystem_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
 cdbs_python_legacy_system = $(or $(strip \
 	$(cdbs_pythonsystem_pysupport)),$(strip \
-	$(cdbs_python_pycentral)),\
+	$(cdbs_pythonsystem_pycentral)),\
 	$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) \
 		(select either pysupport or pycentral, or leave empty \
 		for default python2/python3))))
@@ -219,7 +219,7 @@ $(if $(cdbs_pythonsystem_pysupport),\
 	$(if $(cdbs_python_build_versions),\
 		,\
 		$(error invalid setting in debian/pyversions)))
-$(if $(cdbs_python_pycentral),\
+$(if $(cdbs_pythonsystem_pycentral),\
 	$(if $(cdbs_python_build_versions),\
 		,\
 		$(error invalid setting for XS-Python-Version)))
