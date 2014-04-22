@@ -189,25 +189,18 @@ cdbs_curpythonflavors = $(_cdbs_$(cdbs_curpython)_flavors)
 # package relations
 # Python-related dependencies according to Python policy, appendix A
 #  * Arch-independent Python 3 was broken until 0.4.93~
-cdbs_python_builddeps_legacy = $(if $(DEB_PYTHON_SYSTEM),\
-	$(if $(cdbs_python_arch_packages),\
-		python-all-dev,\
-		python-dev (>= 2.3.5-7)\
-			$(cdbs_python_nondefault_version:%=, python%-dev)))
-cdbs_python_builddeps_python2 = $(if $(cdbs_pythonsystem_python2),\
-	$(if $(_cdbs_python2_arch_packages),\
-		python-all-dev,\
-		python-dev (>= 2.3.5-7)\
-			$(_cdbs_python2_altflavor:%=, %-dev)))
-cdbs_python_builddeps_python3 = $(if $(cdbs_pythonsystem_python3),\
-	$(if $(_cdbs_python3_arch_packages),\
-		python3-all-dev (>= 3.1),\
-		python3-dev\
-			$(_cdbs_python3_altflavor:%=, %-dev)))
+cdbs_python_builddeps_python2 = $(if $(_cdbs_python2_arch_packages),\
+	python-all-dev,\
+	python-dev (>= 2.3.5-7)\
+		$(_cdbs_python2_altflavor:%=, %-dev))
+cdbs_python_builddeps_python3 = $(if $(_cdbs_python3_arch_packages),\
+	python3-all-dev (>= 3.1),\
+	python3-dev\
+		$(_cdbs_python3_altflavor:%=, %-dev))
 cdbs_python_builddeps = \
-	$(cdbs_python_builddeps_legacy), \
-	$(cdbs_python_builddeps_python2), \
-	$(cdbs_python_builddeps_python3)
+	$(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_builddeps_python2)), \
+	$(if $(cdbs_pythonsystem_python2),$(cdbs_python_builddeps_python2)), \
+	$(if $(cdbs_pythonsystem_python3),$(cdbs_python_builddeps_python3))
 cdbs_python_builddeps_cdbs = $(strip \
 	$(if $(_cdbs_python3_indep_packages),\
 		$(comma) cdbs (>= 0.4.93~),\
