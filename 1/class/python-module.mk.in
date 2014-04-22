@@ -35,7 +35,7 @@ CDBS_BUILD_DEPENDS_class_python-module_pycentral ?= python-central
 CDBS_BUILD_DEPENDS_class_python-module_python2 ?= python
 CDBS_BUILD_DEPENDS_class_python-module_python3 ?= python3
 CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_python_pysupport),\
+	$(if $(cdbs_pythonsystem_pysupport),\
 		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pysupport)))
 CDBS_BUILD_DEPENDS += $(strip \
 	$(if $(cdbs_python_pycentral),\
