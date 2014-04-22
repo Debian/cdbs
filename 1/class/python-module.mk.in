@@ -41,7 +41,7 @@ CDBS_BUILD_DEPENDS += $(strip \
 	$(if $(cdbs_pythonsystem_pycentral),\
 		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_pycentral)))
 CDBS_BUILD_DEPENDS += $(strip \
-	$(if $(cdbs_python2),\
+	$(if $(cdbs_pythonsystem_python2),\
 		$(comma) $(CDBS_BUILD_DEPENDS_class_python-module_python2)))
 CDBS_BUILD_DEPENDS += $(strip \
 	$(if $(cdbs_python3),\
