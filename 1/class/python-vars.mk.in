@@ -96,7 +96,7 @@ cdbs_pythonsystem_python2 = $(strip \
 		,\
 		$(if $(cdbs_python2_packages),\
 			python2)))
-cdbs_python3 = $(strip \
+cdbs_pythonsystem_python3 = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		,\
 		$(if $(cdbs_python3_packages),\
@@ -119,9 +119,9 @@ cdbs_python_stem += $(strip \
 
 # Calculate cdbs_python_build_versions
 cdbs_python_current_version := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -vd))
-cdbs_python3_current_version := $(if $(cdbs_python3),$(shell py3versions -vd))
+cdbs_python3_current_version := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -vd))
 cdbs_python_supported_versions := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -vr))
-cdbs_python3_supported_versions := $(if $(cdbs_python3),$(shell py3versions -vr))
+cdbs_python3_supported_versions := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -vr))
 cdbs_python_first_supported_version = $(firstword $(strip $(sort $(cdbs_python_supported_versions))))
 cdbs_python3_first_supported_version = $(firstword $(strip $(sort $(cdbs_python3_supported_versions))))
 
@@ -160,7 +160,7 @@ cdbs_python3_build_versions = $(or $(strip \
 
 # runtime to use
 cdbs_python_current_binary := $(if $(DEB_PYTHON_SYSTEM)$(cdbs_pythonsystem_python2),$(shell pyversions -d))
-cdbs_python3_current_binary := $(if $(cdbs_python3),$(shell py3versions -d))
+cdbs_python3_current_binary := $(if $(cdbs_pythonsystem_python3),$(shell py3versions -d))
 # resolve from binary package and optional flavor
 cdbs_python_binary = $(strip \
 	$(if $(call cdbs_streq,$(cdbs_python$(cdbs_curpythonstem)_current_binary),$(1)),\
@@ -199,7 +199,7 @@ cdbs_python2_builddeps = $(if $(cdbs_pythonsystem_python2),\
 		python-all-dev,\
 		python-dev (>= 2.3.5-7)\
 			$(cdbs_python_nondefault_version:%=, python%-dev)))
-cdbs_python3_builddeps = $(if $(cdbs_python3),\
+cdbs_python3_builddeps = $(if $(cdbs_pythonsystem_python3),\
 	$(if $(cdbs_python3_arch_packages),\
 		python3-all-dev (>= 3.1),\
 		python3-dev\
@@ -211,7 +211,7 @@ cdbs_python_builddeps = \
 cdbs_python_builddeps_cdbs = $(strip \
 	$(if $(cdbs_python3_indep_packages),\
 		$(comma) cdbs (>= 0.4.93~),\
-		$(if $(cdbs_pythonsystem_python2)$(cdbs_python3),\
+		$(if $(cdbs_pythonsystem_python2)$(cdbs_pythonsystem_python3),\
 			$(comma) cdbs (>= 0.4.90~))))
 
 # check if build is possible
@@ -227,7 +227,7 @@ $(if $(cdbs_pythonsystem_python2),\
 	$(if $(cdbs_python_build_versions),\
 		,\
 		$(error invalid setting for X-Python-Version)))
-$(if $(cdbs_python3),\
+$(if $(cdbs_pythonsystem_python3),\
 	$(if $(cdbs_python3_build_versions),\
 		,\
 		$(error invalid setting for X-Python3-Version)))
