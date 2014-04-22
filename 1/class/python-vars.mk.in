@@ -194,7 +194,7 @@ cdbs_python_builddeps_legacy = $(if $(DEB_PYTHON_SYSTEM),\
 		python-all-dev,\
 		python-dev (>= 2.3.5-7)\
 			$(cdbs_python_nondefault_version:%=, python%-dev)))
-cdbs_python2_builddeps = $(if $(cdbs_pythonsystem_python2),\
+cdbs_python_builddeps_python2 = $(if $(cdbs_pythonsystem_python2),\
 	$(if $(cdbs_python2_arch_packages),\
 		python-all-dev,\
 		python-dev (>= 2.3.5-7)\
@@ -206,7 +206,7 @@ cdbs_python3_builddeps = $(if $(cdbs_pythonsystem_python3),\
 			$(cdbs_python3_nondefault_version:%=, python%-dev)))
 cdbs_python_builddeps = \
 	$(cdbs_python_builddeps_legacy), \
-	$(cdbs_python2_builddeps), \
+	$(cdbs_python_builddeps_python2), \
 	$(cdbs_python3_builddeps)
 cdbs_python_builddeps_cdbs = $(strip \
 	$(if $(cdbs_python3_indep_packages),\
