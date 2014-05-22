@@ -8,30 +8,30 @@ Copyright: 2002-2003, Colin Walters <walters@debian.org>
   2003, Christopher L Cheney <ccheney@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2003, Stefan Gybas <sgybas@debian.org>
-  2003,2008-2012, Jonas Smedegaard <dr@jones.dk>
+  2003,2008-2014, Jonas Smedegaard <dr@jones.dk>
   2004, David B Harris <dbharris@eelf.ddts.net>
   2006, Fathi Boudra <fboudra@free.fr>
   2006,2009, Marc Dequènes (Duck) <Duck@DuckCorp.org>
   2006-2009, Peter Eisentraut <petere@debian.org>
   2006, Peter Rockai <me@mornfall.net>
-  2010, IOhannes m zmölnig <zmoelnig@iem.at>
+  2010,2013, IOhannes m zmölnig <zmoelnig@iem.at>
   2010, Rémi Thebault <remi.thebault@gmail.com>
-License: GPL-2+
+License: GPL-3+
 
 Files: *
 Copyright: 2002-2003, Colin Walters <walters@debian.org>
   2003, Christopher L Cheney <ccheney@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2003, Stefan Gybas <sgybas@debian.org>
-  2003,2008-2012, Jonas Smedegaard <dr@jones.dk>
+  2003,2008-2014, Jonas Smedegaard <dr@jones.dk>
   2004, David B Harris <dbharris@eelf.ddts.net>
   2006, Fathi Boudra <fboudra@free.fr>
   2006,2009, Marc Dequènes (Duck) <Duck@DuckCorp.org>
   2006-2009, Peter Eisentraut <petere@debian.org>
   2006, Peter Rockai <me@mornfall.net>
-  2010, IOhannes m zmölnig <zmoelnig@iem.at>
+  2010,2013, IOhannes m zmölnig <zmoelnig@iem.at>
   2010, Rémi Thebault <remi.thebault@gmail.com>
-License: GPL-2+
+License: GPL-3+
 
 Files: scripts/cdbs-edit-patch
 Copyright: 2005, Martin Pitt <mpitt@debian.org>
@@ -84,6 +84,25 @@ Copyright: 1994-2011, Free Software Foundation, Inc.
   2003, Jeff Bailey <jbailey@debian.org>
 License: GAP~Makefile.in and GPL-2+
 
+License: GPL-3+
+ This file is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ Comment:
+ .
+ On Debian systems the 'GNU General Public License' version 3 is located
+ in '/usr/share/common-licenses/GPL-3'.
+ .
+ You should have received a copy of the 'GNU General Public License'
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 License: GPL-2+
  This file is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -99,9 +118,6 @@ License: GPL-2+
  .
  On Debian systems the 'GNU General Public License' version 2 is located
  in '/usr/share/common-licenses/GPL-2'.
- .
- You should have received a copy of the 'GNU General Public License'
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 License: GPL-2
  This script is free software; you can redistribute it and/or modify
