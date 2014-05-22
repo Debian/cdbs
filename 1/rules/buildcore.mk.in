@@ -58,7 +58,8 @@ CDBS_BUILD_DEPENDS_rules_buildcore_zip ?= unzip
 CDBS_BUILD_DEPENDS += $(if $(findstring .zip,$(DEB_TARBALL)),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_zip))
 
 ifneq (, $(DEB_TARBALL))
-$(warning parsing $(DEB_TARBALL) ...)
+$(warning \
+	parsing $(DEB_TARBALL) ...)
 config_all_tar		:= $(shell \
 for i in $(DEB_TARBALL) ; do \
 	if ! test -e $$i.cdbs-config_list ; then \

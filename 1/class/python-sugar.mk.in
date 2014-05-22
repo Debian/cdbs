@@ -46,9 +46,23 @@ DEB_SUGAR_SOURCE_PKGBASE = $(and $(DEB_SOURCE_PACKAGE),$(firstword $(subst -0.,$
 
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
-cdbs_python_sugar_pkgresolve_check = $(if $(call cdbs_streq,$(DEB_PYTHON_SUGAR_PACKAGES),$(cdbs_python_sugar_packages_pre)),,$(warning WARNING: Redefining DEB_PYTHON_SUGAR_PACKAGES late is currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk))
+cdbs_python_sugar_pkgresolve_check = $(strip $(if \
+	$(call cdbs_streq,$(strip \
+		$(DEB_PYTHON_SUGAR_PACKAGES)),$(strip \
+		$(cdbs_python_sugar_packages_pre))),\
+	,\
+	$(warning WARNING: \
+		Redefining DEB_PYTHON_SUGAR_PACKAGES late is \
+		currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES \
+		before including python-sugar.mk))
 ## TODO: Rephrase when DEB_PYTHON_SUGAR_PACKAGES is only expanded inside rules
-cdbs_python_sugar_pkg_check = $(if $(DEB_PYTHON_SUGAR_PACKAGES),,$(warning WARNING: No Python-based Sugar packages found or declared - either rename binary packages or set DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk))
+cdbs_python_sugar_pkg_check = $(strip $(if \
+	$(DEB_PYTHON_SUGAR_PACKAGES),\
+	,\
+	$(warning WARNING: \
+		No Python-based Sugar packages found or declared \
+		- either rename binary packages or set \
+		DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk)))
 
 # convenience wrappers to expand Sugar branches for package dependencies
 cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) ,$(comma) ,$(DEB_SUGAR_PRIMARY_BRANCH))

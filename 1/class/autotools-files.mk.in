@@ -26,7 +26,10 @@ include $(_cdbs_class_path)/autotools-vars.mk$(_cdbs_makefile_suffix)
 # Compatibility blurb, will be eventualy removed
 ifneq ($(DEB_AUTO_UPDATE_AUTOMAKE), )
 ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), )
-$(warning WARNING:  DEB_AUTO_UPDATE_AUTOMAKE will eventually stop implying DEB_AUTO_UPDATE_ACLOCAL.  If you meant aclocal.m4 to be regenerated, please use DEB_AUTO_UPDATE_ACLOCAL.)
+$(warning WARNING: \
+	DEB_AUTO_UPDATE_AUTOMAKE will eventually stop implying \
+	DEB_AUTO_UPDATE_ACLOCAL.  If you meant aclocal.m4 to be \
+	regenerated, please use DEB_AUTO_UPDATE_ACLOCAL.)
 DEB_AUTO_UPDATE_ACLOCAL ?= $(DEB_AUTO_UPDATE_AUTOMAKE)
 endif
 endif
@@ -34,12 +37,14 @@ endif
 # Some update rules are useless on their own
 ifeq ($(DEB_AUTO_UPDATE_LIBTOOL), pre)
 ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), )
-$(warning WARNING:  DEB_AUTO_UPDATE_LIBTOOL requires DEB_AUTO_UPDATE_ACLOCAL.)
+$(warning WARNING: \
+	DEB_AUTO_UPDATE_LIBTOOL requires DEB_AUTO_UPDATE_ACLOCAL.)
 endif
 endif
 ifneq ($(DEB_AUTO_UPDATE_ACLOCAL), )
 ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), )
-$(warning WARNING:  DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
+$(warning WARNING: \
+	DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
 endif
 endif
 

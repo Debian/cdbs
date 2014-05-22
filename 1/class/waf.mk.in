@@ -64,23 +64,38 @@ testsanity::
 
 # and that waf fit the checksum in debian/waf.sha1sum
 cdbs-waf-checksum:
-	$(if $(DEB_WAF_SKIP_CHECKSUM), \
-		$(warning WARNING: waf file is executed without prior inspection! \
-		This might be unsafe - you have been warned...!) \
-		, \
-		$(info Will now checksum the waf file with debian/waf.sha1sum) \
-		$(if $(shell if test -f debian/waf.sha1sum; then echo something; fi), , $(error ERROR: debian/waf.sha1sum is absent)) \
-		$(if $(shell grep waf debian/waf.sha1sum), , $(error ERROR: debian/waf.sha1sum is present but doesn't actually test waf)) \
-		$(if $(shell if sha1sum --check --status debian/waf.sha1sum; then echo something; fi), \
-			$(info waf checksum is OK) \
-			, \
-			$(warning waf calculated checksum is $(firstword $(shell sha1sum ./waf))) \
-			$(info $(shell $(_cdbs_scripts_path)/waf-unpack --waf ./waf --dest debian/waf-unpacked)) \
-			$(error ERROR: waf checksum doesn't fit debian/waf.sha1sum. Inspect unpacked waf in debian/waf-unpacked, \
-					and if ok store above calculated checksum as debian/waf.sha1sum \
-					and delete debian/waf-unpacked) \
-			) \
-	)
+	$(if $(DEB_WAF_SKIP_CHECKSUM),\
+		$(warning WARNING: \
+			waf file is executed without prior inspection! \
+			This might be unsafe - you have been warned...!),\
+		$(info \
+			Will now checksum the waf file with debian/waf.sha1sum)\
+			$(if $(shell if test -f debian/waf.sha1sum; then echo something; fi),\
+				,\
+				$(error ERROR: \
+					debian/waf.sha1sum is absent))\
+			$(if $(shell grep waf debian/waf.sha1sum),\
+				,\
+				$(error ERROR: \
+					debian/waf.sha1sum is present \
+					but doesn't actually test waf))\
+			$(if $(shell if sha1sum --check --status debian/waf.sha1sum; then echo something; fi),\
+				$(info \
+					waf checksum is OK),\
+				$(warning \
+					waf calculated checksum is \
+					$(firstword $(shell sha1sum ./waf)))\
+					$(info $(shell $(_cdbs_scripts_path)/waf-unpack --waf ./waf --dest debian/waf-unpacked)) \
+					$(error ERROR: \
+						waf checksum doesn't \
+						fit debian/waf.sha1sum. \
+						Inspect unpacked waf in \
+						debian/waf-unpacked, \
+						and if ok store above \
+						calculated checksum as \
+						debian/waf.sha1sum \
+						and delete \
+						debian/waf-unpacked)))
 
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: debian/stamp-waf-configure

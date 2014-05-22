@@ -38,7 +38,11 @@ CDBS_BUILD_DEPENDS_class_pd ?= cdbs (>= 0.4.91~)
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
 
 testsanity::
-	$(if $(_cdbs_rules_debhelper),,$(warning WARNING: debhelper rule not used. Make sure to then manually include pd targets!))
+	$(if $(_cdbs_rules_debhelper),\
+		,\
+		$(warning WARNING: \
+			debhelper rule not used. \
+			Make sure to then manually include pd targets!))
 
 # pd externals have the uncommon extension .pd_linux, which prevents them from
 # being properly detected by dh_shlibdeps, so we do it manually
