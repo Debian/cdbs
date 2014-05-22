@@ -104,7 +104,9 @@ CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),$(comma) $(CDBS_BU
 # the future it will be a good place to generate debian/control, but right
 # now we don't support that very well.
 pre-build:: testdir testsanity makebuilddir
-	$(foreach x,$(_cdbs_deprecated_vars),$(if $(shell test "$($x)" != "$(_cdbs_deprecated_$(x)_default)" && echo W),$(warning WARNING:  $x is a deprecated variable)))
+	$(foreach x,$(_cdbs_deprecated_vars),\
+		$(if $(shell test "$($x)" != "$(_cdbs_deprecated_$(x)_default)" && echo W),\
+			$(warning WARNING:  $x is a deprecated variable)))
 
 # This target is called after patches are applied.  Used by the patch system.
 post-patches:: pre-build apply-patches update-config
