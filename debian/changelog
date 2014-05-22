@@ -1,14 +1,31 @@
-cdbs (0.4.123) UNRELEASED; urgency=medium
+cdbs (0.4.123) unstable; urgency=medium
 
   [ Jonas Smedegaard ]
-  * Fix tighten cdbs version handling to merge unversioned only with
-    plainly versioned (not if including arch hints or fallbacks).
-  * Fix always strip $(cdbs_expand_allvars): caused bogusly resolving
-    versioned build-dependency on cdbs with python_module.mk included.
+  * Fix tighten cdbs version handling to avoid merging unversioned with
+    complex versioned (e.g. including arch hints or fallbacks).
+  * Fix always strip cdbs_expand_allvars (bogusly resolved versioned
+    build-dependency on cdbs when python_module.mk was included).
   * Resolve tightened build-dependency on cdbs when autotools hints
-    include comma (see below for details).
+    include comma (see autotools version hint change below).
   * Export AUTOMATED_TESTING=1 to build environment in Perl snippets, as
     recommended by Lancaster consensus.
+  * Fix debhelper snippet to call dh_systemd_* after dh_install.
+    Closes: bug#715504. Thanks to Michael Stapelberg.
+  * Avoid expensive shell call in buildcore.mk deprecation warning loop.
+  * Normalize warnings and errors:
+    + Introduce new expansion variables cdbs_info cdbs_warn
+      cdbs_warn_deprecated.
+    + Include version in deprecation warnings.
+  * Deprecate cdbs_python_selected_pyversions: Unused since 0.4.90.
+  * Drop python-support integrity check: Leave that to python-support
+    itself, and to Python team to agree on coherent Policy.
+    Closes: bug#545373. Thanks to Ludovico Cavedon.
+  * Fix double-word typo in comment.
+  * Update copyright info:
+    + Extend coverage.
+    + Bump licensing to GPL-3+.
+  * Bump to standards-version 3.9.5.
+  * Fix use canonical Vcs-Git URL.
 
   [ IOhannes m zmölnig ]
   * Extend autotools version hints to support range (e.g. ",1.13" for
@@ -16,7 +33,12 @@ cdbs (0.4.123) UNRELEASED; urgency=medium
     recent autotools packages provided only unversioned.
     Closes: bug#725950.
 
- -- Jonas Smedegaard <dr@jones.dk>  Wed, 15 Jan 2014 15:23:51 +0100
+  [ Vasudev Kamath ]
+  * Fix testsuite to expect files below /usr/lib/python*/dist-packages
+    (not implementation-specific /usr/shared/pyshared/).
+    Closes: bug#735412. Thanks to Martin Pitt.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 22 May 2014 15:55:17 +0200
 
 cdbs (0.4.122) unstable; urgency=low
 
