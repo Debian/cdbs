@@ -1,3 +1,11 @@
+cdbs (0.4.124) unstable; urgency=medium
+
+  * Have perl-build.mk resolve to build-depend on libmodule-build-perl
+    if not using Build::Module::Tiny (perl 5.19.0 onwards won't provide
+    it).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 23 Jun 2014 01:29:27 +0200
+
 cdbs (0.4.123) unstable; urgency=medium
 
   [ Jonas Smedegaard ]
