@@ -54,7 +54,7 @@ cdbs_python_sugar_pkgresolve_check = $(strip $(if \
 	$(call cdbs_warn,\
 		Redefining DEB_PYTHON_SUGAR_PACKAGES late is \
 		currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES \
-		before including python-sugar.mk))
+		before including python-sugar.mk)))
 ## TODO: Rephrase when DEB_PYTHON_SUGAR_PACKAGES is only expanded inside rules
 cdbs_python_sugar_pkg_check = $(strip $(if \
 	$(DEB_PYTHON_SUGAR_PACKAGES),\
