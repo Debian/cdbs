@@ -1,3 +1,11 @@
+cdbs (0.4.125) unstable; urgency=high
+
+  * Fix broken syntax in python-sugar.mk. Urgency=high as this affects
+    packages getting auto-removed from testing.
+    Closes: bug#750300, #750271, #750277. Thanks to David Suárez.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 23 Jun 2014 02:56:02 +0200
+
 cdbs (0.4.124) unstable; urgency=medium
 
   * Have perl-build.mk resolve to build-depend on libmodule-build-perl
