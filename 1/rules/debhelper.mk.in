@@ -111,7 +111,7 @@ DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -ge 7 ]; then echo "dh_prep"; else ec
 # TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_CHANGELOGS_ALL)
 DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
 # TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_DOCS_ALL)
-DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
+DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS CONTRIBUTORS CREDITS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 cdbs_strip_quotes = $(subst ',,$(subst ",,$(1)))
