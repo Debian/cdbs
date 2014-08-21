@@ -1,3 +1,18 @@
+cdbs (0.4.126) unstable; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * Have debhelper.mk install CONTRIBUTORS and CREDITS as documentation
+    files by default.
+  * Fix preserve compiler flags set using DEB_* environment variables,
+    in langcore.mk.
+    Closes: bug#712729. Thanks to Simon Ruderich, Emilio Pozuelo Monfort
+    and Markus.
+
+  [ Charles Plessy ]
+  * Corrected a typo in the VCS URL.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 21 Aug 2014 23:05:10 +0200
+
 cdbs (0.4.125) unstable; urgency=high
 
   * Fix broken syntax in python-sugar.mk. Urgency=high as this affects
