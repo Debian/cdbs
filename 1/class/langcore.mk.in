@@ -24,11 +24,19 @@ _cdbs_class_langcore = 1
 
 # Resolve our defaults
 ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
-deb_cflags := $(shell dpkg-buildflags --get CFLAGS)
-deb_cppflags := $(shell dpkg-buildflags --get CPPFLAGS)
-deb_cxxflags := $(shell dpkg-buildflags --get CXXFLAGS)
-deb_fflags := $(shell dpkg-buildflags --get FFLAGS)
-deb_ldflags := $(shell dpkg-buildflags --get LDFLAGS)
+# GNU Make doesn't export current environment in $(shell ..) function.
+# We need at least some of the DEB_* flags for dpkg-buildflags, so
+# extract them from the defined variables.  Sadly there seems to be no
+# way to get just get all exported variables.
+_get_dpkg_buildflags = $(shell \
+	$(foreach flag,$(filter DEB_%,$(.VARIABLES)),\
+		$(flag)="$($(flag))") \
+	dpkg-buildflags --get $(1))
+deb_cflags := $(call _get_dpkg_buildflags,CFLAGS)
+deb_cppflags := $(call _get_dpkg_buildflags,CPPFLAGS)
+deb_cxxflags := $(call _get_dpkg_buildflags,CXXFLAGS)
+deb_fflags := $(call _get_dpkg_buildflags,FFLAGS)
+deb_ldflags := $(call _get_dpkg_buildflags,LDFLAGS)
 else
 # TODO: Use above unconditionally when oldstable has dpkg >= 1.15.7
 deb_cflags = -g
