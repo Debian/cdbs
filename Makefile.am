@@ -42,9 +42,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/autotools-files.mk	\
 		1/class/autotools.mk		\
 		1/class/cmake.mk		\
-		1/class/docbookxml.mk		\
 		1/class/gnome.mk		\
-		1/class/kde.mk			\
 		1/class/langcore.mk		\
 		1/class/makefile-vars.mk	\
 		1/class/makefile.mk		\
@@ -64,8 +62,7 @@ all_mk_files =	1/rules/buildvars.mk		\
 		1/class/qmake.mk		\
 		1/class/scons-vars.mk		\
 		1/class/scons.mk		\
-		1/class/waf.mk			\
-		1/class/hbuild.mk
+		1/class/waf.mk
 
 all-local: $(all_mk_files) $(scripts_SCRIPTS)
 

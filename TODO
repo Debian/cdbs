@@ -14,7 +14,6 @@
   - bzip2 tarball builds
   - disabling make check
   - gnome
-  - kde
   - perl
 
 * Fix current test suite so that install rules are tested.
