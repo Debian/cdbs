@@ -41,10 +41,10 @@ CDBS_BUILD_DEPENDS += $(if $(call cdbs_expand_allvars,DEB_DH_PYTHONHELPER_ARGS D
 
 $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)):: testsanity/%:
 	$(if $(word 2,$(cdbs_curpythonsystems)),\
-		$(error ERROR: binary package $(cdbs_curpkg) use both \
-			"python2" and "python3" packaging systems - \
-			explicitly set DEB_PYTHON2_PACKAGES \
-			and/or DEB_PYTHON3_PACKAGES))
+		$(error ERROR: cannot determine which packaging system \
+			to use for binary package $(cdbs_curpkg) - \
+			either include it in DEB_PYTHON3_PACKAGES \
+			or another DEB_*_PACKAGES))
 
 # Optionally use debhelper (if not then these rules are simply ignored)
 # * invoke for all binary packages with legacy helpers (see bug#377965)
