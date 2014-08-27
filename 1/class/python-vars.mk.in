@@ -260,12 +260,6 @@ $(if $(cdbs_pythonsystem_python3),\
 		$(error invalid setting for X-Python3-Version)))
 
 # deprecated variables
-cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python_selected_pyversions,0.4.90)\
-	$(if $(DEB_PYTHON_SYSTEM),\
-		$(shell if [ -e debian/pyversions ]; then \
-			cat debian/pyversions; \
-		fi)))
 cdbs_curpythonstem = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonstem,0.5)\
 	$(if $(filter python3,$(call _cdbs_expand_python,$(cdbs_curpkg))),3))
