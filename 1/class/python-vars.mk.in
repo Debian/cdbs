@@ -63,10 +63,10 @@ cdbs_python_legacy_packages = $(or $(strip \
 	$(DEB_PYTHON_MODULE_PACKAGES)),$(strip \
 	$(firstword $(cdbs_python_potential_packages))))
 # per-python package lists
-#  * variables cdbs_$python_packages:
+#  * variables _cdbs_$python_packages:
 #    1. any DEB_*_MODULE_PACKAGES is non-empty: DEB_$P_MODULE_PACKAGES
 #    2. $p-* (or $pkgprefix-*) in control file except *-doc *-dev *-common
-$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_packages = $(strip \
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_packages = $(strip \
 	$(if $(strip \
 		$(foreach P,$(_CDBS_PYTHONS),\
 			$(DEB_$(_cdbs_$P_uc)_MODULE_PACKAGES))),\
@@ -76,13 +76,13 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_packages = $(strip \
 cdbs_python_packages = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		$(cdbs_python_legacy_packages),\
-		$(foreach p,$(_CDBS_PYTHONS),$(space)$(cdbs_$p_packages))))
-$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_arch_packages = $(strip \
-	$(filter $(cdbs_$p_packages),$(DEB_ARCH_PACKAGES)))))
+		$(foreach p,$(_CDBS_PYTHONS),$(space)$(_cdbs_$p_packages))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_arch_packages = $(strip \
+	$(filter $(_cdbs_$p_packages),$(DEB_ARCH_PACKAGES)))))
 cdbs_python_arch_packages = $(strip \
 	$(filter $(cdbs_python_packages),$(DEB_ARCH_PACKAGES)))
-$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_indep_packages = $(strip \
-	$(filter $(cdbs_$p_packages),$(DEB_INDEP_PACKAGES)))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_indep_packages = $(strip \
+	$(filter $(_cdbs_$p_packages),$(DEB_INDEP_PACKAGES)))))
 cdbs_python_indep_packages = $(strip \
 	$(filter $(cdbs_python_packages),$(DEB_INDEP_PACKAGES)))
 
@@ -100,20 +100,20 @@ cdbs_python_legacy_system = $(or $(strip \
 cdbs_pythonsystem_python2 = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		,\
-		$(if $(cdbs_python2_packages),\
+		$(if $(_cdbs_python2_packages),\
 			python2)))
 cdbs_pythonsystem_python3 = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		,\
-		$(if $(cdbs_python3_packages),\
+		$(if $(_cdbs_python3_packages),\
 			python3)))
 cdbs_python_systems = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		$(cdbs_python_legacy_system),\
 		$(foreach p,$(_CDBS_PYTHONS),\
-			$(if $(cdbs_$p_packages),\
+			$(if $(_cdbs_$p_packages),\
 				$p))))
-cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(cdbs_python3_packages),3))
+cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(_cdbs_python3_packages),3))
 # some build systems can handle only a single packaging system
 cdbs_python_stem += $(strip \
 	$(if $(word 2,$(cdbs_python_systems)),$(error \
@@ -163,14 +163,14 @@ cdbs_python_binary = $(strip \
 cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
 	$(cdbs_python_legacy_system),\
 	$(strip \
-		$(if $(filter $(cdbs_curpkg),$(cdbs_python2_packages)),\
+		$(if $(filter $(cdbs_curpkg),$(_cdbs_python2_packages)),\
 			python2) \
-		$(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),\
+		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
 			python3))))
 cdbs_curpythonstem = $(strip \
 	$(if $(cdbs_python_single_system),\
 		$(cdbs_python_stem),\
-		$(if $(filter $(cdbs_curpkg),$(cdbs_python3_packages)),\
+		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
 			3)))
 cdbs_curpythonindepbinary = python$(or $(strip \
 	$(cdbs_python$(cdbs_curpythonstem)_nondefault_version)),$(strip \
@@ -187,12 +187,12 @@ cdbs_python_builddeps_legacy = $(if $(DEB_PYTHON_SYSTEM),\
 		python-dev (>= 2.3.5-7)\
 			$(cdbs_python_nondefault_version:%=, python%-dev)))
 cdbs_python2_builddeps = $(if $(cdbs_pythonsystem_python2),\
-	$(if $(cdbs_python2_arch_packages),\
+	$(if $(_cdbs_python2_arch_packages),\
 		python-all-dev,\
 		python-dev (>= 2.3.5-7)\
 			$(cdbs_python_nondefault_version:%=, python%-dev)))
 cdbs_python3_builddeps = $(if $(cdbs_pythonsystem_python3),\
-	$(if $(cdbs_python3_arch_packages),\
+	$(if $(_cdbs_python3_arch_packages),\
 		python3-all-dev (>= 3.1),\
 		python3-dev\
 			$(cdbs_python3_nondefault_version:%=, python%-dev)))
@@ -201,7 +201,7 @@ cdbs_python_builddeps = \
 	$(cdbs_python2_builddeps), \
 	$(cdbs_python3_builddeps)
 cdbs_python_builddeps_cdbs = $(strip \
-	$(if $(cdbs_python3_indep_packages),\
+	$(if $(_cdbs_python3_indep_packages),\
 		$(comma) cdbs (>= 0.4.93~),\
 		$(if $(cdbs_pythonsystem_python2)$(cdbs_pythonsystem_python3),\
 			$(comma) cdbs (>= 0.4.90~))))
