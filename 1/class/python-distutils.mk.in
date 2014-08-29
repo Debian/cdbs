@@ -104,8 +104,6 @@ pre-build::
 	mkdir -p debian/python-module-stampdir
 
 # build stage
-common-build-arch common-build-indep:: $(addprefix python-build-stamp-,$(cdbs_python_build_versions))
-
 $(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)):: build/%: debian/python-module-stampdir/%
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)):: debian/python-module-stampdir/%:
@@ -126,7 +124,7 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: de
 
 
 # install stage
-$(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
+$(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%:
 	$(strip cd $(cdbs_python_distutils_srcdir) && \
 		$(cdbs_curpythonindepbinary) \
 			$(cdbs_python_setup_cmd) install \
@@ -136,7 +134,7 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonpribinary))) \
 			$(cdbs_python_install_args))
 
-$(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
+$(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%:
 	$(strip set -e; \
 		cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach buildver,$(cdbs_curpythonbuildversions),\
@@ -148,13 +146,9 @@ $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix p
 					--install-lib=$(call _cdbs_expand_python_distutils_skeldir,python$(buildver))) \
 				$(cdbs_python_install_args); ))
 
-# Deprecated targets.  You should use above targets instead.
-$(addprefix python-build-stamp-, $(cdbs_python_build_versions)):
-python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
-
 
 # clean stage
-clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
+clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
 	-$(strip cd $(cdbs_python_distutils_srcdir) && \
@@ -168,9 +162,6 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-modul
 			$(call cdbs_python_binary,python$(buildver)) \
 				$(cdbs_python_setup_cmd) clean \
 				$(cdbs_python_clean_args); ))
-
-# Deprecated targets.  You should use above targets instead.
-$(addprefix python-clean-, $(cdbs_python_build_versions)):
 
 # cleanup stamp dir
 # (dh_clean choke on dirs named stamp, so need to happen before clean::)
