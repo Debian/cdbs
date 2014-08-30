@@ -26,6 +26,10 @@ _cdbs_class_perl_makemaker_vars = 1
 include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
+# create verbose-output makefile
+DEB_MAKEMAKER_NORMAL_ARGS ?= \
+	NOECHO=
+
 # Override optimizations to follow Perl Policy 3.9.4 § 4.3
 # and extend to also pass CPPFLAGS and LDFLAGS
 DEB_MAKE_EXTRA_ARGS ?= \
@@ -35,6 +39,7 @@ DEB_MAKE_EXTRA_ARGS ?= \
 	$(DEB_MAKE_PARALLEL)
 
 DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL \
+	$(DEB_MAKEMAKER_NORMAL_ARGS) \
 	$(DEB_MAKEMAKER_USER_FLAGS) \
 	INSTALLDIRS=vendor
 
