@@ -30,12 +30,19 @@ include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 DEB_MAKEMAKER_NORMAL_ARGS ?= \
 	NOECHO=
 
+cdbs_perl_makemaker_lddlflags := \
+	$(shell perl -MConfig -e 'print $$Config{lddlflags}')
+
 # Override optimizations to follow Perl Policy 3.9.4 § 4.3
 # and extend to also pass CPPFLAGS and LDFLAGS
-DEB_MAKE_EXTRA_ARGS ?= \
+# FIXME: Restructure to allow early override
+DEB_MAKE_EXTRA_ARGS = \
 	OPTIMIZE="$(strip \
 		$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS)) \
 		$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS)))" \
+	LDDLFLAGS="$(strip \
+		$(cdbs_perl_makemaker_lddlflags) \
+		$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS)))" \
 	$(DEB_MAKE_PARALLEL)
 
 DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL \
