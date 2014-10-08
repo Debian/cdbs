@@ -115,9 +115,9 @@ cdbs_python_systems = $(strip \
 		$(foreach p,$(_CDBS_PYTHONS),\
 			$(if $(_cdbs_$p_packages),\
 				$p))))
-cdbs_python_stem = $(if $(DEB_PYTHON_SYSTEM),,$(if $(_cdbs_python3_packages),3))
 # some build systems can handle only a single packaging system
-cdbs_python_stem += $(strip \
+_cdbs_python_singlesystem = $(strip \
+	$(cdbs_python_systems) \
 	$(if $(word 2,$(cdbs_python_systems)),$(error \
 	use of multiple python implementations is unsupported here - \
 	either change target binary package names, or explicitly set \
@@ -171,7 +171,7 @@ cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
 			python3))))
 cdbs_curpythonstem = $(strip \
 	$(if $(cdbs_python_single_system),\
-		$(cdbs_python_stem),\
+		$(patsubst python%,%,$(_cdbs_python_singlesystem)),\
 		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
 			3)))
 cdbs_curpythonindepbinary = python$(or $(strip \
