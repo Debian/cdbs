@@ -44,7 +44,8 @@ cdbs_make_check_stamps = $(strip $(if $(cdbs_make_flavors),\
 cdbs_make_clean_nonstamps = $(if $(cdbs_make_flavors),\
 	$(patsubst %,makefile-clean/%,$(cdbs_make_flavors)),\
 	makefile-clean)
-cdbs_make_curflavor = $(filter-out %/,$(subst /,/ ,$@))
+cdbs_make_curflavor = $(strip $(if $(cdbs_make_flavors),\
+	$(filter-out %/,$(subst /,/ ,$@))))
 cdbs_make_curbuilddir = $(strip $(if $(cdbs_make_flavors),\
 	$(subst @FLAVOR@,$(cdbs_make_curflavor),$(or $(strip \
 		$(DEB_MAKE_BUILDDIRSKEL_$(cdbs_make_curflavor))),$(strip \
