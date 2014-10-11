@@ -73,7 +73,7 @@ cdbs_python2_indep_packages = $(strip \
 cdbs_python3_indep_packages = $(strip \
 	$(filter $(cdbs_python3_packages),$(DEB_INDEP_PACKAGES)))
 cdbs_python_indep_packages = $(strip \
-	$(filter $(cdbs_python_packages), $(DEB_INDEP_PACKAGES)))
+	$(filter $(cdbs_python_packages),$(DEB_INDEP_PACKAGES)))
 
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
