@@ -24,12 +24,21 @@ _cdbs_class_langcore = 1
 
 # Resolve our defaults
 ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
+# $(filter-out %x%,...) doesn't work ...
+_filter_out = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 # GNU Make doesn't export current environment in $(shell ..) function.
 # We need at least some of the DEB_* flags for dpkg-buildflags, so
 # extract them from the defined variables.  Sadly there seems to be no
 # way to get just get all exported variables.
+#
+# Make variables containing the characters "+ - ." need to be filtered out as
+# they can't be exported as shell variables, see #712729.
 _get_dpkg_buildflags = $(shell \
-	$(foreach flag,$(filter DEB_%,$(.VARIABLES)),\
+	$(foreach flag,\
+			$(call _filter_out,+,\
+			$(call _filter_out,-,\
+			$(call _filter_out,.,\
+			$(filter DEB_%,$(.VARIABLES))))),\
 		$(flag)="$($(flag))") \
 	dpkg-buildflags --get $(1))
 deb_cflags := $(call _get_dpkg_buildflags,CFLAGS)
