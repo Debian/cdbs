@@ -23,7 +23,6 @@ _cdbs_class_langcore = 1
 
 
 # Resolve our defaults
-ifneq (,$(wildcard /usr/bin/dpkg-buildflags))
 # $(filter-out %x%,...) doesn't work ...
 _filter_out = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 # GNU Make doesn't export current environment in $(shell ..) function.
@@ -46,25 +45,10 @@ deb_cppflags := $(call _get_dpkg_buildflags,CPPFLAGS)
 deb_cxxflags := $(call _get_dpkg_buildflags,CXXFLAGS)
 deb_fflags := $(call _get_dpkg_buildflags,FFLAGS)
 deb_ldflags := $(call _get_dpkg_buildflags,LDFLAGS)
-else
-# TODO: Use above unconditionally when oldstable has dpkg >= 1.15.7
-deb_cflags = -g
-deb_cxxflags = -g
-ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-DEB_OPT_FLAG ?= -O0
-else
-DEB_OPT_FLAG ?= -O2
-endif
-deb_cflags += $(DEB_OPT_FLAG)
-deb_cxxflags += $(DEB_OPT_FLAG)
-endif
 
 DEB_WARNING_FLAGS ?= -Wall
 deb_cflags += $(DEB_WARNING_FLAGS)
 deb_cxxflags += $(DEB_WARNING_FLAGS)
-
-_cdbs_deprecated_vars += DEB_OPT_FLAG,0.4.89
-_cdbs_deprecated_DEB_OPT_FLAG_default := $(DEB_OPT_FLAG)
 
 # Set (not add) our defaults for CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS if
 # undefined or defined implicitly by make (i.e. if not set or set empty)
