@@ -111,9 +111,11 @@ $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: d
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
-	set -e; for buildver in $(cdbs_curpythonbuildversions); do \
+	set -e; \
+	for buildver in $(cdbs_curpythonbuildversions); do \
 		cd $(CURDIR) && cd $(cdbs_python_distutils_srcdir) && \
-			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) build \
+			$(call cdbs_python_binary,python$$buildver) \
+			$(cdbs_python_setup_cmd) build \
 			$(cdbs_python_build_args); \
 	done
 	touch $@
@@ -128,13 +130,15 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-insta
 		$(cdbs_python_install_args)
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
-	set -e; for buildver in $(cdbs_curpythonbuildversions); do \
+	set -e; \
+	for buildver in $(cdbs_curpythonbuildversions); do \
 		cd $(CURDIR) && cd $(cdbs_python_distutils_srcdir) && \
-			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) install \
-			--root="$(cdbs_python_destdir)" \
-			--install-purelib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
-			--install-platlib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
-			$(cdbs_python_install_args); \
+			$(call cdbs_python_binary,python$$buildver) \
+				$(cdbs_python_setup_cmd) install \
+				--root="$(cdbs_python_destdir)" \
+				--install-purelib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
+				--install-platlib=$(call cdbs_expand_python_distutils_installdir,python$$buildver) \
+				$(cdbs_python_install_args); \
 	done
 
 # Deprecated targets.  You should use above targets instead.
@@ -153,8 +157,9 @@ $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-modu
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
 	-for buildver in $(cdbs_curpythonbuildversions); do \
 		cd $(CURDIR) && cd $(cdbs_python_distutils_srcdir) && \
-			$(call cdbs_python_binary,python$$buildver) $(cdbs_python_setup_cmd) clean \
-			$(cdbs_python_clean_args); \
+			$(call cdbs_python_binary,python$$buildver) \
+				$(cdbs_python_setup_cmd) clean \
+				$(cdbs_python_clean_args); \
 	done
 
 # Deprecated targets.  You should use above targets instead.

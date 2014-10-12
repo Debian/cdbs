@@ -28,9 +28,15 @@ include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
 # Override optimizations to follow Perl Policy 3.9.4 § 4.3
 # and extend to also pass CPPFLAGS and LDFLAGS
-DEB_MAKE_EXTRA_ARGS ?= OPTIMIZE="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS)) $(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" $(DEB_MAKE_PARALLEL)
+DEB_MAKE_EXTRA_ARGS ?= \
+	OPTIMIZE="$(strip \
+		$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS)) \
+		$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS)))" \
+	$(DEB_MAKE_PARALLEL)
 
-DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor
+DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL \
+	$(DEB_MAKEMAKER_USER_FLAGS) \
+	INSTALLDIRS=vendor
 
 # Set some MakeMaker defaults
 DEB_MAKE_BUILD_TARGET ?= all

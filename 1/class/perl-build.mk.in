@@ -30,7 +30,9 @@ CDBS_BUILD_DEPENDS_class_perl-build_perl ?= perl
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perl-build_perl)
 
 # Added dependencies when using Module::Build or Module::Build::Tiny
-cdbs_perl_module-build-tiny_check := $(shell grep -slP '^use\s+Module::Build::Tiny' $(DEB_PERL_SRCDIR)/Build.PL)
+cdbs_perl_module-build-tiny_check := $(shell \
+	grep -slP '^use\s+Module::Build::Tiny' \
+	$(DEB_PERL_SRCDIR)/Build.PL)
 CDBS_BUILD_DEPENDS_class_perl-build_module-build ?= libmodule-build-perl
 CDBS_BUILD_DEPENDS_class_perl-build_module-build-tiny ?= libmodule-build-tiny-perl, cdbs (>= 0.4.122~)
 CDBS_BUILD_DEPENDS += $(strip $(if $(cdbs_perl_module-build-tiny_check),\
