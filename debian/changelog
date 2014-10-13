@@ -1,3 +1,23 @@
+cdbs (0.4.127) unstable; urgency=medium
+
+  * Fix use unversioned Python runtime for default flavor in
+    python-distutils.mk and python-sugar.mk (see bug#377964).
+  * Fix detect Module::Build::Tiny more aggressively in perl-build.mk.
+  * Fix build MakeMaker-based Perl modules more verbosely. Introduce new
+    variable DEB_MAKEMAKER_NORMAL_ARGS.
+    Thanks to intrigeri.
+  * Fix set LDFLAGS in perl-makemaker.mk.
+  * Fix cdbs_set_nondefaultvars resolving to skip undefined variables.
+  * Improve buildflags resolving in langcore.mk:
+    + Drop obsolete hardcoded buildflags and variable DEB_OPT_FLAG:
+      dpkg-buildflags now included with dpkg-dev even in oldstable.
+    + Speedup resolving by calling dpkg-buildflags only once.
+    + Fix pass only documented supported environment variables to
+      dpkg-buildflags: Other DEB_* variables not safe to shell-quote.
+  * Acknowledge NMU. Thanks to Felipe Sateler and Simon Ruderich.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 13 Oct 2014 15:19:50 +0200
+
 cdbs (0.4.126+nmu1) unstable; urgency=medium
 
   * Non-maintainer upload.
