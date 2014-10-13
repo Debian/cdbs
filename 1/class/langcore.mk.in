@@ -30,18 +30,15 @@ _filter_out = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 # extract them from the defined variables.  Sadly there seems to be no
 # way to get just get all exported variables.
 #
-# Make variables containing the characters "+ - ." need to be filtered out as
-# they can't be exported as shell variables, see #712729.
-#
 # massage dpkg-buildflag output:
 #  * filter to include only lines matching expected format
 #  * transform prefix, e.g. "export LDFLAGS := " -> "deb_ldflags := "
 $(shell \
 	$(call cdbs_set_nondefaultvars,\
-			$(call _filter_out,+,\
-			$(call _filter_out,-,\
-			$(call _filter_out,.,\
-			$(filter DEB_%,$(.VARIABLES)))))) \
+		$(foreach flag,$(shell dpkg-buildflags --list),\
+			$(foreach op,SET STRIP APPEND PREPEND,\
+				DEB_$(flag)_$(op) DEB_$(flag)_MAINT_$(op)))\
+		DEB_BUILD_OPTIONS DEB_BUILD_MAINT_OPTIONS) \
 	dpkg-buildflags --export=make \
 	| perl -n \
 	-E '/^export\s+([A-Z]+)(\s+:=\s+\S.+)$$/ and say "deb_", lc($$1), $$2' \
