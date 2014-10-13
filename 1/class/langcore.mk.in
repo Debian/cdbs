@@ -33,12 +33,11 @@ _filter_out = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 # Make variables containing the characters "+ - ." need to be filtered out as
 # they can't be exported as shell variables, see #712729.
 _get_dpkg_buildflags = $(shell \
-	$(foreach flag,\
+	$(call cdbs_set_nondefaultvars,\
 			$(call _filter_out,+,\
 			$(call _filter_out,-,\
 			$(call _filter_out,.,\
-			$(filter DEB_%,$(.VARIABLES))))),\
-		$(flag)="$($(flag))") \
+			$(filter DEB_%,$(.VARIABLES))))) \
 	dpkg-buildflags --get $(1))
 deb_cflags := $(call _get_dpkg_buildflags,CFLAGS)
 deb_cppflags := $(call _get_dpkg_buildflags,CPPFLAGS)
