@@ -78,7 +78,7 @@ done)
 endif
 
 # Avoid recursive braindamage if we're building autotools-dev
-ifeq (, $(shell grep -x 'Package: autotools-dev' debian/control))
+ifeq (, $(shell grep -xi 'Package: autotools-dev' debian/control))
 config_guess		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.guess)
 config_sub		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.sub)
 ifneq (, $(config_all_tar))
@@ -87,7 +87,7 @@ config_sub_tar		:= $(filter %/config.sub, $(config_all_tar))
 endif
 endif
 # Ditto for gnulib
-ifeq (, $(shell grep -x 'Package: gnulib' debian/control))
+ifeq (, $(shell grep -xi 'Package: gnulib' debian/control))
 config_rpath		:= $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.rpath)
 ifneq (, $(config_all_tar))
 config_rpath_tar	:= $(filter %/config.rpath, $(config_all_tar))
@@ -237,7 +237,7 @@ debian/control::
 		-e '$$bd =~ $(cdbs_re_squash_trailing_commas_and_spaces);' \
 		-e '$$bd =~ $(cdbs_re_wrap_after_commas);' \
 		-e 's/\@cdbs\@/$$bd/g;' \
-		-e 's/^Build-Depends(|-Indep): ,/Build-Depends$$1:/g;' \
+		-e 's/^Build-Depends(|-Indep): ,/Build-Depends$$1:/gi;' \
 		\
 		-e 'print;' \
 	< debian/control.in > debian/control

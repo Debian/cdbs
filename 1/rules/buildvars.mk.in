@@ -24,7 +24,7 @@ _cdbs_rules_buildvars = 1
 CDBS_VERSION = @PACKAGE_VERSION@
 
 # Common useful variables
-DEB_SOURCE_PACKAGE := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))
+DEB_SOURCE_PACKAGE := $(strip $(shell grep -i '^Source: ' debian/control | cut -f 2 -d ':'))
 DEB_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
 DEB_NOEPOCH_VERSION := $(shell echo $(DEB_VERSION) | cut -d: -f2-)
 DEB_UPSTREAM_VERSION := $(shell echo $(DEB_NOEPOCH_VERSION) | sed 's/-[^-]*$$//')

@@ -54,7 +54,7 @@ sub GetPackages {
 	while (<CONTROL>) {
 		chomp;
 		s/\s+$//;
-		if (/^Package:\s*(.*)/) {
+		if (/^Package:\s*(.*)/i) {
 			$package=$1;
 			# Detect duplicate package names in the same control file.
 			if (! $seen{$package}) {
@@ -64,7 +64,7 @@ sub GetPackages {
 				error("debian/control has a duplicate entry for $package");
 			}
 		}
-		if (/^Architecture:\s*(.*)/) {
+		if (/^Architecture:\s*(.*)/i) {
 			$arch=$1;
 		}
 	
