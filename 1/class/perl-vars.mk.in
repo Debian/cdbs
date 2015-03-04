@@ -23,6 +23,10 @@ _cdbs_class_perl_vars = 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
+cdbs_perl_ccflags := $(shell perl -MConfig -e 'print $$Config{ccflags}')
+cdbs_perl_cppflags := $(shell perl -MConfig -e 'print $$Config{cppflags}')
+cdbs_perl_lddlflags := $(shell perl -MConfig -e 'print $$Config{lddlflags}')
+
 DEB_PERL_PACKAGES ?= $(filter lib%-perl, $(DEB_PACKAGES))
 
 DEB_PERL_ARCH_PACKAGES ?= $(filter $(DEB_PERL_PACKAGES), $(DEB_ARCH_PACKAGES))

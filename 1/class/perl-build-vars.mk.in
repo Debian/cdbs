@@ -21,10 +21,22 @@
 ifndef _cdbs_class_perl_build_vars
 _cdbs_class_perl_build_vars = 1
 
+include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 
 #DEB_PERL_CONFIGURE_TARGET =
-DEB_PERL_CONFIGURE_ARGS ?= --installdirs vendor --config ccflags="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" --config cxxflags="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" --config cppflags="$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS))" --config ldflags="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))"
+DEB_PERL_CONFIGURE_ARGS ?= --installdirs vendor \
+	--config ccflags="$(strip \
+		$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS)) \
+		$(cdbs_perl_ccflags))" \
+	--config cxxflags="$(strip \
+		$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS)))" \
+	--config cppflags="$(strip \
+		$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS)) \
+		$(cdbs_perl_cppflags))" \
+	--config lddlflags="$(strip \
+		$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS)) \
+		$(cdbs_perl_lddlflags))"
 
 DEB_PERL_CONFIGURE_FLAGS ?= --destdir $(cdbs_perl_curdestdir)
 
