@@ -1,3 +1,23 @@
+cdbs (0.4.128) unstable; urgency=medium
+
+  * Fix resolve compiler flags in perl snippets:
+    + Resolve perl-specific ccflags and cppflags (not only lddlflags),
+      as variables cdbs_perl_ccflags cdbs_perl_cppflags
+      cdbs_perl_lddlflags.
+      Deprecate now unused variable cdbs_perl_makemaker_lddlflags.
+    + Have perl-build-vars.mk snippet apply as lddlflags (not ldflags).
+    + Have perl-build-vars.mk snippet include langcore.mk to properly
+      resolve default compiler flags.
+    + Apply perl-specific compiler flags in all perl snippets (not only
+      perl-makemaker.mk).
+    + Append (not prepend) perl-specific compiler flags to default (or
+      locally overridden) compiler flags.
+    Closes: bug#770767. Thanks to Niko Tyni.
+  * Fix support control fields case-insensitively.
+    Closes: bug#772429. Thanks to Guillem Jover.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 06 Mar 2015 03:53:47 +0100
+
 cdbs (0.4.127) unstable; urgency=medium
 
   * Fix use unversioned Python runtime for default flavor in
