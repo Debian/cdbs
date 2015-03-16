@@ -40,8 +40,8 @@ DEB_MAKE_EXTRA_ARGS = \
 		$(or $(CPPFLAGS_$(cdbs_curpkg)),$(CPPFLAGS)) \
 		$(cdbs_perl_cppflags))" \
 	LDDLFLAGS="$(strip \
-		$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS)))" \
-		$(cdbs_perl_lddlflags) \
+		$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS)) \
+		$(cdbs_perl_lddlflags))" \
 	$(DEB_MAKE_PARALLEL)
 
 DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL \
