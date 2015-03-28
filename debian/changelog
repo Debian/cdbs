@@ -1,3 +1,10 @@
+cdbs (0.4.130) unstable; urgency=medium
+
+  * Fix quoting of compiler flags in perlmodule-vars.mk.
+    Closes: bug#781076. Thanks to Niko Tyni.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 28 Mar 2015 15:20:37 +0100
+
 cdbs (0.4.129) unstable; urgency=medium
 
   * Fix quoting of compiler flags in perl-makemaker-vars.mk.
