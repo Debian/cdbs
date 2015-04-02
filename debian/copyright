@@ -77,6 +77,12 @@ License-Grant:
  option) any later version.
 License: FSFULLR~Makefile.in and GPL-2+
 
+Files: tests/dist-py23pypy.at
+ tests/dist-pypy.at
+Copyright: 2014, Vasudev Kamath <kamathvasudev@gmail.com>
+  2016, Jonas Smedegaard <dr@jones.dk>
+License: GPL-3+
+
 License: GPL-3+
 License-Reference: /usr/share/common-licenses/GPL-3
 
