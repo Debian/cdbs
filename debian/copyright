@@ -84,6 +84,11 @@ Copyright: 1994-2011, Free Software Foundation, Inc.
   2003, Jeff Bailey <jbailey@debian.org>
 License: GAP~Makefile.in and GPL-2+
 
+Files: test/distutils-12.sh
+ test/distutils-13.sh
+Copyright: 2014, Vasudev Kamath <kamathvasudev@gmail.com>
+License: GPL-2+
+
 License: GPL-3+
  This file is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
