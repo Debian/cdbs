@@ -14,7 +14,7 @@ Build-Depends-Indep: @cdbs@,
  default-jdk,
  sharutils,
  lzma,
- devscripts (>= 2.10.7)
+ devscripts
 Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
