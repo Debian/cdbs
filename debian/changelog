@@ -1,3 +1,77 @@
+cdbs (0.5) UNRELEASED; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * Refactor python snippets:
+    + Expand implementations from lists.
+    + Handle flavors (not versions).
+    + Check actual need for build-dependencies in cdbs_python_builddeps
+      (not before).
+    + Expand packaging systems from list.
+    + Handle runtimes separate from flavors.
+    + Fix an error message to talk about multiple python implementations
+      (not packaging systems nor too specific ones).
+    + Fix allow early override of python autotools variable.
+  * Modernize python-distutils.mk installdir handling (since supported
+    even in oldstable now):
+    + Use --install-layout=deb (and drop --prefix=/usr) by default.
+    + Use --install-lib option (not --install-purelib/--install-platlib,
+      and only when DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL is set).
+    + Deprecate cdbs_expand_python_distutils_installdir, and have it
+      provide .../dist-packages dir (not .../site-packages) by default
+      to try cope with packages relying on it for non-skel use.
+    Closes: bug#565973. Thanks to Matthias Klose and Piotr Ożarowski.
+  * Tighten cdbs_make_curflavor resolving, to simplify its use.
+  * Introduce new variables:
+    DEB_CONFIGURE_SCRIPT_ENV_PYTHON cdbs_autotools_configure_env
+    cdbs_curpython cdbs_curpythonruntime cdbs_expand_pythonruntime
+    cdbs_make_curpythonruntime cdbs_python_flavors
+  * Introduce new expansion variables:
+    cdbs_uc cdbs_lc
+  * Introduce new per-implementation variables:
+    cdbs_$python_mainflavor
+  * Rename variables:
+    + cdbs_python_pycentral → cdbs_pythonsystem_pycentral
+    + cdbs_python_pysupport → cdbs_pythonsystem_pysupport
+    + cdbs_python2 → cdbs_pythonsystem_python2
+    + cdbs_python3 → cdbs_pythonsystem_python3
+    + cdbs_python2_builddeps → cdbs_python_builddeps_python2
+    + cdbs_python3_builddeps → cdbs_python_builddeps_python3
+  * Deprecate variables:
+    cdbs_curpythonstem cdbs_python3_current_binary
+    cdbs_python3_current_version cdbs_python3_supported_versions
+    cdbs_python_build_versions cdbs_python_current_binary
+    cdbs_python_current_version cdbs_python_supported_versions
+  * Drop variables:
+    cdbs_curpython cdbs_curpythonbuildversions cdbs_curpythonindepbinary
+    cdbs_curpythonpribinary cdbs_python2 cdbs_python2_builddeps
+    cdbs_python3 cdbs_python3_builddeps
+    cdbs_python3_first_supported_version cdbs_python3_nondefault_version
+    cdbs_python3_primary_version cdbs_python_binary
+    cdbs_python_builddeps_legacy cdbs_python_first_supported_version
+    cdbs_python_legacy_system cdbs_python_nondefault_version
+    cdbs_python_primary_version cdbs_python_pycentral
+    cdbs_python_pysupport cdbs_python_stem cdbs_pythonsystem_python3
+    python_python2_packages python_python3_packages
+  * Drop unused make targets:
+    python-build-stamp-% python-install-py python-install-%
+    python-clean-%
+  * Drop unmaintained and unused snippets:
+    docbookxml.mk hbuild.mk kde.mk
+  * Support xz compressed upstream tarballs.
+  * Declare compliance with Debian Policy 3.9.6.
+  * Update Vcs-Browser field to use cgit and https.
+  * Update package relations:
+    + Relax to build-depend unversioned on devscripts: Needed version
+      satisfied even in oldstable.
+  * Update copyright info:
+    + Cover newly added pypy tests.
+
+  [ Vasudev Kamath ]
+  * Support building python modules for pypy
+  * Add myself to Uploaders
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 02 Apr 2015 12:00:17 +0200
+
 cdbs (0.4.130) unstable; urgency=medium
 
   * Fix quoting of compiler flags in perlmodule-vars.mk.

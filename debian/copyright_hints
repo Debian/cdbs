@@ -102,9 +102,7 @@ Copyright: 2006, Peter Eisentraut <petere@debian.org>
 License: UNKNOWN
  FIXME
 
-Files: 1/class/docbookxml.mk.in
- 1/class/gnome.mk.in
- 1/class/hbuild.mk.in
+Files: 1/class/gnome.mk.in
  1/rules/simple-patchsys.mk.in
  test/hdparm.sh
  test/pbuilder-all.sh
@@ -113,6 +111,17 @@ Files: 1/class/docbookxml.mk.in
 Copyright: 2002, Colin Walters <walters@debian.org>
   2002-2003, Colin Walters <walters@debian.org>
   2003, Colin Walters <walters@debian.org>
+License: GPL-2+
+ FIXME
+
+Files: missing
+ test-driver
+ test/autotools/compile
+ test/autotools/depcomp
+ test/autotools/missing
+Copyright: 1996-2013, Free Software Foundation, Inc
+  1999-2013, Free Software Foundation, Inc
+  2011-2013, Free Software Foundation, Inc
 License: GPL-2+
  FIXME
 
@@ -136,23 +145,11 @@ Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc
 License: UNKNOWN
  FIXME
 
-Files: missing
- test-driver
- test/autotools/depcomp
- test/autotools/missing
-Copyright: 1996-2013, Free Software Foundation, Inc
-  1999-2013, Free Software Foundation, Inc
-  2011-2013, Free Software Foundation, Inc
-License: GPL-2+
- FIXME
-
 Files: scripts/list-packages
  test/autotools/config.guess
  test/autotools/config.sub
-Copyright: 1992-1999
-  1992-1999,
+Copyright: 1992-1999,
   1992-2001
-  1992-2001,
   1997-2009
 License: GPL-2+
  FIXME
@@ -201,23 +198,26 @@ Copyright: 2003, Stefan Gybas <sgybas@debian.org>
 License: GPL-2+
  FIXME
 
+Files: test/distutils-12.sh
+ test/distutils-13.sh
+Copyright: 2014, Vasudev Kamath <kamathvasudev@gmail.com>
+License: GPL-2+
+ FIXME
+
 Files: scripts/cdbs-edit-patch
 Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
  FIXME
 
 Files: scripts/licensecheck2dep5
-Copyright: 
+Copyright: ", join($rfc822_list_delimiter, @ownerlines_unique), "\n";
+  2005-2012, Jonas Smedegaard <dr@jones.dk>
+  file format
 License: GPL-2+
  FIXME
 
 Files: scripts/waf-unpack
 Copyright: *No copyright*
-License: GPL-2+
- FIXME
-
-Files: 1/class/kde.mk.in
-Copyright: 2003, Christopher L Cheney <ccheney@debian.org>
 License: GPL-2+
  FIXME
 
