@@ -19,7 +19,7 @@ Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
  Vasudev Kamath <kamathvasudev@gmail.com>
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://amonscm.debian.org/collab-maint/cdbs.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/cdbs.git
 
