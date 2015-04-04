@@ -136,7 +136,7 @@ _cdbs_python_legacy = $(strip \
 # variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor _cdbs_$p_defaultruntime
 #  1. resolved from _cdbs_expand_$p_*
 #  2. name of python implementation
-$(foreach p,$(_CDBS_PYTHONS),$(if $(cdbs_$p_packages),\
+$(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
 	$(foreach v,allflavors defaultflavor defaultruntime,\
 		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
 
@@ -167,10 +167,10 @@ cdbs_python_flavors = $(strip \
 _cdbs_expand_python = $(or $(strip \
 	$(_cdbs_python_legacy)),$(strip \
 	$(if $(cdbs_python_single_system),\
-		$(if $(filter $1,$(cdbs_$(cdbs_python_singlesystem)_packages)),\
+		$(if $(filter $1,$(_cdbs_$(cdbs_python_singlesystem)_packages)),\
 			$(cdbs_python_singlesystem)))),$(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
-		$(if $(filter $1,$(cdbs_$p_packages)),\
+		$(if $(filter $1,$(_cdbs_$p_packages)),\
 			$p))),\
 	$(error no python implementation resolved from binary package "$1"))
 _cdbs_expand_pythonflavors = $(or $(strip \
@@ -238,7 +238,7 @@ cdbs_python_builddeps_cdbs = $(strip \
 		$(comma) cdbs (>= 0.4.93~),\
 		$(if $(cdbs_pythonsystem_python2)$(cdbs_pythonsystem_python3),\
 			$(comma) cdbs (>= 0.4.90~)))\
-	$(if $(cdbs_pypy_packages),\
+	$(if $(_cdbs_pypy_packages),\
 		$(comma) cdbs (>= 0.5~)))
 
 # check if build is possible
