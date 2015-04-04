@@ -48,7 +48,7 @@ $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% :
 	$(if $(word 2,$(cdbs_curpythonsystems)),$(error \
 		cannot determine which packaging system to use for \
 		binary package $(cdbs_curpkg) - either include it in \
-		either DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES, \
+		DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES, \
 		or set an alternative DEB_PYTHON_SYSTEM))
 
 # Optionally use debhelper (if not then these rules are simply ignored)
