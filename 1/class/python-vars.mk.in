@@ -40,7 +40,8 @@ include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 # implementations of Python itself
 _CDBS_PYTHONS = python2 python3 pypy
 #  * uppercase implementation names
-$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_uc := $(call cdbs_uc,$p)))
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$(value p)_uc := $(strip \
+	$(call cdbs_uc,$(value p)))))
 
 # binary packages
 # default package prefix (if different from implementation name)
@@ -69,23 +70,23 @@ cdbs_python_potential_packages = $(strip \
 #  * variables _cdbs_$python_packages:
 #    1. any DEB_*_MODULE_PACKAGES is non-empty: DEB_$P_MODULE_PACKAGES
 #    2. $p-* (or $pkgprefix-*) in control file except *-doc *-dev *-common
-$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_packages = $(strip \
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$(value p)_packages = $(strip \
 	$(if $(strip \
-		$(foreach P,$(_CDBS_PYTHONS),\
-			$(DEB_$(_cdbs_$P_uc)_MODULE_PACKAGES))),\
-		$(DEB_$(_cdbs_$p_uc)_MODULE_PACKAGES),\
-		$(filter $(or $(_cdbs_$p_pkgprefix),$p)-%,\
-			$(cdbs_python_potential_packages))))))
+		$(foreach P,$(value _CDBS_PYTHONS),\
+			$(value DEB_$(value _cdbs_$(value P)_uc)_MODULE_PACKAGES))),\
+		$(value DEB_$(value _cdbs_$(value p)_uc)_MODULE_PACKAGES),\
+		$(filter $(or $(value _cdbs_$(value p)_pkgprefix),$(value p))-%,\
+			$(value cdbs_python_potential_packages))))))
 cdbs_python_packages = $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),$(space)$(_cdbs_$p_packages)))
 $(foreach p,$(_CDBS_PYTHONS),$(eval \
-	_cdbs_$p_arch_packages = $(filter $(_cdbs_$p_packages),\
-		$(DEB_ARCH_PACKAGES))))
+	_cdbs_$(value p)_arch_packages = $(filter $(value _cdbs_$(value p)_packages),\
+		$(value DEB_ARCH_PACKAGES))))
 cdbs_python_arch_packages = $(filter $(cdbs_python_packages),\
 	$(DEB_ARCH_PACKAGES))
 $(foreach p,$(_CDBS_PYTHONS),$(eval \
-	_cdbs_$p_indep_packages = $(filter $(_cdbs_$p_packages),\
-		$(DEB_INDEP_PACKAGES))))
+	_cdbs_$(value p)_indep_packages = $(filter $(value _cdbs_$(value p)_packages),\
+		$(value DEB_INDEP_PACKAGES))))
 cdbs_python_indep_packages = $(filter $(cdbs_python_packages),\
 	$(DEB_INDEP_PACKAGES))
 
@@ -97,8 +98,9 @@ cdbs_python_systems = $(strip \
 		$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
 			$(if $(_cdbs_$p_packages),\
 				$s))))
-$(foreach s,$(_CDBS_PYTHONSYSTEMS),$(eval cdbs_pythonsystem_$s = $(strip \
-	$(filter $s,$(cdbs_python_systems)))))
+$(foreach s,$(_CDBS_PYTHONSYSTEMS),$(eval \
+	cdbs_pythonsystem_$(value s) = $(filter $(value s),\
+		$(value cdbs_python_systems))))
 # some build systems can handle only a single packaging system
 _cdbs_python_singlesystem = $(strip \
 	$(cdbs_python_systems) \
@@ -114,27 +116,29 @@ _cdbs_python_singlesystem = $(strip \
 #  2. name of python implementation
 $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
 	$(foreach v,allflavors defaultflavor defaultruntime,\
-		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
+		$(eval _cdbs_$(value p)_$(value v) := $(or $(strip \
+			$(call _cdbs_expand_$(value p)_$(value v))),$(strip \
+			$(value p)))))))
 
 # flavors to use
 # variables _cdbs_$python_altflavor
 #  * arch-indep w/ default unsupported: first alternative available
-$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_altflavor = $(strip \
-	$(if $(cdbs_python_arch_packages),\
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$(value p)_altflavor = $(strip \
+	$(if $(value cdbs_python_arch_packages),\
 		,\
-		$(if $(filter $(_cdbs_$p_defaultflavor),$(_cdbs_$p_allflavors)),\
+		$(if $(filter $(value _cdbs_$(value p)_defaultflavor),$(value _cdbs_$(value p)_allflavors)),\
 			,\
-			$(firstword $(strip $(sort $(_cdbs_$p_allflavors)))))))))
+			$(firstword $(strip $(sort $(value _cdbs_$(value p)_allflavors)))))))))
 # variables cdbs_$python_mainflavor
-$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_mainflavor = $(or $(strip \
-	$(_cdbs_$p_altflavor)),$(strip \
-	$(_cdbs_$p_defaultflavor)))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$(value p)_mainflavor = $(or $(strip \
+	$(value _cdbs_$(value p)_altflavor)),$(strip \
+	$(value _cdbs_$(value p)_defaultflavor)))))
 # variables _cdbs_$python_flavors
 #  * arch(+indep): all; indep: current if supported, else first supported
-$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_flavors = $(or $(strip \
-	$(if $(cdbs_python_arch_packages),\
-		$(_cdbs_$p_allflavors))),$(strip \
-	$(cdbs_$p_mainflavor)))))
+$(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$(value p)_flavors = $(or $(strip \
+	$(if $(value cdbs_python_arch_packages),\
+		$(value _cdbs_$(value p)_allflavors))),$(strip \
+	$(value cdbs_$(value p)_mainflavor)))))
 cdbs_python_flavors = $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
 		$(_cdbs_$p_flavors)))

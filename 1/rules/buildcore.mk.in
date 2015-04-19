@@ -132,8 +132,8 @@ CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),\
 # now we don't support that very well.
 pre-build:: testdir testsanity makebuilddir
 	$(foreach x,$(_cdbs_deprecated_vars),\
-		$(eval y=$(subst $(comma), ,$x))\
-		$(eval z=$(firstword $y))\
+		$(eval y=$(subst $(comma), ,$(value x)))\
+		$(eval z=$(firstword $(value y)))\
 		$(if $(call cdbs_streq,$($z),$(_cdbs_deprecated_$z_default)),\
 			,\
 			$(call cdbs_warn_deprecated,\
