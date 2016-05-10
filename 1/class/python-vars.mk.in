@@ -93,7 +93,7 @@ cdbs_python_indep_packages = $(filter $(cdbs_python_packages),\
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
 # packaging systems to use
-cdbs_python_systems = $(strip \
+_cdbs_python_maybesystems = $(strip \
 	$(foreach s,$(_CDBS_PYTHONSYSTEMS),\
 		$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
 			$(if $(_cdbs_$p_packages),\
@@ -145,6 +145,8 @@ cdbs_python_flavors = $(strip \
 
 # resolve from binary package
 _cdbs_expand_python = $(or $(strip \
+								$(warning FOO: $(cdbs_python_systems))\
+								$(warning FOO: $(_cdbs_python_legacy))\
 	$(if $(cdbs_python_single_system),\
 		$(if $(filter $1,$(_cdbs_$(cdbs_python_singlesystem)_packages)),\
 			$(cdbs_python_singlesystem)))),$(strip \
@@ -154,6 +156,7 @@ _cdbs_expand_python = $(or $(strip \
 	$(error no python implementation resolved from binary package "$1"))
 _cdbs_expand_pythonflavors = $(or $(strip \
 	$(_cdbs_$(call _cdbs_expand_python,$1)_flavors)),\
+								$(warning FOO: $($(call _cdbs_expand_python,$1)))\
 	$(error no python flavors resolved from binary package "$1"))
 
 # runtime to use
@@ -187,10 +190,11 @@ _cdbs_expand_pythonflavor2python = $(or $(strip \
 	$(error no python implementation resolved from flavor "$1"))
 
 # resolve (implicitly) from binary package
-cdbs_curpythonsystems = $(strip $(foreach s,$(cdbs_python_systems),\
-	$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
-			$s))))
+cdbs_curpythonsystems = $(filter $(cdbs_python_systems),\
+	$(foreach s,$(cdbs_python_systems),\
+		$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
+			$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
+				$s))))
 cdbs_curpythonruntime = $(call cdbs_expand_pythonruntime,$(cdbs_curpkg))
 cdbs_curpythonflavors = $(call _cdbs_expand_pythonflavors,$(cdbs_curpkg))
 
