@@ -29,9 +29,17 @@ ifneq (,$(DEB_MAINTAINER_MODE))
   DEB_COPYRIGHT_CHECK_STRICT ?= yes
 endif
 
-# Single regular expression for files to include or ignore
+# Space-delimited regular expressions for extensions/paths to ignore
+#DEB_COPYRIGHT_CHECK_IGNORE_EXTS =
+#DEB_COPYRIGHT_CHECK_IGNORE_PATHS =
+
+# Single regular expression for files to include and ignore
 DEB_COPYRIGHT_CHECK_REGEX ?= .*
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= ^debian/(changelog|copyright(|_hints|_newhints))$
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
+ ^(?:$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)\
+ $(patsubst %,(?:.*/)?[^/]+\.(?:%),$(subst $(space),|,$(strip \
+  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS))))\
+ debian/(?:changelog|copyright(?:|_hints|_newhints)))))$$
 
 # number of lines from the top of each file to investigate
 DEB_COPYRIGHT_CHECK_PARSELINES ?= 99999
@@ -54,6 +62,12 @@ DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= devscripts
 CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
+
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular ?= cdbs (>= 0.4.131~)
+CDBS_BUILD_DEPENDS += , $(if $(strip \
+ $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS)\
+ $(DEB_COPYRIGHT_CHECK_IGNORE_PATHS),\
+ $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular)))
 
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
