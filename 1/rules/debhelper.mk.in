@@ -93,6 +93,7 @@ CDBS_BUILD_DEPENDS_rules_debhelper_v5 ?= debhelper
 CDBS_BUILD_DEPENDS_rules_debhelper_v6 ?= debhelper
 CDBS_BUILD_DEPENDS_rules_debhelper_v7 ?= debhelper
 CDBS_BUILD_DEPENDS_rules_debhelper_v8 ?= debhelper
+CDBS_BUILD_DEPENDS_rules_debhelper_v9 ?= debhelper
 
 # by default build-depend on version matching compat level
 CDBS_BUILD_DEPENDS_rules_debhelper_v$(DH_COMPAT) ?= debhelper (>= $(DH_COMPAT)~)
