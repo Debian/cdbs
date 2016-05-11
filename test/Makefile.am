@@ -32,8 +32,6 @@ TESTS = autotools-1.sh \
 	debhelper-1.sh \
 	debhelper-2.sh \
 	debhelper-3.sh \
-	debhelper-4.sh \
-	debhelper-5.sh \
 	debhelper-6.sh \
 	debhelper-7.sh \
 	patchsys-1.sh \
