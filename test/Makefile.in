@@ -417,27 +417,25 @@ top_srcdir = @top_srcdir@
 TESTS_ENVIRONMENT = TESTS_SILENT=true
 EXTRA_DIST = testsuite_functions
 TESTS = autotools-1.sh \
-	autotools-2.sh \
-	autotools-3.sh \
-	autotools-4.sh \
-	autotools-5.sh \
-	autotools-lzma.sh \
-	recursive.sh \
-	udeb-1.sh \
-	hdparm.sh \
-	debhelper-1.sh \
-	debhelper-2.sh \
-	debhelper-3.sh \
-	debhelper-4.sh \
-	debhelper-5.sh \
-	debhelper-6.sh \
-	debhelper-7.sh \
-	patchsys-1.sh \
-	list-missing-1.sh \
-	distutils-9.sh \
-	distutils-10.sh \
-	distutils-11.sh \
-	ant-1.sh
+ autotools-2.sh \
+ autotools-3.sh \
+ autotools-4.sh \
+ autotools-5.sh \
+ autotools-lzma.sh \
+ recursive.sh \
+ udeb-1.sh \
+ hdparm.sh \
+ debhelper-1.sh \
+ debhelper-2.sh \
+ debhelper-3.sh \
+ debhelper-6.sh \
+ debhelper-7.sh \
+ patchsys-1.sh \
+ list-missing-1.sh \
+ distutils-9.sh \
+ distutils-10.sh \
+ distutils-11.sh \
+ ant-1.sh
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz
@@ -703,20 +701,6 @@ debhelper-2.sh.log: debhelper-2.sh
 debhelper-3.sh.log: debhelper-3.sh
 	@p='debhelper-3.sh'; \
 	b='debhelper-3.sh'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
-debhelper-4.sh.log: debhelper-4.sh
-	@p='debhelper-4.sh'; \
-	b='debhelper-4.sh'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
-debhelper-5.sh.log: debhelper-5.sh
-	@p='debhelper-5.sh'; \
-	b='debhelper-5.sh'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
