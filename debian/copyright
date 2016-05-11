@@ -21,10 +21,19 @@ Copyright:
   2006, Peter Rockai <me@mornfall.net>
   2010,2013, IOhannes m zmölnig <zmoelnig@iem.at>
   2010, Rémi Thebault <remi.thebault@gmail.com>
+License-Grant:
+ This file is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 3, or (at your option) any
+ later version.
 License: GPL-3+
 
 Files: scripts/cdbs-edit-patch
 Copyright: 2005, Martin Pitt <mpitt@debian.org>
+License-Grant:
+ This script is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
 License: GPL-2
 
 Files: */aclocal.m4
@@ -33,6 +42,11 @@ License: FSFULLR
 
 Files: */config.guess */config.sub */missing
 Copyright: 1992-2014, Free Software Foundation, Inc.
+License-Grant
+ This file is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: GPL-2+ with Autoconf exception
  As a special exception to the GNU General Public License, if you
  distribute this file as part of a program that contains a configuration
@@ -45,6 +59,11 @@ License: FSFUL and FSFUL~config.status
 
 Files: */depcomp
 Copyright: 1999-2014, Free Software Foundation, Inc
+License-Grant:
+ This file is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: GPL-2+ with Autoconf exception
  As a special exception to the GNU General Public License, if you
  distribute this file as part of a program that contains a configuration
@@ -60,47 +79,21 @@ Copyright: 1994-2014, Free Software Foundation, Inc.
   2002-2003, Colin Walters <walters@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2009-2011, Jonas Smedegaard <dr@jones.dk>
+License-Grant:
+ This file is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
 License: FSFULLR~Makefile.in and GPL-2+
 
 License: GPL-3+
- This file is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 3 of the License, or
- (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- General Public License for more details.
- .
- Comment:
- .
- On Debian systems the 'GNU General Public License' version 3 is located
- in '/usr/share/common-licenses/GPL-3'.
- .
- You should have received a copy of the 'GNU General Public License'
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+License-Reference: /usr/share/common-licenses/GPL-3
 
 License: GPL-2+
- This file is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- General Public License for more details.
- .
- Comment:
- .
- On Debian systems the 'GNU General Public License' version 2 is located
- in '/usr/share/common-licenses/GPL-2'.
+License-Reference: /usr/share/common-licenses/GPL-2
 
 License: GPL-2
- This script is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License version 2 as
- published by the Free Software Foundation.
+License-Reference: /usr/share/common-licenses/GPL-2
 
 License: FSFUL
  This configure script is free software; the Free Software Foundation
@@ -115,21 +108,11 @@ License: FSFULLR
  This file is free software; the Free Software Foundation
  gives unlimited permission to copy and/or distribute it,
  with or without modifications, as long as this notice is preserved.
- .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY, to the extent permitted by law; without
- even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- PARTICULAR PURPOSE.
 
 License: FSFULLR~Makefile.in
  This Makefile.in is free software; the Free Software Foundation
  gives unlimited permission to copy and/or distribute it,
  with or without modifications, as long as this notice is preserved.
- .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY, to the extent permitted by law; without
- even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- PARTICULAR PURPOSE.
 
 License: X11
  Permission is hereby granted, free of charge, to any person obtaining a
