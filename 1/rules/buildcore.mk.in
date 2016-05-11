@@ -23,6 +23,8 @@ _cdbs_rules_buildcore = 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
+export SOURCE_DATE_EPOCH
+
 testdir: debian/control
 	test -x debian/rules
 

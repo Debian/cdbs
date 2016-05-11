@@ -23,6 +23,9 @@ _cdbs_rules_buildvars = 1
 
 CDBS_VERSION = @PACKAGE_VERSION@
 
+# See <https://wiki.debian.org/ReproducibleBuilds/TimestampsProposal>
+SOURCE_DATE_EPOCH ?= $(shell dpkg-parsechangelog | grep -Po '^Date: \K.*' | date -f- +%s)
+
 # Common useful variables
 DEB_SOURCE_PACKAGE := $(strip $(shell grep -i '^Source: ' debian/control | cut -f 2 -d ':'))
 DEB_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
