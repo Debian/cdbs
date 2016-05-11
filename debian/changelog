@@ -1,3 +1,93 @@
+cdbs (0.4.131) unstable; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * Modernize python-distutils.mk installdir handling (since supported
+    even in oldstable now):
+    + Use --install-layout=deb (and drop --prefix=/usr) by default.
+    + Use --install-lib option (not --install-purelib/--install-platlib,
+      and only when DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL is set).
+    + Have cdbs_expand_python_distutils_installdir provide
+      .../dist-packages dir (not .../site-packages) by default, to try
+      cope with packages relying on it for non-skel use.
+    Closes: bug#565973. Thanks to Matthias Klose and Piotr Ożarowski.
+  * Fix error message to talk about multiple python implementations (not
+    packaging systems nor too specific ones).
+  * Tighten cdbs_make_curflavor resolving, to simplify its use.
+  * Fix allow early override of python autotools variable.
+  * Improve copyright-check:
+    + Support extending (not only replacing) exceptions.
+    + Support extracting metadata from select binary files.
+  * Introduce new variables:
+    + DEB_CONFIGURE_SCRIPT_ENV_PYTHON
+    + DEB_COPYRIGHT_CHECK_IGNORE_EXTS
+    + DEB_COPYRIGHT_CHECK_IGNORE_PATHS
+    + DEB_COPYRIGHT_EXTRACT_EXTS
+    + DEB_COPYRIGHT_EXTRACT_PATHS_EXIF
+    + DEB_COPYRIGHT_EXTRACT_PATHS_TTF
+    + DEB_COPYRIGHT_EXTRACT_SUFFIX
+    + cdbs_autotools_configure_env
+    + cdbs_lc
+    + cdbs_make_curpythonruntime
+    + cdbs_uc
+  * Rename variables:
+    + cdbs_python_pysupport → cdbs_pythonsystem_pysupport
+    + cdbs_python_pycentral → cdbs_pythonsystem_pycentral
+    + cdbs_python2 → cdbs_pythonsystem_python2
+    + cdbs_python3 → cdbs_pythonsystem_python3
+    + cdbs_python2_builddeps → cdbs_python_builddeps_python2
+    + cdbs_python3_builddeps → cdbs_python_builddeps_python3
+    Former ones above dropped without deprecation (unused outside cdbs).
+  * Deprecate variables:
+    + cdbs_expand_python_distutils_installdir
+  * Drop unmaintained and unused snippets:
+    + docbookxml.mk
+    + hbuild.mk
+    + kde.mk
+  * Support xz compressed upstream tarballs.
+    Closes: Bug#700321. Thanks to Vasudev Kamath.
+  * Relax to build-depend unversioned on devscripts: Needed version is
+    satisfied even in oldstable.
+  * Update Vcs-* URLs:
+    + Use https protocol.
+    + Use cgit browser.
+    + Fix path.
+  * Declare compliance with Debian Policy 3.9.8.
+  * Have debhelper.mk snippet resolve unversioned build-dependency for
+    compat level 9.
+  * Fix have debhelper.mk invoke dh_systemd_enable before
+    dh_installinit.
+    Closes: Bug#811555. Thanks to Dan Nicholson.
+  * Update copyright info:
+    + Extend coverage for main author to include recent years.
+    + Drop Copyright field from header section.
+    + Extend copyright for main author to cover recent years.
+    + Use License shortname X11 (not Expat̃X with X exception).
+    + Use License shortnames FSFUL FSFULLR (not GAP).
+    + Update Files sections for autotools.
+    + Relicense (where permitted) to GPL-3+.
+    + Use License-Grant and License-Reference fields.
+      Thanks to Ben Finney.
+  * Update autotools (with autoreconf -f -i).
+  * Add lintian override regarding license in License-Reference field.
+    See bug#786450.
+  * Resolve (if not overridden) and globally export SOURCE_DATE_EPOCH.
+    Closes: Bug#794241. Thanks to Maria Valentina Marin.
+  * Have debhelper.mk call dh_strip_nondeterminism if available.
+    Closes: Bug#764478. Thanks to Holger Levsen.
+  * Drop tests debhelper4 debhelper5 tied to archaic debhelper compat
+    levels no longer supported.
+    Closes: Bug#805315. Thanks to Niels Thykier.
+  * Build-depend on default-jdk-headless (and on default-jdk only as
+    fallback to ease backporting).
+
+  [ Vasudev Kamath ]
+  * Add myself to Uploaders
+
+  [ IOhannes m zmölnig ]
+  * class/pd: only run commands on *.pd_linux files
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 11 May 2016 16:18:25 +0200
+
 cdbs (0.4.130) unstable; urgency=medium
 
   * Fix quoting of compiler flags in perlmodule-vars.mk.
