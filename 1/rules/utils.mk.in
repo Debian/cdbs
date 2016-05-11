@@ -77,8 +77,8 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular ?= cdbs (>= 0.4.131~)
 CDBS_BUILD_DEPENDS += , $(if $(strip \
  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS)\
- $(DEB_COPYRIGHT_CHECK_IGNORE_PATHS),\
- $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular)))
+ $(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)),\
+ $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular))
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-extract ?= cdbs (>= 0.4.131~), \
  libregexp-assemble-perl, libimage-exiftool-perl, libfont-ttf-perl
