@@ -21,25 +21,25 @@ TESTS_ENVIRONMENT = TESTS_SILENT=true
 EXTRA_DIST = testsuite_functions
 
 TESTS = autotools-1.sh \
-	autotools-2.sh \
-	autotools-3.sh \
-	autotools-4.sh \
-	autotools-5.sh \
-	autotools-lzma.sh \
-	recursive.sh \
-	udeb-1.sh \
-	hdparm.sh \
-	debhelper-1.sh \
-	debhelper-2.sh \
-	debhelper-3.sh \
-	debhelper-6.sh \
-	debhelper-7.sh \
-	patchsys-1.sh \
-	list-missing-1.sh \
-	distutils-9.sh \
-	distutils-10.sh \
-	distutils-11.sh \
-	ant-1.sh
+ autotools-2.sh \
+ autotools-3.sh \
+ autotools-4.sh \
+ autotools-5.sh \
+ autotools-lzma.sh \
+ recursive.sh \
+ udeb-1.sh \
+ hdparm.sh \
+ debhelper-1.sh \
+ debhelper-2.sh \
+ debhelper-3.sh \
+ debhelper-6.sh \
+ debhelper-7.sh \
+ patchsys-1.sh \
+ list-missing-1.sh \
+ distutils-9.sh \
+ distutils-10.sh \
+ distutils-11.sh \
+ ant-1.sh
 
 TARBALLS = tarballs/autotools-test-0.1.tar.gz \
 	tarballs/distutils-test-0.1.tar.gz
@@ -68,4 +68,3 @@ tarballs/distutils-test-0.1.tar.gz:
 	cd distutils && ./setup.py sdist
 	mv distutils/dist/distutils-test-0.1.tar.gz tarballs
 	rm -rf distutils/dist
-
