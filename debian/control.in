@@ -9,7 +9,7 @@ Build-Depends-Indep: @cdbs@,
  python-all-dev,
  python3-all-dev,
  ant,
- default-jdk,
+ default-jdk-headless | default-jdk,
  sharutils,
  lzma,
  devscripts
