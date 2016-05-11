@@ -1,0 +1,250 @@
+#! /usr/bin/perl
+
+use autodie;
+use strict;
+use utf8;
+use warnings qw(all);
+use feature 'say';
+
+use Getopt::Long;
+use Pod::Usage;
+use FileHandle;
+use Regexp::Assemble;
+use Image::ExifTool;
+use Font::TTF::Font;
+use Font::TTF::Ttc;
+
+=head1 NAME
+
+license-miner - extract copyright/licensing info from complex files
+
+=head1 SYNOPSIS
+
+license-miner [B<options>] [F<path>|inspector:F<path>...]
+
+=head1 OPTIONS
+
+=over 12
+
+=item B<--help>
+
+Print a brief help message and exits.
+
+=item B<--man>
+
+Prints the manual page and exits.
+
+=item B<--verbose>
+
+Prints names of paths and the inspector used.
+
+=item B<--debug>
+
+Prints extracted info.
+
+=item B<--suffix>
+
+Suffix appended to each input filename to form output filename.
+
+Default value: F<.metadata>
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> will inspect files,
+extract their copyright and licensing info,
+and save the result next to the files.
+
+File paths are provided either as arguments
+or (if no arguments provided) from STDIN.
+
+Each path may optionally be prefixed with an inspector to use.
+Default is to pick inspector based on file suffix.
+
+=head1 INSPECTORS
+
+Available inspectors are B<ttf> and B<exif>.
+
+=over 12
+
+=item B<ttf>
+
+TrueType fonts (including Truetype-flavored OpenType and WOFF).
+
+Used by default for extensions F<.ttf>, F<.otf>, F<woff>.
+
+Beware that some OpenType fonts are not TrueType but Type1,
+which may fail to parse correctly based on suffix detection.
+If that happens, try force using the exif inspector
+by prefixing the path with "exif:".
+
+=item B<ttc>
+
+TrueType collections (including Truetype-flavored OpenType).
+
+Used by default for extension F<.ttc>.
+
+If parsing fails, try force using the exif inspector
+by prefixing the path with "exif:".
+
+=item B<exif>
+
+misc. images and fonts.
+
+Used by default for extensions F<gif>, F<icc>, F<jpeg>, F<.jpg>, F<.pdf>, F<.pfa>, F<.pfb>, F<.png>, F<psd>, F<svg>.
+
+Beware that some OpenType fonts are not TrueType but Type1,
+which may fail to parse correctly based on suffix detection.
+If that happens, try force using the exif inspector
+by prefixing the path with "exif:".
+
+=back
+
+=cut
+
+# avoid custom configuration of ExifTool
+BEGIN { $Image::ExifTool::configFile = '' }
+
+my $suffix = '.metadata';
+GetOptions( help => \my $help,
+	man      => \my $man,
+	verbose  => \my $verbose,
+	debug    => \my $debug,
+	suffix   => \$suffix,
+) or pod2usage(2);
+pod2usage( -verbose => 1 ) if $help;
+pod2usage( -verbose => 2, -exitstatus => 0 ) if $man;
+
+# Fail if no paths provided as arguments and STDIN is interactive
+pod2usage("$0: No paths provided.") if ((@ARGV == 0) && (-t STDIN));
+
+my $dispatch = {
+	# TrueType (including Truetype-flavored OpenType and WOFF) fonts
+	'((?<=\Attf:).*|\A.*\.(?:ttf|otf|woff))$' => sub {
+		my $file = check_infile(shift);
+		say "ttf: $file" if ($verbose);
+		my $handle = ($debug)
+			? *STDOUT{IO}
+			: FileHandle->new( check_outfile($file), 'w' );
+		# source: http://scripts.sil.org/IWS-Chapter08#3054f18b
+		my %table = (
+			Copyright => 0,
+			Trademark => 7,
+			License => 13,
+			'License URL' => 14,
+		);
+		my $font = Font::TTF::Font->open($file) or do {
+			say STDERR "ERROR: Failed to parse file as TrueType font: $_";
+			exit 1;
+		};
+		my $fn = $font->{'name'}->read;
+		foreach (sort keys %table) {
+			my $value = $fn->find_name($table{$_});
+			print $handle $_ . ": " . $value . "\n"
+				if ($value);
+		}
+	},
+	# TrueType (including Truetype-flavored OpenType) collections
+	'((?<=\Attc:).*|\A.*\.(?:ttc))$' => sub {
+		my $file = check_infile(shift);
+		say "ttf: $file" if ($verbose);
+		my $handle = ($debug)
+			? *STDOUT{IO}
+			: FileHandle->new( check_outfile($file), 'w' );
+		# source: http://scripts.sil.org/IWS-Chapter08#3054f18b
+		my %table = (
+			Copyright => 0,
+			Trademark => 7,
+			License => 13,
+			'License URL' => 14,
+		);
+		my $collection = Font::TTF::Ttc->open($file) or do {
+			say STDERR "ERROR: Failed to parse file as TrueType collection: $_";
+			exit 1;
+		};
+		foreach ( @{$collection->{'directs'}} ) {
+			my $fn = $_->{'name'}->read;
+			foreach (sort keys %table) {
+				my $value = $fn->find_name($table{$_});
+				print $handle $_ . ": " . $value . "\n"
+					if ($value);
+			}
+		}
+	},
+	# exif: misc. images and fonts
+	'((?<=\Aexif:).*|\A.*\.(?:gif|icc|jpeg|jpg|pfa|pfb|pdf|png|psd|svg))$' => sub {
+		my $file = check_infile(shift);
+		say "exif: $file" if ($verbose);
+		my $exifTool = new Image::ExifTool;
+		my $handle = ($debug)
+			? *STDOUT{IO}
+			: FileHandle->new( check_outfile($file), 'w' );
+		my $info = $exifTool->ImageInfo($file,
+			# tags to lookup (like `exiftool $file` in shell)
+			'*Author*', '*Copyright*', '*Creator*', '*Licens*', '*Rights*', '*Trademark*');
+		my $seen;
+		print $handle "File: $file\n";
+		foreach (sort keys %$info) {
+			my $tagdesc = $exifTool->GetDescription($_);
+			print $handle "$tagdesc: $$info{$_}\n";
+		}
+	}
+};
+
+my $re = Regexp::Assemble->new( track => 1 )->add( keys %$dispatch );
+
+while( <> ) {
+	chomp;
+	if( $re->match($_) ) {
+		$dispatch->{ $re->matched }( $re->mvar(1) );
+	}
+	else {
+		say STDERR "ERROR: Unsupported or unparseable string: $_";
+		say STDERR "       maybe you need a prefix (e.g. \"exif:fonts/SomeType1Font\"";
+		exit 1;
+	}
+}
+
+sub check_infile {
+	my $infile = shift;
+	unless ( -e $infile ) {
+		say STDERR "ERROR: file does not exist: $infile";
+		exit 1;
+	}
+	return $infile;
+}
+
+sub check_outfile {
+	my $infile = shift;
+	my $outfile = $infile . $suffix;
+	if ( -e $outfile ) {
+		say STDERR "ERROR: dumpfile exist: $outfile";
+		say STDERR "       remove or put aside and try again";
+		exit 1;
+	}
+	return $outfile;
+}
+
+=head1 AUTHOR
+
+Jonas Smedegaard, C<< <dr@jones.dk> >>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2014-2016 Jonas Smedegaard
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=cut

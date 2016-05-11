@@ -19,6 +19,7 @@
 my $whitespace_list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
 my $rfc822_list_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
 my $merge_same_license = $ENV{'merge_same_license'} || "";
+my $metadata_suffix = $ENV{'metadata_suffix'} || ".metadata";
 
 print "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n";
 print "Upstream-Name: FIXME\n";
@@ -37,6 +38,7 @@ $n=0; while (<>) {
 };
 foreach $file (@files) {
 	$file->{name} =~ s/([*?\\])/\\$1/g;
+	$file->{name} =~ s/$metadata_suffix$//g;
 	$file->{license} =~ s/\s*\(unversioned\/unknown version\)//;
 	$file->{license} =~ s/\s*\(with incorrect FSF address\)//;
 	$file->{license} =~ s/\s+\(v([^)]+) or later\)/-$1+/;

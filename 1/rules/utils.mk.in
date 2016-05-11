@@ -33,12 +33,23 @@ endif
 #DEB_COPYRIGHT_CHECK_IGNORE_EXTS =
 #DEB_COPYRIGHT_CHECK_IGNORE_PATHS =
 
+# Space-delimited regular expressions for extensions/paths to extract
+# metadata from
+#  * Supported extensions: gif icc jpeg jpg pdf pfa pfb png psd svg
+#DEB_COPYRIGHT_EXTRACT_EXTS =
+#DEB_COPYRIGHT_EXTRACT_PATHS_EXIF =
+#DEB_COPYRIGHT_EXTRACT_PATHS_TTF =
+
+# Suffix appended to filenames for temporary stored extracted metadata
+DEB_COPYRIGHT_EXTRACT_SUFFIX ?= ~metadata_dump~
+
 # Single regular expression for files to include and ignore
 DEB_COPYRIGHT_CHECK_REGEX ?= .*
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
  ^(?:$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)\
  $(patsubst %,(?:.*/)?[^/]+\.(?:%),$(subst $(space),|,$(strip \
-  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS))))\
+  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS) $(DEB_COPYRIGHT_EXTRACT_EXTS))))\
+ $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF) $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF) \
  debian/(?:changelog|copyright(?:|_hints|_newhints)))))$$
 
 # number of lines from the top of each file to investigate
@@ -69,6 +80,13 @@ CDBS_BUILD_DEPENDS += , $(if $(strip \
  $(DEB_COPYRIGHT_CHECK_IGNORE_PATHS),\
  $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular)))
 
+CDBS_BUILD_DEPENDS_rules_utils_copyright-extract ?= cdbs (>= 0.4.131~), \
+ libregexp-assemble-perl, libimage-exiftool-perl, libfont-ttf-perl
+CDBS_BUILD_DEPENDS += , $(if $(strip \
+ $(DEB_COPYRIGHT_EXTRACT_EXTS)\
+ $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)),\
+ $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
+
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
@@ -87,6 +105,25 @@ list-missing:
 
 pre-build:: debian/stamp-copyright-check
 debian/stamp-copyright-check:
+	$(if $(DEB_COPYRIGHT_EXTRACT_EXTS),find * \
+		-type f -regextype posix-extended \
+		-regex '^(?:.*/)?[^/]+\.(?:$(subst $(space),|,$(strip \
+			$(DEB_COPYRIGHT_EXTRACT_EXTS))))$$' \
+		-print0 | \
+		perl -0 $(_cdbs_scripts_path)/license-miner \
+		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
+	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF),find * \
+		-type f -regextype posix-extended \
+		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF))$$' \
+		-printf 'exif:%p\0' | \
+		perl -0 $(_cdbs_scripts_path)/license-miner \
+		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
+	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF),find * \
+		-type f -regextype posix-extended \
+		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF))$$' \
+		-printf 'ttf:%p\0' | \
+		perl -0 $(_cdbs_scripts_path)/license-miner \
+		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
 	@set -e; if [ ! -f debian/copyright_hints ]; then \
 		echo; \
 		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - touch debian/copyright_hints to enable.'; \
@@ -110,6 +147,7 @@ debian/stamp-copyright-check:
 		export LC_ALL=C; \
 		export whitespace_list_delimiter="`perl -e 'print "$(DEB_COPYRIGHT_CHECK_DELIMITER)"'`"; \
 		export merge_same_license="$(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE)"; \
+		export metadata_suffix="$(DEB_COPYRIGHT_EXTRACT_SUFFIX)"; \
 		$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints; \
 		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
 		newstrings=`diff -a -u debian/copyright_hints debian/copyright_newhints | sed '1,2d' | egrep -a '^\+' - | sed 's/^\+//'`; \
@@ -131,10 +169,22 @@ debian/stamp-copyright-check:
 			rm -f debian/copyright_newhints; \
 		fi; \
 	fi
+	$(if (strip $(DEB_COPYRIGHT_EXTRACT_EXTS)\
+		$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
+		$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
+		find * \
+		-type f -name '*.$(DEB_COPYRIGHT_EXTRACT_SUFFIX)' \
+		-delete)
 	touch $@
 
 clean::
-	$(if $(DEB_COPYRIGHT_CHECK_STRICT),,rm -f debian/copyright_newhints)
+	$(if $(DEB_COPYRIGHT_CHECK_STRICT),,rm -f debian/copyright_newhints; \
+		$(if $(strip $(DEB_COPYRIGHT_EXTRACT_EXTS)\
+			$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
+			$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
+			find * \
+			-type f -name '*.$(DEB_COPYRIGHT_EXTRACT_SUFFIX)' \
+			-delete))
 	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check
 
 # put aside upstream cruft during build but after copyright-check

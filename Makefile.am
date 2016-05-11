@@ -84,5 +84,6 @@ dist_man_MANS = scripts/cdbs-edit-patch.1
 
 pkglibexec_SCRIPTS = \
  scripts/list-packages \
+ scripts/license-miner \
  scripts/licensecheck2dep5 \
  scripts/waf-unpack
