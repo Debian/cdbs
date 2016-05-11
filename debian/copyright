@@ -7,7 +7,9 @@ Source: http://packages.debian.org/src:cdbs
 License: GPL-3+
 
 Files: *
-Copyright: 2002-2003, Colin Walters <walters@debian.org>
+Copyright:
+  Copyright: 1997-2009, Joey hess
+  2002-2003, Colin Walters <walters@debian.org>
   2003, Christopher L Cheney <ccheney@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2003, Stefan Gybas <sgybas@debian.org>
@@ -24,10 +26,6 @@ License: GPL-3+
 Files: scripts/cdbs-edit-patch
 Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
-
-Files: scripts/list-packages
-Copyright: 1997-2009, Joey hess
-License: GPL-2+
 
 Files: */aclocal.m4
 Copyright: 1996-2013, Free Software Foundation, Inc.
