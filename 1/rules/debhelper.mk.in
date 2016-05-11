@@ -170,6 +170,7 @@ DEB_DH_INSTALLDEB_ARGS_DEFAULT ?= $(DEB_DH_INSTALLDEB_ARGS)
 DEB_DH_LINTIAN_ARGS_DEFAULT ?= $(DEB_DH_LINTIAN_ARGS)
 DEB_DH_INSTALL_ARGS_DEFAULT ?= $(DEB_DH_INSTALL_ARGS)
 DEB_DH_STRIP_ARGS_DEFAULT ?= $(DEB_DH_STRIP_ARGS)
+DEB_DH_STRIP_NONDETERMINISM_ARGS_DEFAULT ?= $(DEB_DH_STRIP_NONDETERMINISM_ARGS)
 DEB_DH_COMPRESS_ARGS_DEFAULT ?= $(DEB_DH_COMPRESS_ARGS)
 DEB_DH_FIXPERMS_ARGS_DEFAULT ?= $(DEB_DH_FIXPERMS_ARGS)
 DEB_DH_MD5SUMS_ARGS_DEFAULT ?= $(DEB_DH_MD5SUMS_ARGS)
@@ -294,6 +295,9 @@ $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) :: binary-strip-IMPL/%:
 		dh_strip -p$(cdbs_curpkg) \
 			$(call cdbs_add_dashx,$(call cdbs_expand_curvar,DEB_STRIP_EXCLUDE)) \
 			$(call cdbs_expand_curvar,DEB_DH_STRIP_ARGS))
+	$(if $(wildcard /usr/bin/dh_strip_nondeterminism),\
+		dh_strip_nondeterminism -p$(cdbs_curpkg) \
+			$(call cdbs_expand_curvar,DEB_DH_STRIP_NONDETERMINISM_ARGS))
 
 # This rule is called right before generating debs {post,pre}{inst,rm} and controls, deps, are calculated
 # for each package, but after the binary-fixup hooks have been run.
