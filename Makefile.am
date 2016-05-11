@@ -1,6 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2002,2003 Colin Walters <walters@debian.org>
-# Copyright © 2009-2011 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2009-2012, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as

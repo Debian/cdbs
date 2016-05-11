@@ -1,6 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2003 Colin Walters <walters@debian.org>
-# Copyright © 2005-2012 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2005-2012, 2016 Jonas Smedegaard <dr@jones.dk>
 # Description: Defines various random rules, including a list-missing rule
 #
 # This program is free software; you can redistribute it and/or
