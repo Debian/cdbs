@@ -77,7 +77,7 @@ DEB_ANT_INVOKE ?= set -e; \
 	$(JAVACMD) -classpath $(DEB_CLASSPATH) \
 	$(ANT_OPTS) -Dant.home=$(ANT_HOME) \
 	org.apache.tools.ant.Main $(DEB_ANT_ARGS) \
-	$(or
+	$(or \
 		$(ANT_ARGS_$(cdbs_curpkg)),\
 		$(ANT_ARGS)) \
 	$(DEB_ANT_COMPILER:%=-Dbuild.compiler=%) \
