@@ -54,7 +54,7 @@ DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),-I m4)
 ## calculate invoke command for a (versioned) autotools-command
 # call as: $(call cdbs_autotools_dependencies,$(VERSION),$(VERSIONEDBINARY),$(BINARY))
 # if VERSION is a single value, it returns "$(VERSIONEDBINARY)$(VERSION)", else it returns "$(BINARY)"
-cdbs_autotools_invoke=$(if $(findstring $(comma),$(1)),$(3),$(2)$(1))
+_cdbs_autotools_invoke=$(if $(findstring $(comma),$(1)),$(3),$(2)$(1))
 
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:
@@ -63,22 +63,22 @@ debian/stamp-autotools-files:
 		libtoolize -c -f)
 	$(if $(DEB_AUTO_UPDATE_ACLOCAL),\
 		cd $(DEB_SRCDIR) && \
-		$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
+		$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
 			$(DEB_ACLOCAL_ARGS))
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			$$(which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
+			$$(which $(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
 				|| which autoconf)))
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			$$(which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
+			$$(which $(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
 				|| which autoheader)))
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
 		$(if $(wildcard $(DEB_SRCDIR)/Makefile.am),\
 			cd $(DEB_SRCDIR) && \
-			$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
+			$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
 				$(DEB_AUTOMAKE_ARGS)))
 	touch debian/stamp-autotools-files
 
