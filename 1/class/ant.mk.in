@@ -55,12 +55,10 @@ debian/stamp-ant-check: debian/stamp-ant-build
 		$(DEB_ANT_INVOKE) $(DEB_ANT_CHECK_TARGET),\
 		$(call cdbs_warn,DEB_ANT_CHECK_TARGET unset$(comma) \
 			not running checks))
-	$(if $(DEB_ANT_CHECK_TARGET),\
-		touch $@)
+	touch $@
 
 clean::
-	$(if $(DEB_ANT_CHECK_TARGET),\
-		rm -f debian/stamp-ant-check)
+	rm -f debian/stamp-ant-check
 endif
 
 endif
