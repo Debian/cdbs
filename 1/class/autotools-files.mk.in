@@ -59,32 +59,27 @@ cdbs_autotools_invoke=$(if $(findstring $(comma),$(1)),$(3),$(2)$(1))
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:
 	$(if $(filter pre,$(DEB_AUTO_UPDATE_LIBTOOL)),\
-		set -e; \
-			cd $(DEB_SRCDIR); \
-			libtoolize -c -f)
+		cd $(DEB_SRCDIR) && \
+		libtoolize -c -f)
 	$(if $(DEB_AUTO_UPDATE_ACLOCAL),\
-		set -e; \
-			cd $(DEB_SRCDIR); \
-			$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
-				$(DEB_ACLOCAL_ARGS))
+		cd $(DEB_SRCDIR) && \
+		$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
+			$(DEB_ACLOCAL_ARGS))
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
-			set -e; \
-				cd $(DEB_SRCDIR); \
-				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
-					|| which autoconf`))
+			cd $(DEB_SRCDIR) && \
+			`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
+				|| which autoconf`))
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
-			set -e; \
-				cd $(DEB_SRCDIR); \
-				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
-					|| which autoheader`))
+			cd $(DEB_SRCDIR) && \
+			`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
+				|| which autoheader`))
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
 		$(if $(wildcard $(DEB_SRCDIR)/Makefile.am),\
-			set -e; \
-				cd $(DEB_SRCDIR); \
-				$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
-					$(DEB_AUTOMAKE_ARGS)))
+			cd $(DEB_SRCDIR) && \
+			$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
+				$(DEB_AUTOMAKE_ARGS)))
 	touch debian/stamp-autotools-files
 
 clean::
