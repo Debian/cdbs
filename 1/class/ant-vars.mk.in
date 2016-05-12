@@ -72,8 +72,8 @@ DEB_ANT_PROPERTYFILE ?= $(wildcard $(CURDIR)/debian/ant.properties)
 # Ant's documentation ("Running Ant"). You can additionally define
 # ANT_ARGS_<package> for each individual package, e.g. to override the default
 # settings for compile.optimize.
-DEB_ANT_INVOKE ?= set -e; \
-	cd $(DEB_BUILDDIR); \
+DEB_ANT_INVOKE ?= \
+	cd $(DEB_BUILDDIR) && \
 	$(JAVACMD) -classpath $(DEB_CLASSPATH) \
 	$(ANT_OPTS) -Dant.home=$(ANT_HOME) \
 	org.apache.tools.ant.Main $(DEB_ANT_ARGS) \
