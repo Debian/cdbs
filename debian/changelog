@@ -1,3 +1,25 @@
+cdbs (0.4.132) unstable; urgency=medium
+
+  * Improve gnome.mk:
+    + Fix gnome.mk to not fail on missing builddir.
+      Closes: Bug#824083. Thanks to Helmut Grohne.
+    + Simplify cleanup.
+  * Improve snippets ant-vars.mk ant.mk:
+    + Avoid subshells.
+    + Support overriding DEB_ANT_ARGS after (not only before) snippet
+      inclusion.
+  * Improve makefile.mk:
+    + Use cdbs_warn.
+  * Improve pd.mk:
+    + Use relative paths.
+    + Merge find commands.
+    + Use "find -execdir '{}' ';'" (not less safe and failure-ignoring
+      "find -exec {} +").
+  * Update copyright info:
+    + Extend copyright for main author to cover current year.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 12 May 2016 17:06:01 +0200
+
 cdbs (0.4.131) unstable; urgency=medium
 
   [ Jonas Smedegaard ]
