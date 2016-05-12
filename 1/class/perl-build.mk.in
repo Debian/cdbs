@@ -44,7 +44,7 @@ CDBS_BUILD_DEPENDS += $(strip $(if $(cdbs_perl_module-build-tiny_check),\
 cdbs_perl_srcdir_early := $(DEB_PERL_SRCDIR)
 cdbs_perl_srcdir_check = $(if $(call cdbs_streq,$(cdbs_perl_srcdir_early),$(DEB_PERL_SRCDIR)),\
 	,\
-	$(error DEB_PERL_SRCDIR must be set before including perl-build.mk, \
+	$(error DEB_PERL_SRCDIR must be set before including perl-build.mk$(comma) \
 		not after))
 
 # Sanity check: only DEB_PERL_SRCDIR == DEB_BUILDDIR is supported

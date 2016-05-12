@@ -27,7 +27,7 @@ include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 cdbs_make_flavors = $(sort $(DEB_MAKE_FLAVORS))
 cdbs_make_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),\
 	$(error DEB_MAKE_FLAVORS in use: \
-		DEB_BUILDDIR must be different from DEB_SRCDIR, \
+		DEB_BUILDDIR must be different from DEB_SRCDIR$(comma) \
 		and needs to be declared before including makefile.mk))
 cdbs_make_build_stamps = $(strip $(if $(cdbs_make_flavors),\
 	$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-makefile-build/%,\
