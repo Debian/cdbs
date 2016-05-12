@@ -49,16 +49,16 @@ testsanity::
 $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 	$(if $(is_debug_package)$(filter nostrip,$(DEB_BUILD_OPTIONS)),\
 		,\
-		find "$(CURDIR)/debian/$(cdbs_curpkg)" -type f -name "*.pd_linux" \
-			-exec strip \
+		find debian/$(cdbs_curpkg) -type f -name "*.pd_linux" \
+			-execdir strip \
 				--remove-section=.comment \
 				--remove-section=.note \
-				--strip-unneeded {} +)
+				--strip-unneeded '{}' ';')
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
-	find "$(CURDIR)/debian/$(cdbs_curpkg)" -type f -name "*.pd_linux" \
-		-exec dpkg-shlibdeps -Tdebian/$(cdbs_curpkg).substvars {} +
-	find "$(CURDIR)/debian/$(cdbs_curpkg)" -type f -name "*.pd_linux" \
-		-exec chmod 0644 {} +
+	find debian/$(cdbs_curpkg) -type f -name "*.pd_linux" \
+		-execdir dpkg-shlibdeps \
+			-Tdebian/$(cdbs_curpkg).substvars '{}' ';' \
+		-execdir chmod 0644 '{}' ';'
 
 #endif _cdbs_class_pd
 endif
