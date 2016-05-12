@@ -68,26 +68,23 @@ debian/stamp-autotools-files:
 			$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
 				$(DEB_ACLOCAL_ARGS))
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
-		set -e; \
-			if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then \
+		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
+			set -e; \
 				cd $(DEB_SRCDIR); \
 				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
-					|| which autoconf`; \
-			fi)
+					|| which autoconf`))
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
-		set -e; \
-			if [ -e $(DEB_SRCDIR)/configure.ac ] || [ -e $(DEB_SRCDIR)/configure.in ]; then \
+		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
+			set -e; \
 				cd $(DEB_SRCDIR); \
 				`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
-					|| which autoheader`; \
-			fi)
+					|| which autoheader`))
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
-		set -e; \
-			if [ -e $(DEB_SRCDIR)/Makefile.am ]; then \
+		$(if $(wildcard $(DEB_SRCDIR)/Makefile.am),\
+			set -e; \
 				cd $(DEB_SRCDIR); \
 				$(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOMAKE),automake-,automake) \
-					$(DEB_AUTOMAKE_ARGS); \
-			fi)
+					$(DEB_AUTOMAKE_ARGS)))
 	touch debian/stamp-autotools-files
 
 clean::
