@@ -85,7 +85,8 @@ makefile-clean:: $(if $(cdbs_make_flavors),$(cdbs_make_clean_nonstamps))
 $(cdbs_make_clean_nonstamps)::
 	$(if $(DEB_MAKE_CLEAN_TARGET),\
 		+-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),\
-		@echo "DEB_MAKE_CLEAN_TARGET unset, not running clean")
+		$(call cdbs_warn,DEB_MAKE_CLEAN_TARGET unset$(comma) \
+			 not running clean))
 	$(if $(cdbs_make_flavors),\
 		rm -f \
 			$(@:makefile-clean%=debian/stamp-makefile-build%) \
@@ -96,8 +97,8 @@ common-install-impl:: $(cdbs_make_install_stamps)
 $(cdbs_make_install_stamps)::
 	$(if $(DEB_MAKE_INSTALL_TARGET),\
 		+$(DEB_MAKE_INVOKE) $(DEB_MAKE_INSTALL_TARGET),\
-		@echo "DEB_MAKE_INSTALL_TARGET unset, \
-			skipping default makefile.mk common-install target")
+		$(call cdbs_warn,DEB_MAKE_INSTALL_TARGET unset$(comma) \
+			skipping default makefile.mk common-install target))
 	$(if $(DEB_MAKE_INSTALL_TARGET),\
 		touch $@)
 
@@ -106,7 +107,8 @@ common-build-arch common-build-indep:: $(cdbs_make_check_stamps)
 $(cdbs_make_check_stamps) : debian/stamp-makefile-check% : debian/stamp-makefile-build%
 	$(if $(DEB_MAKE_CHECK_TARGET),\
 		+$(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET),\
-		@echo "DEB_MAKE_CHECK_TARGET unset, not running checks")
+		$(call cdbs_warn,DEB_MAKE_CHECK_TARGET unset$(comma) \
+			not running checks))
 	$(if $(DEB_MAKE_CHECK_TARGET),\
 		touch $@)
 
