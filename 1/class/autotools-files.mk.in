@@ -51,9 +51,11 @@ endif
 
 DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),-I m4)
 
-## calculate invoke command for a (versioned) autotools-command
-# call as: $(call cdbs_autotools_dependencies,$(VERSION),$(VERSIONEDBINARY),$(BINARY))
-# if VERSION is a single value, it returns "$(VERSIONEDBINARY)$(VERSION)", else it returns "$(BINARY)"
+# resolve make rule from autotools command version hints
+# usage: $(call _cdbs_autotools_invoke,$(VERSION),$(VERSIONEDBINARY),$(BINARY))
+#  * when VERSION contains comma: return "$(BINARY)"
+#  * else: return "$(VERSIONEDBINARY)$(VERSION)"
+# see also autotools-vars.mk
 _cdbs_autotools_invoke=$(if $(findstring $(comma),$(1)),$(3),$(2)$(1))
 
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
