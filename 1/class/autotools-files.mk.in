@@ -68,13 +68,13 @@ debian/stamp-autotools-files:
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
-				|| which autoconf`))
+			$$(which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf) \
+				|| which autoconf)))
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			`which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
-				|| which autoheader`))
+			$$(which $(call cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader) \
+				|| which autoheader)))
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
 		$(if $(wildcard $(DEB_SRCDIR)/Makefile.am),\
 			cd $(DEB_SRCDIR) && \
