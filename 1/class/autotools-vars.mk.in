@@ -155,6 +155,11 @@ CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader ?= \
 CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
 	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autoheader))
 
+CDBS_BUILD_DEPENDS_class_autotools-vars_autopoint ?= \
+	autopoint, cdbs (>= 0.4.133~)
+CDBS_BUILD_DEPENDS += $(if $(DEB_AUTO_UPDATE_AUTOPOINT),\
+	$(comma) $(CDBS_BUILD_DEPENDS_class_autotools-vars_autopoint))
+
 CDBS_BUILD_DEPENDS_class_autotools_vars_comma ?= cdbs (>= 0.4.123~)
 CDBS_BUILD_DEPENDS += $(if \
 	$(findstring $(comma),$(foreach suffix,\

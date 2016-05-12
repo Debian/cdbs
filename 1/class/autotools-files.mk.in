@@ -69,6 +69,10 @@ debian/stamp-autotools-files:
 	$(if $(filter pre,$(DEB_AUTO_UPDATE_LIBTOOL)),\
 		cd $(DEB_SRCDIR) && \
 		libtoolize -c -f)
+	$(if $(DEB_AUTO_UPDATE_AUTOPOINT),\
+		cd $(DEB_SRCDIR) && \
+		$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOPOINT),autopoint,autopoint) \
+			$(DEB_AUTOPOINT_ARGS))
 	$(if $(DEB_AUTO_UPDATE_ACLOCAL),\
 		cd $(DEB_SRCDIR) && \
 		$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_ACLOCAL),aclocal-,aclocal) \
@@ -76,11 +80,13 @@ debian/stamp-autotools-files:
 	$(if $(DEB_AUTO_UPDATE_AUTOCONF),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf,legacy)))
+			$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOCONF),autoconf,autoconf,legacy) \
+				$(DEB_AUTOCONF_ARGS)))
 	$(if $(DEB_AUTO_UPDATE_AUTOHEADER),\
 		$(if $(wildcard $(DEB_SRCDIR)/configure.ac $(DEB_SRCDIR)/configure.in),\
 			cd $(DEB_SRCDIR) && \
-			$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader,legacy)))
+			$(call _cdbs_autotools_invoke,$(DEB_AUTO_UPDATE_AUTOHEADER),autoheader,autoheader,legacy) \
+				$(DEB_AUTOHEADER_ARGS)))
 	$(if $(DEB_AUTO_UPDATE_AUTOMAKE),\
 		$(if $(wildcard $(DEB_SRCDIR)/Makefile.am),\
 			cd $(DEB_SRCDIR) && \
