@@ -85,11 +85,11 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
 
 CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir ?= cdbs (>= 0.4.97~)
 CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_SRCDIR),\
-	$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir))
+	$(comma) $(CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir))
 
 CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir ?= cdbs (>= 0.4.91~)
 CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
-	$(CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir))
+	$(comma) $(CDBS_BUILD_DEPENDS_cdbs_python-distutils_installdir))
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-distutils_python ?= $(cdbs_python_builddeps)
