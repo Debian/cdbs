@@ -61,8 +61,7 @@ DEB_CMAKE_NORMAL_ARGS ?= \
 common-configure-arch common-configure-indep:: common-configure-impl
 common-configure-impl:: $(DEB_BUILDDIR)/CMakeCache.txt
 $(DEB_BUILDDIR)/CMakeCache.txt:
-	set -e; \
-	cd $(DEB_BUILDDIR); \
+	cd $(DEB_BUILDDIR) && \
 	$(CMAKE) $(CURDIR)/$(DEB_SRCDIR) \
 		$(DEB_CMAKE_NORMAL_ARGS) \
 		$(DEB_CMAKE_EXTRA_FLAGS)
