@@ -48,28 +48,21 @@ scons-clean::
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	@if test -n "$(DEB_SCONS_INSTALL_TARGET)"; then \
-		echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) \
-			$(DEB_SCONS_OPTIONS) \
-			$(DEB_SCONS_INSTALL_OPTIONS); \
+	$(if $(DEB_SCONS_INSTALL_TARGET),
 		$(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) \
 			$(DEB_SCONS_OPTIONS) \
-			$(DEB_SCONS_INSTALL_OPTIONS); \
-	else \
-		echo "DEB_SCONS_INSTALL_TARGET unset, \
-			skipping default scons.mk common-install target"; \
-	fi
+			$(DEB_SCONS_INSTALL_OPTIONS), \
+		$(call cdbs_warn,DEB_SCONS_INSTALL_TARGET unset$(comma) \
+			skipping default scons.mk common-install target))
 
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
-	@if test -n "$(DEB_SCONS_CHECK_TARGET)"; then \
-		echo $(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET); \
+	$(if $(DEB_SCONS_CHECK_TARGET),
 		$(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET) \
-			$(DEB_SCONS_OPTIONS); \
-	else \
-		echo "DEB_SCONS_CHECK_TARGET unset, not running checks"; \
-	fi
+			$(DEB_SCONS_OPTIONS), \
+	$(call cdbs_warn,DEB_SCONS_CHECK_TARGET unset$(comma) \
+		not running checks))
 endif
 
 endif
