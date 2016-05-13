@@ -46,10 +46,6 @@ $(shell \
 -include debian/_cdbs_buildflags.mk
 $(shell rm -f debian/_cdbs_buildflags.mk)
 
-DEB_WARNING_FLAGS ?= -Wall
-deb_cflags += $(DEB_WARNING_FLAGS)
-deb_cxxflags += $(DEB_WARNING_FLAGS)
-
 # Set (not add) our defaults for CFLAGS CPPFLAGS CXXFLAGS and LDFLAGS if
 # undefined or defined implicitly by make (i.e. if not set or set empty)
 deb_cflags_nondefault := $(call cdbs_expand_nondefaultvar,CFLAGS,$(deb_cflags))
