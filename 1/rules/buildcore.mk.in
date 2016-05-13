@@ -141,39 +141,30 @@ pre-build:: testdir testsanity makebuilddir
 # This target is called after patches are applied.  Used by the patch system.
 post-patches:: pre-build apply-patches update-config
 update-config::
-ifneq (, $(config_guess))
-	if test -e /usr/share/misc/config.guess ; then \
-		for i in $(config_guess) ; do \
-			if ! test -e $$i.cdbs-orig ; then \
-				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination \
-					/usr/share/misc/config.guess $$i ; \
-			fi ; \
-		done ; \
-	fi
-endif
-ifneq (, $(config_sub))
-	if test -e /usr/share/misc/config.sub ; then \
-		for i in $(config_sub) ; do \
-			if ! test -e $$i.cdbs-orig ; then \
-				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination \
-					/usr/share/misc/config.sub $$i ; \
-			fi ; \
-		done ; \
-	fi
-endif
-ifneq (, $(config_rpath))
-	if test -e /usr/share/gnulib/build-aux/config.rpath ; then \
-		for i in $(config_rpath) ; do \
-			if ! test -e $$i.cdbs-orig ; then \
-				mv $$i $$i.cdbs-orig ; \
-				cp --remove-destination \
-					/usr/share/gnulib/build-aux/config.rpath $$i ; \
-			fi ; \
-		done ; \
-	fi
-endif
+	$(if $(and $(config_guess),$(wildcard /usr/share/misc/config.guess)),\
+		set -e; \
+		$(foreach file,$(config_guess),\
+			$(if $(wildcard $(file).cdbs-orig),\
+				,\
+				mv $(file) $(file).cdbs-orig; \
+					cp --remove-destination \
+						/usr/share/misc/config.guess $(file);)))
+	$(if $(and $(config_sub),$(wildcard /usr/share/misc/config.sub)),\
+		set -e; \
+		$(foreach file,$(config_sub),\
+			$(if $(wildcard $(file).cdbs-orig),\
+				,\
+				mv $(file) $(file).cdbs-orig; \
+					cp --remove-destination \
+						/usr/share/misc/config.sub $(file);)))
+	$(if $(and $(config_rpath),$(wildcard /usr/share/gnulib/build-aux/config.rpath)), \
+		set -e; \
+		$(foreach file,$(config_rpath),\
+			$(if $(wildcard $(file).cdbs-orig),\
+				,\
+				mv $(file) $(file).cdbs-orig; \
+					cp --remove-destination \
+						/usr/share/gnulib/build-aux/config.rpath $(file);)))
 
 # This target should be used to configure the package before building.  Typically
 # this involves running things like ./configure.
@@ -217,13 +208,11 @@ build-indep: $(patsubst %,build/%,$(DEB_INDEP_PACKAGES))
 # add stuff to this rule.
 clean:: testdir cleanbuilddir reverse-config testsanity
 reverse-config::
-ifneq (::, $(config_guess):$(config_sub):$(config_rpath))
-	for i in $(config_guess) $(config_sub) $(config_rpath) ; do \
-		if test -e $$i.cdbs-orig ; then \
-			mv $$i.cdbs-orig $$i ; \
-		fi ; \
-	done
-endif
+	$(if $(config_guess)$(config_sub)$(config_rpath),\
+		set -e;\
+		$(foreach file,$(config_guess) $(config_sub) $(config_rpath),\
+			$(if $(wildcard $(file).cdbs-orig),\
+				mv $(file).cdbs-orig $(file);)))
 
 # Routines convenient for maintainers but unsuitable for build daemons
 ifneq (,$(DEB_MAINTAINER_MODE))
