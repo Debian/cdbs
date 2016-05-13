@@ -236,8 +236,7 @@ $(if $(cdbs_pythonsystem_python3),\
 cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_selected_pyversions,0.4.90)\
 	$(if $(DEB_PYTHON_SYSTEM),\
-		$(shell if [ -e debian/pyversions ]; then \
-			cat debian/pyversions; \
-		fi)))
+		$(if $(wildcard debian/pyversions),
+			$(shell cat debian/pyversions))))
 
 endif
