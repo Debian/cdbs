@@ -151,17 +151,6 @@ get-orig-source:
 		gzip -9 "$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_local_basename).orig.tar"; \
 	fi
 
-fail-source-not-repackaged:
-	$(cdbs_python_exclude_check)
-	@if find $(cdbs_upstream_findargs_files) $(and $(cdbs_upstream_findargs_files),$(cdbs_upstream_findargs_dirs),-o) $(cdbs_upstream_findargs_dirs) | grep '.*'; then \
-		echo; \
-		echo 'ERROR: Source contains the files/paths listed above'; \
-		echo '       which was intended to not be distributed with the source.'; \
-		echo '       Please repackage source with these items stripped!'; \
-		echo '       (set DEB_UPSTREAM_REPACKAGE_EXCLUDES and use get-orig-source target)'; \
-		exit 1; \
-	fi
-
-DEB_PHONY_RULES += print-version get-orig-source fail-source-not-repackaged
+DEB_PHONY_RULES += print-version get-orig-source
 
 endif
