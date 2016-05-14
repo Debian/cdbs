@@ -110,9 +110,9 @@ DEB_DH_PREP ?= $(shell if [ "$(DH_COMPAT)" -ge 7 ]; then echo "dh_prep"; else ec
 
 #DEB_INSTALL_DIRS_ALL =
 # TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_CHANGELOGS_ALL)
-DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(shell for f in ChangeLog Changelog Changes CHANGES changelog CHANGELOG; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; break; fi; done))
+DEB_INSTALL_CHANGELOGS_ALL ?= $(if $(DEB_ISNATIVE),,$(wildcard $(patsubst %,$(DEB_SRCDIR)/%,ChangeLog Changelog Changes CHANGES changelog CHANGELOG)))
 # TODO: Use package-default var for internal defaults (not global-addon DEB_INSTALL_DOCS_ALL)
-DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(shell for f in README NEWS TODO BUGS AUTHORS CONTRIBUTORS CREDITS THANKS; do if test -s $(DEB_SRCDIR)/$$f; then echo $(DEB_SRCDIR)/$$f; fi; done))
+DEB_INSTALL_DOCS_ALL ?= $(filter-out $(DEB_INSTALL_CHANGELOGS_ALL),$(wildcard $(patsubst %,$(DEB_SRCDIR)/%,README NEWS TODO BUGS AUTHORS CONTRIBUTORS CREDITS THANKS)))
 
 cdbs_add_dashx = $(foreach i,$(1),$(patsubst %,-X %,$(i)))
 cdbs_strip_quotes = $(subst ',,$(subst ",,$(1)))
@@ -124,11 +124,11 @@ DEB_DH_GENCONTROL_ARGS ?= $(DEB_DH_GENCONTROL_ARGS_ALL) $(DEB_DH_GENCONTROL_ARGS
 DEB_DH_MAKESHLIBS_ARGS ?= $(DEB_DH_MAKESHLIBS_ARGS_ALL) $(DEB_DH_MAKESHLIBS_ARGS_$(cdbs_curpkg))
 # TODO: Use DEB_DH_SHLIBDEPS_ARGS as package-default var (not global override)
 # TODO: Use DEB_SHLIBDEPS_INCLUDE as package-default var (not global addon)
-DEB_DH_SHLIBDEPS_ARGS ?= $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(shell echo $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)):$(DEB_SHLIBDEPS_INCLUDE) | perl -pe 's/ /:/g;')) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
+DEB_DH_SHLIBDEPS_ARGS ?= $(if $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg)),-L $(DEB_SHLIBDEPS_LIBRARY_$(cdbs_curpkg))) $(if $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg))$(DEB_SHLIBDEPS_INCLUDE),-l $(subst $(space),:,$(strip $(DEB_SHLIBDEPS_INCLUDE_$(cdbs_curpkg)) $(DEB_SHLIBDEPS_INCLUDE)))) $(DEB_DH_SHLIBDEPS_ARGS_ALL) $(DEB_DH_SHLIBDEPS_ARGS_$(cdbs_curpkg))
 
 DEB_DH_BUILDDEB_ENV ?= $(if $(DEB_DH_ALWAYS_EXCLUDE),DH_ALWAYS_EXCLUDE=$(DEB_DH_ALWAYS_EXCLUDE),)
 # TODO: Use DEB_PERL_INCLUDE as package-default var (not global addon)
-DEB_DH_PERL_ARGS ?= $(if $(DEB_PERL_INCLUDE_$(cdbs_curpkg))$(DEB_PERL_INCLUDE),$(shell echo $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE)))
+DEB_DH_PERL_ARGS ?= $(strip $(DEB_PERL_INCLUDE_$(cdbs_curpkg)) $(DEB_PERL_INCLUDE))
 
 ifneq ($(words $(DEB_DBG_PACKAGES)),0)
 ifeq ($(words $(DEB_DBG_PACKAGES)),1)
