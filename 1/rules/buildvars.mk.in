@@ -109,8 +109,7 @@ cdbs_warn = $(warning CDBS WARNING:  $1)
 cdbs_warn_deprecated = $(call cdbs_warn,\
 	$1 is deprecated$(if $2, since $2)$(if $3, - please use $3 instead))
 
-# Can we change this to cdbs_curpkg = $(notdir $@) ?
-cdbs_curpkg = $(filter-out %/,$(subst /,/ ,$@))
+cdbs_curpkg = $(notdir $@)
 
 is_debug_package=$(if $(patsubst %-dbg,,$(cdbs_curpkg)),,yes)
 
@@ -125,7 +124,7 @@ space = $(nullstring) # <- notice the trailing space (only leading is stripped)
 comma = ,
 open_parenthesis = (
 close_parenthesis = )
-cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
+cdbs_delimit = $(subst $(space),$2,$(strip $1))
 
 # workaround for lack of uppercase/lowercase functions in make
 cdbs_uc = $(shell echo '$1' | tr '[:lower:]' '[:upper:]')
