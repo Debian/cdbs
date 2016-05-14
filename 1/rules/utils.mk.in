@@ -87,6 +87,28 @@ CDBS_BUILD_DEPENDS += , $(if $(strip \
  $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)),\
  $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
 
+_cdbs_copyright_check_strict_check = \
+	$(if $(DEB_COPYRIGHT_CHECK_STRICT),\
+		$(error ERROR: Treating above warning as an error \
+			(unset DEB_COPYRIGHT_CHECK_STRICT \
+			or set DEB_MAINTAINER_MODE=1 to suppress)))
+
+_cdbs_copyright_check_enabled_check = \
+	$(if $(wildcard debian/copyright_hints),\
+		,\
+		$(call cdbs_warn,copyright-check disabled \
+			- touch debian/copyright_hints to enable.)\
+			$(_cdbs_copyright_check_strict_check))
+
+_cdbs_copyright_check_licensecheck_check = \
+	$(if $(filter licensecheck,$(firstword $(DEB_COPYRIGHT_CHECK_SCRIPT))),\
+		$(if $(wildcard /usr/bin/licensecheck),\
+			,\
+			$(call cdbs_warn,copyright-check disabled \
+				- licensecheck (from devscripts package) \
+				is missing.)\
+				$(_cdbs_copyright_check_strict_check)))
+
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
 CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
@@ -124,22 +146,9 @@ debian/stamp-copyright-check:
 		-printf 'ttf:%p\0' | \
 		perl -0 $(_cdbs_scripts_path)/license-miner \
 		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
-	@set -e; if [ ! -f debian/copyright_hints ]; then \
-		echo; \
-		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - touch debian/copyright_hints to enable.'; \
-		echo; \
-		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
-	elif [ licensecheck = $(DEB_COPYRIGHT_CHECK_SCRIPT) ] && ! which licensecheck > /dev/null; then \
-		echo; \
-		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - licensecheck (from devscripts package) is missing.'; \
-		echo; \
-		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
-	elif [ licensecheck = $(DEB_COPYRIGHT_CHECK_SCRIPT) ] && ! licensecheck --help | grep -qv -- --copyright; then \
-		echo; \
-		echo '$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): copyright-check disabled - licensecheck (from devscripts package) seems older than needed 2.10.7.'; \
-		echo; \
-		$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
-	else \
+	@set -e; \
+		$(_cdbs_copyright_check_enabled_check) \
+		$(_cdbs_copyright_check_licensecheck_check) \
 		echo; \
 		echo 'Scanning upstream source for new/changed copyright notices...'; \
 		echo; \
@@ -191,35 +200,28 @@ clean::
 pre-build:: debian/stamp-upstream-cruft
 debian/stamp-upstream-cruft: debian/stamp-copyright-check
 	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),mkdir -p "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)")
-	@for orig in $(DEB_UPSTREAM_CRUFT_MOVE); do \
-		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
-		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
-			mkdir -p "$$(dirname "$$backup")"; \
-			echo mv "$$orig" "$$backup"; \
-			mv "$$orig" "$$backup"; \
-		}; \
-	done
-	@for orig in $(DEB_UPSTREAM_CRUFT_COPY); do \
-		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
-		[ ! -e "$$orig" ] || [ -e "$$backup" ] || { \
-			mkdir -p "$$(dirname "$$backup")"; \
-			echo "cp -a" "$$orig" "$$backup"; \
-			cp -a "$$orig" "$$backup"; \
-		}; \
-	done
+	$(foreach orig,$(DEB_UPSTREAM_CRUFT_MOVE),\
+		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+			$(if $(wildcard $(orig)),\
+				$(if $(wildcard $(backup)),\
+					,\
+					$(shell mkdir -p "$(dir $(backup))") \
+					mv "$(orig)" "$(backup)";))))
+	$(foreach orig,$(DEB_UPSTREAM_CRUFT_COPY),\
+		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+			$(if $(wildcard $(orig)),\
+				$(if $(wildcard $(backup)),\
+					,\
+					$(shell mkdir -p "$(dir $(backup))") \
+					cp -a "$(orig)" "$(backup)";))))
 	touch $@
 clean::
-	@for orig in $(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY); do \
-		backup="$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$$orig"; \
-		if [ -e "$$backup" ]; then \
-			if [ -e "$$orig" ]; then \
-				echo "rm -rf" "$$orig"; \
-				rm -rf "$$orig"; \
-			fi; \
-			echo mv "$$backup" "$$orig"; \
-			mv "$$backup" "$$orig"; \
-		fi; \
-	done
+	$(foreach orig,$(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY),\
+		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+			$(if $(wildcard $(backup)),\
+				$(if $(wildcard $(orig)),\
+					rm -rf "$(orig)";) \
+				mv "$(backup)" "$(orig)";)))
 	rm -rf "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)"
 	rm -f debian/stamp-upstream-cruft
 
