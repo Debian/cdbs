@@ -1,25 +1,78 @@
 #!/usr/bin/perl -w
-# -*- mode: cperl; coding: utf-8 -*-
-# Copyright © 2005-2012, 2016 Jonas Smedegaard <dr@jones.dk>
-# Description: Reformat licencecheck output to copyright file format
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-my $whitespace_list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
-my $rfc822_list_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
-my $merge_same_license = $ENV{'merge_same_license'} || "";
-my $metadata_suffix = $ENV{'metadata_suffix'} || ".metadata";
+use Getopt::Long;
+use Pod::Usage;
+
+=head1 NAME
+
+licensecheck2dep5 - reformat licencecheck output to copyright file format
+
+=head1 SYNOPSIS
+
+licensecheck2dep5 [B<options>]
+
+=head1 OPTIONS
+
+=over 12
+
+=item B<--help>
+
+Print a brief help message and exits.
+
+=item B<--man>
+
+Prints the manual page and exits.
+
+=item B<--list-delimiter>
+
+String added between each item in whitelist-based lists.
+
+Default value (without quotes): S<"\n ">
+
+=item B<--rfc822-delimiter>
+
+String added between each item in rfc822-based lists.
+
+Default value (without quotes): S<"\n  ">
+
+=item B<--merge-licenses>
+
+Boolean flag to merge Files sections with same license.
+
+Default value: unset
+
+=item B<--strip-suffix>
+
+Suffix stripped from each input filename.
+
+Default value: F<.metadata>
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> will readfrom B<STDIN>
+the output of the B<licensecheck> command
+shipped with Debian B<devscript> package,
+reformat to Debian copyright format,
+and emit to B<STDOUT>.
+
+=cut
+
+my $list_delimiter = $ENV{'whitespace_list_delimiter'} || "\n ";
+my $rfc822_delimiter = $ENV{'rfc822_list_delimiter'} || "\n  ";
+my $merge_licenses = $ENV{'merge_same_license'} || "";
+my $strip_suffix = $ENV{'metadata_suffix'} || ".metadata";
+
+GetOptions( help => \my $help,
+	man      => \my $man,
+	'list-delimiter' => \$list_delimiter,
+	'rfc822-delimiter' => \$rfc822_delimiter,
+	'merge-licenses!' => \$merge_licenses,
+	'strip-suffix' => \$strip_suffix,
+) or pod2usage(2);
+pod2usage( -verbose => 1 ) if $help;
+pod2usage( -verbose => 2, -exitstatus => 0 ) if $man;
 
 print "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n";
 print "Upstream-Name: FIXME\n";
@@ -38,7 +91,7 @@ $n=0; while (<>) {
 };
 foreach $file (@files) {
 	$file->{name} =~ s/([*?\\])/\\$1/g;
-	$file->{name} =~ s/$metadata_suffix$//g;
+	$file->{name} =~ s/$strip_suffix$//g;
 	$file->{license} =~ s/\s*\(unversioned\/unknown version\)//;
 	$file->{license} =~ s/\s*\(with incorrect FSF address\)//;
 	$file->{license} =~ s/\s+\(v([^)]+) or later\)/-$1+/;
@@ -66,7 +119,7 @@ foreach $file (@files) {
 		push @{ $owneryears{"$owner"} }, $owneryear;
 	};
 	my @owners = sort keys %owneryears;
-	@owners = () if ($merge_same_license and $owneryears_seem_correct);
+	@owners = () if ($merge_licenses and $owneryears_seem_correct);
 	my $pattern = join ("\n", $file->{license}, @owners);
 	push @{ $patternfiles{"$pattern"} }, $file->{name};
 	push @{ $patternownerlines{"$pattern"} }, @ownerlines_clean;
@@ -79,7 +132,30 @@ foreach $pattern ( sort {
 		} keys %patternfiles ) {
 	my $prev;
 	@ownerlines_unique = grep((!defined $prev || $_ ne $prev) && (($prev) = $_), sort @{ $patternownerlines{$pattern} });
-	print "Files: ", join($whitespace_list_delimiter, sort @{ $patternfiles{$pattern} }), "\n";
-	print "Copyright: ", join($rfc822_list_delimiter, @ownerlines_unique), "\n";
+	print "Files: ", join($list_delimiter, sort @{ $patternfiles{$pattern} }), "\n";
+	print "Copyright: ", join($rfc822_delimiter, @ownerlines_unique), "\n";
 	print "License: $patternlicense{$pattern}\n FIXME\n\n";
 };
+
+=head1 AUTHOR
+
+Jonas Smedegaard, C<< <dr@jones.dk> >>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2005-2012 Jonas Smedegaard
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=cut
