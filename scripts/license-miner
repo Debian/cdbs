@@ -101,12 +101,22 @@ by prefixing the path with "exif:".
 
 =back
 
+=head1 ENVIRONMENT VARIABLES
+
+=over 12
+
+=item B<LICENSE_MINER_SUFFIX>
+
+Sets the option B<suffix>, if not provided as commandline argument.
+
+=back
+
 =cut
 
 # avoid custom configuration of ExifTool
 BEGIN { $Image::ExifTool::configFile = '' }
 
-my $suffix = '.metadata';
+my $suffix = $ENV{'LICENSE_MINER_SUFFIX'} || ".metadata";
 GetOptions( help => \my $help,
 	man      => \my $man,
 	verbose  => \my $verbose,
