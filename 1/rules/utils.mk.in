@@ -40,9 +40,6 @@ endif
 #DEB_COPYRIGHT_EXTRACT_PATHS_EXIF =
 #DEB_COPYRIGHT_EXTRACT_PATHS_TTF =
 
-# Suffix appended to filenames for temporary stored extracted metadata
-DEB_COPYRIGHT_EXTRACT_SUFFIX ?= ~metadata_dump~
-
 # Single regular expression for files to include and ignore
 DEB_COPYRIGHT_CHECK_REGEX ?= .*
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
@@ -132,20 +129,17 @@ debian/stamp-copyright-check:
 		-regex '^(?:.*/)?[^/]+\.(?:$(subst $(space),|,$(strip \
 			$(DEB_COPYRIGHT_EXTRACT_EXTS))))$$' \
 		-print0 | \
-		perl -0 $(_cdbs_scripts_path)/license-miner \
-		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
+		perl -0 $(_cdbs_scripts_path)/license-miner)
 	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF),find * \
 		-type f -regextype posix-extended \
 		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF))$$' \
 		-printf 'exif:%p\0' | \
-		perl -0 $(_cdbs_scripts_path)/license-miner \
-		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
+		perl -0 $(_cdbs_scripts_path)/license-miner)
 	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF),find * \
 		-type f -regextype posix-extended \
 		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF))$$' \
 		-printf 'ttf:%p\0' | \
-		perl -0 $(_cdbs_scripts_path)/license-miner \
-		--suffix '$(DEB_COPYRIGHT_EXTRACT_SUFFIX)')
+		perl -0 $(_cdbs_scripts_path)/license-miner)
 	@set -e; \
 		$(_cdbs_copyright_check_enabled_check) \
 		$(_cdbs_copyright_check_licensecheck_check) \
@@ -156,7 +150,6 @@ debian/stamp-copyright-check:
 		export LC_ALL=C; \
 		export whitespace_list_delimiter="`perl -e 'print "$(DEB_COPYRIGHT_CHECK_DELIMITER)"'`"; \
 		export merge_same_license="$(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE)"; \
-		export metadata_suffix="$(DEB_COPYRIGHT_EXTRACT_SUFFIX)"; \
 		$(DEB_COPYRIGHT_CHECK_INVOKE) | $(_cdbs_scripts_path)/licensecheck2dep5 > debian/copyright_newhints; \
 		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
 		newstrings=`diff -a -u debian/copyright_hints debian/copyright_newhints | sed '1,2d' | egrep -a '^\+' - | sed 's/^\+//'`; \
@@ -182,7 +175,7 @@ debian/stamp-copyright-check:
 		$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
 		$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
 		find * \
-		-type f -name '*.$(DEB_COPYRIGHT_EXTRACT_SUFFIX)' \
+		-type f -name '*.metadata' \
 		-delete)
 	touch $@
 
@@ -192,7 +185,7 @@ clean::
 			$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
 			$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
 			find * \
-			-type f -name '*.$(DEB_COPYRIGHT_EXTRACT_SUFFIX)' \
+			-type f -name '*.metadata' \
 			-delete))
 	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check
 
