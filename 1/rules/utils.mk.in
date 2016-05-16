@@ -137,6 +137,8 @@ debian/stamp-copyright-check:
 		--copyright \
 		--ignore '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' \
 		--lines 99999 \
+		$(if $(shell licensecheck --encoding utf8 --version),\
+			--encoding utf8)\
 		* \
 		| $(_cdbs_scripts_path)/licensecheck2dep5 \
 			$(if $(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE),\
@@ -154,9 +156,9 @@ debian/stamp-copyright-check:
 				New or changed notices discovered:"; \
 			echo; \
 			echo "$$newstrings" \
-				| perl -n \
-					-e '/^.{0,60}$$/ or s/^(.{0,60})\b.*$$/$$1…/;' \
-					-e 's/[^[:print:][:space:]…]//g;' \
+				| perl -nC \
+					-e 's/[^[:print:][:space:]]+/…/g;' \
+					-e 's/^.{59}[^…]?\b\K.+$$/…/;' \
 					-e '$$_ ne $$prev and (($$prev) = $$_) and print' \
 				| sort -m \
 				| head -n 200; \
