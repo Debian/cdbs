@@ -40,14 +40,6 @@ endif
 #DEB_COPYRIGHT_EXTRACT_PATHS_EXIF =
 #DEB_COPYRIGHT_EXTRACT_PATHS_TTF =
 
-# Single regular expression for files to ignore
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
- ^(?:$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)\
- $(patsubst %,(?:.*/)?[^/]+\.(?:%),$(subst $(space),|,$(strip \
-  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS) $(DEB_COPYRIGHT_EXTRACT_EXTS))))\
- $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF) $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF) \
- debian/(?:changelog|copyright(?:|_hints|_newhints)))))$$
-
 # spacing between multiline file and copyright items
 DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITER))
 
@@ -215,5 +207,16 @@ clean::
 				mv "$(backup)" "$(orig)";)))
 	rm -rf "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)"
 	rm -f debian/stamp-upstream-cruft
+
+# deprecated variable
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
+ ^(?:$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)\
+ $(patsubst %,(?:.*/)?[^/]+\.(?:%),$(subst $(space),|,$(strip \
+  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS) $(DEB_COPYRIGHT_EXTRACT_EXTS))))\
+ $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF) $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF) \
+ debian/(?:changelog|copyright(?:|_hints|_newhints)))))$$
+_cdbs_deprecated_vars += DEB_COPYRIGHT_CHECK_IGNORE_REGEX,0.4.133
+_cdbs_deprecated_DEB_COPYRIGHT_CHECK_IGNORE_REGEX_default := $(strip \
+	$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX))
 
 endif
