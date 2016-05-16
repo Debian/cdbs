@@ -144,7 +144,7 @@ debian/stamp-copyright-check:
 			$(if $(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE),\
 				--merge-licenses) \
 		> debian/copyright_newhints)
-	@echo "$$(grep -c ^Files: debian/copyright_hints) combinations of copyright and licensing found."
+	@echo "$$(grep -c ^Files: debian/copyright_newhints) combinations of copyright and licensing found."
 	@set -e; \
 		newstrings=$$(\
 			diff -a -u debian/copyright_hints debian/copyright_newhints \
