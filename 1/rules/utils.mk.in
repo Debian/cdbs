@@ -90,7 +90,9 @@ _cdbs_copyright_check_licensecheck_check = \
 			$(_cdbs_copyright_check_strict_check))
 
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
-CDBS_BUILD_DEPENDS += , $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),$(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
+CDBS_BUILD_DEPENDS += \
+	$(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
+		$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
 list-missing:
 	@if test -d debian/tmp; then \
@@ -140,19 +142,27 @@ debian/stamp-copyright-check:
 			$(if $(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE),\
 				--merge-licenses) \
 		> debian/copyright_newhints)
+	@echo "$$(grep -c ^Files: debian/copyright_hints) combinations of copyright and licensing found."
 	@set -e; \
-		echo "`grep -c ^Files: debian/copyright_hints` combinations of copyright and licensing found."; \
-		newstrings=`diff -a -u debian/copyright_hints debian/copyright_newhints | sed '1,2d' | egrep -a '^\+' - | sed 's/^\+//'`; \
+		newstrings=$$(\
+			diff -a -u debian/copyright_hints debian/copyright_newhints \
+			| sed '1,2d' \
+			| egrep -a '^\+' - \
+			| sed 's/^\+//'); \
 		if [ -n "$$newstrings" ]; then \
-			echo "$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): The following (and possibly more) new or changed notices discovered:"; \
+			echo "$(if $(DEB_COPYRIGHT_CHECK_STRICT),ERROR,WARNING): \
+				New or changed notices discovered:"; \
 			echo; \
 			echo "$$newstrings" \
-				| perl -ne '/^.{0,60}$$/ or s/^(.{0,60})\b.*$$/$$1…/;s/[^[:print:][:space:]…]//g;$$_ ne $$prev and (($$prev) = $$_) and print' \
+				| perl -n \
+					-e '/^.{0,60}$$/ or s/^(.{0,60})\b.*$$/$$1…/;' \
+					-e 's/[^[:print:][:space:]…]//g;' \
+					-e '$$_ ne $$prev and (($$prev) = $$_) and print' \
 				| sort -m \
 				| head -n 200; \
 			echo; \
 			echo "To fix the situation please do the following:"; \
-			echo "  1) Fully compare debian/copyright_hints with debian/copyright_newhints"; \
+			echo "  1) Examine debian/copyright_* and referenced files"; \
 			echo "  2) Update debian/copyright as needed"; \
 			echo "  3) Replace debian/copyright_hints with debian/copyright_newhints"; \
 			$(if $(DEB_COPYRIGHT_CHECK_STRICT),exit 1,:); \
@@ -170,19 +180,25 @@ debian/stamp-copyright-check:
 	touch $@
 
 clean::
-	$(if $(DEB_COPYRIGHT_CHECK_STRICT),,rm -f debian/copyright_newhints; \
+	$(if $(DEB_COPYRIGHT_CHECK_STRICT),\
+		,\
+		rm -f debian/copyright_newhints; \
 		$(if $(strip $(DEB_COPYRIGHT_EXTRACT_EXTS)\
 			$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
 			$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
 			find * \
 			-type f -name '*.metadata' \
 			-delete))
-	rm -f debian/cdbs-install-list debian/cdbs-package-list debian/stamp-copyright-check
+	$(strip rm -f \
+		debian/cdbs-install-list \
+		debian/cdbs-package-list \
+		debian/stamp-copyright-check)
 
 # put aside upstream cruft during build but after copyright-check
 pre-build:: debian/stamp-upstream-cruft
 debian/stamp-upstream-cruft: debian/stamp-copyright-check
-	$(and $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),mkdir -p "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)")
+	$(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
+		mkdir -p "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)")
 	$(foreach orig,$(DEB_UPSTREAM_CRUFT_MOVE),\
 		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
 			$(if $(wildcard $(orig)),\
