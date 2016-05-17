@@ -215,8 +215,7 @@ debian/stamp-copyright-check:
 		else \
 			echo 'No new copyright notices found - assuming no news is good news...'; \
 			rm -f debian/copyright_newhints; \
-		fi; \
-	fi
+		fi
 	$(_cdbs_copyright_check_remove_metadata)
 	touch $@
 
