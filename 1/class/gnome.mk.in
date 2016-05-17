@@ -39,7 +39,7 @@ clean::
 			intltool-merge \
 			intltool-update \
 			po/.intltool-merge-cache)
-	$(if $(wildcard test),\
+	$(if $(wildcard doc),\
 		find doc -name '*.omf.out' -type f -delete)
 	$(if $(wildcard test),\
 		find test -name '*.omf.out' -type f -delete)
