@@ -100,7 +100,7 @@ CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_buildvars)
 # Internal useful variables/expansions
 
 cdbs_info = $(info CDBS: $1)
-cdbs_warn = $(warning CDBS WARNING:  $1)
+cdbs_warn = $(info CDBS WARNING:  $1)
 
 # emit warning on use of deprecated variable
 #  * $1: variable name
@@ -121,6 +121,10 @@ cdbs_streq = $(if $(filter-out xx,x$(subst $1,,$2)$(subst $2,,$1)x),,yes)
 
 nullstring =
 space = $(nullstring) # <- notice the trailing space (only leading is stripped)
+define newline =
+$(nullstring)
+$(nullstring)
+endef
 comma = ,
 open_parenthesis = (
 close_parenthesis = )
