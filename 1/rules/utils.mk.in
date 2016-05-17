@@ -68,6 +68,26 @@ CDBS_BUILD_DEPENDS += , $(if $(strip \
  $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)),\
  $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
 
+_cdbs_copyright_ignore_regex = $(subst $(space),|,$(strip \
+	$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS:/=/[^/]+)\
+	$(patsubst %,.+\.(%),$(subst $(space),|,$(strip \
+		$(DEB_COPYRIGHT_CHECK_IGNORE_EXTS))))))
+
+_cdbs_copyright_extract_regex = $(subst $(space),|,$(strip \
+	$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF:/=/[^/]+) \
+	$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF:/=/[^/]+) \
+	$(patsubst %,.+\.(%),$(subst $(space),|,$(strip \
+		$(DEB_COPYRIGHT_EXTRACT_EXTS))))))
+
+_cdbs_copyright_check_remove_metadata = $(patsubst %,find * \
+	-regextype posix-extended \
+	$(patsubst %,'!' -regex '^(%)$$',\
+		$(_cdbs_copyright_ignore_regex)) \
+	-regex '^(%)\.metadata$$' \
+	-type f \
+	-delete,\
+	$(_cdbs_copyright_extract_regex))
+
 _cdbs_copyright_check_strict_check = \
 	$(if $(DEB_COPYRIGHT_CHECK_STRICT),\
 		$(error ERROR: Treating above warning as an error \
@@ -89,6 +109,13 @@ _cdbs_copyright_check_licensecheck_check = \
 			is missing.)\
 			$(_cdbs_copyright_check_strict_check))
 
+_cdbs_copyright_check_regex_deprecated_check = $(and \
+	$(_cdbs_copyright_ignore_regex)$(_cdbs_copyright_extract_regex),\
+	$(filter-out $(DEB_COPYRIGHT_CHECK_IGNORE_REGEX),\
+		$(_cdbs_deprecated_DEB_COPYRIGHT_CHECK_IGNORE_REGEX_default)),\
+	$(error ERROR: Deprecated variable DEB_COPYRIGHT_CHECK_IGNORE_REGEX \
+		and granular regex variables cannot be used together.))
+
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
 CDBS_BUILD_DEPENDS += \
 	$(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
@@ -109,22 +136,34 @@ list-missing:
 
 pre-build:: debian/stamp-copyright-check
 debian/stamp-copyright-check:
-	$(if $(DEB_COPYRIGHT_EXTRACT_EXTS),find * \
+	$(_cdbs_copyright_check_regex_deprecated_check)
+	$(patsubst %,set -e; find * \
 		-type f -regextype posix-extended \
-		-regex '^(?:.*/)?[^/]+\.(?:$(subst $(space),|,$(strip \
-			$(DEB_COPYRIGHT_EXTRACT_EXTS))))$$' \
+		$(patsubst %,'!' -regex '^(%)$$',\
+			$(_cdbs_copyright_ignore_regex)) \
+		-regex '^.+\.(%)$$' \
 		-print0 | \
-		perl -0 $(_cdbs_scripts_path)/license-miner)
-	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF),find * \
+		perl -0 $(_cdbs_scripts_path)/license-miner,\
+		$(subst $(space),|,$(strip \
+			$(DEB_COPYRIGHT_EXTRACT_EXTS))))
+	$(patsubst %,set -e; find * \
 		-type f -regextype posix-extended \
-		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF))$$' \
+		$(patsubst %,'!' -regex '^(%)$$',\
+			$(_cdbs_copyright_ignore_regex)) \
+		-regex '^(%)$$' \
 		-printf 'exif:%p\0' | \
-		perl -0 $(_cdbs_scripts_path)/license-miner)
-	$(if $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF),find * \
+		perl -0 $(_cdbs_scripts_path)/license-miner,\
+		$(subst $(space),|,$(strip \
+			$(DEB_COPYRIGHT_PATHS_EXIF:/=/[^/]+))))
+	$(patsubst %,set -e; find * \
 		-type f -regextype posix-extended \
-		-regex '^(?:$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF))$$' \
+		$(patsubst %,'!' -regex '^(%)$$',\
+			$(_cdbs_copyright_ignore_regex)) \
+		-regex '^(%)$$' \
 		-printf 'ttf:%p\0' | \
-		perl -0 $(_cdbs_scripts_path)/license-miner)
+		perl -0 $(_cdbs_scripts_path)/license-miner,\
+		$(subst $(space),|,$(strip \
+			$(DEB_COPYRIGHT_PATHS_TTF:/=/[^/]+))))
 	$(_cdbs_copyright_check_enabled_check)
 	$(_cdbs_copyright_check_licensecheck_check)
 	@echo
@@ -135,7 +174,12 @@ debian/stamp-copyright-check:
 		--check '.*' \
 		--recursive \
 		--copyright \
-		--ignore '$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)' \
+		--ignore '$(strip \
+			$(or $(patsubst %,^(%|debian/(changelog|copyright(|_hints|_newhints)))$$,\
+					$(subst $(space),|,$(strip \
+						$(_cdbs_copyright_ignore_regex) \
+						$(_cdbs_copyright_extract_regex)))\
+				),$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)))' \
 		--lines 99999 \
 		$(if $(shell licensecheck --encoding utf8 --version),\
 			--encoding utf8)\
@@ -173,24 +217,15 @@ debian/stamp-copyright-check:
 			rm -f debian/copyright_newhints; \
 		fi; \
 	fi
-	$(if (strip $(DEB_COPYRIGHT_EXTRACT_EXTS)\
-		$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
-		$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
-		find * \
-		-type f -name '*.metadata' \
-		-delete)
+	$(_cdbs_copyright_check_remove_metadata)
 	touch $@
 
 clean::
 	$(if $(DEB_COPYRIGHT_CHECK_STRICT),\
 		,\
-		rm -f debian/copyright_newhints; \
-		$(if $(strip $(DEB_COPYRIGHT_EXTRACT_EXTS)\
-			$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)\
-			$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)),\
-			find * \
-			-type f -name '*.metadata' \
-			-delete))
+		rm -f debian/copyright_newhints)
+	$(_cdbs_copyright_check_regex_deprecated_check)
+	$(_cdbs_copyright_check_remove_metadata)
 	$(strip rm -f \
 		debian/cdbs-install-list \
 		debian/cdbs-package-list \
@@ -227,12 +262,8 @@ clean::
 	rm -f debian/stamp-upstream-cruft
 
 # deprecated variable
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(subst $(space),|,$(strip \
- ^(?:$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)\
- $(patsubst %,(?:.*/)?[^/]+\.(?:%),$(subst $(space),|,$(strip \
-  $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS) $(DEB_COPYRIGHT_EXTRACT_EXTS))))\
- $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF) $(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF) \
- debian/(?:changelog|copyright(?:|_hints|_newhints)))))$$
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX ?= $(patsubst %,^(%)$$,\
+	debian/(changelog|copyright(|_hints|_newhints)))
 _cdbs_deprecated_vars += DEB_COPYRIGHT_CHECK_IGNORE_REGEX,0.4.133
 _cdbs_deprecated_DEB_COPYRIGHT_CHECK_IGNORE_REGEX_default := $(strip \
 	$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX))
