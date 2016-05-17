@@ -416,7 +416,8 @@ top_srcdir = @top_srcdir@
 # Run these tests silently so we can see what fails
 TESTS_ENVIRONMENT = TESTS_SILENT=true
 EXTRA_DIST = testsuite_functions
-TESTS = autotools-1.sh \
+TESTS = all-clean.sh \
+ autotools-1.sh \
  autotools-2.sh \
  autotools-3.sh \
  autotools-4.sh \
@@ -621,6 +622,13 @@ recheck: all
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
+all-clean.sh.log: all-clean.sh
+	@p='all-clean.sh'; \
+	b='all-clean.sh'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 autotools-1.sh.log: autotools-1.sh
 	@p='autotools-1.sh'; \
 	b='autotools-1.sh'; \
