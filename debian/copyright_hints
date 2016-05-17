@@ -44,6 +44,7 @@ Files: 1/class/ant-vars.mk.in
  Makefile.in
  debian/rules
  scripts/list-packages
+ scripts/waf-unpack
  test/Makefile.am
  test/Makefile.in
  test/autotools-1.sh
@@ -69,52 +70,52 @@ Copyright: 1994-2014, Free Software Foundation, Inc
   1997-2009, Adapted for CDBS purposes by Colin Walters <walters@debian.org>
   2002, Colin Walters <walters@debian.org>
   2002-2003, Colin Walters <walters@debian.org>
-  2003, 2008, 2010, 2013, 2015, Jonas Smedegaard <dr@jones.dk>
+  2003, 2008, 2010, 2013, 2015-2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2008-2016, Jonas Smedegaard <dr@jones.dk>
   2003, Colin Walters <walters@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2003, Stefan Gybas <sgybas@debian.org>
-  2003,2006-2011, 2014 Jonas Smedegaard <dr@jones.dk>
-  2003,2006-2012, 2014 Jonas Smedegaard <dr@jones.dk>
-  2003,2008, 2010, 2012-2015, Jonas Smedegaard <dr@jones.dk>
+  2003,2006-2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003,2006-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003,2008, 2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
   2003,2008,2010-2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2003,2008-2010, 2012-2015, Jonas Smedegaard <dr@jones.dk>
-  2003,2008-2010, 2013-2015, Jonas Smedegaard <dr@jones.dk>
-  2003,2009-2010, 2012-2014, Jonas Smedegaard <dr@jones.dk>
+  2003,2008-2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
+  2003,2008-2010, 2013-2016, Jonas Smedegaard <dr@jones.dk>
+  2003,2009-2010, 2012-2014, 2016 Jonas Smedegaard <dr@jones.dk>
   2003,2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2004, David B Harris <dbharris@eelf.ddts.net>
   2005, Matthew A. Nicholson <matt@matt-land.com>
   2005, Robert Millan
   2005-2012, 2016 Jonas Smedegaard <dr@jones.dk>
   2006, Fathi Boudra <fboudra@free.fr>
-  2006, Marc DequÃ¨nes (Duck) <Duck@DuckCorp.org>
+  2006, Marc Dequènes (Duck) <Duck@DuckCorp.org>
   2006, Peter Eisentraut <petere@debian.org>
   2006, Peter Rockai <me@mornfall.net>
   2007, Peter Eisentraut <petere@debian.org>
-  2007-2010, 2012, 2014-2015, Jonas Smedegaard <dr@jones.dk>
-  2008, 2010, 2012, Jonas Smedegaard <dr@jones.dk>
-  2008, 2010, 2014, Jonas Smedegaard <dr@jones.dk>
-  2008-2010, 2012, 2014, Jonas Smedegaard <dr@jones.dk>
-  2008-2010, 2014 Jonas Smedegaard <dr@jones.dk>
-  2008-2011,2014, Jonas Smedegaard <dr@jones.dk>
-  2008-2012, 2014 Jonas Smedegaard <dr@jones.dk>
+  2007-2010, 2012, 2014-2016, Jonas Smedegaard <dr@jones.dk>
+  2008, 2010, 2012, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008, 2010, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008-2010, 2012, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008-2010, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2008-2011,2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009, Jonas Smedegaard <dr@jones.dk>
   2009-2010, 2012, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2009-2010, 2012, 2014, Jonas Smedegaard <dr@jones.dk>
-  2009-2010, 2012-2014, Jonas Smedegaard <dr@jones.dk>
-  2009-2010, 2014 Jonas Smedegaard <dr@jones.dk>
+  2009-2010, 2012-2014, 2016 Jonas Smedegaard <dr@jones.dk>
   2009-2010, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2009-2012, 2014-2015, Jonas Smedegaard <dr@jones.dk>
+  2009-2012, 2014-2016, Jonas Smedegaard <dr@jones.dk>
   2009-2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2009-2015, Jonas Smedegaard <dr@jones.dk>
-  2010, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
-  2010, RÃmi Thebault <remi.thebault@gmail.com>
-  2011, 2014 Jonas Smedegaard <dr@jones.dk>
-  2011, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
-  2011-2012, 2014 Jonas Smedegaard <dr@jones.dk>
+  2009-2016, Jonas Smedegaard <dr@jones.dk>
+  2010, IOhannes m zmölnig <zmoelnig@iem.at>
+  2010, Rémi Thebault <remi.thebault@gmail.com>
+  2010-2011, 2015-2016, Jonas Smedegaard <dr@jones.dk>
+  2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2011, 2016 Jonas Smedegaard <dr@jones.dk>
+  2011, IOhannes m zmölnig <zmoelnig@iem.at>
   2011-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2013, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
+  2013, IOhannes m zmölnig <zmoelnig@iem.at>
+  2016, Jonas Smedegaard <dr@jones.dk>
 License: GPL-3+
  FIXME
 
@@ -159,6 +160,7 @@ License: UNKNOWN
 Files: aclocal.m4
  configure
  configure.ac
+ test/all-clean.sh
  test/ant-1.sh
  test/autotools/aclocal.m4
  test/autotools/configure
@@ -175,6 +177,7 @@ Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc
   1996-2014, Free Software Foundation, Inc
   2002-2003, Colin Walters <walters@debian.org>
   2006, Peter Eisentraut <petere@debian.org>
+  2016, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
  FIXME
 
@@ -206,19 +209,13 @@ Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
  FIXME
 
-Files: scripts/waf-unpack
-Copyright: *No copyright*
-License: GPL-3+
- FIXME
-
 Files: scripts/license-miner
 Copyright: => 0 Trademark => 7, License => 13, 'License URL' => 14, );
 License: GPL-3+
  FIXME
 
 Files: scripts/licensecheck2dep5
-Copyright: 2005-2012, 2016 Jonas Smedegaard <dr@jones.dk>
-  file format
+Copyright: file format
 License: GPL-3+
  FIXME
 

@@ -1,3 +1,49 @@
+cdbs (0.4.133) unstable; urgency=medium
+
+  * Update copyright info:
+    + Fix add a missing trailing colon.
+    + Extend copyright for main author to cover recent years.
+    + Fix add missed copyright holder.
+  * Misc. code cleanup.
+    + Fix add delimiting commas to resolved build-dependencies.
+    + Use make instead of shell at more places.
+    + Drop variables:
+      cdbs_autotools_invoke
+      deb_*flags (CDBS-labelled compiler flags)
+      DEB_COPYRIGHT_CHECK_ARGS
+      DEB_COPYRIGHT_CHECK_INVOKE
+      DEB_COPYRIGHT_CHECK_PARSELINES
+      DEB_COPYRIGHT_CHECK_REGEX
+      DEB_COPYRIGHT_CHECK_SCRIPT
+      DEB_COPYRIGHT_EXTRACT_SUFFIX
+      DEB_UPSTREAM_CRUFT_BACKUPDIR
+      DEB_WARNING_FLAGS
+    + Deprecate variable DEB_COPYRIGHT_CHECK_IGNORE_REGEX.
+    + Introduce new variables:
+      newline
+      DEB_AUTOCONF_ARGS DEB_AUTOPOINT_ARGS
+      DEB_AUTOHEADER_ARGS
+      DEB_AUTO_UPDATE_AUTOPOINT
+    + Fix expansion variables cdbs_expand_nondefaultvar
+      cdbs_set_nondefaultvars.
+    + Fix and simplify compiler flags.
+      Closes: Bug#712729. Thanks to Felipe Sateler.
+    + Drop hack in buildvars.mk unneeded since debhelper 5.0.30.
+    + Drop target fail-source-not-repackaged.
+    + Have license-miner support environment variable
+      LICENSE_MINER_SUFFIX.
+    + Have licensecheck2dep5 support commandline options.
+    + Fix count copryright-check newhints (not hints).
+    + Fix copyright-check regex handling (broken since 0.4.131).
+    + Tidy output.
+      Closes: Bug#824087. Thanks to Michael Biebl.
+  * Drop support for bogus DEB_BUILD_OPTIONS debug option.
+    Thanks to Ben Hutchings.
+  * Add all-clean test to testsuite.
+  * Update autotools (with autoreconf -f -i).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 17 May 2016 15:51:30 +0200
+
 cdbs (0.4.132) unstable; urgency=medium
 
   * Improve gnome.mk:
