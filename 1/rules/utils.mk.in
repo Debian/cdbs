@@ -47,9 +47,6 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 # DEB_UPSTREAM_CRUFT_MOVE =
 # DEB_UPSTREAM_CRUFT_COPY =
 
-# location for backup of upstream files and directories
-DEB_UPSTREAM_CRUFT_BACKUPDIR ?= debian/upstream-cruft
-
 DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= devscripts
@@ -67,6 +64,8 @@ CDBS_BUILD_DEPENDS += , $(if $(strip \
  $(DEB_COPYRIGHT_EXTRACT_EXTS)\
  $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)),\
  $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
+
+_cdbs_upstream_cruft_backupdir ?= debian/upstream-cruft
 
 _cdbs_copyright_ignore_regex = $(subst $(space),|,$(strip \
 	$(DEB_COPYRIGHT_CHECK_IGNORE_PATHS:/=/[^/]+)\
@@ -234,16 +233,16 @@ clean::
 pre-build:: debian/stamp-upstream-cruft
 debian/stamp-upstream-cruft: debian/stamp-copyright-check
 	$(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
-		mkdir -p "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)")
+		mkdir -p "$(_cdbs_upstream_cruft_backupdir)")
 	$(foreach orig,$(DEB_UPSTREAM_CRUFT_MOVE),\
-		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+		$(foreach backup,$(_cdbs_upstream_cruft_backupdir)/$(orig),\
 			$(if $(wildcard $(orig)),\
 				$(if $(wildcard $(backup)),\
 					,\
 					$(shell mkdir -p "$(dir $(backup))") \
 					mv "$(orig)" "$(backup)";))))
 	$(foreach orig,$(DEB_UPSTREAM_CRUFT_COPY),\
-		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+		$(foreach backup,$(_cdbs_upstream_cruft_backupdir)/$(orig),\
 			$(if $(wildcard $(orig)),\
 				$(if $(wildcard $(backup)),\
 					,\
@@ -252,12 +251,12 @@ debian/stamp-upstream-cruft: debian/stamp-copyright-check
 	touch $@
 clean::
 	$(foreach orig,$(DEB_UPSTREAM_CRUFT_MOVE) $(DEB_UPSTREAM_CRUFT_COPY),\
-		$(foreach backup,$(DEB_UPSTREAM_CRUFT_BACKUPDIR)/$(orig),\
+		$(foreach backup,$(_cdbs_upstream_cruft_backupdir)/$(orig),\
 			$(if $(wildcard $(backup)),\
 				$(if $(wildcard $(orig)),\
 					rm -rf "$(orig)";) \
 				mv "$(backup)" "$(orig)";)))
-	rm -rf "$(DEB_UPSTREAM_CRUFT_BACKUPDIR)"
+	rm -rf "$(_cdbs_upstream_cruft_backupdir)"
 	rm -f debian/stamp-upstream-cruft
 
 # deprecated variable
