@@ -1,6 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2005 Robert Millan
-# Copyright © 2009-2010, 2014 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2009-2010, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
 # Copyright © 2013 IOhannes m zmölnig <zmoelnig@iem.at>
 # Description: A class to automatically update GNU autotools files
 #

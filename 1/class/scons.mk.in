@@ -1,6 +1,6 @@
 # -*- mode: makefile; coding: utf-8 -*-
 # Copyright © 2005 Matthew A. Nicholson <matt@matt-land.com>
-# Copyright © 2008, 2010, 2014 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2008, 2010, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
 # Description: Builds and cleans SCons (SConstruct file) packages
 #
 # This program is free software; you can redistribute it and/or modify

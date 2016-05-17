@@ -3,6 +3,7 @@
 # Most of this code was stolen from Debhelper 7.3.16+. which is:
 # Joey Hess, GPL copyright 1997-2009.
 # Adapted for CDBS purposes by Colin Walters <walters@debian.org>
+# Copyright © 2010-2011, 2015-2016 Jonas Smedegaard <dr@jones.dk>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
