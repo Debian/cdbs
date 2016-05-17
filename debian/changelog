@@ -1,3 +1,11 @@
+cdbs (0.4.134) unstable; urgency=medium
+
+  * Fix gnome.mk cleanup (typo since 0.4.132).
+    Closes: Bug#824585. Thanks to Chris Lamb and Michael Biebl.
+  * Update copyright info: Merge Files sections with identical license.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 18 May 2016 01:27:14 +0200
+
 cdbs (0.4.133) unstable; urgency=medium
 
   * Update copyright info:
