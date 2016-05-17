@@ -20,7 +20,8 @@ TESTS_ENVIRONMENT = TESTS_SILENT=true
 
 EXTRA_DIST = testsuite_functions
 
-TESTS = autotools-1.sh \
+TESTS = all-clean.sh \
+ autotools-1.sh \
  autotools-2.sh \
  autotools-3.sh \
  autotools-4.sh \
