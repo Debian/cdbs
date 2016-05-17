@@ -43,14 +43,13 @@ $(cdbs_autotools_configure_stamps):
 	$(if $(call cdbs_streq,$(cdbs_make_curbuilddir),$(DEB_BUILDDIR_$(cdbs_curpkg))),\
 		,\
 		mkdir -p $(cdbs_make_curbuilddir))
-	$(DEB_CONFIGURE_INVOKE) \
+	$(strip $(DEB_CONFIGURE_INVOKE) \
 		$(cdbs_configure_flags) \
 		$(DEB_CONFIGURE_EXTRA_FLAGS) \
-		$(DEB_CONFIGURE_USER_FLAGS)
+		$(DEB_CONFIGURE_USER_FLAGS))
 	$(if $(filter post,$(DEB_AUTO_UPDATE_LIBTOOL)),\
-		if [ -e $(cdbs_make_curbuilddir)/libtool ]; then \
-			cp -f /usr/bin/libtool $(cdbs_make_curbuilddir)/libtool; \
-		fi)
+		$(if $(wildcard $(cdbs_make_curbuilddir)/libtool),\
+			cp -f /usr/bin/libtool $(cdbs_make_curbuilddir)/libtool))
 	touch $@
 
 makefile-clean::
@@ -66,4 +65,5 @@ $(cdbs_make_clean_nonstamps)::
 			$(cdbs_make_curbuilddir))
 	$(if $(cdbs_make_flavors),\
 		rm -f $(@:makefile-clean%=debian/stamp-autotools%))
+
 endif

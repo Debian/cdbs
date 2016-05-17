@@ -29,18 +29,21 @@ cdbs_make_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR))
 	$(error DEB_MAKE_FLAVORS in use: \
 		DEB_BUILDDIR must be different from DEB_SRCDIR$(comma) \
 		and needs to be declared before including makefile.mk))
-cdbs_make_build_stamps = $(strip $(if $(cdbs_make_flavors),\
-	$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-makefile-build/%,\
+cdbs_make_build_stamps = $(if $(cdbs_make_flavors),\
+	$(cdbs_make_builddir_check)\
+	$(patsubst %,debian/stamp-makefile-build/%,\
 		$(cdbs_make_flavors)),\
-	debian/stamp-makefile-build))
-cdbs_make_install_stamps = $(strip $(if $(cdbs_make_flavors),\
-	$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-makefile-install/%,\
+	debian/stamp-makefile-build)
+cdbs_make_install_stamps = $(if $(cdbs_make_flavors),\
+	$(cdbs_make_builddir_check)\
+	$(patsubst %,debian/stamp-makefile-install/%,\
 		$(cdbs_make_flavors)),\
-	debian/stamp-makefile-install))
-cdbs_make_check_stamps = $(strip $(if $(cdbs_make_flavors),\
-	$(cdbs_make_builddir_check)$(patsubst %,debian/stamp-makefile-check/%,\
+	debian/stamp-makefile-install)
+cdbs_make_check_stamps = $(if $(cdbs_make_flavors),\
+	$(cdbs_make_builddir_check)\
+	$(patsubst %,debian/stamp-makefile-check/%,\
 		$(cdbs_make_flavors)),\
-	debian/stamp-makefile-check))
+	debian/stamp-makefile-check)
 cdbs_make_clean_nonstamps = $(if $(cdbs_make_flavors),\
 	$(patsubst %,makefile-clean/%,$(cdbs_make_flavors)),\
 	makefile-clean)
@@ -86,7 +89,7 @@ $(cdbs_make_clean_nonstamps)::
 	$(if $(DEB_MAKE_CLEAN_TARGET),\
 		+-$(DEB_MAKE_INVOKE) -k $(DEB_MAKE_CLEAN_TARGET),\
 		$(call cdbs_warn,DEB_MAKE_CLEAN_TARGET unset$(comma) \
-			 not running clean))
+			not running clean))
 	$(if $(cdbs_make_flavors),\
 		rm -f \
 			$(@:makefile-clean%=debian/stamp-makefile-build%) \

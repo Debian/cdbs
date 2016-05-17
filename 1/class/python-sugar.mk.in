@@ -31,7 +31,12 @@ _cdbs_class_python_sugar = 1
 
 # include both simple and versioned activity packages by default
 # NB! This variable must be declared *above* inclusion of this snippet
-DEB_PYTHON_SUGAR_PACKAGES ?= $(filter sugar-%-activity $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES), , ), $(DEB_PACKAGES))
+DEB_PYTHON_SUGAR_PACKAGES ?= (filter \
+	sugar-%-activity \
+	$(call cdbs_expand_branches,\
+		sugar-%-activity,\
+		$(DEB_SUGAR_BRANCHES),,),\
+	$(DEB_PACKAGES))
 
 DEB_PYTHON_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),$(DEB_PYTHON_SUGAR_PACKAGES))
 DEB_PYTHON2_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),,$(DEB_PYTHON_SUGAR_PACKAGES))
@@ -42,38 +47,33 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 
 # Convenience variable for e.g. conflicts/provides/replaces
-DEB_SUGAR_SOURCE_PKGBASE = $(and $(DEB_SOURCE_PACKAGE),$(firstword $(subst -0.,$(space),$(DEB_SOURCE_PACKAGE))))
+DEB_SUGAR_SOURCE_PKGBASE = $(strip $(if $(DEB_SOURCE_PACKAGE),\
+	$(firstword $(subst -0.,$(space),$(DEB_SOURCE_PACKAGE)))))
 
 # prepare sanity checks
 cdbs_python_sugar_packages_pre := $(DEB_PYTHON_SUGAR_PACKAGES)
-cdbs_python_sugar_pkgresolve_check = $(strip $(if \
-	$(call cdbs_streq,$(strip \
-		$(DEB_PYTHON_SUGAR_PACKAGES)),$(strip \
-		$(cdbs_python_sugar_packages_pre))),\
+cdbs_python_sugar_pkgresolve_check = $(if $(call cdbs_streq,$(strip $(DEB_PYTHON_SUGAR_PACKAGES)),$(cdbs_python_sugar_packages_pre)),\
 	,\
-	$(call cdbs_warn,\
-		Redefining DEB_PYTHON_SUGAR_PACKAGES late is \
+	$(call cdbs_warn,Redefining DEB_PYTHON_SUGAR_PACKAGES late  is\
 		currently unsupported: set DEB_PYTHON_SUGAR_PACKAGES \
-		before including python-sugar.mk)))
+		before including python-sugar.mk))
 ## TODO: Rephrase when DEB_PYTHON_SUGAR_PACKAGES is only expanded inside rules
-cdbs_python_sugar_pkg_check = $(strip $(if \
-	$(DEB_PYTHON_SUGAR_PACKAGES),\
+cdbs_python_sugar_pkg_check = $(if $(DEB_PYTHON_SUGAR_PACKAGES),\
 	,\
-	$(call cdbs_warn,\
-		No Python-based Sugar packages found or declared \
+	$(call cdbs_warn,No Python-based Sugar packages found or declared \
 		- either rename binary packages or set \
-		DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk)))
+		DEB_PYTHON_SUGAR_PACKAGES before including python-sugar.mk))
 
 # convenience wrappers to resolve package dependencies for all Sugar branches
 cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) ,$(comma) ,$(DEB_SUGAR_PRIMARY_BRANCH))
 cdbs_sugar_anybranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) , | ,$(DEB_SUGAR_PRIMARY_BRANCH))
 
 CDBS_BUILD_DEPENDS_class_python-sugar ?= $(cdbs_python_builddeps_cdbs)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-sugar)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-sugar)
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-sugar_python ?= $(cdbs_python_builddeps)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-sugar_python)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-sugar_python)
 
 # warn about wrong number of resolved packages
 CDBS_BUILD_DEPENDS += $(cdbs_python_sugar_pkg_check)
@@ -81,7 +81,7 @@ CDBS_BUILD_DEPENDS += $(cdbs_python_sugar_pkg_check)
 # Sugar-related dependencies
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar ?= \
 	$(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit), unzip
-CDBS_BUILD_DEPENDS += $(comma) $(CDBS_BUILD_DEPENDS_class_python-sugar_sugar)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-sugar_sugar)
 
 # warn early about late changes to DEB_PYTHON_SUGAR_PACKAGES
 testsanity::
@@ -91,59 +91,58 @@ pre-build::
 	mkdir -p debian/stamps-configure
 
 $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
-	[ ! -e $(cdbs_cursrcdir)/MANIFEST ] \
+	$(strip [ ! -e $(cdbs_cursrcdir)/MANIFEST ] \
 		|| [ -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
 		|| mv $(cdbs_cursrcdir)/MANIFEST \
-			$(cdbs_cursrcdir)/MANIFEST.upstream
-	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
+			$(cdbs_cursrcdir)/MANIFEST.upstream)
+	$(strip [ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
 		|| egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' \
 			$(cdbs_cursrcdir)/MANIFEST.upstream \
-			> $(cdbs_cursrcdir)/MANIFEST
-	set -e; \
-	$(foreach buildver,$(cdbs_curpythonbuildversions),\
-		$(call cdbs_python_binary,python$(buildver)) \
-			$(cdbs_cursrcdir)/setup.py build; )
-	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
+			> $(cdbs_cursrcdir)/MANIFEST)
+	$(strip set -e; \
+		$(foreach buildver,$(cdbs_curpythonbuildversions),\
+			$(call cdbs_python_binary,python$(buildver)) \
+				$(cdbs_cursrcdir)/setup.py build; ))
+	$(strip [ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
 		|| IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" \
 			-type f \( -name '*.mo' -or -name 'activity.linfo' \) \
 		| while read path; do \
 			echo "$$path" \
 				| sed 's!^$(cdbs_cursrcdir)/!!' \
 				>> $(cdbs_cursrcdir)/MANIFEST; \
-		done
+		done)
 
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
-	set -e; \
-	$(foreach buildver,$(cdbs_curpythonbuildversions),\
-		LANG=C XDG_DATA_HOME="$(DEB_DESTDIR)/usr/share" \
-			$(call cdbs_python_binary,python$(buildver)) \
-			$(cdbs_cursrcdir)/setup.py install \
-			--prefix="$(DEB_DESTDIR)/usr"; )
+	$(strip set -e; \
+		$(foreach buildver,$(cdbs_curpythonbuildversions),\
+			LANG=C XDG_DATA_HOME="$(DEB_DESTDIR)/usr/share" \
+				$(call cdbs_python_binary,python$(buildver)) \
+				$(cdbs_cursrcdir)/setup.py install \
+				--prefix="$(DEB_DESTDIR)/usr"; ))
 
 # Replace superfluous COPYING files with symlinks
 $(patsubst %,binary-post-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-post-install/%:
-	! test -f $(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING \
+	$(strip ! test -f $(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING \
 		|| ! diff -wq /usr/share/common-licenses/GPL-2 \
 			$(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING \
 		|| ln -sfT ../../../common-licenses/GPL-2 \
-			$(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING
+			$(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING)
 
 reverse-config:: $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES))
 $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar-reverse-config/% :
-	[ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
+	$(strip [ ! -e $(cdbs_cursrcdir)/MANIFEST.upstream ] \
 		|| mv -f $(cdbs_cursrcdir)/MANIFEST.upstream \
-			$(cdbs_cursrcdir)/MANIFEST
+			$(cdbs_cursrcdir)/MANIFEST)
 
 $(patsubst %,cleanpythonsugar/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar/% :
-	-IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" \
+	-$(strip IFS="`printf '\n'`" find "$(cdbs_cursrcdir)/locale" \
 		-type f \( -name '*.mo' -or -name 'activity.linfo' \) \
 		| while read path; do \
 			rm -f "$$path"; \
 			rmdir --ignore-fail-on-non-empty \
 				"`dirname "$$path"`"; \
-		done
-	-rmdir --ignore-fail-on-non-empty \
-		"$(cdbs_cursrcdir)/locale"
+		done)
+	-rmdir --ignore-fail-on-non-empty "$(cdbs_cursrcdir)/locale"
 
 endif

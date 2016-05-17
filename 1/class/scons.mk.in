@@ -31,17 +31,16 @@ DEB_PHONY_RULES += scons-clean
 
 common-build-arch common-build-indep:: debian/stamp-scons-build
 debian/stamp-scons-build:
-	$(DEB_SCONS_INVOKE) $(DEB_SCONS_BUILD_TARGET) \
+	$(strip $(DEB_SCONS_INVOKE) $(DEB_SCONS_BUILD_TARGET) \
 		$(DEB_SCONS_OPTIONS) \
-		$(DEB_SCONS_BUILD_OPTIONS)
+		$(DEB_SCONS_BUILD_OPTIONS))
 	touch debian/stamp-scons-build
 
 clean:: scons-clean
 scons-clean::
-	$(DEB_SCONS_INVOKE) $(DEB_SCONS_CLEAN_TARGET) \
+	-$(strip $(DEB_SCONS_INVOKE) $(DEB_SCONS_CLEAN_TARGET) \
 		$(DEB_SCONS_OPTIONS) \
-		--keep-going --clean \
-		|| true
+		--keep-going --clean)
 	rm -f debian/stamp-scons-build
 	rm -rf .sconf_temp/
 	rm -f .sconsign.dblite config.log

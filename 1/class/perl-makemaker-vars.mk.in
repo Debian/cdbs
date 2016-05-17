@@ -27,8 +27,7 @@ include $(_cdbs_class_path)/perl-vars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
 # create verbose-output makefile
-DEB_MAKEMAKER_NORMAL_ARGS ?= \
-	NOECHO=
+DEB_MAKEMAKER_NORMAL_ARGS ?= NOECHO=
 
 # Override optimizations to follow Perl Policy 3.9.4 § 4.3
 # and extend to also pass CPPFLAGS and LDFLAGS
@@ -44,10 +43,11 @@ DEB_MAKE_EXTRA_ARGS = \
 		$(cdbs_perl_lddlflags))" \
 	$(DEB_MAKE_PARALLEL)
 
-DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL \
+DEB_MAKEMAKER_INVOKE ?= $(strip \
+	/usr/bin/perl Makefile.PL \
 	$(DEB_MAKEMAKER_NORMAL_ARGS) \
 	$(DEB_MAKEMAKER_USER_FLAGS) \
-	INSTALLDIRS=vendor
+	INSTALLDIRS=vendor)
 
 # Set some MakeMaker defaults
 DEB_MAKE_BUILD_TARGET ?= all
@@ -56,7 +56,7 @@ DEB_MAKE_CHECK_TARGET ?= test TEST_VERBOSE=1
 DEB_MAKE_INSTALL_TARGET ?= install DESTDIR="$(DEB_PERL_DESTDIR)"
 
 # deprecated variables
-cdbs_perl_makemaker_lddlflags = $(strip $(call cdbs_warn_deprecated,\
+cdbs_perl_makemaker_lddlflags = $(call cdbs_warn_deprecated,\
 	cdbs_perl_lddlflags,0.4.128)\
 	$(shell perl -MConfig -e 'print $$Config{lddlflags}')
 

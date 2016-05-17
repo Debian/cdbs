@@ -38,11 +38,12 @@ DEB_MAKE_EXTRA_ARGS ?= \
 	LDFLAGS="$(or $(LDFLAGS_$(cdbs_curpkg)),$(LDFLAGS))" \
 	$(DEB_MAKE_PARALLEL)
 
-DEB_MAKE_INVOKE ?= $(DEB_MAKE_ENVVARS) $(MAKE) \
+DEB_MAKE_INVOKE ?= $(strip \
+	$(DEB_MAKE_ENVVARS) $(MAKE) \
 	$(if $(DEB_MAKE_MAKEFILE),\
 		-f $(DEB_MAKE_MAKEFILE)) \
 	-C $(or $(cdbs_make_curbuilddir),$(cdbs_curbuilddir)) \
-	$(DEB_MAKE_EXTRA_ARGS)
+	$(DEB_MAKE_EXTRA_ARGS))
 
 #DEB_MAKE_BUILD_TARGET =
 

@@ -25,8 +25,7 @@ _cdbs_class_perlmodule_vars = 1
 
 include $(_cdbs_class_path)/makefile-vars.mk$(_cdbs_makefile_suffix)
 
-$(call cdbs_warn_deprecated,\
-	perlmodule-vars.mk,0.4.72,perl-makemaker-vars.mk)
+$(call cdbs_warn_deprecated,perlmodule-vars.mk,0.4.72,perl-makemaker-vars.mk)
 
 cdbs_perl_ccflags := $(shell perl -MConfig -e 'print $$Config{ccflags}')
 cdbs_perl_cppflags := $(shell perl -MConfig -e 'print $$Config{cppflags}')
@@ -47,16 +46,25 @@ DEB_MAKE_EXTRA_ARGS = \
 
 # Install into first listed package by default.
 # Unset for standard debhelper rules (use debian/tmp if multiple packages).
-DEB_MAKEMAKER_PACKAGE ?= $(firstword $(if $(_cdbs_rules_debhelper),$(shell dh_listpackages),$(shell $(_cdbs_scripts_path)/list-packages)))
+DEB_MAKEMAKER_PACKAGE ?= $(firstword \
+	$(if $(_cdbs_rules_debhelper),\
+		$(shell dh_listpackages),\
+		$(shell $(_cdbs_scripts_path)/list-packages)))
 
-DEB_MAKEMAKER_INVOKE ?= /usr/bin/perl Makefile.PL $(DEB_MAKEMAKER_USER_FLAGS) INSTALLDIRS=vendor
+DEB_MAKEMAKER_INVOKE ?= $(strip \
+	/usr/bin/perl Makefile.PL \
+	$(DEB_MAKEMAKER_USER_FLAGS) \
+	INSTALLDIRS=vendor)
 
 # Set some MakeMaker defaults
 # FIXME: Restructure to allow early override
 DEB_MAKE_BUILD_TARGET = all
 DEB_MAKE_CLEAN_TARGET = distclean
 DEB_MAKE_CHECK_TARGET = test
-DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(if $(DEB_MAKEMAKER_PACKAGE),$(CURDIR)/debian/$(DEB_MAKEMAKER_PACKAGE),$(DEB_DESTDIR))
+DEB_MAKE_INSTALL_TARGET = install DESTDIR=$(strip \
+	$(if $(DEB_MAKEMAKER_PACKAGE),\
+		$(CURDIR)/debian/$(DEB_MAKEMAKER_PACKAGE),\
+		$(DEB_DESTDIR)))
 
 # Avoid auto-building dependencies
 export PERL_AUTOINSTALL = --skipdeps

@@ -50,20 +50,16 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 DEB_PHONY_RULES += list-missing
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= devscripts
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular ?= cdbs (>= 0.4.131~)
-CDBS_BUILD_DEPENDS += , $(if $(strip \
- $(DEB_COPYRIGHT_CHECK_IGNORE_EXTS)\
- $(DEB_COPYRIGHT_CHECK_IGNORE_PATHS)),\
- $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular))
+CDBS_BUILD_DEPENDS += $(if $(_cdbs_copyright_ignore_regex),\
+	$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular))
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-extract ?= cdbs (>= 0.4.131~), \
- libregexp-assemble-perl, libimage-exiftool-perl, libfont-ttf-perl
-CDBS_BUILD_DEPENDS += , $(if $(strip \
- $(DEB_COPYRIGHT_EXTRACT_EXTS)\
- $(DEB_COPYRIGHT_EXTRACT_PATHS_TTF)$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF)),\
- $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
+	libregexp-assemble-perl, libimage-exiftool-perl, libfont-ttf-perl
+CDBS_BUILD_DEPENDS += $(if $(_cdbs_copyright_extract_regex),\
+	$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
 
 _cdbs_upstream_cruft_backupdir ?= debian/upstream-cruft
 
@@ -87,26 +83,22 @@ _cdbs_copyright_check_remove_metadata = $(patsubst %,find * \
 	-delete,\
 	$(_cdbs_copyright_extract_regex))
 
-_cdbs_copyright_check_strict_check = \
-	$(if $(DEB_COPYRIGHT_CHECK_STRICT),\
-		$(error ERROR: Treating above warning as an error \
-			(unset DEB_COPYRIGHT_CHECK_STRICT \
-			or set DEB_MAINTAINER_MODE=1 to suppress)))
+_cdbs_copyright_check_strict_check = $(if $(DEB_COPYRIGHT_CHECK_STRICT),\
+	$(error ERROR: Treating above warning as an error \
+		(unset DEB_COPYRIGHT_CHECK_STRICT \
+		or set DEB_MAINTAINER_MODE=1 to suppress)))
 
-_cdbs_copyright_check_enabled_check = \
-	$(if $(wildcard debian/copyright_hints),\
-		,\
-		$(call cdbs_warn,copyright-check disabled \
-			- touch debian/copyright_hints to enable.)\
-			$(_cdbs_copyright_check_strict_check))
+_cdbs_copyright_check_enabled_check = $(if $(wildcard debian/copyright_hints),\
+	,\
+	$(call cdbs_warn,copyright-check disabled \
+		- touch debian/copyright_hints to enable.)\
+		$(_cdbs_copyright_check_strict_check))
 
-_cdbs_copyright_check_licensecheck_check = \
-	$(if $(wildcard /usr/bin/licensecheck),\
-		,\
-		$(call cdbs_warn,copyright-check disabled \
-			- licensecheck (from devscripts package) \
-			is missing.)\
-			$(_cdbs_copyright_check_strict_check))
+_cdbs_copyright_check_licensecheck_check = $(if $(wildcard /usr/bin/licensecheck),\
+	,\
+	$(call cdbs_warn,copyright-check disabled \
+		- licensecheck (from devscripts package) is missing.)\
+		$(_cdbs_copyright_check_strict_check))
 
 _cdbs_copyright_check_regex_deprecated_check = $(and \
 	$(_cdbs_copyright_ignore_regex)$(_cdbs_copyright_extract_regex),\
@@ -116,9 +108,8 @@ _cdbs_copyright_check_regex_deprecated_check = $(and \
 		and granular regex variables cannot be used together.))
 
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft ?= cdbs (>= 0.4.106~)
-CDBS_BUILD_DEPENDS += \
-	$(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
-		$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
+CDBS_BUILD_DEPENDS += $(if $(DEB_UPSTREAM_CRUFT_MOVE)$(DEB_UPSTREAM_CRUFT_COPY),\
+	$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft))
 
 list-missing:
 	@if test -d debian/tmp; then \

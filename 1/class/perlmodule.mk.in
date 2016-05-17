@@ -26,12 +26,11 @@ _cdbs_class_perlmodule = 1
 # Initialize CDBS_BUILD_DEPENDS
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 
-$(call cdbs_warn_deprecated,\
-	perlmodule.mk,0.4.72,perl-makemaker.mk)
+$(call cdbs_warn_deprecated,perlmodule.mk,0.4.72,perl-makemaker.mk)
 
 # Dependency according to Perl Policy 3.9.4 § 5.2
 CDBS_BUILD_DEPENDS_class_perlmodule ?= perl
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_perlmodule)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_perlmodule)
 
 include $(_cdbs_class_path)/perlmodule-vars.mk$(_cdbs_makefile_suffix)
 
@@ -39,7 +38,9 @@ include $(_cdbs_class_path)/makefile.mk$(_cdbs_makefile_suffix)
 
 DEB_MAKEMAKER_PACKAGE ?= tmp
 
-cdbs_makemaker_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),,$(error DEB_BUILDDIR and DEB_SRCDIR must be the same for Perl builds))
+cdbs_makemaker_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),\
+	,\
+	$(error DEB_BUILDDIR and DEB_SRCDIR must be the same for Perl builds))
 
 # always be non-interactive
 export PERL_MM_USE_DEFAULT = 1
@@ -47,7 +48,7 @@ export AUTOMATED_TESTING = $(DEB_PERL_AUTOMATED_TESTING)
 
 common-configure-arch common-configure-indep:: Makefile
 Makefile:
-	(cd $(DEB_BUILDDIR) && \
-		$(cdbs_makemaker_builddir_check)$(DEB_MAKEMAKER_INVOKE) )
+	$(cdbs_makemaker_builddir_check)
+	cd $(DEB_BUILDDIR) && $(DEB_MAKEMAKER_INVOKE)
 
 endif

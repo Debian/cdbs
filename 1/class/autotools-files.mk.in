@@ -25,10 +25,9 @@ _cdbs_class_autotools_files = 1
 include $(_cdbs_class_path)/autotools-vars.mk$(_cdbs_makefile_suffix)
 
 # Compatibility blurb, will be eventualy removed
-ifneq ($(DEB_AUTO_UPDATE_AUTOMAKE), )
-ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), )
-$(call cdbs_warn,\
-	DEB_AUTO_UPDATE_AUTOMAKE will eventually stop implying \
+ifneq (,$(DEB_AUTO_UPDATE_AUTOMAKE))
+ifeq (,$(DEB_AUTO_UPDATE_ACLOCAL))
+$(call cdbs_warn,DEB_AUTO_UPDATE_AUTOMAKE will eventually stop implying \
 	DEB_AUTO_UPDATE_ACLOCAL.  If you meant aclocal.m4 to be \
 	regenerated, please use DEB_AUTO_UPDATE_ACLOCAL.)
 DEB_AUTO_UPDATE_ACLOCAL ?= $(DEB_AUTO_UPDATE_AUTOMAKE)
@@ -36,20 +35,19 @@ endif
 endif
 
 # Some update rules are useless on their own
-ifeq ($(DEB_AUTO_UPDATE_LIBTOOL), pre)
-ifeq ($(DEB_AUTO_UPDATE_ACLOCAL), )
-$(call cdbs_warn,\
-	DEB_AUTO_UPDATE_LIBTOOL requires DEB_AUTO_UPDATE_ACLOCAL.)
+ifeq (pre,$(DEB_AUTO_UPDATE_LIBTOOL))
+ifeq (,$(DEB_AUTO_UPDATE_ACLOCAL))
+$(call cdbs_warn,DEB_AUTO_UPDATE_LIBTOOL requires DEB_AUTO_UPDATE_ACLOCAL.)
 endif
 endif
-ifneq ($(DEB_AUTO_UPDATE_ACLOCAL), )
-ifeq ($(DEB_AUTO_UPDATE_AUTOCONF), )
-$(call cdbs_warn,\
-	DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
+ifneq (,$(DEB_AUTO_UPDATE_ACLOCAL))
+ifeq (,$(DEB_AUTO_UPDATE_AUTOCONF))
+$(call cdbs_warn,DEB_AUTO_UPDATE_ACLOCAL requires DEB_AUTO_UPDATE_AUTOCONF.)
 endif
 endif
 
-DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),-I m4)
+DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),\
+	-I m4)
 
 # resolve make rule from autotools command version hints
 # usage: $(call _cdbs_autotools_invoke,$(VERSION),$(VERSIONEDBINARY),$(BINARY),$(LEGACY))
@@ -57,12 +55,11 @@ DEB_ACLOCAL_ARGS ?= $(if $(wildcard $(DEB_SRCDIR)/m4),-I m4)
 #  * else, when LEGACY exist: return $$(which "$(VERSIONEDBINARY)$(VERSION)" || which "$(BINARY)")
 #  * else: return "$(VERSIONEDBINARY)$(VERSION)"
 # see also autotools-vars.mk
-_cdbs_autotools_invoke=$(strip \
-	$(if $(findstring $(comma),$(1)),\
-		$(3),\
-		$(if $(4),\
-			$$(which "$(2)$(1)" || which "$(3)"),\
-			$(2)$(1))))
+_cdbs_autotools_invoke = $(if $(findstring $(comma),$1),\
+	$3,\
+	$(if $4,\
+		$$(which "$2$1" || which "$3"),\
+		$2$1))
 
 common-configure-arch common-configure-indep:: debian/stamp-autotools-files
 debian/stamp-autotools-files:

@@ -67,21 +67,19 @@ cdbs_python_pkgresolve_check = $(strip $(if \
 		$(cdbs_python_arch_packages)$(cdbs_python_indep_packages)),$(strip \
 		$(cdbs_python_packages_pre))),\
 	,\
-	$(call cdbs_warn,\
-		Redefining DEB_PYTHON_MODULE_PACKAGES late is \
+	$(call cdbs_warn,Redefining DEB_PYTHON_MODULE_PACKAGES late is \
 		currently unsupported: set DEB_PYTHON_MODULE_PACKAGES \
 		before including python-distutils.mk)))
 ## TODO: Rephrase when DEB_PYTHON_MODULE_PACKAGES is only expanded inside rules
-cdbs_python_pkg_check = $(strip $(if \
-	$(cdbs_python_arch_packages)$(cdbs_python_indep_packages),\
+cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_packages),\
 	,\
-	$(call cdbs_warn,\
-		No Python packages found or declared - either rename \
-		binary packages or set DEB_PYTHON_MODULE_PACKAGES \
+	$(call cdbs_warn,No Python packages found or declared \
+		- either rename binary packages \
+		or set DEB_PYTHON_MODULE_PACKAGES \
 		before including python-distutils.mk)))
 
 CDBS_BUILD_DEPENDS_class_python-distutils ?= $(cdbs_python_builddeps_cdbs)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-distutils)
 
 CDBS_BUILD_DEPENDS_cdbs_python-distutils_srcdir ?= cdbs (>= 0.4.97~)
 CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_SRCDIR),\
@@ -93,7 +91,7 @@ CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-distutils_python ?= $(cdbs_python_builddeps)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-distutils_python)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-distutils_python)
 
 # warn about wrong number of resolved Python packages
 CDBS_BUILD_DEPENDS += $(cdbs_python_pkg_check)
@@ -106,41 +104,41 @@ pre-build::
 	mkdir -p debian/python-module-stampdir
 
 # build stage
-common-build-arch common-build-indep:: $(addprefix python-build-stamp-, $(cdbs_python_build_versions))
+common-build-arch common-build-indep:: $(addprefix python-build-stamp-,$(cdbs_python_build_versions))
 
-$(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) :: build/% : debian/python-module-stampdir/%
+$(patsubst %,build/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)):: build/%: debian/python-module-stampdir/%
 
-$(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)) :: debian/python-module-stampdir/%:
-	cd $(cdbs_python_distutils_srcdir) && \
+$(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_indep_packages)):: debian/python-module-stampdir/%:
+	$(strip cd $(cdbs_python_distutils_srcdir) && \
 		$(cdbs_curpythonindepbinary) \
 			$(cdbs_python_setup_cmd) build \
-			$(cdbs_python_build_args)
+			$(cdbs_python_build_args))
 	touch $@
 
 $(patsubst %,debian/python-module-stampdir/%,$(cdbs_python_arch_packages)) :: debian/python-module-stampdir/%:
-	set -e; \
-	cd $(cdbs_python_distutils_srcdir) && \
+	$(strip set -e; \
+		cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach buildver,$(cdbs_curpythonbuildversions),\
 			$(call cdbs_python_binary,python$(buildver)) \
 				$(cdbs_python_setup_cmd) build \
-				$(cdbs_python_build_args); )
+				$(cdbs_python_build_args); ))
 	touch $@
 
 
 # install stage
 $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%: python-install-py
-	cd $(cdbs_python_distutils_srcdir) && \
+	$(strip cd $(cdbs_python_distutils_srcdir) && \
 		$(cdbs_curpythonindepbinary) \
 			$(cdbs_python_setup_cmd) install \
 			--root="$(cdbs_python_destdir)" \
 			--install-layout=deb \
 			$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
 				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonpribinary))) \
-			$(cdbs_python_install_args)
+			$(cdbs_python_install_args))
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix python-install-, $(cdbs_python_build_versions))
-	set -e; \
-	cd $(cdbs_python_distutils_srcdir) && \
+	$(strip set -e; \
+		cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach buildver,$(cdbs_curpythonbuildversions),\
 			$(call cdbs_python_binary,python$(buildver)) \
 				$(cdbs_python_setup_cmd) install \
@@ -148,7 +146,7 @@ $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%: $(addprefix p
 				--install-layout=deb \
 				$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
 					--install-lib=$(call _cdbs_expand_python_distutils_skeldir,python$(buildver))) \
-				$(cdbs_python_install_args); )
+				$(cdbs_python_install_args); ))
 
 # Deprecated targets.  You should use above targets instead.
 $(addprefix python-build-stamp-, $(cdbs_python_build_versions)):
@@ -159,17 +157,17 @@ python-install-py $(addprefix python-install-, $(cdbs_python_build_versions)):
 clean:: $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages) $(cdbs_python_arch_packages)) $(addprefix python-clean-, $(cdbs_python_build_versions))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_indep_packages)) :: python-module-clean/%:
-	-cd $(cdbs_python_distutils_srcdir) && \
+	-$(strip cd $(cdbs_python_distutils_srcdir) && \
 		$(cdbs_curpythonindepbinary) \
 			$(cdbs_python_setup_cmd) clean \
-			$(cdbs_python_clean_args)
+			$(cdbs_python_clean_args))
 
 $(patsubst %,python-module-clean/%,$(cdbs_python_arch_packages)) :: python-module-clean/%:
-	-cd $(cdbs_python_distutils_srcdir) && \
+	-$(strip cd $(cdbs_python_distutils_srcdir) && \
 		$(foreach buildver,$(cdbs_curpythonbuildversions),\
 			$(call cdbs_python_binary,python$(buildver)) \
 				$(cdbs_python_setup_cmd) clean \
-				$(cdbs_python_clean_args); )
+				$(cdbs_python_clean_args); ))
 
 # Deprecated targets.  You should use above targets instead.
 $(addprefix python-clean-, $(cdbs_python_build_versions)):

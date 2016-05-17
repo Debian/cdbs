@@ -33,10 +33,10 @@ testroot:
 
 # These targets are triggered by pre-build and clean targets allowing
 # for non-intrusive sanity checks of the build environment
-$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)) :: testsanity/% :
+$(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES)):: testsanity/%:
 testsanity:: $(patsubst %,testsanity/%,$(DEB_ALL_PACKAGES))
 
-$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)) :: makebuilddir/% :
+$(patsubst %,makebuilddir/%,$(DEB_ALL_PACKAGES)):: makebuilddir/%:
 	$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),\
 		mkdir -p "$(DEB_BUILDDIR_$(cdbs_curpkg))")
 
@@ -48,7 +48,7 @@ cleanbuilddir:: $(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES))
 		,\
 		rmdir $(DEB_BUILDDIR))
 
-$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)) :: cleanbuilddir/% :
+$(patsubst %,cleanbuilddir/%,$(DEB_ALL_PACKAGES)):: cleanbuilddir/%:
 	-$(if $(DEB_BUILDDIR_$(cdbs_curpkg)),\
 		$(if $(call cdbs_streq,$(DEB_BUILDDIR_$(cdbs_curpkg)),$(DEB_SRCDIR)),\
 			,\
@@ -65,65 +65,66 @@ CDBS_BUILD_DEPENDS += $(if $(findstring .bz2,$(DEB_TARBALL)),$(comma) $(CDBS_BUI
 CDBS_BUILD_DEPENDS_rules_buildcore_zip ?= unzip
 CDBS_BUILD_DEPENDS += $(if $(findstring .zip,$(DEB_TARBALL)),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_zip))
 
-ifneq (, $(DEB_TARBALL))
-$(call cdbs_info,\
-	parsing $(DEB_TARBALL) ...)
+ifneq (,$(DEB_TARBALL))
+$(call cdbs_info,parsing $(DEB_TARBALL) ...)
 config_all_tar := $(shell \
-for i in $(DEB_TARBALL) ; do \
-	if ! test -e $$i.cdbs-config_list ; then \
-		echo Parsing $$i... >&2 ; \
+for i in $(DEB_TARBALL); do \
+	if ! test -e $$i.cdbs-config_list; then \
+		echo Parsing $$i... >&2; \
 		case $$i in \
 		  *.tar$(close_parenthesis) \
 			tar -tf $$i \
 				| grep "/config\.[^/]*$$" \
-				> $$i.cdbs-config_list ;; \
+				> $$i.cdbs-config_list;; \
 		  *.tgz|*.tar.gz$(close_parenthesis) \
 			tar -tzf $$i \
 				| grep "/config\.[^/]*$$" \
-				> $$i.cdbs-config_list ;; \
+				> $$i.cdbs-config_list;; \
 		  *.tar.bz|*.tar.bz2$(close_parenthesis) \
 			tar -tjf $$i \
 				| grep "/config\.[^/]*$$" \
-				> $$i.cdbs-config_list ;; \
+				> $$i.cdbs-config_list;; \
 		  *.tar.lzma$(close_parenthesis) \
 			tar -t --lzma -f $$i \
 				| grep "/config\.[^/]*$$" \
-				> $$i.cdbs-config_list ;; \
+				> $$i.cdbs-config_list;; \
 		  *.zip$(close_parenthesis) \
 			unzip -l $$i \
 				| grep "/config\.[^/]*$$" \
-				> $$i.cdbs-config_list ;; \
+				> $$i.cdbs-config_list;; \
 		  *$(close_parenthesis) \
 			echo Warning: tarball $$i \
-				with unknown format >&2 ;; \
-		esac ; \
-	fi ; \
-	cat $$i.cdbs-config_list ; \
+				with unknown format >&2;; \
+		esac; \
+	fi; \
+	cat $$i.cdbs-config_list; \
 done)
 endif
 
 # Avoid recursive braindamage if we're building autotools-dev
-ifeq (, $(shell grep -xi 'Package: autotools-dev' debian/control))
+ifeq (,$(shell grep -xi 'Package: autotools-dev' debian/control))
 config_guess := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.guess)
 config_sub := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.sub)
-ifneq (, $(config_all_tar))
+ifneq (,$(config_all_tar))
 config_guess_tar := $(filter %/config.guess, $(config_all_tar))
 config_sub_tar := $(filter %/config.sub, $(config_all_tar))
 endif
 endif
 # Ditto for gnulib
-ifeq (, $(shell grep -xi 'Package: gnulib' debian/control))
+ifeq (,$(shell grep -xi 'Package: gnulib' debian/control))
 config_rpath := $(shell find $(DEB_SRCDIR) \( -type f -or -type l \) -name config.rpath)
-ifneq (, $(config_all_tar))
+ifneq (,$(config_all_tar))
 config_rpath_tar := $(filter %/config.rpath, $(config_all_tar))
 endif
 endif
 
 CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub ?= autotools-dev
-CDBS_BUILD_DEPENDS += $(if $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub))
+CDBS_BUILD_DEPENDS += $(if $(config_guess)$(config_sub)$(config_guess_tar)$(config_sub_tar),\
+	$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-guess-sub))
 
 CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath ?= gnulib
-CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath))
+CDBS_BUILD_DEPENDS += $(if $(config_rpath)$(config_rpath_tar),\
+	$(comma) $(CDBS_BUILD_DEPENDS_rules_buildcore_config-rpath))
 
 # This target is called before almost anything else happens.  It's a good place
 # to do stuff like unpack extra source tarballs, apply patches, and stuff.  In
@@ -170,8 +171,8 @@ update-config::
 # this involves running things like ./configure.
 common-configure-arch:: post-patches
 common-configure-indep:: post-patches
-$(patsubst %,configure/%,$(DEB_ARCH_PACKAGES)) :: configure/% : common-configure-arch
-$(patsubst %,configure/%,$(DEB_INDEP_PACKAGES)) :: configure/% : common-configure-indep
+$(patsubst %,configure/%,$(DEB_ARCH_PACKAGES)):: configure/%: common-configure-arch
+$(patsubst %,configure/%,$(DEB_INDEP_PACKAGES)):: configure/%: common-configure-indep
 
 # This is a required Debian target; however, its specific semantics is
 # in dispute.  We are of the opinion that 'build' should invoke
@@ -189,8 +190,8 @@ build: $(DEB_BUILD_DEPENDENCIES)
 # Most often this involves invoking "make".
 common-build-arch:: testdir $(patsubst %,configure/%,$(DEB_ARCH_PACKAGES))
 common-build-indep:: testdir $(patsubst %,configure/%,$(DEB_INDEP_PACKAGES))
-$(patsubst %,build/%,$(DEB_ARCH_PACKAGES)) :: build/% : common-build-arch configure/%
-$(patsubst %,build/%,$(DEB_INDEP_PACKAGES)) :: build/% : common-build-indep configure/%
+$(patsubst %,build/%,$(DEB_ARCH_PACKAGES)):: build/%: common-build-arch configure/%
+$(patsubst %,build/%,$(DEB_INDEP_PACKAGES)):: build/%: common-build-indep configure/%
 
 # This rule is for stuff to run after the build process.  Note that this
 # may run under fakeroot or sudo, so it's inappropriate for things that
@@ -277,8 +278,8 @@ install-arch: $(patsubst %,install/%,$(DEB_ARCH_PACKAGES))
 install-indep: $(patsubst %,install/%,$(DEB_INDEP_PACKAGES))
 
 # These rules should do any installation work specific to a particular package.
-$(patsubst %,install/%,$(DEB_ARCH_PACKAGES)) :: install/% : testdir testroot common-install-arch build/%
-$(patsubst %,install/%,$(DEB_INDEP_PACKAGES)) :: install/% : testdir testroot common-install-indep build/%
+$(patsubst %,install/%,$(DEB_ARCH_PACKAGES)):: install/%: testdir testroot common-install-arch build/%
+$(patsubst %,install/%,$(DEB_INDEP_PACKAGES)):: install/%: testdir testroot common-install-indep build/%
 
 _cdbs_deprecated_vars += $(patsubst %,CDBS_%$(comma)0.4.85,\
 	DEPENDS PREDEPENDS RECOMMENDS SUGGESTS BREAKS PROVIDES REPLACES \
@@ -361,8 +362,8 @@ binary-arch: $(patsubst %,binary/%,$(DEB_ARCH_PACKAGES))
 
 # These rules should do all the work of actually creating a .deb from the staging
 # directory.
-$(patsubst %,binary/%,$(DEB_ARCH_PACKAGES)) :: binary/% : testdir testroot common-binary-arch install/%
-$(patsubst %,binary/%,$(DEB_INDEP_PACKAGES)) :: binary/% : testdir testroot common-binary-indep install/%
+$(patsubst %,binary/%,$(DEB_ARCH_PACKAGES)):: binary/%: testdir testroot common-binary-arch install/%
+$(patsubst %,binary/%,$(DEB_INDEP_PACKAGES)):: binary/%: testdir testroot common-binary-indep install/%
 
 # Required Debian target
 binary: binary-indep binary-arch

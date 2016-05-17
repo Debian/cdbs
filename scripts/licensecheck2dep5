@@ -68,7 +68,7 @@ GetOptions( help => \my $help,
 	man      => \my $man,
 	'list-delimiter' => \$list_delimiter,
 	'rfc822-delimiter' => \$rfc822_delimiter,
-	'merge-licenses!' => \$merge_licenses,
+	'merge-licenses' => \$merge_licenses,
 	'strip-suffix' => \$strip_suffix,
 ) or pod2usage(2);
 pod2usage( -verbose => 1 ) if $help;

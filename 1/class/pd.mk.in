@@ -35,13 +35,12 @@ include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
 # Tighten to versions of cdbs providing this snippet
 CDBS_BUILD_DEPENDS_class_pd ?= cdbs (>= 0.4.91~)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_pd)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_pd)
 
 testsanity::
 	$(if $(_cdbs_rules_debhelper),\
 		,\
-		$(call cdbs_warn,\
-			debhelper rule not used. \
+		$(call cdbs_warn,debhelper rule not used. \
 			Make sure to then manually include pd targets!))
 
 # pd externals have the uncommon extension .pd_linux, which prevents them from
@@ -55,10 +54,10 @@ $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 				--remove-section=.note \
 				--strip-unneeded '{}' ';')
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
-	find debian/$(cdbs_curpkg) -type f -name "*.pd_linux" \
+	$(strip find debian/$(cdbs_curpkg) -type f -name "*.pd_linux" \
 		-execdir dpkg-shlibdeps \
 			-Tdebian/$(cdbs_curpkg).substvars '{}' ';' \
-		-execdir chmod 0644 '{}' ';'
+		-execdir chmod 0644 '{}' ';')
 
 #endif _cdbs_class_pd
 endif

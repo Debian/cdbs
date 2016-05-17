@@ -34,11 +34,11 @@ include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 cdbs_python_single_system = true
 
 CDBS_BUILD_DEPENDS_class_python-autotools ?= $(cdbs_python_builddeps_cdbs)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-autotools)
 
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
-CDBS_BUILD_DEPENDS += , $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
+CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
 cdbs_make_curpythonruntime = $(or $(strip \
 	$(python$(cdbs_python$(cdbs_curpythonstem)_nondefault_version):%=python%)),$(strip \

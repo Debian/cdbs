@@ -1,3 +1,6 @@
+  * Move sanity checks to testsanity target.
+  * Use shell assignment operator != instead of = $(shell ...).
+
   * avoid copyright check on arch-only builds.
     Thanks to Matthias Klose (see bug#717827).
 

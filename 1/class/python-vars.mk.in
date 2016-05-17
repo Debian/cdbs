@@ -67,18 +67,18 @@ cdbs_python_packages = $(strip \
 	$(if $(DEB_PYTHON_SYSTEM),\
 		$(cdbs_python_legacy_packages),\
 		$(cdbs_python2_packages) $(cdbs_python3_packages)))
-cdbs_python2_arch_packages = $(strip \
-	$(filter $(cdbs_python2_packages),$(DEB_ARCH_PACKAGES)))
-cdbs_python3_arch_packages = $(strip \
-	$(filter $(cdbs_python3_packages),$(DEB_ARCH_PACKAGES)))
-cdbs_python_arch_packages = $(strip \
-	$(filter $(cdbs_python_packages),$(DEB_ARCH_PACKAGES)))
-cdbs_python2_indep_packages = $(strip \
-	$(filter $(cdbs_python2_packages),$(DEB_INDEP_PACKAGES)))
-cdbs_python3_indep_packages = $(strip \
-	$(filter $(cdbs_python3_packages),$(DEB_INDEP_PACKAGES)))
-cdbs_python_indep_packages = $(strip \
-	$(filter $(cdbs_python_packages),$(DEB_INDEP_PACKAGES)))
+cdbs_python2_arch_packages = $(filter $(cdbs_python2_packages),\
+	$(DEB_ARCH_PACKAGES))
+cdbs_python3_arch_packages = $(filter $(cdbs_python3_packages),\
+	$(DEB_ARCH_PACKAGES))
+cdbs_python_arch_packages = $(filter $(cdbs_python_packages),\
+	$(DEB_ARCH_PACKAGES))
+cdbs_python2_indep_packages = $(filter $(cdbs_python2_packages),\
+	$(DEB_INDEP_PACKAGES))
+cdbs_python3_indep_packages = $(filter $(cdbs_python3_packages),\
+	$(DEB_INDEP_PACKAGES))
+cdbs_python_indep_packages = $(filter $(cdbs_python_packages),\
+	$(DEB_INDEP_PACKAGES))
 
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
@@ -236,7 +236,7 @@ $(if $(cdbs_pythonsystem_python3),\
 cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_selected_pyversions,0.4.90)\
 	$(if $(DEB_PYTHON_SYSTEM),\
-		$(if $(wildcard debian/pyversions),
+		$(if $(wildcard debian/pyversions),\
 			$(shell cat debian/pyversions))))
 
 endif

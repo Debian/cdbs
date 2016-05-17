@@ -24,8 +24,15 @@ _cdbs_class_scons_vars = 1
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
 #DEB_SCONS_ENVVARS =
-DEB_SCONS_PARALLEL ?= $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS),-j$(DEB_PARALLEL_JOBS))
-DEB_SCONS_INVOKE ?= $(DEB_SCONS_ENVVARS) scons --directory="$(DEB_SRCDIR)" CC="$(or $(CC_$(cdbs_curpkg)),$(CC))" CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" CXX="$(or $(CXX_$(cdbs_curpkg)),$(CXX))" CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" $(DEB_SCONS_PARALLEL)
+DEB_SCONS_PARALLEL ?= $(if $(and $(DEB_BUILD_PARALLEL),$(DEB_PARALLEL_JOBS)),\
+		-j$(DEB_PARALLEL_JOBS))
+DEB_SCONS_INVOKE ?= $(DEB_SCONS_ENVVARS) scons \
+	--directory="$(DEB_SRCDIR)" \
+	CC="$(or $(CC_$(cdbs_curpkg)),$(CC))" \
+	CFLAGS="$(or $(CFLAGS_$(cdbs_curpkg)),$(CFLAGS))" \
+	CXX="$(or $(CXX_$(cdbs_curpkg)),$(CXX))" \
+	CXXFLAGS="$(or $(CXXFLAGS_$(cdbs_curpkg)),$(CXXFLAGS))" \
+	$(DEB_SCONS_PARALLEL)
 
 # general options (passed on all scons commands)
 #DEB_SCONS_OPTIONS =
