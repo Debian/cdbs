@@ -81,10 +81,6 @@ DEB_CONFIGURE_NORMAL_ARGS ?= \
 	--disable-dependency-tracking \
 	--disable-silent-rules
 
-ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
-DEB_CONFIGURE_DEBUG_ARGS ?= --enable-debug
-endif
-
 # all environment settings for autotools configure execution
 # (potentially extended by other snippets)
 cdbs_autotools_configure_env = $(DEB_CONFIGURE_SCRIPT_ENV)
