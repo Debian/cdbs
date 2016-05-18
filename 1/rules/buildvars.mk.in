@@ -27,7 +27,7 @@ CDBS_VERSION = @PACKAGE_VERSION@
 SOURCE_DATE_EPOCH ?= $(shell dpkg-parsechangelog | grep -Po '^Date: \K.*' | date -f- +%s)
 
 # Common useful variables
-DEB_SOURCE_PACKAGE := $(shell grep -Pom1 '^Source:\s*\K\w*' debian/control)
+DEB_SOURCE_PACKAGE := $(shell grep -Pom1 '^Source:\s*\K[^\s]*' debian/control)
 DEB_VERSION := $(shell dpkg-parsechangelog | grep -Pom1 '^Version: \K.*')
 DEB_NOEPOCH_VERSION = $(lastword \
 	$(subst :,$(space),\
