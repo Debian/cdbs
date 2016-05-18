@@ -39,6 +39,8 @@ DEB_ISNATIVE = $(strip $(if $(findstring -,$(DEB_VERSION))\
 	,\
 	,native))
 
+DEB_SUITE ?= $(shell dpkg-parsechangelog | grep -Po '^Distribution: \K.*')
+
 # Split into arch/indep packages
 ifneq ($(DEB_INDEP_PACKAGES),cdbs)
 ifdef _cdbs_rules_debhelper
