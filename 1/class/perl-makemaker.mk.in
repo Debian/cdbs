@@ -34,7 +34,7 @@ CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_perl-makemaker_perl)
 cdbs_makemaker_builddir_check = $(if $(call cdbs_streq,$(DEB_BUILDDIR),$(DEB_SRCDIR)),\
 	,\
 	$(error DEB_BUILDDIR and DEB_SRCDIR must be the same \
-		for Perl builds)))
+		for Perl builds))
 
 # always be non-interactive
 export PERL_MM_USE_DEFAULT = 1
