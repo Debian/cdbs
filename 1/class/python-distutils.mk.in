@@ -76,7 +76,7 @@ cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_pac
 	$(call cdbs_warn,No Python packages found or declared \
 		- either rename binary packages \
 		or set DEB_PYTHON_MODULE_PACKAGES \
-		before including python-distutils.mk)))
+		before including python-distutils.mk))
 
 CDBS_BUILD_DEPENDS_class_python-distutils ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-distutils)
