@@ -152,9 +152,7 @@ cdbs_lc = $(shell echo '$1' | tr '[:upper:]' '[:lower:]')
 #  * VAR_pkg applies to current package
 #  * VAR_DEFAULT applies to current package if not overridden by VAR_pkg
 cdbs_expand_curvar = $(strip \
-	$($(1)_ALL)$(strip \
-	$(if $($(1)_ALL),$(strip \
-		$(or $2,$(space)))))$(strip \
+	$($(1)_ALL)$(if $($(1)_ALL),$(or $2,$(space)))$(strip \
 	$(if $(filter-out $(origin $(1)_$(cdbs_curpkg)),undefined),$(strip \
 		$($(1)_$(cdbs_curpkg))),$(strip \
 		$($(1)_DEFAULT)))))
