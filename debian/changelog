@@ -1,3 +1,10 @@
+cdbs (0.4.137) unstable; urgency=medium
+
+  * Fix preserve explicitly added space delimiter in cdbs_expand_curvar.
+    Closes: Bug#824831. Thanks to Emilio Pozuelo Monfort.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 20 May 2016 14:12:13 +0200
+
 cdbs (0.4.136) unstable; urgency=medium
 
   * Fix typo in perl-makemaker.mk.
