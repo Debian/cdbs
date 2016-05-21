@@ -190,7 +190,7 @@ clean::
 
 # deprecated variables
 cdbs_expand_python_distutils_installdir = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_expand_python_distutils_installdir,0.5)\
+	cdbs_expand_python_distutils_installdir,0.4.131)\
 	$(subst @PYTHONBINARY@,$1,$(or $(strip \
 		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)),$(strip \
 		/usr/lib/@PYTHONBINARY@/dist-packages/))))
