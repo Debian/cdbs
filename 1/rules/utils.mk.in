@@ -127,6 +127,11 @@ list-missing:
 pre-build:: debian/stamp-copyright-check
 debian/stamp-copyright-check:
 	$(_cdbs_copyright_check_regex_deprecated_check)
+	$(_cdbs_copyright_check_enabled_check)
+	$(_cdbs_copyright_check_licensecheck_check)
+	@echo
+	@echo 'Scanning upstream source for new/changed copyright notices...'
+	@echo
 	$(patsubst %,set -e; find * \
 		-type f -regextype posix-extended \
 		$(patsubst %,'!' -regex '^(%)$$',\
@@ -154,11 +159,6 @@ debian/stamp-copyright-check:
 		perl -0 $(_cdbs_scripts_path)/license-miner,\
 		$(subst $(space),|,$(strip \
 			$(DEB_COPYRIGHT_PATHS_TTF:/=/[^/]+))))
-	$(_cdbs_copyright_check_enabled_check)
-	$(_cdbs_copyright_check_licensecheck_check)
-	@echo
-	@echo 'Scanning upstream source for new/changed copyright notices...'
-	@echo
 	$(strip set -e; \
 		licensecheck \
 		--check '.*' \
