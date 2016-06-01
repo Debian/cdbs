@@ -196,9 +196,15 @@ my $dispatch = {
 		my $handle = ($debug)
 			? *STDOUT{IO}
 			: FileHandle->new( check_outfile($file), 'w' );
-		my $info = $exifTool->ImageInfo($file,
-			# tags to lookup (like `exiftool $file` in shell)
-			'*Author*', '*Copyright*', '*Creator*', '*Licens*', '*Rights*', '*Trademark*');
+		my $info = $exifTool->ImageInfo($file, qw[
+			*Agreement* *Artist* *Author* *Certificate*
+			*Comment* *Company* *Contact* *Copyright*
+			*Creator* *Credit* *Disclaimer* *Institution*
+			*IPTCDigest* *Legal* *Licens* *Modified*
+			*Notice* *Organization* *Permissions* *Perms*
+			*Restrictions* *Rights* *Statement* *Terms*
+			*Trademark*
+		]);
 		my $seen;
 		print $handle "File: $file\n";
 		foreach (sort keys %$info) {
