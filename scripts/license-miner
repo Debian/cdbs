@@ -90,9 +90,15 @@ by prefixing the path with "exif:".
 
 =item B<exif>
 
-misc. images and fonts.
+Misc. images, fonts, and other data files.
 
-Used by default for extensions F<gif>, F<icc>, F<jpeg>, F<.jpg>, F<.pdf>, F<.pfa>, F<.pfb>, F<.png>, F<psd>, F<svg>.
+Used by default for extensions
+F<.afm>, F<aif>, F<aifc>, F<aiff>, F<avi>, F<dcm>, F<dfont>, F<doc>,
+F<docx>, F<eps>, F<epub>, F<exe>, F<flac>, F<flv>, F<gif>, F<icc>,
+F<jpeg>, F<jpg>, F<mov>, F<mp3>, F<mp4>, F<mpeg>, F<mpg>, F<odp>,
+F<ods>, F<odt>, F<oga>, F<ogg>, F<ogv>, F<pdf>, F<pfa>, F<pfb>, F<pfm>,
+F<png>, F<ppt>, F<pptx>, F<ps>, F<psd>, F<ra>, F<svg>, F<swf>, F<tif>,
+F<tiff>, F<wav>, F<webm>, F<webp>, F<xcf>, F<xls>, F<xlsx>.
 
 Beware that some OpenType fonts are not TrueType but Type1,
 which may fail to parse correctly based on suffix detection.
@@ -183,7 +189,7 @@ my $dispatch = {
 		}
 	},
 	# exif: misc. images and fonts
-	'((?<=\Aexif:).*|\A.*\.(?:gif|icc|jpeg|jpg|pfa|pfb|pdf|png|psd|svg))$' => sub {
+	'((?<=\Aexif:).*|\A.*\.(?:afm|aif|aifc|aiff|avi|dcm|dfont|doc|docx|eps|epub|exe|flac|flv|gif|icc|jpeg|jpg|mov|mp3|mp4|mpeg|mpg|odp|ods|odt|oga|ogg|ogv|pdf|pfa|pfb|pfm|png|ppt|pptx|ps|psd|ra|svg|swf|tif|tiff|wav|webm|webp|xcf|xls|xlsx))$' => sub {
 		my $file = check_infile(shift);
 		say "exif: $file" if ($verbose);
 		my $exifTool = new Image::ExifTool;
