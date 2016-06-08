@@ -145,27 +145,27 @@ update-config::
 	$(if $(and $(config_guess),$(wildcard /usr/share/misc/config.guess)),\
 		set -e; \
 		$(foreach file,$(config_guess),\
-			$(if $(wildcard $(file).cdbs-orig),\
+			$(if $(wildcard $(file)),$(if $(wildcard $(file).cdbs-orig),\
 				,\
 				mv $(file) $(file).cdbs-orig; \
 					cp --remove-destination \
-						/usr/share/misc/config.guess $(file);)))
+						/usr/share/misc/config.guess $(file);))))
 	$(if $(and $(config_sub),$(wildcard /usr/share/misc/config.sub)),\
 		set -e; \
 		$(foreach file,$(config_sub),\
-			$(if $(wildcard $(file).cdbs-orig),\
+			$(if $(wildcard $(file)),$(if $(wildcard $(file).cdbs-orig),\
 				,\
 				mv $(file) $(file).cdbs-orig; \
 					cp --remove-destination \
-						/usr/share/misc/config.sub $(file);)))
+						/usr/share/misc/config.sub $(file);))))
 	$(if $(and $(config_rpath),$(wildcard /usr/share/gnulib/build-aux/config.rpath)), \
 		set -e; \
 		$(foreach file,$(config_rpath),\
-			$(if $(wildcard $(file).cdbs-orig),\
+			$(if $(wildcard $(file)),$(if $(wildcard $(file).cdbs-orig),\
 				,\
 				mv $(file) $(file).cdbs-orig; \
 					cp --remove-destination \
-						/usr/share/gnulib/build-aux/config.rpath $(file);)))
+						/usr/share/gnulib/build-aux/config.rpath $(file);))))
 
 # This target should be used to configure the package before building.  Typically
 # this involves running things like ./configure.
