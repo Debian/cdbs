@@ -17,8 +17,6 @@
 
 AUTOMAKE_OPTIONS = 1.8 foreign no-dist
 
-SUBDIRS = . test
-
 BUILT_SOURCES =
 
 edit = perl -p \
@@ -87,3 +85,25 @@ pkglibexec_SCRIPTS = \
  scripts/license-miner \
  scripts/licensecheck2dep5 \
  scripts/waf-unpack
+
+EXTRA_DIST = tests/clean.at \
+ tests/auto.at \
+ tests/auto-build.at \
+ tests/auto-srcbuild.at \
+ tests/auto-tar.at \
+ tests/auto-tar-build.at \
+ tests/auto-tar-lzma.at \
+ tests/auto-udeb.at \
+ tests/hdparm.at \
+ tests/exclude.at \
+ tests/auto-dbg.at \
+ tests/auto-data.at \
+ tests/auto-data-dbg.at \
+ tests/auto-datadbg.at \
+ tests/patchsys.at \
+ tests/dist-py23.at \
+ tests/dist-py2-tar.at \
+ tests/dist-py3.at \
+ tests/ant.at
+
+@AX_GNU_AUTOTEST_DEFAULT@

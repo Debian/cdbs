@@ -1,0 +1,41 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2009, 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build distutils tarball with python2 to extra])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(dnl
+[#!/usr/bin/make -f
+DEB_TAR_SRCDIR=distutils-test-0.1
+include debian/testsuite.mk
+include $(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
+include $(_cdbs_package_root_dir)/1/rules/tarball.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
+
+DEB_PYTHON_DESTDIR = $(CURDIR)/debian/$(cdbs_curpkg)],
+m4_join([], [OUR_CONTROL], [
+
+Package: python-cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.]dnl
+))
+
+# prepare source
+MY_CREATE_TARBALL_DISTUTILS
+[cp tarballs/distutils-test-0.1.tar.gz pkg]
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([dpkg -c python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python.*/dist-packages/testing/foo.py'],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

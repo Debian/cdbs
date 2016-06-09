@@ -1,0 +1,32 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_TESTED([perl])
+AT_TESTED([dpkg-buildpackage])
+AT_TESTED([fakeroot])
+
+AT_BANNER([Package clean tests.])
+m4_include([clean.at])
+
+AT_BANNER([Package build tests.])
+m4_include([exclude.at])
+m4_include([data.at])
+m4_include([auto.at])
+m4_include([auto-build.at])
+m4_include([auto-srcbuild.at])
+m4_include([auto-tar.at])
+m4_include([auto-tar-build.at])
+m4_include([auto-tar-lzma.at])
+m4_include([auto-dbg.at])
+m4_include([auto-data-dbg.at])
+m4_include([auto-datadbg.at])
+m4_include([auto-udeb.at])
+m4_include([hdparm.at])
+m4_include([patchsys.at])
+m4_include([dist-py23.at])
+m4_include([dist-py2-tar.at])
+m4_include([dist-py3.at])
+m4_include([ant.at])

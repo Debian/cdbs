@@ -1,0 +1,28 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build simple-patchsys])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES],[
+include $(_cdbs_package_root_dir)/1/rules/simple-patchsys.mk.in]dnl
+))
+
+# prepare source
+[cp -R $srcdir/data/patches pkg/debian/]
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([test -s pkg/dummy1],
+	[], [ignore], [ignore])
+AT_CHECK([test -s pkg/dummy2],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

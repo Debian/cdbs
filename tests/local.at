@@ -1,0 +1,147 @@
+# Process this -*- Autotest -*- file with autom4te.
+# Copyright 2016 Jonas Smedegaard <dr@jones.dk>
+
+# Macros for the CDBS Test suite.
+
+# mimic package.m4, but resolved after configure
+# FIXME: avoid assumption of execution at $top_srcdir
+m4_define([AT_PACKAGE_NAME],
+  m4_esyscmd_s([grep -Pom1 '^Upstream-Name: \K.*' debian/copyright]))
+m4_define([AT_PACKAGE_TARNAME],
+  [cdbs])
+m4_define([AT_PACKAGE_VERSION],
+  m4_esyscmd_s([grep -Pom1 '\(\K[^\)]*' debian/changelog]))
+m4_define([AT_PACKAGE_STRING],
+  AT_PACKAGE_NAME AT_PACKAGE_VERSION)
+m4_define([AT_PACKAGE_BUGREPORT],
+  m4_esyscmd_s([grep -Pom1 '^Upstream-Contact:.*<\K[^>]+' debian/copyright]))
+m4_define([AT_PACKAGE_URL],
+  m4_esyscmd_s([grep -Pom1 '^Source: \K.*' debian/copyright]))
+
+m4_define([GPL3_OR_NEWER], m4_expand([
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+]))# OUR_LICENSE
+
+m4_define([MY_LICENSE_GRANT], AT_COPYRIGHT([$1])
+)# OUR_LICENSE
+
+m4_define([MY_COPYRIGHT_HOLDERS], AT_COPYRIGHT([$1])
+)# OUR_COPYRIGHT_HOLDERS
+
+# OUR_RULES
+# ----------------
+m4_define([OUR_RULES], m4_expand(dnl
+[#!/usr/bin/make -f
+include debian/testsuite.mk
+include $(_cdbs_package_root_dir)/1/rules/debhelper.mk.in]))# OUR_RULES
+
+# OUR_CHANGELOG
+# -------------
+m4_define([OUR_CHANGELOG], m4_expand(dnl
+[cdbs-testsuite (0.1) unstable; urgency=low
+
+  * This is a dummy changelog file.
+
+ -- Jeff Bailey <jbailey@debian.org>  Fri,  6 Jun 2003 16:27:27 -0400]))# OUR_CHANGELOG
+
+# OUR_COMPAT
+# ----------
+m4_define([OUR_COMPAT], m4_expand([5]))# OUR_COMPAT
+
+# OUR_CONTROL
+# -----------
+m4_define([OUR_CONTROL], m4_expand(dnl
+[Source: cdbs-testsuite
+Section: devel
+Priority: optional
+Maintainer: Jeff Bailey <jbailey@debian.org>
+Standards-Version: 3.5.10
+
+Package: cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've 
+ managed to install this, something has gone horribly wrong.]))# OUR_CONTROL
+
+# OUR_COPYRIGHT
+# -------------
+m4_define([OUR_COPYRIGHT], m4_expand(dnl
+[Author(s): Jeff Bailey
+
+Copyright:
+
+See /usr/share/common-licenses/GPL-3 on your Debian system.]))# OUR_COPYRIGHT
+
+# OUR_TESTSUITE_MK
+# ----------------
+m4_define([OUR_TESTSUITE_MK], m4_expand(dnl
+[# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+#
+]GPL3_OR_NEWER[
+
+# cdbs uses itself to build itself.
+_cdbs_package_root_dir = $(CURDIR)/../../..
+_cdbs_scripts_path = $(_cdbs_package_root_dir)/scripts
+_cdbs_rules_path = $(_cdbs_package_root_dir)/1/rules
+_cdbs_class_path = $(_cdbs_package_root_dir)/1/class
+_cdbs_makefile_suffix = .in]))# OUR_TESTSUITE_MK
+
+# MY_SETUP_WORKDIR(rules, control, changelog, compat, copyright, testsuite.mk)
+# ---------------------------------------------------------------------
+# Setup the work environment
+m4_define([MY_SETUP_WORKDIR], [
+AS_MKDIR_P([pkg/debian])
+AT_DATA([pkg/debian/rules], [m4_default([$1],[OUR_RULES])
+])
+AT_DATA([pkg/debian/control], [m4_default([$2],[OUR_CONTROL])
+])
+AT_DATA([pkg/debian/changelog], [m4_default([$3],[OUR_CHANGELOG])
+])
+AT_DATA([pkg/debian/compat], [m4_default([$4],[OUR_COMPAT])
+])
+AT_DATA([pkg/debian/copyright], [m4_default([$5],[OUR_COPYRIGHT])
+])
+AT_DATA([pkg/debian/testsuite.mk], [m4_default([$6],[OUR_TESTSUITE_MK])
+])
+[chmod +x pkg/debian/rules]
+[perl -i -pe "s,_cdbs_package_root_dir =\K.*, ${abs_top_srcdir}," pkg/debian/testsuite.mk]
+])# MY_SETUP_WORKDIR
+
+# MY_CREATE_TARBALL_AUTOTOOLS
+# ---------------------------
+# Create the autotools tarball
+m4_define([MY_CREATE_TARBALL_AUTOTOOLS], [
+AS_MKDIR_P([tarballs/autotools_build])
+[cp -R $srcdir/data/autotools tarballs]
+[(cd tarballs/autotools_build && ../autotools/configure)]
+[make -C tarballs/autotools_build dist]
+[mv tarballs/autotools_build/autotools-test-0.1.tar.gz tarballs]
+])# MY_CREATE_TARBALL_AUTOTOOLS
+
+# MY_CREATE_TARBALL_DISTUTILS
+# ---------------------------
+# Create the autotools tarball
+m4_define([MY_CREATE_TARBALL_DISTUTILS], [
+AS_MKDIR_P([tarballs])
+[cp -R $srcdir/data/distutils tarballs]
+[(cd tarballs/distutils && ./setup.py sdist)]
+[mv tarballs/distutils/dist/distutils-test-0.1.tar.gz tarballs]
+])# MY_CREATE_TARBALL_DISTUTILS
+
+AT_INIT
+
+AT_COLOR_TESTS
+
+AT_TESTED([dpkg])
+AT_TESTED([dpkg-architecture])
