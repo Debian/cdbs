@@ -22,12 +22,15 @@ _cdbs_class_path = 1/class
 _cdbs_scripts_path = scripts
 _cdbs_makefile_suffix = .in
 
+DEB_AUTO_UPDATE_AUTOCONF = ,
 include 1/rules/utils.mk.in
 include 1/rules/debhelper.mk.in
 include 1/class/autotools.mk.in
 
 # Suppress build-dependency on ourselves
+CDBS_BUILD_DEPENDS_class_autotools_vars_comma =
 CDBS_BUILD_DEPENDS_rules_buildvars =
+CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft =
 
 DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE = yes
 
@@ -41,3 +44,6 @@ DEB_MAKE_CHECK_TARGET = check
 # later).
 config_guess =
 config_sub =
+
+# preserve (and force regenerate) upstream-shipped autotools files
+DEB_UPSTREAM_CRUFT_MOVE = configure tests/testsuite
