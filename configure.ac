@@ -17,7 +17,12 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see
 dnl <http://www.gnu.org/licenses/>.
 
-AC_INIT(cdbs, something)
+AC_INIT(
+	m4_esyscmd_s([grep -Pom1 '^Upstream-Name: \K.*' debian/copyright]),
+	m4_esyscmd_s([grep -Pom1 '\(\K[^\)]*' debian/changelog]),
+	m4_esyscmd_s([grep -Pom1 '^Upstream-Contact:.*<\K[^>]+' debian/copyright]),
+	[cdbs],
+	m4_esyscmd_s([grep -Pom1 '^Source: \K.*' debian/copyright]))
 AC_CONFIG_SRCDIR(1/rules/buildcore.mk.in)
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
