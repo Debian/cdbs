@@ -1,3 +1,14 @@
+cdbs (0.4.139) unstable; urgency=medium
+
+  [ IOhannes m zmölnig ]
+  * Only touch make-check-stamp file when running 'make check'.
+    Closes: #825135. Thanks to Michael Biebl.
+
+  [ Jonas Smedegaard ]
+  * Emit testsuite errors, and don't fail on experimental builds.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 09 Jun 2016 21:16:59 +0200
+
 cdbs (0.4.138) unstable; urgency=medium
 
   [ Jonas Smedegaard ]
