@@ -5,6 +5,7 @@ Maintainer: CDBS Hackers <build-common-hackers@lists.alioth.debian.org>
 Build-Depends-Indep: devscripts,
  debhelper,
  dh-buildinfo,
+ autoconf,
  realpath,
  fakeroot,
  python-dev,

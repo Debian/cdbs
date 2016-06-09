@@ -1,3 +1,34 @@
+cdbs (0.4.138) unstable; urgency=medium
+
+  [ Jonas Smedegaard ]
+  * Fix python-module.mk build-dependency resolving for python3
+    (regression since 0.4.131).
+  * Fix python-distutils.mk build-dependency resolving stray parenthesis
+    (regression since 0.4.131).
+
+  [ Jonas Smedegaard ]
+  * Fix cdbs_expand_python_distutils_installdir version reference in
+    deprecation warning.
+  * Improve copyright-check:
+    + Support many more extensions in license-miner.
+    + Extract many more keywords in license-miner.
+  * Fix bump compat level for hdparm test.
+  * Rewrite testsuite using autotest.
+  * Add project hints to autotools.
+  * Add autogen.sh script.
+  * Update autotools (with autogen.sh).
+  * Regenerate configure script during build (for up-to-date version
+    info in testsuite).
+    Build-depend on autoconf.
+    Closes: Bug#576808. Thanks to Anders Kaseorg.
+
+  [ IOhannes m zmölnig ]
+  * Fix buildcore.mk to only backup existing autotools-files.
+    Closes: #825109, #825370, #825411. Thanks to Niko Tyni and Chris
+    Lamb.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 09 Jun 2016 16:27:53 +0200
+
 cdbs (0.4.137) unstable; urgency=medium
 
   * Fix preserve explicitly added space delimiter in cdbs_expand_curvar.
