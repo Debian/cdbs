@@ -1,0 +1,46 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build with list-missing to -data])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES], [
+include $(_cdbs_package_root_dir)/1/rules/utils.mk.in
+
+DEB_DH_INSTALL_SOURCEDIR = debian/tmp
+
+common-install-prehook-impl::
+	install -D foo $(DEB_DESTDIR)/usr/lib/foo
+	install -D bar $(DEB_DESTDIR)/usr/share/bar]dnl
+), m4_join([], [OUR_CONTROL], [
+
+Package: cdbs-testsuite-data
+Architecture: all
+Description: common build system test suite (data)
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.]dnl
+))
+AT_DATA([pkg/debian/cdbs-testsuite.install], m4_n([/usr/lib]))
+AT_DATA([pkg/debian/cdbs-testsuite-data.install], m4_n([/usr/share]))
+
+# prepare source
+AT_DATA([pkg/foo], m4_n([foo]))
+AT_DATA([pkg/bar], m4_n([bar]))
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/debian/cdbs-testsuite/usr/lib/foo],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/debian/cdbs-testsuite-data/usr/share/bar],
+	[], [ignore], [ignore])
+AT_CHECK([test $(make -C pkg -f debian/rules list-missing | egrep '^-' | wc -l) -eq 0],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

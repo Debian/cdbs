@@ -1,6 +1,7 @@
 dnl -*- mode: autoconf; coding: utf-8 -*-
 dnl Configury for CDBS
 dnl Copyright © 2002,2003 Colin Walters <walters@debian.org>
+dnl Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -20,5 +21,6 @@ AC_INIT(cdbs, something)
 AC_CONFIG_SRCDIR(1/rules/buildcore.mk.in)
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
-AC_CONFIG_FILES([Makefile test/Makefile])
+AX_GNU_AUTOTEST(,,,[no])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

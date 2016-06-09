@@ -1,0 +1,30 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2009, 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build distutils with python3])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES], [
+include $(_cdbs_package_root_dir)/1/class/python-distutils.mk.in]dnl
+))
+[sed -i \
+	-e 's/Package: cdbs-testsuite/Package: python3-cdbs-testsuite/' \
+	-e 's/Architecture: any/Architecture: all/' \
+	pkg/debian/control]
+
+# prepare source
+[cp -R $srcdir/data/distutils/* pkg]
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([dpkg -c python3-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python3/dist-packages/testing/foo.py'],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

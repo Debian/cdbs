@@ -1,0 +1,34 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build with excludes])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES], [
+
+DEB_CLEAN_EXCLUDE = .orig
+DEB_COMPRESS_EXCLUDE = README]dnl
+))
+
+# prepare source
+[cp $top_srcdir/COPYING pkg/README]
+[cp $top_srcdir/COPYING pkg/TODO]
+[touch pkg/test.orig]
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/test.orig],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/debian/cdbs-testsuite/usr/share/doc/cdbs-testsuite/README],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/debian/cdbs-testsuite/usr/share/doc/cdbs-testsuite/TODO.gz],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

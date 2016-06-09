@@ -1,0 +1,43 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([clean most possible snippets])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES], [
+include $(_cdbs_package_root_dir)/1/class/ant.mk.in
+include $(_cdbs_package_root_dir)/1/class/autotools.mk.in
+include $(_cdbs_package_root_dir)/1/class/cmake.mk.in
+include $(_cdbs_package_root_dir)/1/class/dkms.mk.in
+include $(_cdbs_package_root_dir)/1/class/gnome.mk.in
+include $(_cdbs_package_root_dir)/1/class/pd.mk.in
+include $(_cdbs_package_root_dir)/1/class/perl-build.mk.in
+include $(_cdbs_package_root_dir)/1/class/perl-makemaker.mk.in
+include $(_cdbs_package_root_dir)/1/class/perlmodule.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-autotools.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-sugar.mk.in
+include $(_cdbs_package_root_dir)/1/class/qmake.mk.in
+include $(_cdbs_package_root_dir)/1/class/scons.mk.in
+#TODO include $(_cdbs_package_root_dir)/1/class/waf.mk.in
+#TODO include $(_cdbs_package_root_dir)/1/rules/dpatch.mk.in
+include $(_cdbs_package_root_dir)/1/rules/simple-patchsys.mk.in
+#TODO include $(_cdbs_package_root_dir)/1/rules/tarball.mk.in
+include $(_cdbs_package_root_dir)/1/rules/upstream-tarball.mk.in
+include $(_cdbs_package_root_dir)/1/rules/utils.mk.in
+
+JAVA_HOME := /usr/lib/jvm/default-java
+DEB_PERL_SRCDIR = $(DEB_BUILDDIR)]dnl
+))
+
+# prepare source
+[cp -R $srcdir/data/autotools/* pkg]
+
+# build and examine results
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP

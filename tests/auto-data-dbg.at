@@ -1,0 +1,53 @@
+# Process this -*- Autotest -*- file with autom4te.
+MY_COPYRIGHT_HOLDERS([
+# Copyright © 2006 Peter Eisentraut <petere@debian.org>
+# Copyright © 2016 Jonas Smedegaard <dr@jones.dk>
+])
+MY_LICENSE_GRANT([GPL3_OR_NEWER])
+
+AT_SETUP([build autotools to -data,-dbg])
+
+# prepare debian dir
+MY_SETUP_WORKDIR(m4_join([], [OUR_RULES], [
+include $(_cdbs_package_root_dir)/1/class/autotools.mk.in
+
+DEB_DH_INSTALL_SOURCEDIR = debian/tmp
+
+common-install-prehook-impl::
+	install -D main $(DEB_DESTDIR)/usr/bin/foo
+	install -D main $(DEB_DESTDIR)/usr/lib/bar
+
+DEB_DBG_PACKAGE_cdbs-testsuite = cdbs-testsuite-dbg]dnl
+), m4_join([], [OUR_CONTROL], [
+
+Package: cdbs-testsuite-data
+Architecture: any
+Description: common build system test suite (data)
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+
+Package: cdbs-testsuite-dbg
+Architecture: any
+Description: common build system test suite debug package
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.]dnl
+))
+AT_DATA([pkg/debian/cdbs-testsuite.install], m4_n([/usr/bin]))
+AT_DATA([pkg/debian/cdbs-testsuite-data.install], m4_n([/usr/lib]))
+
+# prepare source
+[cp -R $srcdir/data/autotools/* pkg]
+AT_DATA([pkg/foo], m4_n([foo]))
+AT_DATA([pkg/bar], m4_n([bar]))
+
+# build and examine results
+AT_CHECK([cd pkg && dpkg-buildpackage -rfakeroot -us -uc],
+	[], [ignore], [ignore])
+AT_CHECK([test -f pkg/debian/cdbs-testsuite-dbg/usr/lib/debug/usr/bin/foo],
+	[], [ignore], [ignore])
+AT_CHECK([test ! -f pkg/debian/cdbs-testsuite-dbg/usr/lib/debug/usr/lib/bar],
+	[], [ignore], [ignore])
+AT_CHECK([cd pkg && fakeroot debian/rules clean],
+	[], [ignore], [ignore])
+
+AT_CLEANUP
