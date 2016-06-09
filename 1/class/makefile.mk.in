@@ -112,7 +112,8 @@ $(cdbs_make_check_stamps) : debian/stamp-makefile-check% : debian/stamp-makefile
 		+$(DEB_MAKE_INVOKE) $(DEB_MAKE_CHECK_TARGET),\
 		$(call cdbs_warn,DEB_MAKE_CHECK_TARGET unset$(comma) \
 			not running checks))
-	touch $@
+	$(if $(DEB_MAKE_CHECK_TARGET),\
+		touch $@)
 
 makefile-clean::
 	$(if $(DEB_MAKE_CHECK_TARGET),\
