@@ -1,3 +1,57 @@
+cdbs (0.4.140) UNRELEASED; urgency=medium
+
+  * Refactor python snippets:
+    + Expand implementations from lists.
+    + Handle flavors (not versions).
+    + Check actual need for build-dependencies in cdbs_python_builddeps
+      (not before).
+    + Drop support for legacy systems pysupport and pycentral.
+    + Expand packaging systems from list.
+  * Introduce new variable:
+    + cdbs_python_flavors
+  * Introduce new per-implementation variable:
+    + cdbs_$python_mainflavor
+  * Deprecate variables:
+    + cdbs_curpythonstem
+    + cdbs_python3_current_binary
+    + cdbs_python3_current_version
+    + cdbs_python3_supported_versions
+    + cdbs_python_build_versions
+    + cdbs_python_current_binary
+    + cdbs_python_current_version
+    + cdbs_python_supported_versions
+  * Drop unused variables:
+    + DEB_PYTHON_MODULE_PACKAGE (deprecated since )
+    + DEB_PYTHON_MODULE_PACKAGES
+    + DEB_PYTHON_SYSTEM
+    + cdbs_curpythonbuildversions
+    + cdbs_python3_first_supported_version
+    + cdbs_python3_nondefault_version
+    + cdbs_python3_primary_version
+    + cdbs_python_builddeps_legacy
+    + cdbs_python_first_supported_version
+    + cdbs_python_legacy_packages
+    + cdbs_python_legacy_system
+    + cdbs_python_nondefault_version
+    + cdbs_python_packages_pre
+    + cdbs_python_pkg_check
+    + cdbs_python_pkgresolve_check
+    + cdbs_python_primary_version
+    + cdbs_python_selected_pyversions (deprecated since )
+    + cdbs_python_stem
+    + cdbs_pythonsystem_pycentral
+    + cdbs_pythonsystem_pysupport
+    + cdbs_pythonsystem_python3
+  * Drop unused per-flavor variables:
+    + python_*_packages
+  * Drop unused make targets:
+    + python-build-stamp-%
+    + python-clean-%
+    + python-install-%
+    + python-install-py
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Jun 2016 11:13:35 +0200
+
 cdbs (0.4.139) unstable; urgency=medium
 
   [ IOhannes m zmölnig ]
