@@ -25,20 +25,11 @@ _cdbs_class_python_vars = 1
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_class_path)/langcore.mk$(_cdbs_makefile_suffix)
 
-# By default per-implementation packaging systems are used.
-# Set explicitly to use legacy alternative "pysupport" or "pycentral".
-#DEB_PYTHON_SYSTEM =
-
 # Per-implementation systems use all likely packages by default.
 # These are tied together: Set one, and default is none for the others.
 # NB! override needs to be done _before_ including this file!
 #DEB_PYTHON2_MODULE_PACKAGES =
 #DEB_PYTHON3_MODULE_PACKAGES =
-
-# Legacy systems "pysupport" and "pycentral" use first likely package in
-# debian/control by default.
-# NB! override needs to be done _before_ including this file!
-#DEB_PYTHON_MODULE_PACKAGES =
 
 #DEB_PYTHON_PRIVATE_MODULES_DIRS =
 
@@ -65,9 +56,6 @@ _cdbs_expand_python3_defaultflavor = $(shell py3versions -d)
 # binary packages in use
 cdbs_python_potential_packages = $(strip \
 	$(filter-out %-doc %-dev %-common,$(DEB_PACKAGES)))
-cdbs_python_legacy_packages = $(or $(strip \
-	$(DEB_PYTHON_MODULE_PACKAGES)),$(strip \
-	$(firstword $(cdbs_python_potential_packages))))
 # per-python package lists
 #  * variables _cdbs_$python_packages:
 #    1. any DEB_*_MODULE_PACKAGES is non-empty: DEB_$P_MODULE_PACKAGES
@@ -80,9 +68,7 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_packages = $(strip \
 		$(filter $(or $(_cdbs_$p_pkgprefix),$p)-%,\
 			$(cdbs_python_potential_packages))))))
 cdbs_python_packages = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		$(cdbs_python_legacy_packages),\
-		$(foreach p,$(_CDBS_PYTHONS),$(space)$(_cdbs_$p_packages))))
+	$(foreach p,$(_CDBS_PYTHONS),$(space)$(_cdbs_$p_packages)))
 $(foreach p,$(_CDBS_PYTHONS),$(eval \
 	_cdbs_$p_arch_packages = $(filter $(_cdbs_$p_packages),\
 		$(DEB_ARCH_PACKAGES))))
@@ -97,30 +83,16 @@ cdbs_python_indep_packages = $(filter $(cdbs_python_packages),\
 cdbs_python_destdir = $(or $(DEB_PYTHON_DESTDIR),$(DEB_DESTDIR))
 
 # packaging systems to use
-cdbs_pythonsystem_pysupport = $(filter pysupport,$(DEB_PYTHON_SYSTEM))
-cdbs_pythonsystem_pycentral = $(filter pycentral,$(DEB_PYTHON_SYSTEM))
-cdbs_python_legacy_system = $(or $(strip \
-	$(cdbs_pythonsystem_pysupport)),$(strip \
-	$(cdbs_pythonsystem_pycentral)),\
-	$(error unsupported Python system: $(DEB_PYTHON_SYSTEM) \
-		(select either pysupport or pycentral, or leave empty \
-		for default $(subst $(space),/,$(strip $(_CDBS_PYTHONS)))))))
 cdbs_pythonsystem_python2 = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		,\
-		$(if $(_cdbs_python2_packages),\
-			python2)))
+	$(if $(_cdbs_python2_packages),\
+		python2))
 cdbs_pythonsystem_python3 = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		,\
-		$(if $(_cdbs_python3_packages),\
-			python3)))
+	$(if $(_cdbs_python3_packages),\
+		python3))
 cdbs_python_systems = $(strip \
-	$(if $(DEB_PYTHON_SYSTEM),\
-		$(cdbs_python_legacy_system),\
-		$(foreach p,$(_CDBS_PYTHONS),\
-			$(if $(_cdbs_$p_packages),\
-				$p))))
+	$(foreach p,$(_CDBS_PYTHONS),\
+		$(if $(_cdbs_$p_packages),\
+			$p)))
 # some build systems can handle only a single packaging system
 _cdbs_python_singlesystem = $(strip \
 	$(cdbs_python_systems) \
@@ -169,13 +141,11 @@ cdbs_python_binary = $(strip \
 		$1))
 
 # resolve (implicitly) from binary package
-cdbs_curpythonsystems = $(strip $(if $(DEB_PYTHON_SYSTEM),\
-	$(cdbs_python_legacy_system),\
-	$(strip \
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_python2_packages)),\
-			python2) \
-		$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
-			python3))))
+cdbs_curpythonsystems = $(strip \
+	$(if $(filter $(cdbs_curpkg),$(_cdbs_python2_packages)),\
+		python2) \
+	$(if $(filter $(cdbs_curpkg),$(_cdbs_python3_packages)),\
+		python3))
 cdbs_curpython_TMPNAME = $(strip \
 	$(if $(cdbs_python_single_system),\
 		$(_cdbs_python_singlesystem),\
@@ -200,7 +170,6 @@ cdbs_python_builddeps_python3 = $(if $(_cdbs_python3_arch_packages),\
 	python3-dev\
 		$(_cdbs_python3_altflavor:%=, %-dev))
 cdbs_python_builddeps = \
-	$(if $(DEB_PYTHON_SYSTEM),$(cdbs_python_builddeps_python2)), \
 	$(if $(cdbs_pythonsystem_python2),$(cdbs_python_builddeps_python2)), \
 	$(if $(cdbs_pythonsystem_python3),$(cdbs_python_builddeps_python3))
 cdbs_python_builddeps_cdbs = $(strip \
@@ -210,14 +179,6 @@ cdbs_python_builddeps_cdbs = $(strip \
 			$(comma) cdbs (>= 0.4.90~))))
 
 # check if build is possible
-$(if $(cdbs_pythonsystem_pysupport),\
-	$(if $(_cdbs_python2_flavors),\
-		,\
-		$(error invalid setting in debian/pyversions)))
-$(if $(cdbs_pythonsystem_pycentral),\
-	$(if $(_cdbs_python2_flavors),\
-		,\
-		$(error invalid setting for XS-Python-Version)))
 $(if $(cdbs_pythonsystem_python2),\
 	$(if $(_cdbs_python2_flavors),\
 		,\
@@ -228,11 +189,6 @@ $(if $(cdbs_pythonsystem_python3),\
 		$(error invalid setting for X-Python3-Version)))
 
 # deprecated variables
-cdbs_python_selected_pyversions = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python_selected_pyversions,0.4.90)\
-	$(if $(DEB_PYTHON_SYSTEM),\
-		$(if $(wildcard debian/pyversions),\
-			$(shell cat debian/pyversions))))
 cdbs_curpythonstem = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonstem,0.5,cdbs_curpython_TMPNAME)\
 	$(filter 3,$(cdbs_curpython_TMPNAME:python%=%)))

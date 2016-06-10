@@ -38,10 +38,9 @@ DEB_PYTHON_SUGAR_PACKAGES ?= (filter \
 		$(DEB_SUGAR_BRANCHES),,),\
 	$(DEB_PACKAGES))
 
-DEB_PYTHON_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),$(DEB_PYTHON_SUGAR_PACKAGES))
-DEB_PYTHON2_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),,$(DEB_PYTHON_SUGAR_PACKAGES))
+DEB_PYTHON2_MODULE_PACKAGES = $(DEB_PYTHON_SUGAR_PACKAGES)
 # FIXME: support multiple Python packaging systems in same binary package
-#DEB_PYTHON3_MODULE_PACKAGES = $(if $(DEB_PYTHON_SYSTEM),,$(DEB_PYTHON_SUGAR_PACKAGES))
+#DEB_PYTHON3_MODULE_PACKAGES = $(DEB_PYTHON_SUGAR_PACKAGES)
 
 include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)

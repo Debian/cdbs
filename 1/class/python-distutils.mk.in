@@ -44,11 +44,6 @@ _cdbs_deprecated_vars += DEB_PYTHON_CLEAN_ARGS,0.4.89
 _cdbs_deprecated_DEB_PYTHON_CLEAN_ARGS_default := $(DEB_PYTHON_CLEAN_ARGS)
 DEB_PYTHON_CLEAN_ARGS_DEFAULT ?= $(DEB_PYTHON_CLEAN_ARGS)
 
-# (warn even when used as-is: plural form breaks use in build targets)
-DEB_PYTHON_MODULE_PACKAGE = $(strip $(call cdbs_warn_deprecated,\
-	DEB_PYTHON_MODULE_PACKAGE,0.4.54,DEB_PYTHON_MODULE_PACKAGES)\
-	$(firstword $(filter-out %-doc %-dev %-common, $(DEB_PACKAGES))))
-
 cdbs_python_distutils_srcdir = $(or $(strip \
 	$(DEB_PYTHON_DISTUTILS_SRCDIR)),$(strip\
 	$(DEB_SRCDIR)))
@@ -59,24 +54,6 @@ cdbs_python_clean_args = $(call cdbs_expand_curvar,DEB_PYTHON_CLEAN_ARGS)
 _cdbs_expand_python_distutils_skeldir = $(strip \
 	$(subst @PYTHONBINARY@,$1,\
 		$(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL)))
-
-# prepare sanity checks
-cdbs_python_packages_pre := $(cdbs_python_arch_packages)$(cdbs_python_indep_packages)
-cdbs_python_pkgresolve_check = $(strip $(if \
-	$(call cdbs_streq,$(strip \
-		$(cdbs_python_arch_packages)$(cdbs_python_indep_packages)),$(strip \
-		$(cdbs_python_packages_pre))),\
-	,\
-	$(call cdbs_warn,Redefining DEB_PYTHON_MODULE_PACKAGES late is \
-		currently unsupported: set DEB_PYTHON_MODULE_PACKAGES \
-		before including python-distutils.mk)))
-## TODO: Rephrase when DEB_PYTHON_MODULE_PACKAGES is only expanded inside rules
-cdbs_python_pkg_check = $(if $(cdbs_python_arch_packages)$(cdbs_python_indep_packages),\
-	,\
-	$(call cdbs_warn,No Python packages found or declared \
-		- either rename binary packages \
-		or set DEB_PYTHON_MODULE_PACKAGES \
-		before including python-distutils.mk))
 
 CDBS_BUILD_DEPENDS_class_python-distutils ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-distutils)
@@ -92,13 +69,6 @@ CDBS_BUILD_DEPENDS += $(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
 # Python-related dependencies according to Python policy, appendix A
 CDBS_BUILD_DEPENDS_class_python-distutils_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-distutils_python)
-
-# warn about wrong number of resolved Python packages
-CDBS_BUILD_DEPENDS += $(cdbs_python_pkg_check)
-
-# warn early about late changes to DEB_PYTHON_MODULES_PACKAGES
-testsanity::
-	$(cdbs_python_pkgresolve_check)
 
 pre-build::
 	mkdir -p debian/python-module-stampdir
