@@ -160,7 +160,7 @@ debian/stamp-copyright-check:
 		$(subst $(space),|,$(strip \
 			$(DEB_COPYRIGHT_PATHS_TTF:/=/[^/]+))))
 	$(strip set -e; \
-		licensecheck \
+		LC_ALL=C.UTF-8 licensecheck \
 		--check '.*' \
 		--recursive \
 		--copyright \
