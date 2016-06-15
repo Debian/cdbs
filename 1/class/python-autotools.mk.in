@@ -24,7 +24,7 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 
 # Flavors are used if more than a single Python build is needed
 # Used in implicit rules, so must be set before including makefile
-# (leading "python" stripped to stay compatible with CDBS << 0.5)
+# (leading "python" stripped to stay compatible with CDBS << 0.4.140)
 DEB_MAKE_FLAVORS ?= $(strip \
 	$(if $(word 2,$(cdbs_python_flavors)),\
 		$(strip python%,%,$(cdbs_python_flavors))))
@@ -41,7 +41,7 @@ CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-autotools)
 CDBS_BUILD_DEPENDS_class_python-autotools_python ?= $(cdbs_python_builddeps)
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-autotools_python)
 
-# (prepend "python" to digit flavors to stay compatible with CDBS << 0.5)
+# (prepend "python" to digit flavors to stay compatible with CDBS << 0.4.140)
 cdbs_make_curpythonruntime = $(or $(strip \
 	$(_cdbs_$(cdbs_curpython_TMPNAME)_altflavor)),$(strip \
 	$(call cdbs_python_binary,$(strip \
