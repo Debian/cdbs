@@ -1,4 +1,4 @@
-cdbs (0.4.140) UNRELEASED; urgency=medium
+cdbs (0.4.140) unstable; urgency=medium
 
   * Refactor python snippets:
     + Expand implementations from lists.
@@ -49,8 +49,9 @@ cdbs (0.4.140) UNRELEASED; urgency=medium
     + python-clean-%
     + python-install-%
     + python-install-py
+  * Fix set LC_ALL=C.UTF-8 for licensecheck.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 10 Jun 2016 11:13:35 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 15 Jun 2016 20:57:30 +0200
 
 cdbs (0.4.139) unstable; urgency=medium
 
