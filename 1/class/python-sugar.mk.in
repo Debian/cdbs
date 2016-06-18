@@ -31,7 +31,7 @@ _cdbs_class_python_sugar = 1
 
 # include both simple and versioned activity packages by default
 # NB! This variable must be declared *above* inclusion of this snippet
-DEB_PYTHON_SUGAR_PACKAGES ?= (filter \
+DEB_PYTHON_SUGAR_PACKAGES ?= $(filter \
 	sugar-%-activity \
 	$(call cdbs_expand_branches,\
 		sugar-%-activity,\
