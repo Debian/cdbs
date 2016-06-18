@@ -1,3 +1,11 @@
+cdbs (0.4.141) unstable; urgency=medium
+
+  * Fix python-sugar.mk PYTHON_SUGAR_PACKAGES default value.
+    Closes: Bug#825765.
+  * Fix deprecation notes for changelog section 0.4.140.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 18 Jun 2016 10:26:42 +0200
+
 cdbs (0.4.140) unstable; urgency=medium
 
   * Refactor python snippets:
@@ -21,7 +29,7 @@ cdbs (0.4.140) unstable; urgency=medium
     + cdbs_python_current_version
     + cdbs_python_supported_versions
   * Drop unused variables:
-    + DEB_PYTHON_MODULE_PACKAGE (deprecated since )
+    + DEB_PYTHON_MODULE_PACKAGE (deprecated since 0.4.54)
     + DEB_PYTHON_MODULE_PACKAGES
     + DEB_PYTHON_SYSTEM
     + cdbs_curpythonbuildversions
@@ -37,7 +45,7 @@ cdbs (0.4.140) unstable; urgency=medium
     + cdbs_python_pkg_check
     + cdbs_python_pkgresolve_check
     + cdbs_python_primary_version
-    + cdbs_python_selected_pyversions (deprecated since )
+    + cdbs_python_selected_pyversions (deprecated since 0.4.90)
     + cdbs_python_stem
     + cdbs_pythonsystem_pycentral
     + cdbs_pythonsystem_pysupport
