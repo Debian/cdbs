@@ -1,3 +1,14 @@
+cdbs (0.4.142) unstable; urgency=medium
+
+  * Fix pd.mk to use find option -exec (not -execdir) when passing
+    relative paths.
+    Closes: Bug#827619. Thanks to Felipe Sateler.
+  * Fix upstream-tarball.mk failure to download tarball to new dir
+    (unbalanced quoting).
+  * Move packaging to build-common team: Update Vcs-* fields.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 19 Jun 2016 11:52:53 +0200
+
 cdbs (0.4.141) unstable; urgency=medium
 
   * Fix python-sugar.mk PYTHON_SUGAR_PACKAGES default value.
