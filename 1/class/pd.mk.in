@@ -55,7 +55,7 @@ $(patsubst %,binary-strip-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 				--strip-unneeded '{}' ';')
 $(patsubst %,binary-predeb-IMPL/%,$(DEB_ALL_PACKAGES)) ::
 	$(strip find debian/$(cdbs_curpkg) -type f -name "*.pd_linux" \
-		-execdir dpkg-shlibdeps \
+		-exec dpkg-shlibdeps \
 			-Tdebian/$(cdbs_curpkg).substvars '{}' ';' \
 		-execdir chmod 0644 '{}' ';')
 
