@@ -122,7 +122,7 @@ print-version:
 
 get-orig-source:
 	@@dh_testdir
-	$(shell mkdir -p "$(DEB_UPSTREAM_WORKDIR))
+	$(shell mkdir -p '$(DEB_UPSTREAM_WORKDIR)')
 	$(if $(wildcard $(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)),\
 		$(call cdbs_info,Upstream source tarball already downloaded: \
 			$(DEB_UPSTREAM_WORKDIR)/$(cdbs_upstream_received_tarball)), \
