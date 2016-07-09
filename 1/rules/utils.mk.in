@@ -49,7 +49,7 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 
 DEB_PHONY_RULES += list-missing
 
-CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= devscripts
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= licensecheck
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular ?= cdbs (>= 0.4.131~)
@@ -97,7 +97,7 @@ _cdbs_copyright_check_enabled_check = $(if $(wildcard debian/copyright_hints),\
 _cdbs_copyright_check_licensecheck_check = $(if $(wildcard /usr/bin/licensecheck),\
 	,\
 	$(call cdbs_warn,copyright-check disabled \
-		- licensecheck (from devscripts package) is missing.)\
+		- licensecheck is missing.)\
 		$(_cdbs_copyright_check_strict_check))
 
 _cdbs_copyright_check_regex_deprecated_check = $(and \
