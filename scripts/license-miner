@@ -142,7 +142,7 @@ my $dispatch = {
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
-			: FileHandle->new( check_outfile($file), 'w' );
+			: FileHandle->new( check_outfile($file), '> :encoding(UTF-8)' );
 		# source: http://scripts.sil.org/IWS-Chapter08#3054f18b
 		my %table = (
 			Copyright => 0,
@@ -167,7 +167,7 @@ my $dispatch = {
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
-			: FileHandle->new( check_outfile($file), 'w' );
+			: FileHandle->new( check_outfile($file), '> :encoding(UTF-8)' );
 		# source: http://scripts.sil.org/IWS-Chapter08#3054f18b
 		my %table = (
 			Copyright => 0,
@@ -195,7 +195,7 @@ my $dispatch = {
 		my $exifTool = new Image::ExifTool;
 		my $handle = ($debug)
 			? *STDOUT{IO}
-			: FileHandle->new( check_outfile($file), 'w' );
+			: FileHandle->new( check_outfile($file), '> :encoding(UTF-8)' );
 		my $info = $exifTool->ImageInfo($file, qw[
 			*Agreement* *Artist* *Author* *Certificate*
 			*Comment* *Company* *Contact* *Copyright*
