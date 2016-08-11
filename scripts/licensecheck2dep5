@@ -102,13 +102,13 @@ foreach $file (@files) {
 	$file->{license} =~ s/^\s*zlib\/libpng$/Zlib/;
 	$file->{license} =~ s/^\s*MIT\/X11 \(BSD like\)$/Expat/;
 	$file->{license} =~ s/^\s*BSD \((\d) clause\)$/BSD-$1-clause/;
-	$file->{copyright} =~ s/\b(\d{4}),?\s+([\S^\d])/$1, $2/g;
+	$file->{copyright} =~ s/(?:(?<=\A)|(?<=\/ ))\d{4}(?:(?:-|, )\d{4})*\K(?= [\S^\d])/,/g;
 	my @ownerlines = grep {/\w\w/} split /\s\/\s/, $file->{copyright};
 	my @ownerlines_clean = ();
 	my %owneryears = ();
 	my $owneryears_seem_correct = 1;
 	for $ownerline ( @ownerlines ) {
-		my ($owneryear, $owner) = $ownerline =~ /^([\d\-,\s]*)\s*+(.*)/;
+		my ($owneryear, $owner) = $ownerline =~ /^((?:\d{4}(?:(?:-|, )\d{4})*)?) ?((?:\S.*)?)$/;
 		$owneryears_seem_correct = 0 unless ($owneryear);
 		push @ownerlines_clean, "$owneryear$owner";
 		push @{ $owneryears{"$owner"} }, $owneryear;
