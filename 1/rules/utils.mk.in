@@ -170,7 +170,7 @@ debian/stamp-copyright-check:
 						$(_cdbs_copyright_ignore_regex) \
 						$(_cdbs_copyright_extract_regex)))\
 				),$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)))' \
-		--lines 99999 \
+		--lines 0 \
 		$(if $(shell licensecheck --encoding utf8 --version),\
 			--encoding utf8)\
 		* \
