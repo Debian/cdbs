@@ -171,8 +171,6 @@ debian/stamp-copyright-check:
 						$(_cdbs_copyright_extract_regex)))\
 				),$(DEB_COPYRIGHT_CHECK_IGNORE_REGEX)))' \
 		--lines 0 \
-		$(if $(shell licensecheck --encoding utf8 --version),\
-			--encoding utf8)\
 		* \
 		| $(_cdbs_scripts_path)/licensecheck2dep5 \
 			$(if $(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE),\
