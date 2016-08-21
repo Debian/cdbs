@@ -164,6 +164,7 @@ debian/stamp-copyright-check:
 		--check '.*' \
 		--recursive \
 		--copyright \
+		--deb-fmt \
 		--ignore '$(strip \
 			$(or $(patsubst %,^(%|debian/(changelog|copyright(|_hints|_newhints)))$$,\
 					$(subst $(space),|,$(strip \

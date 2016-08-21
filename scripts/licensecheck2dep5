@@ -92,16 +92,13 @@ $n=0; while (<>) {
 foreach $file (@files) {
 	$file->{name} =~ s/([*?\\])/\\$1/g;
 	$file->{name} =~ s/$strip_suffix$//g;
-	$file->{license} =~ s/\s*\(unversioned\/unknown version\)//;
-	$file->{license} =~ s/\s*\(with incorrect FSF address\)//;
-	$file->{license} =~ s/\s+\(v([^)]+) or later\)/-$1+/;
-	$file->{license} =~ s/\s+\(v([^)]+)\)/-$1/;
-	$file->{license} =~ s/\s*(\*No copyright\*)\s*// and $file->{copyright} = $1;
-	$file->{license} =~ s/^\s*(GENERATED FILE)/UNKNOWN/;
-	$file->{license} =~ s/\s+(GENERATED FILE)//;
-	$file->{license} =~ s/^\s*zlib\/libpng$/Zlib/;
-	$file->{license} =~ s/^\s*MIT\/X11 \(BSD like\)$/Expat/;
-	$file->{license} =~ s/^\s*BSD \((\d) clause\)$/BSD-$1-clause/;
+	unless ($file->{copyright}) {
+		$file->{copyright} = 'NONE';
+		$file->{license} =~ s/^\*No copyright\*\s*//;
+	}
+	$file->{license} =~ s/^generated-file$/UNKNOWN/;
+	$file->{license} =~ s/^generated-file or //;
+	$file->{license} =~ s/ or generated-file//;
 	$file->{copyright} =~ s/(?:(?<=\A)|(?<=\/ ))\d{4}(?:(?:-|, )\d{4})*\K(?= [\S^\d])/,/g;
 	my @ownerlines = grep {/\w\w/} split /\s\/\s/, $file->{copyright};
 	my @ownerlines_clean = ();
