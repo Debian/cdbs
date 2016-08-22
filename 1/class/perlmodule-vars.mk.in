@@ -52,7 +52,7 @@ DEB_MAKEMAKER_PACKAGE ?= $(firstword \
 		$(shell $(_cdbs_scripts_path)/list-packages)))
 
 DEB_MAKEMAKER_INVOKE ?= $(strip \
-	/usr/bin/perl Makefile.PL \
+	/usr/bin/perl -I. Makefile.PL \
 	$(DEB_MAKEMAKER_USER_FLAGS) \
 	INSTALLDIRS=vendor)
 

@@ -44,7 +44,7 @@ DEB_MAKE_EXTRA_ARGS = \
 	$(DEB_MAKE_PARALLEL)
 
 DEB_MAKEMAKER_INVOKE ?= $(strip \
-	/usr/bin/perl Makefile.PL \
+	/usr/bin/perl -I. Makefile.PL \
 	$(DEB_MAKEMAKER_NORMAL_ARGS) \
 	$(DEB_MAKEMAKER_USER_FLAGS) \
 	INSTALLDIRS=vendor)

@@ -65,7 +65,7 @@ common-configure-arch common-configure-indep:: $(DEB_PERL_SRCDIR)/Build
 $(DEB_PERL_SRCDIR)/Build:
 	$(cdbs_perl_srcdir_check)
 	$(strip cd $(cdbs_perl_curbuilddir) && \
-		perl Build.PL $(DEB_PERL_BUILD_CONFIGURE_TARGET) \
+		perl Build.PL -I. $(DEB_PERL_BUILD_CONFIGURE_TARGET) \
 			$(DEB_PERL_CONFIGURE_ARGS) \
 			$(DEB_PERL_CONFIGURE_FLAGS))
 

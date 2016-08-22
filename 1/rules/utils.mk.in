@@ -89,22 +89,22 @@ _cdbs_copyright_check_strict_check = $(if $(DEB_COPYRIGHT_CHECK_STRICT),\
 		or set DEB_MAINTAINER_MODE=1 to suppress)))
 
 _cdbs_copyright_check_enabled_ok = $(or \
-	$(wildcard debian/copyright_hints),\
+	$(wildcard debian/copyright_hints),$(strip \
 	$(call cdbs_warn,copyright-check disabled \
 		- touch debian/copyright_hints to enable.)\
-		$(_cdbs_copyright_check_strict_check))
+		$(_cdbs_copyright_check_strict_check)))
 
 _cdbs_copyright_check_licensecheck_installed_ok = $(or \
-	$(wildcard /usr/bin/licensecheck),\
+	$(wildcard /usr/bin/licensecheck),$(strip \
 	$(call cdbs_warn,copyright-check disabled \
 		- licensecheck is missing.)\
-		$(_cdbs_copyright_check_strict_check))
+		$(_cdbs_copyright_check_strict_check)))
 
 _cdbs_copyright_check_licensecheck_modern_ok = $(or \
-	$(shell licensecheck --deb-fmt --version > /dev/null 2>&1 && echo OK),\
+	$(shell licensecheck --deb-fmt --version > /dev/null 2>&1 && echo OK),$(strip \
 	$(call cdbs_warn,copyright-check disabled \
 		- licensecheck is too old.)\
-		$(_cdbs_copyright_check_strict_check))
+		$(_cdbs_copyright_check_strict_check)))
 
 _cdbs_copyright_check_regex_deprecated_check = $(and \
 	$(_cdbs_copyright_ignore_regex)$(_cdbs_copyright_extract_regex),\
