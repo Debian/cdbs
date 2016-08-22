@@ -11,8 +11,7 @@ Build-Depends-Indep: @cdbs@,
  ant,
  default-jdk-headless | default-jdk,
  sharutils,
- lzma,
- devscripts
+ lzma
 Uploaders: Jonas Smedegaard <dr@jones.dk>,
  Marc Dequènes (Duck) <Duck@DuckCorp.org>,
  Rémi Thebault (RTbo) <remi.thebault@gmail.com>,
