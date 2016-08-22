@@ -48,7 +48,7 @@ ifdef _cdbs_rules_debhelper
 	dh_listpackages -i))
   DEB_ARCH_PACKAGES := $(filter-out $(DEB_INDEP_PACKAGES),\
 	$(strip $(shell \
-		dh_listpackages -s)))
+		dh_listpackages -a)))
 else
   DEB_INDEP_PACKAGES := $(strip $(shell \
 	$(_cdbs_scripts_path)/list-packages indep))
