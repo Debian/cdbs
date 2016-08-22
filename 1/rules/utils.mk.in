@@ -23,6 +23,9 @@ _cdbs_rules_utils = 1
 
 include $(_cdbs_rules_path)/buildcore.mk$(_cdbs_makefile_suffix)
 
+# path to licensecheck executable
+DEB_COPYRIGHT_CHECK_LICENSECHECK ?= /usr/bin/licensecheck
+
 # Routines convenient for maintainers but unsuitable for build daemons
 #  * strict checking makes rule fail if changed/new hints are found
 ifneq (,$(DEB_MAINTAINER_MODE))
@@ -95,7 +98,7 @@ _cdbs_copyright_check_enabled_ok = $(or \
 		$(_cdbs_copyright_check_strict_check)))
 
 _cdbs_copyright_check_licensecheck_installed_ok = $(or \
-	$(wildcard /usr/bin/licensecheck),$(strip \
+	$(wildcard $(DEB_COPYRIGHT_CHECK_LICENSECHECK)),$(strip \
 	$(call cdbs_warn,copyright-check disabled \
 		- licensecheck is missing.)\
 		$(_cdbs_copyright_check_strict_check)))
