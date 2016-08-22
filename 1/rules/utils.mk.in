@@ -47,7 +47,7 @@ DEB_COPYRIGHT_CHECK_DELIMITER ?= $(subst $(comma),,$(CDBS_BUILD_DEPENDS_DELIMITE
 # DEB_UPSTREAM_CRUFT_MOVE =
 # DEB_UPSTREAM_CRUFT_COPY =
 
-DEB_PHONY_RULES += list-missing
+DEB_PHONY_RULES += list-missing debian/copyright_newhints
 
 CDBS_BUILD_DEPENDS_rules_utils_copyright-check ?= licensecheck
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check)
@@ -88,16 +88,22 @@ _cdbs_copyright_check_strict_check = $(if $(DEB_COPYRIGHT_CHECK_STRICT),\
 		(unset DEB_COPYRIGHT_CHECK_STRICT \
 		or set DEB_MAINTAINER_MODE=1 to suppress)))
 
-_cdbs_copyright_check_enabled_check = $(if $(wildcard debian/copyright_hints),\
-	,\
+_cdbs_copyright_check_enabled_ok = $(or \
+	$(wildcard debian/copyright_hints),\
 	$(call cdbs_warn,copyright-check disabled \
 		- touch debian/copyright_hints to enable.)\
 		$(_cdbs_copyright_check_strict_check))
 
-_cdbs_copyright_check_licensecheck_check = $(if $(wildcard /usr/bin/licensecheck),\
-	,\
+_cdbs_copyright_check_licensecheck_installed_ok = $(or \
+	$(wildcard /usr/bin/licensecheck),\
 	$(call cdbs_warn,copyright-check disabled \
 		- licensecheck is missing.)\
+		$(_cdbs_copyright_check_strict_check))
+
+_cdbs_copyright_check_licensecheck_modern_ok = $(or \
+	$(shell licensecheck --deb-fmt --version > /dev/null 2>&1 && echo OK),\
+	$(call cdbs_warn,copyright-check disabled \
+		- licensecheck is too old.)\
 		$(_cdbs_copyright_check_strict_check))
 
 _cdbs_copyright_check_regex_deprecated_check = $(and \
@@ -124,11 +130,12 @@ list-missing:
 	  echo "All files were installed into debian/$(DEB_SOURCE_PACKAGE)."; \
 	fi
 
-pre-build:: debian/stamp-copyright-check
-debian/stamp-copyright-check:
-	$(_cdbs_copyright_check_regex_deprecated_check)
-	$(_cdbs_copyright_check_enabled_check)
-	$(_cdbs_copyright_check_licensecheck_check)
+pre-build:: $(_cdbs_copyright_check_regex_deprecated_check)$(and \
+	$(_cdbs_copyright_check_enabled_ok),\
+	$(_cdbs_copyright_check_licensecheck_installed_ok),\
+	$(_cdbs_copyright_check_licensecheck_modern_ok),\
+	debian/stamp-copyright-check)
+debian/copyright_newhints:
 	@echo
 	@echo 'Scanning upstream source for new/changed copyright notices...'
 	@echo
@@ -177,6 +184,7 @@ debian/stamp-copyright-check:
 			$(if $(DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE),\
 				--merge-licenses) \
 		> debian/copyright_newhints)
+debian/stamp-copyright-check: debian/copyright_newhints
 	@echo "$$(grep -c ^Files: debian/copyright_newhints) combinations of copyright and licensing found."
 	@set -e; \
 		newstrings=$$(\
