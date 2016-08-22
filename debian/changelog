@@ -1,3 +1,28 @@
+cdbs (0.4.143) unstable; urgency=medium
+
+  * Have utils.mk resolve build-dependency on licensecheck (not
+    devscripts).
+  * Fix have license-miner emit UTF-8.
+  * Improve copyright-check:
+    + Scan whole files (not only top and bottom, and not only until
+      first cluster of copyrights).
+    + Revert to not force-decode as utf8.
+    + Fix re-add comma between year range and owners (dropped in recent
+      licensecheck) for some corner cases.
+    + Use licensecheck --deb-fmt (and adapt cleanup).
+    + Fix skip gracefully if licensecheck unavailable or too old.
+      Closes: Bug#831263. Thanks to Lucas Nussbaum.
+    + Make path to licensecheck configurable.
+  * Fix have perl snippets include current dir during configure call.
+    Closes: Bug#833783 (CVE-2016-1238). Thanks to Dominic Hargreaves.
+  * Suppress build-dependency on licensecheck to ease backporting and
+    arch bootstrapping.
+  * Stop build-depend on devscripts.
+  * Modernize debhelper usage: Avoid deprecated --same-arch option.
+    Closes: Bug#835077. Thanks to Rafael Laboissière.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 22 Aug 2016 11:37:48 +0200
+
 cdbs (0.4.142) unstable; urgency=medium
 
   * Fix pd.mk to use find option -exec (not -execdir) when passing
