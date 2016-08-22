@@ -32,6 +32,9 @@ CDBS_BUILD_DEPENDS_class_autotools_vars_comma =
 CDBS_BUILD_DEPENDS_rules_buildvars =
 CDBS_BUILD_DEPENDS_rules_utils_upstream_cruft =
 
+# Suppress build-dependency on licensecheck to ease backports + arch bootstrap
+CDBS_BUILD_DEPENDS_rules_utils_copyright-check =
+
 DEB_COPYRIGHT_CHECK_MERGE_SAME_LICENSE = yes
 
 # We use autotools too modern for default CDBS
