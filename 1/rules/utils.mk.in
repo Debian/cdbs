@@ -170,7 +170,7 @@ debian/copyright_newhints:
 		$(subst $(space),|,$(strip \
 			$(DEB_COPYRIGHT_PATHS_TTF:/=/[^/]+))))
 	$(strip set -e; \
-		LC_ALL=C.UTF-8 licensecheck \
+		LC_ALL=C.UTF-8 $(DEB_COPYRIGHT_CHECK_LICENSECHECK) \
 		--check '.*' \
 		--recursive \
 		--copyright \
