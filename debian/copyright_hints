@@ -39,7 +39,6 @@ Files: 1/class/ant-vars.mk.in
  1/rules/simple-patchsys.mk.in
  1/rules/tarball.mk.in
  1/rules/upstream-tarball.mk.in
- 1/rules/utils.mk.in
  Makefile.am
  Makefile.in
  debian/rules
@@ -49,53 +48,51 @@ Files: 1/class/ant-vars.mk.in
  tests/data/autotools/Makefile.in
  tests/data/autotools/configure.ac
  tests/data/hdparm/debian/rules
- tests/local.at
  tests/pbuilder-all.sh
-Copyright: 1994-2014, Free Software Foundation, Inc
+Copyright: 1994-2014, Free Software Foundation, Inc.
   1997-2009, Adapted for CDBS purposes by Colin Walters <walters@debian.org>
   2002, Colin Walters <walters@debian.org>
   2002-2003, Colin Walters <walters@debian.org>
+  2003, 2006-2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2006-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2008, 2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2008, 2010, 2013, 2015-2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2008, 2010-2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2008-2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2008-2010, 2013-2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2008-2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2009-2010, 2012-2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2003, 2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2003, Colin Walters <walters@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
   2003, Stefan Gybas <sgybas@debian.org>
-  2003,2006-2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2003,2006-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2003,2008, 2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
-  2003,2008,2010-2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2003,2008-2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
-  2003,2008-2010, 2013-2016, Jonas Smedegaard <dr@jones.dk>
-  2003,2009-2010, 2012-2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2003,2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2004, David B Harris <dbharris@eelf.ddts.net>
   2005, Matthew A. Nicholson <matt@matt-land.com>
   2005, Robert Millan
-  2005-2012, 2016 Jonas Smedegaard <dr@jones.dk>
   2006, Fathi Boudra <fboudra@free.fr>
   2006, Marc Dequènes (Duck) <Duck@DuckCorp.org>
   2006, Peter Eisentraut <petere@debian.org>
   2006, Peter Rockai <me@mornfall.net>
   2007, Peter Eisentraut <petere@debian.org>
   2007-2010, 2012, 2014-2016, Jonas Smedegaard <dr@jones.dk>
-  2008, 2010, 2012, 2016 Jonas Smedegaard <dr@jones.dk>
-  2008, 2010, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2008-2010, 2012, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008, 2010, 2012, 2016, Jonas Smedegaard <dr@jones.dk>
+  2008, 2010, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2008-2010, 2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2008-2010, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2008-2011,2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2008-2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2008-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2009-2010, 2012, 2014, 2016 Jonas Smedegaard <dr@jones.dk>
-  2009-2010, 2012-2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2009-2010, 2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
+  2009-2010, 2012-2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2010, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2012, 2014-2016, Jonas Smedegaard <dr@jones.dk>
-  2009-2014, 2016 Jonas Smedegaard <dr@jones.dk>
+  2009-2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2016, Jonas Smedegaard <dr@jones.dk>
   2010, IOhannes m zmölnig <zmoelnig@iem.at>
   2010, Rémi Thebault <remi.thebault@gmail.com>
   2010-2011, 2015-2016, Jonas Smedegaard <dr@jones.dk>
   2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2011, 2016 Jonas Smedegaard <dr@jones.dk>
+  2011, 2016, Jonas Smedegaard <dr@jones.dk>
   2011, IOhannes m zmölnig <zmoelnig@iem.at>
   2011-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2013, IOhannes m zmölnig <zmoelnig@iem.at>
@@ -117,6 +114,7 @@ Files: TODO
  doc/buildcore.dot
  doc/cdbs-doc-xhtml.xsl
  doc/cdbs-doc.css
+ doc/cdbs-doc.xml
  doc/gen-dotty.pl
  mkinstalldirs
  scripts/cdbs-edit-patch.1
@@ -134,7 +132,7 @@ Files: TODO
  tests/data/hdparm/hdparm
  tests/data/patches/patch1.patch
  tests/data/patches/patch2.patch.uu
-Copyright: *No copyright*
+Copyright: NONE
 License: UNKNOWN
  FIXME
 
@@ -156,22 +154,32 @@ Files: aclocal.m4
  tests/data.at
  tests/data/autotools/aclocal.m4
  tests/data/autotools/configure
- tests/data/hdparm/debian/copyright
  tests/dist-py2-tar.at
  tests/dist-py23.at
+ tests/dist-py23pypy.at
  tests/dist-py3.at
+ tests/dist-pypy.at
  tests/exclude.at
  tests/hdparm.at
  tests/patchsys.at
  tests/testsuite.at
-Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc
-  1994-2001, -- freely distributable
-  1996-2014, Free Software Foundation, Inc
+Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc.
+  1996-2014, Free Software Foundation, Inc.
+  1997-2014, Free Software Foundation, Inc.
+  1999-2014, Free Software Foundation, Inc.
+  2001-2014, Free Software Foundation, Inc.
   2002-2003, Colin Walters <walters@debian.org>
+  2002-2014, Free Software Foundation, Inc.
   2003, Colin Walters <walters@debian.org>
   2003, Jeff Bailey <jbailey@debian.org>
+  2003-2014, Free Software Foundation, Inc.
+  2004-2014, Free Software Foundation, Inc.
   2006, Peter Eisentraut <petere@debian.org>
-  2009, 2016 Jonas Smedegaard <dr@jones.dk>
+  2006-2014, Free Software Foundation, Inc.
+  2009, 2016, Jonas Smedegaard <dr@jones.dk>
+  2009-2014, Free Software Foundation, Inc.
+  2012, Free Software Foundation, Inc.
+  2014, Vasudev Kamath <kamathvasudev@gmail.com>
   2016, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
  FIXME
@@ -183,9 +191,10 @@ Files: missing
  tests/data/autotools/depcomp
  tests/data/autotools/main.c
  tests/data/autotools/missing
-Copyright: 1992-1999, 2000-2009, Free Software Foundation, Inc.
-  1996-2014, Free Software Foundation, Inc
-  1999-2014, Free Software Foundation, Inc
+Copyright: 1992-2008, Free Software Foundation, Inc.
+  1992-2009, Free Software Foundation, Inc.
+  1996-2014, Free Software Foundation, Inc.
+  1999-2014, Free Software Foundation, Inc.
   2003, Jeff Bailey <jbailey@debian.org>
 License: GPL-2+
  FIXME
@@ -202,33 +211,53 @@ Copyright: 2005, Martin Pitt <mpitt@debian.org>
 License: GPL-2
  FIXME
 
-Files: scripts/license-miner
-Copyright: => 0 Trademark => 7, License => 13, 'License URL' => 14, );
+Files: COPYING
+Copyright: 1989, 1991, Free Software Foundation, Inc.,
+  the software, and
+License: GPL-2+
+ FIXME
+
+Files: 1/rules/utils.mk.in
+Copyright: 2003, Colin Walters <walters@debian.org>
+  2005-2012, 2016, Jonas Smedegaard <dr@jones.dk>
+  items
 License: GPL-3+
  FIXME
 
 Files: scripts/licensecheck2dep5
-Copyright: file format
+Copyright: Copyright 2005-2012, 2016 Jonas Smedegaard
+  file format
+  format,
+License: GPL-3+
+ FIXME
+
+Files: scripts/license-miner
+Copyright: NONE
+License: GPL-3+
+ FIXME
+
+Files: tests/local.at
+Copyright: See /usr/share/common-licenses/GPL-3 on your Debian system.
+  testsuite.mk)
 License: GPL-3+
  FIXME
 
 Files: tests/testsuite
-Copyright: 2009-2012, Free Software Foundation, Inc
-License: GPL-3+ GPL-3 or later
+Copyright: 2003, Jeff Bailey <jbailey@debian.org>
+  2009-2012, Free Software Foundation, Inc.
+  2012, Free Software Foundation, Inc.
+  See /usr/share/common-licenses/GPL-3 on your Debian system.
+License: GPL-3+ or GPL-3+
  FIXME
 
-Files: COPYING
-Copyright: 1989, 1991 Free Software Foundation, Inc.
-License: GPL-ever
- FIXME
-
-Files: debian/TODO
-Copyright: check on arch-only builds
+Files: tests/data/hdparm/debian/copyright
+Copyright: 1994-2001, -- freely distributable
+  hdparm.c - Command line interface to get/set hard disk parameters
 License: UNKNOWN
  FIXME
 
-Files: doc/cdbs-doc.xml
-Copyright: ~~ 2003, Jonas Smedegaard <dr@jones.dk>
+Files: debian/TODO
+Copyright: check on arch-only builds.
 License: UNKNOWN
  FIXME
 
