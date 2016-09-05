@@ -56,6 +56,11 @@ _cdbs_expand_python3_allflavors = $(shell py3versions -r)
 _cdbs_expand_python2_defaultflavor = $(shell pyversions -d)
 _cdbs_expand_python3_defaultflavor = $(shell py3versions -d)
 
+# runtimes
+# runtime to use for default flavor (if different from implementation name)
+# (see bug#377964)
+_cdbs_python2_defaultruntime = python
+
 # binary packages in use
 cdbs_python_potential_packages = $(strip \
 	$(filter-out %-doc %-dev %-common,$(DEB_PACKAGES)))
@@ -102,12 +107,12 @@ _cdbs_python_singlesystem = $(strip \
 	or suppress the binary packages to operate on using either \
 	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
-# all/default flavors to use
-# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor
+# all/default flavors and default runtimes to use
+# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor _cdbs_$p_defaultruntime
 #  1. resolved from _cdbs_expand_$p_*
 #  2. name of python implementation
 $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
-	$(foreach v,allflavors defaultflavor,\
+	$(foreach v,allflavors defaultflavor defaultruntime,\
 		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
 
 # flavors to use
@@ -133,29 +138,56 @@ cdbs_python_flavors = $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
 		$(_cdbs_$p_flavors)))
 
+# resolve from binary package
+_cdbs_expand_python = $(or $(strip \
+	$(if $(cdbs_python_single_system),\
+		$(if $(filter $1,$(_cdbs_$(cdbs_python_singlesystem)_packages)),\
+			$(cdbs_python_singlesystem)))),$(strip \
+	$(foreach p,$(_CDBS_PYTHONS),\
+		$(if $(filter $1,$(_cdbs_$p_packages)),\
+			$p))),\
+	$(error no python implementation resolved from binary package "$1"))
+_cdbs_expand_pythonflavors = $(or $(strip \
+	$(_cdbs_$(call _cdbs_expand_python,$1)_flavors)),\
+	$(error no python flavors resolved from binary package "$1"))
+
 # runtime to use
 # resolve from binary package and optional flavor
-cdbs_python_binary = $(strip \
-	$(if $(call cdbs_streq,$(cdbs_$(cdbs_curpython_TMPNAME)_defaultflavor),$1),\
-		$(cdbs_curpython_TMPNAME),\
-		$1))
+# (flavor needed only for arch-dep packages)
+#  1. arch-indep w/ default flavor unsupported: name of first supported flavor
+#  2. default flavor or arch-indep: _cdbs_$python_defaultruntime
+#  3. name of flavor
+cdbs_expand_pythonruntime = $(or $(strip \
+	$(foreach p,$(call _cdbs_expand_python,$1),$(or $(strip \
+		$(_cdbs_$p_altflavor)),$(strip \
+		$(if $(filter $1,$(cdbs_python_indep_packages)),\
+			$(_cdbs_$p_defaultruntime))),$(strip \
+		$(if $2,$(or $(strip \
+			$(if $(filter $2,$(_cdbs_$p_defaultflavor)),\
+				$(_cdbs_$p_defaultruntime))),$(strip \
+			$2)))),$(strip \
+		$(if word 2,$(_cdbs_$p_allflavors),\
+			$(error no python runtime resolved from binary \
+				package "$1": Too many flavors),\
+			$(or $(strip \
+				$(if $(filter $f,$(_cdbs_$p_defaultflavor)),\
+					$(_cdbs_$p_defaultruntime))),$(strip \
+				$f))))))),\
+	$(error no python runtime resolved from binary package "$1" \
+		$(if $2,and flavor "$2")))
+
+_cdbs_expand_pythonflavor2python = $(or $(strip \
+	$(foreach p,$(_CDBS_PYTHONS),\
+		$(if $(filter $1,$(cdbs_$p_flavors)),$p))),\
+	$(error no python implementation resolved from flavor "$1"))
 
 # resolve (implicitly) from binary package
 cdbs_curpythonsystems = $(strip $(foreach s,$(cdbs_python_systems),\
 	$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
 		$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
 			$s))))
-cdbs_curpython_TMPNAME = $(strip \
-	$(if $(cdbs_python_single_system),\
-		$(_cdbs_python_singlesystem),\
-		$(foreach p,$(_CDBS_PYTHONS),\
-			$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
-				$p))))
-cdbs_curpythonindepbinary = $(or $(strip \
-	$(_cdbs_$(cdbs_curpython_TMPNAME)_altflavor)),$(strip \
-	$(cdbs_curpython_TMPNAME)))
-cdbs_curpythonpribinary = $(cdbs_$(cdbs_curpython_TMPNAME)_mainflavor)
-cdbs_curpythonflavors = $(_cdbs_$(cdbs_curpython_TMPNAME)_flavors)
+cdbs_curpythonruntime = $(call cdbs_expand_pythonruntime,$(cdbs_curpkg))
+cdbs_curpythonflavors = $(call _cdbs_expand_pythonflavors,$(cdbs_curpkg))
 
 # package relations
 # Python-related dependencies according to Python policy, appendix A
@@ -189,8 +221,8 @@ $(if $(cdbs_pythonsystem_python3),\
 
 # deprecated variables
 cdbs_curpythonstem = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_curpythonstem,0.4.140,cdbs_curpython_TMPNAME)\
-	$(filter 3,$(cdbs_curpython_TMPNAME:python%=%)))
+	cdbs_curpythonstem,0.4.140)\
+	$(if $(filter python3,$(call _cdbs_expand_python,$(cdbs_curpkg))),3))
 cdbs_python_current_binary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_current_binary,0.4.140)\
 	$(_cdbs_python2_defaultflavor))
@@ -212,5 +244,16 @@ cdbs_python3_supported_versions = $(strip $(call cdbs_warn_deprecated,\
 cdbs_python_build_versions = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_build_versions,0.4.140,cdbs_python_flavors)\
 	$(_cdbs_python2_flavors))
+cdbs_curpythonindepbinary = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_curpythonindepbinary,0.4.144,cdbs_curpythonruntime)\
+	$(cdbs_curpythonruntime))
+cdbs_curpythonpribinary = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_curpythonpribinary,0.4.144,cdbs_curpythonruntime)\
+	$(cdbs_curpythonruntime))
+cdbs_python_binary = $(strip $(call cdbs_warn_deprecated,\
+	cdbs_python_binary,0.4.144,cdbs_curpythonruntime or cdbs_expand_pythonruntime)\
+	$(call cdbs_expand_pythonruntime,\
+		$(call _cdbs_expand_pythonflavor2python,$1),\
+		$1))
 
 endif
