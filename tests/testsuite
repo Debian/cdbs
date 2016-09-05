@@ -612,7 +612,9 @@ at_help_all="1;clean.at:7;clean most possible snippets;;
 16;dist-py23.at:8;build distutils with python2,python3 to extra;;
 17;dist-py2-tar.at:8;build distutils tarball with python2 to extra;;
 18;dist-py3.at:8;build distutils with python3;;
-19;ant.at:8;build ant;;
+19;dist-pypy.at:8;build distutils with pypy;;
+20;dist-py23pypy.at:8;build distutils with python2,python3,pypy to extra;;
+21;ant.at:8;build ant;;
 "
 # List of the all the test groups.
 at_groups_all=`$as_echo "$at_help_all" | sed 's/;.*//'`
@@ -626,7 +628,7 @@ at_fn_validate_ranges ()
   for at_grp
   do
     eval at_value=\$$at_grp
-    if test $at_value -lt 1 || test $at_value -gt 19; then
+    if test $at_value -lt 1 || test $at_value -gt 21; then
       $as_echo "invalid test group: $at_value" >&2
       exit 1
     fi
@@ -925,7 +927,7 @@ fi
 # List of tests.
 if $at_list_p; then
   cat <<_ATEOF || at_write_fail=1
-CDBS 0.4.137 test suite test groups:
+CDBS 0.4.143 test suite test groups:
 
  NUM: FILE-NAME:LINE     TEST-GROUP-NAME
       KEYWORDS
@@ -966,7 +968,7 @@ _ATEOF
   exit $at_write_fail
 fi
 if $at_version_p; then
-  $as_echo "$as_me (CDBS 0.4.137)" &&
+  $as_echo "$as_me (CDBS 0.4.143)" &&
   cat <<\_ATEOF || at_write_fail=1
 
 Copyright (C) 2012 Free Software Foundation, Inc.
@@ -1149,11 +1151,11 @@ exec 5>>"$at_suite_log"
 
 # Banners and logs.
 $as_echo "## ------------------------ ##
-## CDBS 0.4.137 test suite. ##
+## CDBS 0.4.143 test suite. ##
 ## ------------------------ ##"
 {
   $as_echo "## ------------------------ ##
-## CDBS 0.4.137 test suite. ##
+## CDBS 0.4.143 test suite. ##
 ## ------------------------ ##"
   echo
 
@@ -1997,7 +1999,7 @@ _ASBOX
   $as_echo "Please send $at_msg and all information you think might help:
 
    To: <build-common-hackers@lists.alioth.debian.org>
-   Subject: [CDBS 0.4.137] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
+   Subject: [CDBS 0.4.143] $as_me: $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}$at_xpass_list${at_xpass_list:+ passed unexpectedly}
 
 You may investigate any problem if you feel able to do so, in which
 case the test suite provides a good starting point.  Its output may
@@ -4583,11 +4585,327 @@ $at_traceon; }
 read at_status <"$at_status_file"
 #AT_STOP_18
 #AT_START_19
-at_fn_group_banner 19 'ant.at:8' \
-  "build ant" "                                      " 2
+at_fn_group_banner 19 'dist-pypy.at:8' \
+  "build distutils with pypy" "                      " 2
 at_xfail=no
 (
   $as_echo "19. $at_setup_line: testing $at_desc ..."
+  $at_traceon
+
+
+# prepare debian dir
+
+as_dir=pkg/debian; as_fn_mkdir_p
+cat >pkg/debian/rules <<'_ATEOF'
+#!/usr/bin/make -f
+include debian/testsuite.mk
+include $(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
+_ATEOF
+
+cat >pkg/debian/control <<'_ATEOF'
+Source: cdbs-testsuite
+Section: devel
+Priority: optional
+Maintainer: Jeff Bailey <jbailey@debian.org>
+Standards-Version: 3.5.10
+
+Package: cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+_ATEOF
+
+cat >pkg/debian/changelog <<'_ATEOF'
+cdbs-testsuite (0.1) unstable; urgency=low
+
+  * This is a dummy changelog file.
+
+ -- Jeff Bailey <jbailey@debian.org>  Fri,  6 Jun 2003 16:27:27 -0400
+_ATEOF
+
+cat >pkg/debian/compat <<'_ATEOF'
+5
+_ATEOF
+
+cat >pkg/debian/copyright <<'_ATEOF'
+Author(s): Jeff Bailey
+
+Copyright:
+
+See /usr/share/common-licenses/GPL-3 on your Debian system.
+_ATEOF
+
+cat >pkg/debian/testsuite.mk <<'_ATEOF'
+# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+#
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# cdbs uses itself to build itself.
+_cdbs_package_root_dir = $(CURDIR)/../../..
+_cdbs_scripts_path = $(_cdbs_package_root_dir)/scripts
+_cdbs_rules_path = $(_cdbs_package_root_dir)/1/rules
+_cdbs_class_path = $(_cdbs_package_root_dir)/1/class
+_cdbs_makefile_suffix = .in
+_ATEOF
+
+chmod +x pkg/debian/rules
+perl -i -pe "s,_cdbs_package_root_dir =\K.*, ${abs_top_srcdir}," pkg/debian/testsuite.mk
+
+sed -i \
+	-e 's/Package: cdbs-testsuite/Package: pypy-cdbs-testsuite/' \
+	-e 's/Architecture: any/Architecture: all/' \
+	pkg/debian/control
+
+# prepare source
+cp -R $srcdir/data/distutils/* pkg
+
+# build and examine results
+{ set +x
+$as_echo "$at_srcdir/dist-pypy.at:23: cd pkg && dpkg-buildpackage -rfakeroot -us -uc"
+at_fn_check_prepare_trace "dist-pypy.at:23"
+( $at_check_trace; cd pkg && dpkg-buildpackage -rfakeroot -us -uc
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-pypy.at:23"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-pypy.at:25: dpkg -c pypy-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/pypy/dist-packages/testing/foo.py'"
+at_fn_check_prepare_notrace 'a shell pipeline' "dist-pypy.at:25"
+( $at_check_trace; dpkg -c pypy-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/pypy/dist-packages/testing/foo.py'
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-pypy.at:25"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-pypy.at:27: cd pkg && fakeroot debian/rules clean"
+at_fn_check_prepare_trace "dist-pypy.at:27"
+( $at_check_trace; cd pkg && fakeroot debian/rules clean
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-pypy.at:27"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+
+  set +x
+  $at_times_p && times >"$at_times_file"
+) 5>&1 2>&1 7>&- | eval $at_tee_pipe
+read at_status <"$at_status_file"
+#AT_STOP_19
+#AT_START_20
+at_fn_group_banner 20 'dist-py23pypy.at:8' \
+  "build distutils with python2,python3,pypy to extra" "" 2
+at_xfail=no
+(
+  $as_echo "20. $at_setup_line: testing $at_desc ..."
+  $at_traceon
+
+
+# prepare debian dir
+
+as_dir=pkg/debian; as_fn_mkdir_p
+cat >pkg/debian/rules <<'_ATEOF'
+#!/usr/bin/make -f
+include debian/testsuite.mk
+include $(_cdbs_package_root_dir)/1/rules/debhelper.mk.in
+include $(_cdbs_package_root_dir)/1/class/python-distutils.mk.in
+
+DEB_PYTHON_DESTDIR = debian/$(cdbs_curpkg)
+_ATEOF
+
+cat >pkg/debian/control <<'_ATEOF'
+Source: cdbs-testsuite
+Section: devel
+Priority: optional
+Maintainer: Jeff Bailey <jbailey@debian.org>
+Standards-Version: 3.5.10
+
+Package: cdbs-testsuite
+Architecture: any
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+
+Package: python-cdbs-testsuite
+Architecture: all
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+
+Package: python3-cdbs-testsuite
+Architecture: all
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+
+Package: pypy-cdbs-testsuite
+Architecture: all
+Description: common build system test suite
+ This package is part of the testsuite for the CDBS build system.  If you've
+ managed to install this, something has gone horribly wrong.
+_ATEOF
+
+cat >pkg/debian/changelog <<'_ATEOF'
+cdbs-testsuite (0.1) unstable; urgency=low
+
+  * This is a dummy changelog file.
+
+ -- Jeff Bailey <jbailey@debian.org>  Fri,  6 Jun 2003 16:27:27 -0400
+_ATEOF
+
+cat >pkg/debian/compat <<'_ATEOF'
+5
+_ATEOF
+
+cat >pkg/debian/copyright <<'_ATEOF'
+Author(s): Jeff Bailey
+
+Copyright:
+
+See /usr/share/common-licenses/GPL-3 on your Debian system.
+_ATEOF
+
+cat >pkg/debian/testsuite.mk <<'_ATEOF'
+# Copyright © 2003 Jeff Bailey <jbailey@debian.org>
+#
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# cdbs uses itself to build itself.
+_cdbs_package_root_dir = $(CURDIR)/../../..
+_cdbs_scripts_path = $(_cdbs_package_root_dir)/scripts
+_cdbs_rules_path = $(_cdbs_package_root_dir)/1/rules
+_cdbs_class_path = $(_cdbs_package_root_dir)/1/class
+_cdbs_makefile_suffix = .in
+_ATEOF
+
+chmod +x pkg/debian/rules
+perl -i -pe "s,_cdbs_package_root_dir =\K.*, ${abs_top_srcdir}," pkg/debian/testsuite.mk
+
+
+# prepare source
+cp -R $srcdir/data/distutils/* pkg
+sed -i 's/^#EXT#/     /g' pkg/setup.py
+touch pkg/foo.c
+
+# build and examine results
+{ set +x
+$as_echo "$at_srcdir/dist-py23pypy.at:42: cd pkg && dpkg-buildpackage -rfakeroot -us -uc"
+at_fn_check_prepare_trace "dist-py23pypy.at:42"
+( $at_check_trace; cd pkg && dpkg-buildpackage -rfakeroot -us -uc
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-py23pypy.at:42"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-py23pypy.at:44: dpkg -c python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python.*/dist-packages/testing/foo.py'"
+at_fn_check_prepare_notrace 'a shell pipeline' "dist-py23pypy.at:44"
+( $at_check_trace; dpkg -c python-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python.*/dist-packages/testing/foo.py'
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-py23pypy.at:44"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-py23pypy.at:46: dpkg -c python3-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python3/dist-packages/testing/foo.py'"
+at_fn_check_prepare_notrace 'a shell pipeline' "dist-py23pypy.at:46"
+( $at_check_trace; dpkg -c python3-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/python3/dist-packages/testing/foo.py'
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-py23pypy.at:46"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-py23pypy.at:48: dpkg -c pypy-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/pypy/dist-packages/testing/foo.py'"
+at_fn_check_prepare_notrace 'a shell pipeline' "dist-py23pypy.at:48"
+( $at_check_trace; dpkg -c pypy-cdbs-testsuite_0.1_*.deb | grep -q '/usr/lib/pypy/dist-packages/testing/foo.py'
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-py23pypy.at:48"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+{ set +x
+$as_echo "$at_srcdir/dist-py23pypy.at:50: cd pkg && fakeroot debian/rules clean"
+at_fn_check_prepare_trace "dist-py23pypy.at:50"
+( $at_check_trace; cd pkg && fakeroot debian/rules clean
+) >>"$at_stdout" 2>>"$at_stderr" 5>&-
+at_status=$? at_failed=false
+$at_check_filter
+echo stderr:; cat "$at_stderr"
+echo stdout:; cat "$at_stdout"
+at_fn_check_status 0 $at_status "$at_srcdir/dist-py23pypy.at:50"
+$at_failed && at_fn_log_failure
+$at_traceon; }
+
+
+  set +x
+  $at_times_p && times >"$at_times_file"
+) 5>&1 2>&1 7>&- | eval $at_tee_pipe
+read at_status <"$at_status_file"
+#AT_STOP_20
+#AT_START_21
+at_fn_group_banner 21 'ant.at:8' \
+  "build ant" "                                      " 2
+at_xfail=no
+(
+  $as_echo "21. $at_setup_line: testing $at_desc ..."
   $at_traceon
 
 
@@ -4704,4 +5022,4 @@ $at_traceon; }
   $at_times_p && times >"$at_times_file"
 ) 5>&1 2>&1 7>&- | eval $at_tee_pipe
 read at_status <"$at_status_file"
-#AT_STOP_19
+#AT_STOP_21
