@@ -197,6 +197,7 @@ cdbs_curpythonsystems = $(strip $(foreach s,$(cdbs_python_systems),\
 	$(foreach p,$(or $(_cdbs_pythonsystempythons_$s),$s),\
 		$(if $(filter $(cdbs_curpkg),$(_cdbs_$p_packages)),\
 			$s))))
+cdbs_curpythondefaultflavor = $(cdbs_$(call _cdbs_expand_python,$(cdbs_curpkg))_defaultflavor)
 cdbs_curpythonflavors = $(call _cdbs_expand_pythonflavors,$(cdbs_curpkg))
 cdbs_curpythonruntime = $(call cdbs_expand_pythonruntime,$(cdbs_curpkg))
 

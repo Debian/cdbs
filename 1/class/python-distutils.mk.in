@@ -105,7 +105,7 @@ $(patsubst %,install/%,$(cdbs_python_indep_packages)) :: install/%:
 			--root="$(cdbs_python_destdir)" \
 			--install-layout=deb \
 			$(if $(DEB_PYTHON_DISTUTILS_INSTALLDIR_SKEL),\
-				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythonflavor))) \
+				--install-lib=$(call _cdbs_expand_python_distutils_skeldir,$(cdbs_curpythondefaultflavor))) \
 			$(cdbs_python_install_args))
 
 $(patsubst %,install/%,$(cdbs_python_arch_packages)) :: install/%:
