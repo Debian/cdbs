@@ -1,3 +1,21 @@
+cdbs (0.4.145) unstable; urgency=medium
+
+  * Fix resolve deprecated variables cdbs_curpythonindepbinary
+    cdbs_curpythonpribinary: Add python2 runtime as fallback.
+    Closes: Bug#830529. Thanks to Jeremy Bicha.
+  * Fix resolve default python runtimes internally (affecting deprecated
+    variables cdbs_python_current_binary cdbs_python3_current_binary
+    cdbs_curpythonindepbinary cdbs_curpythonpribinary).
+  * Fix resolve installpath for flavored arch-indep python-distutils
+    builds.
+  * Introduce new variables:
+    + cdbs_$python_allflavors
+    + cdbs_$python_defaultflavor
+    + cdbs_$python_defaultruntime
+    + cdbs_curpythondefaultflavor
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 06 Sep 2016 17:52:42 +0200
+
 cdbs (0.4.144) unstable; urgency=medium
 
   [ Vasudev Kamath ]
