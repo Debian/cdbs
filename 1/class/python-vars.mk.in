@@ -109,12 +109,12 @@ _cdbs_python_singlesystem = $(strip \
 	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
 # all/default flavors to use
-# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor
-#  1. resolved from _cdbs_expand_$p_*
+# variables _cdbs_$python_allflavors _cdbs_$python_defaultflavor
+#  1. exceptionally resolved _cdbs_expand_$python_*
 #  2. name of python implementation
 $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
 	$(foreach v,allflavors defaultflavor,\
-		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
+		$(eval cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
 
 # flavors to use
 # variables _cdbs_$python_altflavor
@@ -122,18 +122,18 @@ $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
 $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_altflavor = $(strip \
 	$(if $(cdbs_python_arch_packages),\
 		,\
-		$(if $(filter $(_cdbs_$p_defaultflavor),$(_cdbs_$p_allflavors)),\
+		$(if $(filter $(cdbs_$p_defaultflavor),$(cdbs_$p_allflavors)),\
 			,\
-			$(firstword $(strip $(sort $(_cdbs_$p_allflavors)))))))))
+			$(firstword $(strip $(sort $(cdbs_$p_allflavors)))))))))
 # variables cdbs_$python_mainflavor
 $(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_mainflavor = $(or $(strip \
 	$(_cdbs_$p_altflavor)),$(strip \
-	$(_cdbs_$p_defaultflavor)))))
+	$(cdbs_$p_defaultflavor)))))
 # variables _cdbs_$python_flavors
 #  * arch(+indep): all; indep: current if supported, else first supported
 $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_flavors = $(or $(strip \
 	$(if $(cdbs_python_arch_packages),\
-		$(_cdbs_$p_allflavors))),$(strip \
+		$(cdbs_$p_allflavors))),$(strip \
 	$(cdbs_$p_mainflavor)))))
 cdbs_python_flavors = $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
@@ -174,14 +174,14 @@ cdbs_expand_pythonruntime = $(or $(strip \
 		$(if $(filter $1,$(cdbs_python_indep_packages)),\
 			$(_cdbs_$p_defaultruntime))),$(strip \
 		$(if $2,$(or $(strip \
-			$(if $(filter $2,$(_cdbs_$p_defaultflavor)),\
+			$(if $(filter $2,$(cdbs_$p_defaultflavor)),\
 				$(_cdbs_$p_defaultruntime))),$(strip \
 			$2)))),$(strip \
-		$(if word 2,$(_cdbs_$p_allflavors),\
+		$(if word 2,$(cdbs_$p_allflavors),\
 			$(error no python runtime resolved from binary \
 				package "$1": Too many flavors),\
 			$(or $(strip \
-				$(if $(filter $f,$(_cdbs_$p_defaultflavor)),\
+				$(if $(filter $f,$(cdbs_$p_defaultflavor)),\
 					$(_cdbs_$p_defaultruntime))),$(strip \
 				$f))))))),\
 	$(error no python runtime resolved from binary package "$1" \
@@ -244,17 +244,17 @@ cdbs_python3_current_binary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python3_current_binary,0.4.140,cdbs_python3_defaultruntime)\
 	$(cdbs_python3_defaultruntime))
 cdbs_python_current_version = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python_current_version,0.4.140)\
-	$(_cdbs_python2_defaultflavor:python%=%))
+	cdbs_python_current_version,0.4.140,cdbs_python2_defaultflavor)\
+	$(cdbs_python2_defaultflavor:python%=%))
 cdbs_python3_current_version = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python3_current_version,0.4.140)\
-	$(_cdbs_python3_defaultflavor:python%=%))
+	cdbs_python3_current_version,0.4.140,cdbs_python3_defaultflavor)\
+	$(cdbs_python3_defaultflavor:python%=%))
 cdbs_python_supported_versions = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python_supported_versions,0.4.140)\
-	$(_cdbs_python2_allflavors:python%=%))
+	cdbs_python_supported_versions,0.4.140,cdbs_python2_allflavors)\
+	$(cdbs_python2_allflavors:python%=%))
 cdbs_python3_supported_versions = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python3_supported_versions,0.4.140)\
-	$(_cdbs_python3_allflavors:python%=%))
+	cdbs_python3_supported_versions,0.4.140,cdbs_python3_allflavors)\
+	$(cdbs_python3_allflavors:python%=%))
 cdbs_python_build_versions = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_build_versions,0.4.140,cdbs_python_flavors)\
 	$(_cdbs_python2_flavors))
