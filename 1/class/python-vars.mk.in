@@ -108,12 +108,12 @@ _cdbs_python_singlesystem = $(strip \
 	or suppress the binary packages to operate on using either \
 	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
-# all/default flavors and default runtimes to use
-# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor _cdbs_$p_defaultruntime
+# all/default flavors to use
+# variables _cdbs_$p_allflavors _cdbs_$p_defaultflavor
 #  1. resolved from _cdbs_expand_$p_*
 #  2. name of python implementation
 $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
-	$(foreach v,allflavors defaultflavor defaultruntime,\
+	$(foreach v,allflavors defaultflavor,\
 		$(eval _cdbs_$p_$v := $(or $(call _cdbs_expand_$p_$v),$p)))))
 
 # flavors to use
@@ -138,6 +138,16 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval _cdbs_$p_flavors = $(or $(strip \
 cdbs_python_flavors = $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
 		$(_cdbs_$p_flavors)))
+
+# default runtimes to use
+# variables cdbs_$python_defaultruntime
+#  1. arch-indep w/ default flavor unsupported: name of first supported flavor
+#  2. exceptionally named default runtime: _cdbs_$python_defaultruntime
+#  3. name of python implementation
+$(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_defaultruntime = $(or $(strip \
+	$(_cdbs_$p_altflavor)),$(strip \
+	$(_cdbs_$p_defaultruntime)),$(strip \
+	$p))))
 
 # resolve from binary package
 _cdbs_expand_python = $(or $(strip \
@@ -228,11 +238,11 @@ cdbs_curpythonstem = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonstem,0.4.140)\
 	$(if $(filter python3,$(call _cdbs_expand_python,$(cdbs_curpkg))),3))
 cdbs_python_current_binary = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python_current_binary,0.4.140)\
-	$(_cdbs_python2_defaultflavor))
+	cdbs_python_current_binary,0.4.140,cdbs_python2_defaultruntime)\
+	$(cdbs_python2_defaultruntime))
 cdbs_python3_current_binary = $(strip $(call cdbs_warn_deprecated,\
-	cdbs_python3_current_binary,0.4.140)\
-	$(_cdbs_python3_defaultflavor))
+	cdbs_python3_current_binary,0.4.140,cdbs_python3_defaultruntime)\
+	$(cdbs_python3_defaultruntime))
 cdbs_python_current_version = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_current_version,0.4.140)\
 	$(_cdbs_python2_defaultflavor:python%=%))
@@ -252,12 +262,12 @@ cdbs_curpythonindepbinary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonindepbinary,0.4.144,cdbs_curpythonruntime)\
 	$(if $(cdbs_curpythonsystems),\
 		$($(cdbs_curpythonruntime)),\
-		$(_cdbs_python2_defaultruntime)))
+		$(cdbs_python2_defaultruntime)))
 cdbs_curpythonpribinary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonpribinary,0.4.144,cdbs_curpythonruntime)\
 	$(if $(cdbs_curpythonsystems),\
 		$($(cdbs_curpythonruntime)),\
-		$(_cdbs_python2_defaultruntime)))
+		$(cdbs_python2_defaultruntime)))
 cdbs_python_binary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_binary,0.4.144,cdbs_curpythonruntime or cdbs_expand_pythonruntime)\
 	$(call cdbs_expand_pythonruntime,\
