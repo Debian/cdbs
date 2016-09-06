@@ -250,10 +250,14 @@ cdbs_python_build_versions = $(strip $(call cdbs_warn_deprecated,\
 	$(_cdbs_python2_flavors))
 cdbs_curpythonindepbinary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonindepbinary,0.4.144,cdbs_curpythonruntime)\
-	$(cdbs_curpythonruntime))
+	$(if $(cdbs_curpythonsystems),\
+		$($(cdbs_curpythonruntime)),\
+		$(_cdbs_python2_defaultruntime)))
 cdbs_curpythonpribinary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_curpythonpribinary,0.4.144,cdbs_curpythonruntime)\
-	$(cdbs_curpythonruntime))
+	$(if $(cdbs_curpythonsystems),\
+		$($(cdbs_curpythonruntime)),\
+		$(_cdbs_python2_defaultruntime)))
 cdbs_python_binary = $(strip $(call cdbs_warn_deprecated,\
 	cdbs_python_binary,0.4.144,cdbs_curpythonruntime or cdbs_expand_pythonruntime)\
 	$(call cdbs_expand_pythonruntime,\
