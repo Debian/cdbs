@@ -679,7 +679,7 @@ cdbs (0.4.106) unstable; urgency=low
     Closes: bug#661983. Thanks to Rémi Denis-Courmont.
   * Fix strip PD libraries below per-package install dirs (only for
     single-binary-package below debian/tmp).
-    Closes: Bug#661983. Thanks to Felipe Sateler.
+    Closes: Bug#661962. Thanks to Felipe Sateler.
   * Fix set CPPFLAGS (not bogus CPPLAGS) in langcore.mk.
     Closes: bug#651964. Thanks (again) to Simon Ruderich and Moritz
     Muehlenhoff.
