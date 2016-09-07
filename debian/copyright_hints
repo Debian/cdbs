@@ -41,16 +41,15 @@ Files: 1/class/ant-vars.mk.in
  1/rules/upstream-tarball.mk.in
  Makefile.am
  Makefile.in
- debian/rules
+ scripts/licensecheck2dep5
  scripts/list-packages
- scripts/waf-unpack
  tests/data/autotools/Makefile.am
  tests/data/autotools/Makefile.in
  tests/data/autotools/configure.ac
  tests/data/hdparm/debian/rules
  tests/pbuilder-all.sh
 Copyright: 1994-2014, Free Software Foundation, Inc.
-  1997-2009, Adapted for CDBS purposes by Colin Walters <walters@debian.org>
+  1997-2009
   2002, Colin Walters <walters@debian.org>
   2002-2003, Colin Walters <walters@debian.org>
   2003, 2006-2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
@@ -60,7 +59,6 @@ Copyright: 1994-2014, Free Software Foundation, Inc.
   2003, 2008, 2010-2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2008-2010, 2012-2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2008-2010, 2013-2016, Jonas Smedegaard <dr@jones.dk>
-  2003, 2008-2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2009-2010, 2012-2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2003, 2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2003, Colin Walters <walters@debian.org>
@@ -70,7 +68,7 @@ Copyright: 1994-2014, Free Software Foundation, Inc.
   2005, Matthew A. Nicholson <matt@matt-land.com>
   2005, Robert Millan
   2006, Fathi Boudra <fboudra@free.fr>
-  2006, Marc Dequènes (Duck) <Duck@DuckCorp.org>
+  2006, Marc DequÃ¨nes (Duck) <Duck@DuckCorp.org>
   2006, Peter Eisentraut <petere@debian.org>
   2006, Peter Rockai <me@mornfall.net>
   2007, Peter Eisentraut <petere@debian.org>
@@ -88,14 +86,13 @@ Copyright: 1994-2014, Free Software Foundation, Inc.
   2009-2012, 2014-2016, Jonas Smedegaard <dr@jones.dk>
   2009-2014, 2016, Jonas Smedegaard <dr@jones.dk>
   2009-2016, Jonas Smedegaard <dr@jones.dk>
-  2010, IOhannes m zmölnig <zmoelnig@iem.at>
-  2010, Rémi Thebault <remi.thebault@gmail.com>
+  2010, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
+  2010, RÃ©mi Thebault <remi.thebault@gmail.com>
   2010-2011, 2015-2016, Jonas Smedegaard <dr@jones.dk>
   2011, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2011, 2016, Jonas Smedegaard <dr@jones.dk>
-  2011, IOhannes m zmölnig <zmoelnig@iem.at>
+  2011, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
   2011-2012, 2014, 2016, Jonas Smedegaard <dr@jones.dk>
-  2013, IOhannes m zmölnig <zmoelnig@iem.at>
+  2013, IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
   2016, Jonas Smedegaard <dr@jones.dk>
 License: GPL-3+
  FIXME
@@ -105,8 +102,6 @@ Files: TODO
  debian/NEWS
  debian/cdbs.lintian-overrides
  debian/compat
- debian/control
- debian/control.in
  debian/gbp.conf
  debian/source/format
  debian/source/lintian-overrides
@@ -180,6 +175,7 @@ Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc.
   2009-2014, Free Software Foundation, Inc.
   2012, Free Software Foundation, Inc.
   2014, Vasudev Kamath <kamathvasudev@gmail.com>
+  2015, Olaf Mandel <olaf@mandel.name>
   2016, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
  FIXME
@@ -202,8 +198,13 @@ License: GPL-2+
 Files: install-sh
  tests/data/autotools/install-sh
 Copyright: 1994, X Consortium
-  and license
 License: Expat
+ FIXME
+
+Files: debian/control
+ debian/control.in
+Copyright: mi Thebault (RTbo) <remi.thebault@gmail.com>,
+License: UNKNOWN
  FIXME
 
 Files: scripts/cdbs-edit-patch
@@ -213,26 +214,50 @@ License: GPL-2
 
 Files: COPYING
 Copyright: 1989, 1991, Free Software Foundation, Inc.,
+  <year> <name of author>
+  disclaimer" for the program, if
+  ed by the Free
+  ed interfaces, the
+  interest in the program
   the software, and
+  year name of author
 License: GPL-2+
  FIXME
 
+Files: scripts/license-miner
+Copyright: *Creator* *Credit* *Disclaimer* *Institution /
+  Copyright 2014-2016 Jonas Smedegaard
+License: GPL-3+
+ FIXME
+
 Files: 1/rules/utils.mk.in
-Copyright: 2003, Colin Walters <walters@debian.org>
+Copyright: --deb-fmt
+  -check
+  -check ?= licensecheck
+  -check disabled
+  -check)
+  -check-granular ?= cdbs (>= 0.4.131~)
+  -check-granular))
+  -check: debian/copyright_newhints
+  -extract ?= cdbs (>= 0.4.131~),
+  -extract))
+  2003, Colin Walters <walters@debian.org>
   2005-2012, 2016, Jonas Smedegaard <dr@jones.dk>
+  as needed";
   items
 License: GPL-3+
  FIXME
 
-Files: scripts/licensecheck2dep5
-Copyright: Copyright 2005-2012, 2016 Jonas Smedegaard
-  file format
-  format,
+Files: debian/rules
+Copyright: -check =
+  2002-2003, Colin Walters <walters@debian.org>
+  2003, 2008-2016, Jonas Smedegaard <dr@jones.dk>
 License: GPL-3+
  FIXME
 
-Files: scripts/license-miner
-Copyright: NONE
+Files: scripts/waf-unpack
+Copyright: 2011, 2016, Jonas Smedegaard <dr@jones.dk>
+  mi Thebault <remi.thebault@gmail.com>
 License: GPL-3+
  FIXME
 
@@ -244,6 +269,7 @@ License: GPL-3+
 
 Files: tests/testsuite
 Copyright: 2003, Jeff Bailey <jbailey@debian.org>
+  2003, Jeff Bailey <jbailey@debian.org> /
   2009-2012, Free Software Foundation, Inc.
   2012, Free Software Foundation, Inc.
   See /usr/share/common-licenses/GPL-3 on your Debian system.

@@ -1,3 +1,10 @@
+cdbs (0.4.146) unstable; urgency=medium
+
+  * Support build profiles.
+    Closes: Bug#772788. Thanks to Johannes Schauer.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 07 Sep 2016 17:45:19 +0200
+
 cdbs (0.4.145) unstable; urgency=medium
 
   * Fix resolve deprecated variables cdbs_curpythonindepbinary
