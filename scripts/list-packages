@@ -50,6 +50,11 @@ sub GetPackages {
 	my $arch="";
 	my @list=();
 	my %seen;
+	my @profiles=();
+	my $included_in_build_profile;
+	if (exists $ENV{'DEB_BUILD_PROFILES'}) {
+		@profiles=split /\s+/, $ENV{'DEB_BUILD_PROFILES'};
+	}
 	open (CONTROL, 'debian/control') ||
 		error("cannot read debian/control: $!\n");
 	while (<CONTROL>) {
@@ -64,13 +69,31 @@ sub GetPackages {
 			else {
 				error("debian/control has a duplicate entry for $package");
 			}
+			$included_in_build_profile=1;
 		}
 		if (/^Architecture:\s*(.*)/i) {
 			$arch=$1;
 		}
-	
+
+		# rely on libdpkg-perl providing the parsing functions because
+		# if we work on a package with a Build-Profiles field, then a
+		# high enough version of dpkg-dev is needed anyways
+		if (/^Build-Profiles:\s*(.*)/) {
+				my $build_profiles=$1;
+			eval {
+				require Dpkg::BuildProfiles;
+				my @restrictions=Dpkg::BuildProfiles::parse_build_profiles($build_profiles);
+				if (@restrictions) {
+					$included_in_build_profile=Dpkg::BuildProfiles::evaluate_restriction_formula(\@restrictions, \@profiles);
+				}
+			};
+			if ($@) {
+				error("The control file has a Build-Profiles field. Requires libdpkg-perl >= 1.17.14");
+			}
+		}
+
 		if (!$_ or eof) { # end of stanza.
-			if ($package &&
+			if ($package && $included_in_build_profile &&
 #			    (($type eq 'indep' && $arch eq 'all') ||
 #			     ($type eq 'arch' && $arch ne 'all') ||
 #			     ($type eq 'same' && (samearch(buildarch(), $arch))) ||
