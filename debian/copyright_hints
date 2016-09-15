@@ -239,7 +239,7 @@ Copyright: --deb-fmt
   -check-granular ?= cdbs (>= 0.4.131~)
   -check-granular))
   -check: debian/copyright_newhints
-  -extract ?= cdbs (>= 0.4.131~),
+  -extract ?= cdbs (>= 0.4.147~),
   -extract))
   2003, Colin Walters <walters@debian.org>
   2005-2012, 2016, Jonas Smedegaard <dr@jones.dk>

@@ -1,3 +1,13 @@
+cdbs (0.4.147) unstable; urgency=medium
+
+  * Fix strip parser prefix in license-miner.
+  * Simplify regexes (avoid look-behind) in license-miner.
+  * Fix use of DEB_COPYRIGHT_EXTRACT_PATHS_EXIF
+    DEB_COPYRIGHT_EXTRACT_PATHS_TTF in utils.mk.
+    Tighten auto-resolved dependency on cdbs when used.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 15 Sep 2016 18:53:13 +0200
+
 cdbs (0.4.146) unstable; urgency=medium
 
   * Support build profiles.
