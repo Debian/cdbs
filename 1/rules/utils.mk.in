@@ -59,7 +59,7 @@ CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular ?= cdbs (>= 0.4.131~)
 CDBS_BUILD_DEPENDS += $(if $(_cdbs_copyright_ignore_regex),\
 	$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_copyright-check-granular))
 
-CDBS_BUILD_DEPENDS_rules_utils_copyright-extract ?= cdbs (>= 0.4.131~), \
+CDBS_BUILD_DEPENDS_rules_utils_copyright-extract ?= cdbs (>= 0.4.147~), \
 	libregexp-assemble-perl, libimage-exiftool-perl, libfont-ttf-perl
 CDBS_BUILD_DEPENDS += $(if $(_cdbs_copyright_extract_regex),\
 	$(comma) $(CDBS_BUILD_DEPENDS_rules_utils_copyright-extract))
@@ -159,7 +159,7 @@ debian/copyright_newhints:
 		-printf 'exif:%p\0' | \
 		perl -0 $(_cdbs_scripts_path)/license-miner,\
 		$(subst $(space),|,$(strip \
-			$(DEB_COPYRIGHT_PATHS_EXIF:/=/[^/]+))))
+			$(DEB_COPYRIGHT_EXTRACT_PATHS_EXIF:/=/[^/]+))))
 	$(patsubst %,set -e; find * \
 		-type f -regextype posix-extended \
 		$(patsubst %,'!' -regex '^(%)$$',\
@@ -168,7 +168,7 @@ debian/copyright_newhints:
 		-printf 'ttf:%p\0' | \
 		perl -0 $(_cdbs_scripts_path)/license-miner,\
 		$(subst $(space),|,$(strip \
-			$(DEB_COPYRIGHT_PATHS_TTF:/=/[^/]+))))
+			$(DEB_COPYRIGHT_EXTRACT_PATHS_TTF:/=/[^/]+))))
 	$(strip set -e; \
 		LC_ALL=C.UTF-8 $(DEB_COPYRIGHT_CHECK_LICENSECHECK) \
 		--check '.*' \
