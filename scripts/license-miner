@@ -138,7 +138,9 @@ pod2usage("$0: No paths provided.") if ((@ARGV == 0) && (-t STDIN));
 my $dispatch = {
 	# TrueType (including Truetype-flavored OpenType and WOFF) fonts
 	'((?<=\Attf:).*|\A.*\.(?:ttf|otf|woff))$' => sub {
-		my $file = check_infile(shift);
+		my $file = shift;
+		$file =~ s/^ttf://;
+		$file = check_infile(shift);
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
@@ -163,7 +165,9 @@ my $dispatch = {
 	},
 	# TrueType (including Truetype-flavored OpenType) collections
 	'((?<=\Attc:).*|\A.*\.(?:ttc))$' => sub {
-		my $file = check_infile(shift);
+		my $file = shift;
+		$file =~ s/^ttf://;
+		$file = check_infile(shift);
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
@@ -190,7 +194,9 @@ my $dispatch = {
 	},
 	# exif: misc. images and fonts
 	'((?<=\Aexif:).*|\A.*\.(?:afm|aif|aifc|aiff|avi|dcm|dfont|doc|docx|eps|epub|exe|flac|flv|gif|icc|jpeg|jpg|mov|mp3|mp4|mpeg|mpg|odp|ods|odt|oga|ogg|ogv|pdf|pfa|pfb|pfm|png|ppt|pptx|ps|psd|ra|svg|swf|tif|tiff|wav|webm|webp|xcf|xls|xlsx))$' => sub {
-		my $file = check_infile(shift);
+		my $file = shift;
+		$file =~ s/^exif://;
+		$file = check_infile(shift);
 		say "exif: $file" if ($verbose);
 		my $exifTool = new Image::ExifTool;
 		my $handle = ($debug)
