@@ -140,7 +140,7 @@ my $dispatch = {
 	'^(ttf:.*|.*\.(?:ttf|otf|woff))$' => sub {
 		my $file = shift;
 		$file =~ s/^ttf://;
-		$file = check_infile(shift);
+		$file = check_infile($file);
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
@@ -167,7 +167,7 @@ my $dispatch = {
 	'^(ttc:.*|.*\.(?:ttc))$' => sub {
 		my $file = shift;
 		$file =~ s/^ttf://;
-		$file = check_infile(shift);
+		$file = check_infile($file);
 		say "ttf: $file" if ($verbose);
 		my $handle = ($debug)
 			? *STDOUT{IO}
@@ -196,7 +196,7 @@ my $dispatch = {
 	'^(exif:.*|.*\.(?:afm|aif|aifc|aiff|avi|dcm|dfont|doc|docx|eps|epub|exe|flac|flv|gif|icc|jpeg|jpg|mov|mp3|mp4|mpeg|mpg|odp|ods|odt|oga|ogg|ogv|pdf|pfa|pfb|pfm|png|ppt|pptx|ps|psd|ra|svg|swf|tif|tiff|wav|webm|webp|xcf|xls|xlsx))$' => sub {
 		my $file = shift;
 		$file =~ s/^exif://;
-		$file = check_infile(shift);
+		$file = check_infile($file);
 		say "exif: $file" if ($verbose);
 		my $exifTool = new Image::ExifTool;
 		my $handle = ($debug)
