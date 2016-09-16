@@ -1,3 +1,9 @@
+cdbs (0.4.148) unstable; urgency=medium
+
+  * Fix license-miner.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 16 Sep 2016 10:40:37 +0200
+
 cdbs (0.4.147) unstable; urgency=medium
 
   * Fix strip parser prefix in license-miner.
