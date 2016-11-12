@@ -47,7 +47,7 @@ scons-clean::
 
 common-install-arch common-install-indep:: common-install-impl
 common-install-impl::
-	$(if $(DEB_SCONS_INSTALL_TARGET),
+	$(if $(DEB_SCONS_INSTALL_TARGET),\
 		$(DEB_SCONS_INVOKE) $(DEB_SCONS_INSTALL_TARGET) \
 			$(DEB_SCONS_OPTIONS) \
 			$(DEB_SCONS_INSTALL_OPTIONS), \
@@ -57,7 +57,7 @@ common-install-impl::
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 common-post-build-arch common-post-build-indep:: common-post-build-impl
 common-post-build-impl::
-	$(if $(DEB_SCONS_CHECK_TARGET),
+	$(if $(DEB_SCONS_CHECK_TARGET),\
 		$(DEB_SCONS_INVOKE) $(DEB_SCONS_CHECK_TARGET) \
 			$(DEB_SCONS_OPTIONS), \
 	$(call cdbs_warn,DEB_SCONS_CHECK_TARGET unset$(comma) \
