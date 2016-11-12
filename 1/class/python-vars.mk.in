@@ -189,7 +189,7 @@ cdbs_expand_pythonruntime = $(or $(strip \
 
 _cdbs_expand_pythonflavor2python = $(or $(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
-		$(if $(filter $1,$(cdbs_$p_flavors)),$p))),\
+		$(if $(filter $1,$(_cdbs_$p_flavors)),$p))),\
 	$(error no python implementation resolved from flavor "$1"))
 
 # resolve (implicitly) from binary package
