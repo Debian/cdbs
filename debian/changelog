@@ -1,3 +1,15 @@
+cdbs (0.4.149) unstable; urgency=medium
+
+  * Improve python-vars.mksnippet:
+    + Fix resolve default python runtimes.
+    + Fix _cdbs_expand_pythonflavor2python.
+    + Improve error messages to mention involved packages.
+    Possibly closes (but let's check first) bug#837006.
+  * Fix scons.mk snippet.
+    Closes: Bug#826672. Thanks to Chris Lamb and Adrian Bunk.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 12 Nov 2016 21:39:38 +0100
+
 cdbs (0.4.148) unstable; urgency=medium
 
   * Fix license-miner.
