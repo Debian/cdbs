@@ -166,23 +166,23 @@ _cdbs_expand_pythonflavors = $(or $(strip \
 # resolve from binary package and optional flavor
 # (flavor needed only for arch-dep packages)
 #  1. arch-indep w/ default flavor unsupported: name of first supported flavor
-#  2. default flavor or arch-indep: _cdbs_$python_defaultruntime
+#  2. default flavor or arch-indep: cdbs_$python_defaultruntime
 #  3. name of flavor
 cdbs_expand_pythonruntime = $(or $(strip \
 	$(foreach p,$(call _cdbs_expand_python,$1),$(or $(strip \
 		$(_cdbs_$p_altflavor)),$(strip \
 		$(if $(filter $1,$(cdbs_python_indep_packages)),\
-			$(_cdbs_$p_defaultruntime))),$(strip \
+			$(cdbs_$p_defaultruntime))),$(strip \
 		$(if $2,$(or $(strip \
 			$(if $(filter $2,$(cdbs_$p_defaultflavor)),\
-				$(_cdbs_$p_defaultruntime))),$(strip \
+				$(cdbs_$p_defaultruntime))),$(strip \
 			$2)))),$(strip \
 		$(if word 2,$(cdbs_$p_allflavors),\
 			$(error no python runtime resolved from binary \
 				package "$1": Too many flavors),\
 			$(or $(strip \
 				$(if $(filter $f,$(cdbs_$p_defaultflavor)),\
-					$(_cdbs_$p_defaultruntime))),$(strip \
+					$(cdbs_$p_defaultruntime))),$(strip \
 				$f))))))),\
 	$(error no python runtime resolved from binary package "$1" \
 		$(if $2,and flavor "$2")))
