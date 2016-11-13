@@ -164,6 +164,12 @@ _cdbs_expand_pythonflavors = $(or $(strip \
 	$(error no python flavors resolved from binary package "$1" \
 		among packages $(cdbs_python_packages)))
 
+_cdbs_expand_pythonflavor2python = $(or $(strip \
+	$(foreach p,$(_CDBS_PYTHONS),\
+		$(if $(filter $1,$(_cdbs_$p_flavors)),$p))),\
+	$(error no python implementation resolved from flavor "$1" \
+		among packages $(cdbs_python_packages)))
+
 # runtime to use
 # resolve from binary package and optional flavor
 # (flavor needed only for arch-dep packages)
@@ -188,12 +194,6 @@ cdbs_expand_pythonruntime = $(or $(strip \
 				$(cdbs_$p_allflavors)))))))),\
 	$(error no python runtime resolved from binary package "$1" \
 		$(if $2,and flavor "$2") \
-		among packages $(cdbs_python_packages)))
-
-_cdbs_expand_pythonflavor2python = $(or $(strip \
-	$(foreach p,$(_CDBS_PYTHONS),\
-		$(if $(filter $1,$(_cdbs_$p_flavors)),$p))),\
-	$(error no python implementation resolved from flavor "$1" \
 		among packages $(cdbs_python_packages)))
 
 # resolve (implicitly) from binary package
