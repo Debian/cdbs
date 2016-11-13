@@ -27,7 +27,7 @@ include $(_cdbs_class_path)/python-module.mk$(_cdbs_makefile_suffix)
 # (leading "python" stripped to stay compatible with CDBS << 0.4.140)
 DEB_MAKE_FLAVORS ?= $(strip \
 	$(if $(word 2,$(cdbs_python_flavors)),\
-		$(strip python%,%,$(cdbs_python_flavors))))
+		$(patsubst python%,%,$(cdbs_python_flavors))))
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 
