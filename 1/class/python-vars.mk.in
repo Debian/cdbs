@@ -171,30 +171,25 @@ _cdbs_expand_pythonflavor2python = $(or $(strip \
 		among packages $(cdbs_python_packages)))
 
 # runtime to use
-# resolve from binary package and optional flavor
-# (flavor needed only for arch-dep packages)
-#  1. arch-indep w/ default flavor unsupported: name of first supported flavor
-#  2. default flavor or arch-indep: cdbs_$python_defaultruntime
+# resolve from implicit singleflavor or optional binary package or optional (favored) flavor
+#  1. provided binary package arch-indep: cdbs_$python_defaultruntime
+#  2. default flavor: cdbs_$python_defaultruntime
 #  3. name of flavor
 cdbs_expand_pythonruntime = $(or $(strip \
-	$(foreach p,$(call _cdbs_expand_python,$1),$(or $(strip \
-		$(_cdbs_$p_altflavor)),$(strip \
-		$(if $(filter $1,$(cdbs_python_indep_packages)),\
-			$(cdbs_$p_defaultruntime))),$(strip \
-		$(if $2,$(or $(strip \
-			$(if $(filter $2,$(cdbs_$p_defaultflavor)),\
+	$(if $(filter $1,$(cdbs_python_indep_packages)),\
+		$(cdbs_$(call _cdbs_expand_python,$1)_defaultruntime))),$(strip \
+	$(foreach f,$(or $(strip \
+	 $2),$(strip \
+	 $(if $1,$(call _cdbs_expand_pythonflavors,$1))),$(strip \
+	 $(if word 2,$(cdbs_flavors),\
+	  $(error Too many flavors: $(cdbs_flavors)),\
+	  $(cdbs_flavors)))),\
+		$(foreach p,$(call _cdbs_expand_pythonflavor2python,$f),$(or $(strip \
+			$(if $(filter $f,$(cdbs_$p_defaultflavor)),\
 				$(cdbs_$p_defaultruntime))),$(strip \
-			$2)))),$(strip \
-		$(if word 2,$(cdbs_$p_allflavors),\
-			$(error no python runtime resolved from binary \
-				package "$1": Too many flavors),\
-			$(or $(strip \
-				$(if $(filter $(cdbs_$p_allflavors),$(cdbs_$p_defaultflavor)),\
-					$(cdbs_$p_defaultruntime))),$(strip \
-				$(cdbs_$p_allflavors)))))))),\
-	$(error no python runtime resolved from binary package "$1" \
-		$(if $2,and flavor "$2") \
-		among packages $(cdbs_python_packages)))
+			$f),\
+			$(error no python runtime resolved \
+				from binary package "$1" and flavor "$2"))))))
 
 # resolve (implicitly) from binary package
 cdbs_curpythonsystems = $(strip $(foreach s,$(cdbs_python_systems),\
