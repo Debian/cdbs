@@ -109,7 +109,7 @@ _cdbs_python_singlesystem = $(strip \
 	DEB_PYTHON3_PACKAGES or another DEB_*_PACKAGES variable)))
 
 # all/default flavors to use
-# variables _cdbs_$python_allflavors _cdbs_$python_defaultflavor
+# variables cdbs_$python_allflavors cdbs_$python_defaultflavor
 #  1. exceptionally resolved _cdbs_expand_$python_*
 #  2. name of python implementation
 $(foreach p,$(_CDBS_PYTHONS),$(if $(_cdbs_$p_packages),\
