@@ -183,9 +183,9 @@ cdbs_expand_pythonruntime = $(or $(strip \
 			$(error no python runtime resolved from binary \
 				package "$1": Too many flavors),\
 			$(or $(strip \
-				$(if $(filter $f,$(cdbs_$p_defaultflavor)),\
+				$(if $(filter $(cdbs_$p_allflavors),$(cdbs_$p_defaultflavor)),\
 					$(cdbs_$p_defaultruntime))),$(strip \
-				$f))))))),\
+				$(cdbs_$p_allflavors)))))))),\
 	$(error no python runtime resolved from binary package "$1" \
 		$(if $2,and flavor "$2") \
 		among packages $(cdbs_python_packages)))
