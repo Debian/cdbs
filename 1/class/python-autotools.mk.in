@@ -32,9 +32,6 @@ DEB_MAKE_FLAVORS ?= $(cdbs_make_pythonflavors)
 
 include $(_cdbs_class_path)/autotools.mk$(_cdbs_makefile_suffix)
 
-# Build-time per-package variables conflict with flavor variables
-cdbs_python_single_system = true
-
 CDBS_BUILD_DEPENDS_class_python-autotools ?= $(cdbs_python_builddeps_cdbs)
 CDBS_BUILD_DEPENDS +=, $(CDBS_BUILD_DEPENDS_class_python-autotools)
 
