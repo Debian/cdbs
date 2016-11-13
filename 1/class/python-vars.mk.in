@@ -152,8 +152,8 @@ $(foreach p,$(_CDBS_PYTHONS),$(eval cdbs_$p_defaultruntime = $(or $(strip \
 # resolve from binary package
 _cdbs_expand_python = $(or $(strip \
 	$(if $(cdbs_python_single_system),\
-		$(if $(filter $1,$(_cdbs_$(cdbs_python_singlesystem)_packages)),\
-			$(cdbs_python_singlesystem)))),$(strip \
+		$(if $(filter $1,$(_cdbs_$(_cdbs_python_singlesystem)_packages)),\
+			$(_cdbs_python_singlesystem)))),$(strip \
 	$(foreach p,$(_CDBS_PYTHONS),\
 		$(if $(filter $1,$(_cdbs_$p_packages)),\
 			$p))),\
