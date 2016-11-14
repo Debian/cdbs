@@ -1,3 +1,25 @@
+cdbs (0.4.150) unstable; urgency=medium
+
+  * Fix python-autotools.mk:
+    + Fix use bare numbers in python-autotools.mk for python2/python3.
+    + Fix python-vars.mk resolving cdbs_expand_pythonruntime for
+      arch-dependent packages and implicit (i.e. single) flavor.
+    + Fix python-vars.mk resolve python implementation in single-system
+      mode (i.e. using python-autotools.mk).
+    + Fix python-vars.mk variable cdbs_expand_pythonruntime support for
+      omitting package name (i.e. favor explicitly provided python
+      flavor or falling back to implicit single pythonflavor).
+    + Fix python-autotools.mk to not bogusly involve cdbs_curpkg in
+      resolving python runtime (autotools targets are not not tied to
+      target binary package).
+    Closes: Bug#837006. Thanks to Vasudev Kamath, Héctor Orón, and all
+    the people filing, reassigning and merging the numerous bugreports.
+  * Improve python-autotools.mk: Add variable cdbs_make_pythonflavors to
+    ease overriding DEB_MAKE_FLAVORS.
+  * Drop obsolete variable cdbs_python_single_system.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 14 Nov 2016 04:37:06 +0100
+
 cdbs (0.4.149) unstable; urgency=medium
 
   * Improve python-vars.mksnippet:
